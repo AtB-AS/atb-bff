@@ -1,15 +1,23 @@
 import Hapi from '@hapi/hapi';
-
+import http from 'http';
 import { createServer, initializePlugins } from '../../server';
-import geocoderRoutes, { IGeocoderService } from '../geocoder';
+import geocoderRoutes from '../geocoder';
+import { IGeocoderService } from '../../service/interface';
+import { Result } from '@badrap/result';
+import { randomPort } from './common';
 
 let server: Hapi.Server;
 let svc: jest.Mocked<IGeocoderService>;
+
 beforeEach(async () => {
-  server = createServer();
+  server = createServer({
+    port: randomPort()
+  });
   svc = {
-    getFeatures: jest.fn((...args: any) => Promise.resolve([])),
-    getFeaturesReverse: jest.fn((...args: any) => Promise.resolve([]))
+    getFeatures: jest.fn((...args: any): any => Result.ok(Promise.resolve([]))),
+    getFeaturesReverse: jest.fn((...args: any): any =>
+      Result.ok(Promise.resolve([]))
+    )
   };
   await initializePlugins(server);
   geocoderRoutes(server)(svc);
@@ -36,10 +44,7 @@ describe('GET /geocoder/reverse', () => {
       url: '/geocoder/reverse?lat=63.43&lon=10.34'
     });
 
-    expect(svc.getFeaturesReverse).toBeCalledWith(
-      { latitude: 63.43, longitude: 10.34 },
-      {}
-    );
+    expect(svc.getFeaturesReverse).toBeCalledWith({ lat: 63.43, lon: 10.34 });
   });
   it('responds with 400 for missing required parameters', async () => {
     const res = await server.inject({
@@ -50,11 +55,11 @@ describe('GET /geocoder/reverse', () => {
     expect(res.statusCode).toBe(400);
   });
 });
-describe('GET /geocoder/feature', () => {
+describe('GET /geocoder/features', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/feature?query=Trondheim&lat=63.43&lon=10.34'
+      url: '/geocoder/features?query=Trondheim&lat=63.43&lon=10.34'
     });
 
     expect(res.statusCode).toBe(200);
@@ -62,22 +67,19 @@ describe('GET /geocoder/feature', () => {
   it('calls the service with the correct arguments', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/feature?query=Trondheim&lat=63.43&lon=10.34'
+      url: '/geocoder/features?query=Trondheim&lat=63.43&lon=10.34'
     });
 
-    expect(svc.getFeatures.mock.calls[0]).toEqual([
-      'Trondheim',
-      {
-        latitude: 63.43,
-        longitude: 10.34
-      },
-      {}
-    ]);
+    expect(svc.getFeatures).toBeCalledWith({
+      lat: 63.43,
+      lon: 10.34,
+      query: 'Trondheim'
+    });
   });
   it('responds with 400 for malformed queries', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/feature?query='
+      url: '/geocoder/features?query='
     });
 
     expect(res.statusCode).toBe(400);

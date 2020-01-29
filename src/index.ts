@@ -7,7 +7,9 @@ process.on('unhandledRejection', err => {
 });
 
 (async () => {
-  const server = createServer();
+  const server = createServer({
+    port: process.env['PORT'] || '8080'
+  });
 
   await initializePlugins(server);
   await initializeRoutes(server);

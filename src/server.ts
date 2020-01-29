@@ -1,21 +1,33 @@
+import http from 'http';
+
 import hapi from '@hapi/hapi';
 import hapiPino from 'hapi-pino';
 import hapiPulse from 'hapi-pulse';
 import hapiSwagger from 'hapi-swagger';
 import hapiInert from '@hapi/inert';
 import hapiVision from '@hapi/vision';
-
 import hapiApiVersion from 'hapi-api-version';
 import Boom from '@hapi/boom';
-import EnturService from '@entur/sdk';
+
+import enturService from './service/impl/entur';
+import geocoderService from './service/impl/geocoder';
+import stopsService from './service/impl/stops';
+import journeyService from './service/impl/journey';
 
 import geocoderRoutes from './api/geocoder';
+import stopsRoutes from './api/stops';
+import journeyRoutes from './api/journey';
 
-export const createServer = () => {
-  const port = process.env['PORT'] || 8080;
+interface ServerOptions {
+  port: string;
+  listener?: http.Server;
+}
+
+export const createServer = (opts: ServerOptions) => {
   const server = new hapi.Server({
-    port,
     host: 'localhost',
+    listener: opts.listener,
+    port: opts.port,
     routes: {
       validate: {
         failAction: async (request, h, err) => {
@@ -69,11 +81,7 @@ export const initializePlugins = async (server: hapi.Server) => {
 };
 
 export const initializeRoutes = (server: hapi.Server) => {
-  const enturService = new EnturService({
-    clientName: 'atb-mittatb'
-  });
-
-  // initJourney(server);
-  geocoderRoutes(server)(enturService);
-  // initStops(server);
+  stopsRoutes(server)(stopsService(enturService));
+  geocoderRoutes(server)(geocoderService(enturService));
+  journeyRoutes(server)(journeyService(enturService));
 };

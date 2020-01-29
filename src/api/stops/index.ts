@@ -1,111 +1,63 @@
-import {
-  Coordinates,
-  StopPlace,
-  GetDeparturesParams,
-  Departure
-} from '@entur/sdk';
 import { Boom } from '@hapi/boom';
 import Hapi from '@hapi/hapi';
-import Joi from '@hapi/joi';
 
+import { IStopsService } from '../../service/interface';
 import {
-  makeFindStops,
-  makeGetStopDepartures,
-  makeGetStopPlace
-} from './stops';
-
-export interface IStopsService {
-  getStopPlace(id: string): Promise<StopPlace>;
-  getStopPlacesByPosition(
-    coordinates: Coordinates,
-    distance?: number
-  ): Promise<StopPlace[]>;
-  getDeparturesFromStopPlace(
-    stopPlaceId: string,
-    params?: GetDeparturesParams
-  ): Promise<Departure[]>;
-}
+  getStopPlaceRequest,
+  getStopPlaceByPositionRequest,
+  getStopPlaceDeparturesRequest
+} from './schema';
+import {
+  StopPlaceQuery,
+  DeparturesFromStopPlaceQuery
+} from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
-  const getStopPlace = makeGetStopPlace(service);
-  const getStopDepartures = makeGetStopDepartures(service);
-  const findStops = makeFindStops(service);
-
   server.route({
     method: 'GET',
     path: '/v1/stop/{id}',
     options: {
-      tags: ['api'],
-      description: 'wut',
-      plugins: {
-        'hapi-swagger': {
-          payloadType: 'form'
-        }
-      }
+      tags: ['api', 'stops'],
+      validate: getStopPlaceRequest,
+      description: 'Get details for a StopPlace'
     },
-
     handler: async (request, h) => {
       const { id } = request.params;
-      const stop = await getStopPlace(id);
-      if (stop === null) {
-        throw new Boom(`stop place with id ${id} not found`, {
-          statusCode: 404
-        });
+      const stop = await service.getStopPlace(id);
+
+      if (stop.isOk && stop.value === null) {
+        return new Boom(`stop with id ${id} not found`, { statusCode: 404 });
       }
-      return stop;
+
+      return stop.unwrap();
     }
   });
-
   server.route({
     method: 'GET',
     path: '/v1/stop/{id}/departures',
     options: {
-      validate: {
-        query: Joi.object({
-          startTime: Joi.date().default(new Date()),
-          timeRange: Joi.number().default(86400),
-          departures: Joi.number().default(5),
-          includeNonBoarding: Joi.bool().default(false)
-        })
-      }
+      tags: ['api', 'stops'],
+      validate: getStopPlaceDeparturesRequest,
+      description: 'Get departures from StopPlace'
     },
-    handler: (request, h) => {
+    handler: async (request, h) => {
       const { id } = request.params;
-      const params = (request.query as unknown) as {
-        startTime: Date;
-        timeRange: number;
-        departures: number;
-        includeNonBoarding: boolean;
-      };
+      const query = (request.query as unknown) as DeparturesFromStopPlaceQuery;
 
-      return getStopDepartures({ id, ...params });
+      return (await service.getDeparturesFromStopPlace(id, query)).unwrap();
     }
   });
-
   server.route({
     method: 'GET',
     path: '/v1/stops',
     options: {
-      validate: {
-        query: Joi.object({
-          lat: Joi.number().required(),
-          lon: Joi.number().required(),
-          distance: Joi.number()
-        })
-      }
+      tags: ['api', 'stops'],
+      validate: getStopPlaceByPositionRequest,
+      description: 'Find stops near coordinates'
     },
-    handler: (request, h) => {
-      const { lat, lon, distance } = (request.query as unknown) as {
-        lat: number;
-        lon: number;
-        distance?: number;
-      };
-      const coords: Coordinates = {
-        latitude: lat,
-        longitude: lon
-      };
-
-      return findStops({ coords, distance });
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as StopPlaceQuery;
+      return (await service.getStopPlacesByPosition(query)).unwrap();
     }
   });
 };

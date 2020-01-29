@@ -1,16 +1,30 @@
 import Hapi from '@hapi/hapi';
-
 import { createServer, initializePlugins } from '../../server';
-import stopsRoutes, { IStopsService } from '../stops';
+import stopsRoutes from '../stops';
+import { IStopsService } from '../../service/interface';
+import { Result } from '@badrap/result';
+import { randomPort } from './common';
+import { APIError } from '../../service/types';
 
 let server: Hapi.Server;
 let svc: jest.Mocked<IStopsService>;
+
 beforeEach(async () => {
-  server = createServer();
+  server = createServer({
+    port: randomPort()
+  });
   svc = {
-    getDeparturesFromStopPlace: jest.fn((...args: any) => Promise.resolve([])),
-    getStopPlace: jest.fn((...args: any): any => Promise.resolve({})),
-    getStopPlacesByPosition: jest.fn((...args: any) => Promise.resolve([]))
+    getDeparturesFromStopPlace: jest.fn((...args: any): any =>
+      Result.ok(Promise.resolve([]))
+    ),
+    getStopPlace: jest.fn((...args: any): any =>
+      Result.ok({
+        message: 'It works!'
+      })
+    ),
+    getStopPlacesByPosition: jest.fn((...args: any): any =>
+      Result.ok(Promise.resolve([]))
+    )
   };
   await initializePlugins(server);
   stopsRoutes(server)(svc);
@@ -21,6 +35,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await server.stop();
 });
+
 describe('GET /stop/{id}', () => {
   it('responds with 200', async () => {
     const res = await server.inject({

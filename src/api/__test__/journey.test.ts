@@ -1,13 +1,28 @@
-import 'reflect-metadata';
-
 import Hapi from '@hapi/hapi';
 
-import { init, createServer } from '../../server';
+import journeyRoutes from '../journey';
+import { IJourneyService } from '../../service/interface';
+import { Result } from '@badrap/result';
+import { createServer, initializePlugins } from '../../server';
+import { randomPort } from './common';
 
 let server: Hapi.Server;
+let svc: jest.Mocked<IJourneyService>;
+
 beforeEach(async () => {
-  server = createServer();
-  await init(server);
+  server = createServer({
+    port: randomPort()
+  });
+  svc = {
+    getTripPatterns: jest.fn((args: any): any =>
+      Result.ok(Promise.resolve([]))
+    ),
+    getTrips: jest.fn((args: any): any => Result.ok(Promise.resolve([])))
+  };
+  await initializePlugins(server);
+  journeyRoutes(server)(svc);
+  await server.initialize();
+  await server.start();
 });
 
 afterEach(async () => {
@@ -23,10 +38,11 @@ describe('GET /journey/trip', () => {
 
     expect(res.statusCode).toBe(200);
   });
+
   it('responds with 400 for missing required parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/from=Trondheim'
+      url: '/journey/trip?from=Trondheim'
     });
 
     expect(res.statusCode).toBe(400);
