@@ -1,5 +1,6 @@
 import { name, version } from '../package.json';
 import { createServer, initializePlugins, initializeRoutes } from './server';
+import { Boom } from '@hapi/boom';
 
 process.on('unhandledRejection', err => {
   console.error(err);
@@ -13,6 +14,12 @@ process.on('unhandledRejection', err => {
 
   await initializePlugins(server);
   await initializeRoutes(server);
+  server.route({
+    method: '*',
+    path: '/{any*}',
+    handler: (request, h) =>
+      new Boom('The requested resource was not found.', { statusCode: 404 })
+  });
   await server.initialize();
   await server.start();
 
