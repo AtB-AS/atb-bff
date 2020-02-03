@@ -7,18 +7,18 @@ import { Result } from '@badrap/result';
 import { randomPort } from './common';
 
 let server: Hapi.Server;
-let svc: jest.Mocked<IGeocoderService>;
+const svc: jest.Mocked<IGeocoderService> = {
+  getFeatures: jest.fn((...args: any): any => Result.ok(Promise.resolve([]))),
+  getFeaturesReverse: jest.fn((...args: any): any =>
+    Result.ok(Promise.resolve([]))
+  )
+};
 
 beforeEach(async () => {
   server = createServer({
     port: randomPort()
   });
-  svc = {
-    getFeatures: jest.fn((...args: any): any => Result.ok(Promise.resolve([]))),
-    getFeaturesReverse: jest.fn((...args: any): any =>
-      Result.ok(Promise.resolve([]))
-    )
-  };
+  
   await initializePlugins(server);
   geocoderRoutes(server)(svc);
   await server.initialize();
