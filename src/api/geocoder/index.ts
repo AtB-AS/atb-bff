@@ -7,9 +7,10 @@ import { FeaturesQuery, ReverseFeaturesQuery } from '../../service/types';
 import { DEFAULT_CACHE_TTL } from '../../config/cache';
 
 export default (server: Hapi.Server) => (service: IGeocoderService) => {
-  const getFeatures = (q: FeaturesQuery) => service.getFeatures(q);
-  const getFeaturesReverse = (q: ReverseFeaturesQuery) =>
-    service.getFeaturesReverse(q);
+  const getFeatures = async (q: FeaturesQuery) =>
+    (await service.getFeatures(q)).unwrap();
+  const getFeaturesReverse = async (q: ReverseFeaturesQuery) =>
+    (await service.getFeaturesReverse(q)).unwrap();
 
   server.method('feature', getFeatures, {
     generateKey: (q: FeaturesQuery) => qs.stringify(q),
