@@ -1,5 +1,4 @@
 import Hapi from '@hapi/hapi';
-import Joi from '@hapi/joi';
 import { IJourneyService } from '../../service/interface';
 import { TripQuery, TripPatternsQuery } from '../../service/types';
 import { postJourneyRequest, getJourneyRequest } from './schema';
