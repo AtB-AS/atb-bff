@@ -28,6 +28,7 @@ export const createServer = (opts: ServerOptions) => {
     host: 'localhost',
     listener: opts.listener,
     port: opts.port,
+    address: '0.0.0.0',
     routes: {
       validate: {
         failAction: async (request, h, err) => {
@@ -61,9 +62,9 @@ export const initializePlugins = async (server: hapi.Server) => {
   await server.register({
     plugin: hapiApiVersion,
     options: {
-      validVersions: [1, 2],
+      validVersions: [1],
       defaultVersion: 1,
-      vendorName: 'mittatb'
+      vendorName: 'mitt∂atb'
     }
   });
   await server.register({
