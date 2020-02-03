@@ -1,5 +1,7 @@
 import createService from '@entur/sdk';
 
-export default createService({
+const service = createService({
   clientName: process.env.CLIENT_NAME || 'atb-mittatb'
 });
+
+export default service;

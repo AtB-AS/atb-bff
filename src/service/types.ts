@@ -5,7 +5,7 @@ export interface Coordinates {
   longitude: number;
 }
 
-export interface FeaturesQuery {
+export type FeaturesQuery = {
   query: string;
   lat: number;
   lon: number;
@@ -17,15 +17,19 @@ export interface FeaturesQuery {
   sources?: string[];
   layers?: string[];
   limit?: number;
+};
+
+export interface QuaysForStopPlaceQuery {
+  filterByInUse: boolean;
 }
 
-export interface ReverseFeaturesQuery {
+export type ReverseFeaturesQuery = {
   lat: number;
   lon: number;
   radius?: number;
   size?: number;
   layers?: string[];
-}
+};
 
 export interface StopPlaceQuery {
   lat: number;
@@ -38,6 +42,14 @@ export interface DeparturesFromStopPlaceQuery {
   timeRange?: number;
   limit?: number;
   includeNonBoarding?: boolean;
+}
+
+export interface DeparturesFromQuayQuery {
+  start?: Date;
+  timeRange: number;
+  limit: number;
+  omitNonBoarding: boolean;
+  includeCancelledTrips: boolean;
 }
 
 export interface TripQuery {
@@ -54,6 +66,19 @@ export interface TripPatternsQuery {
   limit: number;
   modes: QueryMode[];
   wheelchairAccessible: boolean;
+}
+
+export interface NearestPlacesQuery {
+  lat: number;
+  lon: number;
+  maxDistance?: number;
+  limit?: number;
+  typeFilter: string[];
+  modeFilter: string[];
+}
+
+export interface DeparturesForServiceJourneyQuery {
+  date?: Date;
 }
 
 export class APIError extends Error {

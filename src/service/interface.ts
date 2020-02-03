@@ -1,5 +1,12 @@
 import { Result } from '@badrap/result';
-import { Departure, Feature, StopPlace, TripPattern } from '@entur/sdk';
+import {
+  Feature,
+  StopPlace,
+  TripPattern,
+  NearestPlace,
+  Quay,
+  EstimatedCall
+} from '@entur/sdk';
 import {
   APIError,
   FeaturesQuery,
@@ -7,7 +14,11 @@ import {
   StopPlaceQuery,
   DeparturesFromStopPlaceQuery,
   TripQuery,
-  TripPatternsQuery
+  TripPatternsQuery,
+  NearestPlacesQuery,
+  DeparturesForServiceJourneyQuery,
+  QuaysForStopPlaceQuery,
+  DeparturesFromQuayQuery
 } from './types';
 
 export interface IGeocoderService {
@@ -22,10 +33,25 @@ export interface IStopsService {
   getStopPlacesByPosition(
     query: StopPlaceQuery
   ): Promise<Result<StopPlace[], APIError>>;
+  getDeparturesForServiceJourney(
+    id: string,
+    query: DeparturesForServiceJourneyQuery
+  ): Promise<Result<EstimatedCall[] | null, APIError>>;
   getDeparturesFromStopPlace(
     id: string,
     query: DeparturesFromStopPlaceQuery
-  ): Promise<Result<Departure[], APIError>>;
+  ): Promise<Result<EstimatedCall[], APIError>>;
+  getDeparturesFromQuay(
+    id: string,
+    query: DeparturesFromQuayQuery
+  ): Promise<Result<EstimatedCall[], APIError>>;
+  getQuaysForStopPlace(
+    id: string,
+    query: QuaysForStopPlaceQuery
+  ): Promise<Result<Quay[] | null, APIError>>;
+  getNearestPlaces(
+    query: NearestPlacesQuery
+  ): Promise<Result<NearestPlace[] | null, APIError>>;
 }
 
 export interface IJourneyService {

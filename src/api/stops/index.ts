@@ -5,11 +5,17 @@ import { IStopsService } from '../../service/interface';
 import {
   getStopPlaceRequest,
   getStopPlaceByPositionRequest,
-  getStopPlaceDeparturesRequest
+  getStopPlaceDeparturesRequest,
+  getStopPlaceQuaysRequest,
+  getDeparturesFromQuayRequest,
+  getDeparturesForServiceJourneyRequest
 } from './schema';
 import {
   StopPlaceQuery,
-  DeparturesFromStopPlaceQuery
+  DeparturesFromStopPlaceQuery,
+  DeparturesForServiceJourneyQuery,
+  QuaysForStopPlaceQuery,
+  DeparturesFromQuayQuery
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -26,10 +32,64 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       const stop = await service.getStopPlace(id);
 
       if (stop.isOk && stop.value === null) {
-        return new Boom(`stop with id ${id} not found`, { statusCode: 404 });
+        return new Boom(`stop with id ${id} not found`, {
+          statusCode: 404
+        });
       }
 
       return stop.unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/v1/stop/{id}/quays',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getStopPlaceQuaysRequest,
+      description: 'Get all quays that belongs to a StopPlace'
+    },
+    handler: async (request, h) => {
+      const { id } = request.params;
+      const query = (request.query as unknown) as QuaysForStopPlaceQuery;
+      const quays = await service.getQuaysForStopPlace(id, query);
+
+      if (quays.isOk && quays.value === null) {
+        return new Boom(`stop with id ${id} not found`, {
+          statusCode: 404
+        });
+      }
+      return quays.unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/v1/quay/{id}/departures',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getDeparturesFromQuayRequest,
+      description: 'Get departures from Quay'
+    },
+    handler: async (request, h) => {
+      const { id } = request.params;
+      const query = (request.query as unknown) as DeparturesFromQuayQuery;
+      return (await service.getDeparturesFromQuay(id, query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/v1/servicejourney/{id}/departures',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getDeparturesForServiceJourneyRequest,
+      description: 'Get departures for Service Journey'
+    },
+    handler: async (request, h) => {
+      const { id } = request.params;
+      const {
+        date
+      } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
+
+      return await service.getDeparturesForServiceJourney(id, { date });
     }
   });
   server.route({
