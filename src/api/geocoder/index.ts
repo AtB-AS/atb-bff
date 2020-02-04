@@ -5,6 +5,7 @@ import { IGeocoderService } from '../../service/interface';
 import { getFeaturesRequest, getFeaturesReverseRequest } from './schema';
 import { FeaturesQuery, ReverseFeaturesQuery } from '../../service/types';
 import { DEFAULT_CACHE_TTL } from '../../config/cache';
+import { EXTERNAL_API_TIMEOUT } from '../../config/external';
 
 export default (server: Hapi.Server) => (service: IGeocoderService) => {
   const getFeatures = async (q: FeaturesQuery) =>
@@ -16,14 +17,14 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
     generateKey: (q: FeaturesQuery) => qs.stringify(q),
     cache: {
       expiresIn: DEFAULT_CACHE_TTL,
-      generateTimeout: 5000
+      generateTimeout: EXTERNAL_API_TIMEOUT
     }
   });
   server.method('reverse', getFeaturesReverse, {
     generateKey: (q: ReverseFeaturesQuery) => qs.stringify(q),
     cache: {
       expiresIn: DEFAULT_CACHE_TTL,
-      generateTimeout: 5000
+      generateTimeout: EXTERNAL_API_TIMEOUT
     }
   });
 
