@@ -13,19 +13,17 @@ const svc: jest.Mocked<IGeocoderService> = {
     Result.ok(Promise.resolve([]))
   )
 };
-
-beforeEach(async () => {
+beforeAll(async () => {
   server = createServer({
     port: randomPort()
   });
-  
+
   await initializePlugins(server);
   geocoderRoutes(server)(svc);
   await server.initialize();
   await server.start();
 });
-
-afterEach(async () => {
+afterAll(async () => {
   await server.stop();
 });
 
