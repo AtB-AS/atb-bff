@@ -46,7 +46,7 @@ export const initializePlugins = async (server: hapi.Server) => {
     options: {
       validVersions: [1],
       defaultVersion: 1,
-      vendorName: 'mitt∂atb'
+      vendorName: 'bff-oneclick-planner'
     }
   });
   await server.register({
