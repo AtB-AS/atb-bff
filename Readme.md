@@ -18,7 +18,7 @@ Build and run the docker image:
 
 ## Architecture
 
-The runtime is written in Typescript and runs on Node.js
+The runtime is written in TypeScript and runs on Node.js
 
 - HTTP server framework: [Hapi](https://hapi.dev)
   - Request and response validation is performed by
