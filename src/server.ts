@@ -7,16 +7,6 @@ import hapiSwagger from 'hapi-swagger';
 import hapiInert from '@hapi/inert';
 import hapiVision from '@hapi/vision';
 import hapiApiVersion from 'hapi-api-version';
-import Boom from '@hapi/boom';
-
-import enturService from './service/impl/entur';
-import geocoderService from './service/impl/geocoder';
-import stopsService from './service/impl/stops';
-import journeyService from './service/impl/journey';
-
-import geocoderRoutes from './api/geocoder';
-import stopsRoutes from './api/stops';
-import journeyRoutes from './api/journey';
 
 interface ServerOptions {
   port: string;
@@ -31,15 +21,7 @@ export const createServer = (opts: ServerOptions) => {
     address: '0.0.0.0',
     routes: {
       validate: {
-        failAction: async (request, h, err) => {
-          if (process.env.NODE_ENV === 'production') {
-            // In prod, log a limited error message and throw the default Bad Request error.
-            console.error('ValidationError:', err?.message);
-            throw Boom.badRequest(`Invalid request payload input`);
-          } else {
-            throw err;
-          }
-        }
+        failAction: async (request, h, err) => err
       }
     }
   });
@@ -79,10 +61,4 @@ export const initializePlugins = async (server: hapi.Server) => {
   });
 
   return server;
-};
-
-export const initializeRoutes = (server: hapi.Server) => {
-  stopsRoutes(server)(stopsService(enturService));
-  geocoderRoutes(server)(geocoderService(enturService));
-  journeyRoutes(server)(journeyService(enturService));
 };
