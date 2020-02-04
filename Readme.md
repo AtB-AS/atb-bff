@@ -27,13 +27,13 @@ The runtime is written in Typescript and runs on Node.js
     [hapi-swagger](https://github.com/glennjones/hapi-swagger)
 - Testing framework: [Jest](https://jestjs.io/)
 
-We chose Hapi because it is battle-proven, has a magnitude of features supported
-out of the box, is well documented, and has few external dependencies. Most of
-its dependencies are handled by the same team that maintains Hapi.
+Hapi was chosen because it is battle-tested, has a magnitude of features
+supported out of the box, and has few external dependencies. Most of its
+dependencies are handled by the same team that maintains Hapi.
 
 Service interfaces lives in `service/`, implementations in `service/impl`
 
-API endpoints live in `api/`
+API endpoints live in `api/`.
 
 The current implementation uses [@entur/sdk](https://github.com/entur/sdk) as an
 abstraction on top of Entur's GraphQL endpoints.
