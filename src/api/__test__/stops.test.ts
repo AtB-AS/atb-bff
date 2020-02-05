@@ -91,12 +91,22 @@ describe('GET /stops', () => {
 
     expect(res.statusCode).toBe(400);
   });
-  describe('GET /departures', () => {
-    it('responds with 200', async () => {
-      const res = await server.inject({
-        method: 'get',
-        url: '/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
-      });
+});
+describe('GET /departures', () => {
+  it('responds with 200', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
+    });
+  });
+  it('parses query parameters correctly', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
+    });
+    expect(svc.getDeparturesBetweenStopPlaces).toBeCalledWith({
+      from: 'NSR:StopPlace:42624',
+      to: 'NSR:StopPlace:41609'
     });
   });
 });
