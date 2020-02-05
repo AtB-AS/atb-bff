@@ -1,4 +1,3 @@
-
 steps:
     - name: 'gcr.io/cloud-builders/docker'
       args: ['build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest', '.']
@@ -17,5 +16,5 @@ steps:
         - '--platform'
         - 'managed'
         - '--allow-unauthenticated'
-  images:
+images:
     - gcr.io/$PROJECT_ID/$REPO_NAME:latest
