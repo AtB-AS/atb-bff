@@ -77,6 +77,11 @@ export interface NearestPlacesQuery {
   modeFilter: string[];
 }
 
+export interface DeparturesBetweenStopPlacesQuery {
+  from: string;
+  to: string;
+}
+
 export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }

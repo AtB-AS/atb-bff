@@ -7,6 +7,9 @@ import { randomPort } from './common';
 
 let server: Hapi.Server;
 const svc: jest.Mocked<IStopsService> = {
+  getDeparturesBetweenStopPlaces: jest.fn((...args: any): any =>
+    Result.ok(Promise.resolve([]))
+  ),
   getDeparturesForServiceJourney: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),
@@ -71,7 +74,7 @@ describe('GET /stops/{id}/departures', () => {
   });
 });
 describe('GET /stops', () => {
-  it('response with 200', async () => {
+  it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
       url: '/stops?lat=63.3818027&lon=10.3677379'
@@ -87,5 +90,13 @@ describe('GET /stops', () => {
     });
 
     expect(res.statusCode).toBe(400);
+  });
+  describe('GET /departures', () => {
+    it('responds with 200', async () => {
+      const res = await server.inject({
+        method: 'get',
+        url: '/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
+      });
+    });
   });
 });

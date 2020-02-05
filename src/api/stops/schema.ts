@@ -43,3 +43,10 @@ export const getDeparturesForServiceJourneyRequest = {
     date: Joi.date()
   })
 };
+
+export const getDeparturesBetweenStopPlacesRequest = {
+  query: Joi.object({
+    from: Joi.string().required(),
+    to: Joi.string().required()
+  }).required()
+};

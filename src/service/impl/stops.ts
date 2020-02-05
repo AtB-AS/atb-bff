@@ -4,6 +4,14 @@ import { IStopsService } from '../interface';
 import { APIError } from '../types';
 
 export default (service: EnturService): IStopsService => ({
+  async getDeparturesBetweenStopPlaces({ from, to }) {
+    try {
+      const departures = await service.getDeparturesBetweenStopPlaces(from, to);
+      return Result.ok(departures);
+    } catch (error) {
+      return Result.err(new APIError(error?.message));
+    }
+  },
   async getStopPlace(id) {
     try {
       const stop = await service.getStopPlace(id);
