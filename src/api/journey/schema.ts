@@ -24,7 +24,7 @@ export const postJourneyRequest = {
         longitude: Joi.number().required()
       })
     }).required(),
-    searchDate: Joi.date().default(new Date()),
+    searchDate: Joi.date(),
     arriveBy: Joi.bool().default(false),
     modes: Joi.array().default(['foot', 'bus']),
     limit: Joi.number().default(5),
