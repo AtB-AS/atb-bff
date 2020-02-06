@@ -33,6 +33,6 @@ export const getFeaturesReverseRequest = {
     lon: Joi.number().required(),
     layers: Joi.string(),
     radius: Joi.number(),
-    size: Joi.number()
+    limit: Joi.number()
   })
 };

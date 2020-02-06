@@ -27,7 +27,7 @@ export type ReverseFeaturesQuery = {
   lat: number;
   lon: number;
   radius?: number;
-  size?: number;
+  limit?: number;
   layers?: string[];
 };
 
