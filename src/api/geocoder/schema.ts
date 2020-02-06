@@ -6,16 +6,25 @@ export const getFeaturesRequest = {
     lon: Joi.number(),
     lat: Joi.number(),
     layers: Joi.string(),
-    bx1: Joi.number(),
-    bx2: Joi.number(),
-    by1: Joi.number(),
-    by2: Joi.number(),
+    boundary: Joi.object({
+      rect: Joi.object({
+        min_lat: Joi.number(),
+        max_lat: Joi.number(),
+        min_lon: Joi.number(),
+        max_lon: Joi.number()
+      })
+    }),
     country: Joi.string(),
     sources: Joi.string(),
     limit: Joi.number()
   })
     .and('lat', 'lon')
-    .and('bx1', 'bx2', 'by2', 'by1')
+    .and(
+      'boundary.rect.min_lat',
+      'boundary.rect.max_lat',
+      'boundary.rect.min_lon',
+      'boundary.rect.max_lon'
+    )
 };
 
 export const getFeaturesReverseRequest = {
