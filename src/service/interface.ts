@@ -16,6 +16,7 @@ import {
   DeparturesFromStopPlaceQuery,
   FeaturesQuery,
   NearestPlacesQuery,
+  NextDepartureFromCoordinateQuery,
   NextDepartureFromStopQuery,
   QuaysForStopPlaceQuery,
   ReverseFeaturesQuery,
@@ -26,8 +27,11 @@ import {
 import { AgentError } from './impl/agent';
 
 export interface IAgentService {
-  getNextDepartureFromStop(
+  getNextDepartureBetweenStops(
     query: NextDepartureFromStopQuery
+  ): Promise<Result<string, AgentError>>;
+  getNextDepartureFromCoordinate(
+    query: NextDepartureFromCoordinateQuery
   ): Promise<Result<string, AgentError>>;
 }
 

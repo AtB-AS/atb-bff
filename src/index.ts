@@ -35,7 +35,7 @@ process.on('unhandledRejection', err => {
   geocoderRoutes(server)(geocoderService(enturService));
   journeyRoutes(server)(journeyService(enturService));
   agentRoutes(server)(agentService(stopsService(enturService)));
-  
+
   await server.initialize();
   await server.start();
 

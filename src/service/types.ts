@@ -96,6 +96,12 @@ export interface DeparturesBetweenStopPlacesParams {
   start?: Date;
 }
 
+export type NextDepartureFromCoordinateQuery = {
+  lat: number;
+  lon: number;
+  to: string;
+};
+
 export class APIError extends Error {
   constructor(public message: string) {
     super();
