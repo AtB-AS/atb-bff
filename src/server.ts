@@ -14,7 +14,7 @@ interface ServerOptions {
 }
 
 export const createServer = (opts: ServerOptions) => {
-  const server = new hapi.Server({
+  return new hapi.Server({
     host: 'localhost',
     listener: opts.listener,
     port: opts.port,
@@ -25,8 +25,6 @@ export const createServer = (opts: ServerOptions) => {
       }
     }
   });
-
-  return server;
 };
 
 export const initializePlugins = async (server: hapi.Server) => {

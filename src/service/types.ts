@@ -86,6 +86,16 @@ export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
 
+export interface NextDepartureFromStopQuery {
+  from: string;
+  to: string;
+}
+
+export interface DeparturesBetweenStopPlacesParams {
+  limit?: number;
+  start?: Date;
+}
+
 export class APIError extends Error {
   constructor(public message: string) {
     super();
