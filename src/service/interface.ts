@@ -5,6 +5,7 @@ import {
   NearestPlace,
   Quay,
   StopPlace,
+  StopPlaceDetails,
   TripPattern
 } from '@entur/sdk';
 import {
@@ -44,7 +45,7 @@ export interface IGeocoderService {
 }
 
 export interface IStopsService {
-  getStopPlace(id: string): Promise<Result<StopPlace | null, APIError>>;
+  getStopPlace(id: string): Promise<Result<StopPlaceDetails | null, APIError>>;
 
   getDeparturesBetweenStopPlaces(
     query: DeparturesBetweenStopPlacesQuery,
