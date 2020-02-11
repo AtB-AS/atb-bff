@@ -44,7 +44,6 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as FeaturesQuery;
-      console.log(query);
       return server.methods.feature(query);
     }
   });
