@@ -34,7 +34,9 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
     options: {
       description: 'Find features matching query',
       tags: ['api', 'geocoder'],
-      validate: getFeaturesRequest,
+      validate: {
+        query: getFeaturesRequest
+      },
       cache: {
         expiresIn: DEFAULT_CACHE_TTL,
         privacy: 'public'
@@ -42,6 +44,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as FeaturesQuery;
+      console.log(query);
       return server.methods.feature(query);
     }
   });
