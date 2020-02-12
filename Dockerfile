@@ -10,5 +10,5 @@ COPY --from=build /app/dist ./dist
 COPY package*.json ./
 RUN npm install --production
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 CMD npm start
