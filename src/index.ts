@@ -21,14 +21,6 @@ process.on('unhandledRejection', err => {
 });
 
 (async () => {
-  /* Set up tracing if running on Google Cloud */
-  if (
-    process.env.NODE_ENV === 'production' &&
-    process.env.GOOGLE_CLOUD_PROJECT
-  ) {
-    traceAgent.start();
-  }
-
   const server = createServer({
     port: process.env['PORT'] || '8080'
   });
@@ -53,4 +45,13 @@ process.on('unhandledRejection', err => {
   server
     .logger()
     .info(`${name} (${version}) listening on ${server.settings.port}`);
+
+  /* Set up tracing if running on Google Cloud */
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.GOOGLE_CLOUD_PROJECT
+  ) {
+    server.logger().info(`running on google cloud, starting trace agent`);
+    traceAgent.start();
+  }
 })();
