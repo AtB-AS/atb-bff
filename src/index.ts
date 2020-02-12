@@ -1,7 +1,11 @@
 import { name, version } from '../package.json';
 
 import { Boom } from '@hapi/boom';
-import traceAgent from '@google-cloud/trace-agent';
+
+/* Set up tracing if running in production */
+if (process.env.NODE_ENV === 'production') {
+  require('@google-cloud/trace-agent').start();
+}
 
 import { createServer, initializePlugins } from './server';
 import enturService from './service/impl/entur';
@@ -45,10 +49,4 @@ process.on('unhandledRejection', err => {
   server
     .logger()
     .info(`${name} (${version}) listening on ${server.settings.port}`);
-
-  /* Set up tracing if running in production */
-  if (process.env.NODE_ENV === 'production') {
-    traceAgent.start();
-    server.logger().info(`started trace agent`);
-  }
 })();
