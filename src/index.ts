@@ -46,9 +46,19 @@ process.on('unhandledRejection', err => {
     .logger()
     .info(`${name} (${version}) listening on ${server.settings.port}`);
 
+<<<<<<< HEAD
   /* Set up tracing if running in production */
   if (process.env.NODE_ENV === 'production') {
     traceAgent.start();
     server.logger().info(`started trace agent`);
+=======
+  /* Set up tracing if running on Google Cloud */
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.GOOGLE_CLOUD_PROJECT
+  ) {
+    server.logger().info(`running on google cloud, starting trace agent`);
+    traceAgent.start();
+>>>>>>> 91d0c6722b4dc71442d8a9c97ed9c4acd6e90916
   }
 })();
