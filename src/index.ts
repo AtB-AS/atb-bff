@@ -1,6 +1,7 @@
 import { name, version } from '../package.json';
 
 import { Boom } from '@hapi/boom';
+import traceAgent from '@google-cloud/trace-agent';
 
 import { createServer, initializePlugins } from './server';
 import enturService from './service/impl/entur';
@@ -20,6 +21,14 @@ process.on('unhandledRejection', err => {
 });
 
 (async () => {
+  /* Set up tracing if running on Google Cloud */
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.GOOGLE_CLOUD_PROJECT
+  ) {
+    traceAgent.start();
+  }
+
   const server = createServer({
     port: process.env['PORT'] || '8080'
   });
