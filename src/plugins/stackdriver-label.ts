@@ -17,7 +17,7 @@ const plugin: Hapi.Plugin<Options> = {
           traceAgent
             .get()
             .getCurrentRootSpan()
-            .addLabel(h, v);
+            .addLabel(h, v.toLowerCase().replace('-', '/'));
         }
       });
       return h.continue;
