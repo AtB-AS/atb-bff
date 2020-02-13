@@ -8,6 +8,8 @@ import hapiInert from '@hapi/inert';
 import hapiVision from '@hapi/vision';
 import hapiApiVersion from 'hapi-api-version';
 
+import stackdriverLabel from './plugins/stackdriver-label';
+
 interface ServerOptions {
   port: string;
   listener?: http.Server;
@@ -28,6 +30,12 @@ export const createServer = (opts: ServerOptions) => {
 };
 
 export const initializePlugins = async (server: hapi.Server) => {
+  await server.register({
+    plugin: stackdriverLabel,
+    options: {
+      headers: ['Atb-Install-Id']
+    }
+  });
   await server.register({
     plugin: hapiPino,
     options: {
