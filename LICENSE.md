@@ -50,7 +50,7 @@ by law in order to make effective the licence of the economic rights here above 
 The Licensor grants to the Licensee royalty-free, non-exclusive usage rights to any patents held by the Licensor, to the
 extent necessary to make use of the rights granted on the Work under this Licence.
 
-3.Communication of the Source Code
+## 3.Communication of the Source Code
 The Licensor may provide the Work either in its Source Code form, or as Executable Code. If the Work is provided as
 Executable Code, the Licensor provides in addition a machine-readable copy of the Source Code of the Work along with
 each copy of the Work that the Licensor distributes or indicates, in a notice following the copyright notice attached to
