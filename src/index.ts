@@ -4,6 +4,7 @@ import { Boom } from '@hapi/boom';
 
 /* Set up tracing if running in production */
 if (process.env.NODE_ENV === 'production') {
+  console.info('starting tace agent...');
   require('@google-cloud/trace-agent').start();
 }
 
