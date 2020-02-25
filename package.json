@@ -33,7 +33,7 @@
     "@entur/sdk": "^1.0.0",
     "@google-cloud/trace-agent": "^4.2.5",
     "@hapi/boom": "^9.0.0",
-    "@hapi/hapi": "^19.0.5",
+    "@hapi/hapi": "^19.1.1",
     "@hapi/inert": "^6.0.1",
     "@hapi/vision": "^6.0.0",
     "@types/hapi__hapi": "^19.0.0",
