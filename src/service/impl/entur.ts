@@ -1,5 +1,5 @@
 import createService from '@entur/sdk';
-import fetch, { RequestInit } from 'node-fetch';
+import fetch from 'node-fetch';
 import { HttpsAgent as Agent } from 'agentkeepalive';
 import { Logging } from '@google-cloud/logging';
 
