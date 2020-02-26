@@ -14,7 +14,7 @@ export default (service: EnturService): IGeocoderService => ({
 
       return Result.ok(features);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getFeaturesReverse({ lat, lon, ...params }) {
@@ -26,7 +26,7 @@ export default (service: EnturService): IGeocoderService => ({
 
       return Result.ok(features);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   }
 });

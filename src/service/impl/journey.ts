@@ -9,7 +9,7 @@ export default (service: EnturService): IJourneyService => ({
       const trips = await service.findTrips(from, to, when);
       return Result.ok(trips);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getTripPatterns(query) {
@@ -17,7 +17,7 @@ export default (service: EnturService): IJourneyService => ({
       const trips = await service.getTripPatterns(query);
       return Result.ok(trips);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   }
 });

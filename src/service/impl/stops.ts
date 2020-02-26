@@ -13,7 +13,7 @@ export default (service: EnturService): IStopsService => ({
       );
       return Result.ok(departures);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getStopPlace(id) {
@@ -25,7 +25,7 @@ export default (service: EnturService): IStopsService => ({
         const re = /Entur SDK: No data available/;
         if (error.message.match(re)) return Result.ok(null);
       }
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getDeparturesFromStopPlace(id, query) {
@@ -34,7 +34,7 @@ export default (service: EnturService): IStopsService => ({
 
       return Result.ok(departures);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getDeparturesFromQuay(id, query) {
@@ -48,7 +48,7 @@ export default (service: EnturService): IStopsService => ({
       }
       return Result.ok([]);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getStopPlacesByPosition({ lat: latitude, lon: longitude, distance }) {
@@ -63,7 +63,7 @@ export default (service: EnturService): IStopsService => ({
 
       return Result.ok(stops);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getNearestPlaces({ lat, lon, ...query }) {
@@ -74,7 +74,7 @@ export default (service: EnturService): IStopsService => ({
       });
       return Result.ok(places);
     } catch (error) {
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getQuaysForStopPlace(id, query) {
@@ -87,7 +87,7 @@ export default (service: EnturService): IStopsService => ({
         const re = /Entur SDK: No data available/;
         if (error.message.match(re)) return Result.ok(null);
       }
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   },
   async getDeparturesForServiceJourney(id, { date }) {
@@ -102,7 +102,7 @@ export default (service: EnturService): IStopsService => ({
       const re = /Entur SDK: No data available/;
       if (error.message.match(re)) return Result.ok(null);
 
-      return Result.err(new APIError(error));
+      return Result.err(new APIError(error?.message));
     }
   }
 });
