@@ -1,9 +1,9 @@
 import { StackdriverStatsExporter } from '@opencensus/exporter-stackdriver';
 import { globalStats } from '@opencensus/core';
 
-export default () => {
+export default (projectId: string) => {
   const exporter = new StackdriverStatsExporter({
-    projectId: 'atb-mobility-platform'
+    projectId
   });
   globalStats.registerExporter(exporter);
 };
