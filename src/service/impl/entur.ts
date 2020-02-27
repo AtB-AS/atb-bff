@@ -1,6 +1,7 @@
 import createService from '@entur/sdk';
 import fetch from 'node-fetch';
 import { HttpsAgent as Agent } from 'agentkeepalive';
+import { v4 as uuid } from 'uuid';
 
 import {
   globalStats,
@@ -11,6 +12,7 @@ import {
 
 const MEASURE_INTERVAL = 120 * 1000;
 const ENDPOINT_RE = /(http.?:\/\/\S+?\/)(\w+)/;
+const instanceId = uuid();
 
 const enturRps = globalStats.createMeasureDouble(
   'entur/requests',
@@ -19,12 +21,13 @@ const enturRps = globalStats.createMeasureDouble(
 );
 
 const endpointTagKey = { name: 'endpoint' };
+const instanceIdTagKey = { name: 'instanceId' };
 
 const rpsView = globalStats.createView(
   'rpc/upstream_entur',
   enturRps,
   AggregationType.SUM,
-  [endpointTagKey],
+  [endpointTagKey, instanceIdTagKey],
   'Requests upstream'
 );
 globalStats.registerView(rpsView);
@@ -62,6 +65,7 @@ const reportMetrics = (requests: EndpointMeasure[]) => {
   metrics.forEach(m => {
     const tagmap = new TagMap();
     tagmap.set(endpointTagKey, { value: m.tag });
+    tagmap.set(instanceIdTagKey, { value: instanceId });
     globalStats.record(
       [
         {
