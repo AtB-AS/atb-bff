@@ -74,6 +74,14 @@ describe('GET /geocoder/features', () => {
       query: 'Trondheim'
     });
   });
+  it('responds with 400 for malformed queries', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/geocoder/features?query='
+    });
+
+    expect(res.statusCode).toBe(400);
+  });
   it('converts comma-separated query-parameters to string array', async () => {
     const res = await server.inject({
       method: 'get',
@@ -86,13 +94,5 @@ describe('GET /geocoder/features', () => {
       query: 'Trondheim',
       layers: ['venue', 'address']
     });
-  });
-  it('responds with 400 for malformed queries', async () => {
-    const res = await server.inject({
-      method: 'get',
-      url: '/geocoder/features?query='
-    });
-
-    expect(res.statusCode).toBe(400);
   });
 });
