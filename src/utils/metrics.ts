@@ -3,7 +3,8 @@ import { globalStats } from '@opencensus/core';
 
 export default (projectId: string) => {
   const exporter = new StackdriverStatsExporter({
-    projectId
+    projectId,
+    period: 120 * 1000
   });
   globalStats.registerExporter(exporter);
 };
