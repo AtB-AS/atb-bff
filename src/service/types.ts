@@ -1,4 +1,6 @@
 import { Location, QueryMode } from '@entur/sdk';
+import { FetchError } from 'node-fetch';
+import { boomify } from '@hapi/boom';
 
 export interface Coordinates {
   latitude: number;
@@ -103,8 +105,21 @@ export type NextDepartureFromCoordinateQuery = {
 };
 
 export class APIError extends Error {
-  constructor(public message: string) {
+  public statusCode?: number = 500;
+
+  constructor(error: any) {
     super();
-    this.name = 'APIError';
+    if (error instanceof FetchError) {
+      switch (error.code) {
+        case 'ETIMEDOUT':
+        case 'EPIPE':
+        case 'ECONNRESET':
+        case 'ECONNREFUSED':
+        case 'ENOTFOUND':
+          this.message = 'Upstream service temporarily unavailable';
+          this.statusCode = 503;
+      }
+    }
+    return boomify(this, { statusCode: this.statusCode });
   }
 }
