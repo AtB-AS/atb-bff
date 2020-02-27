@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 import { createServer, initializePlugins } from './server';
-import enturService from './service/impl/entur';
+import enturClient from './service/impl/entur';
 import geocoderService from './service/impl/geocoder';
 import stopsService from './service/impl/stops';
 import journeyService from './service/impl/journey';
@@ -29,7 +29,7 @@ process.on('unhandledRejection', err => {
   const server = createServer({
     port: process.env['PORT'] || '8080'
   });
-
+  const enturService = enturClient({});
   await initializePlugins(server);
   server.route({
     method: '*',
