@@ -22,8 +22,13 @@ import agentRoutes from './api/agent';
 
 import registerMetricsExporter from './utils/metrics';
 
+import { GaxiosError } from 'gaxios';
+
 process.on('unhandledRejection', err => {
   console.error(err);
+  /* Ignore errors from the Stackdriver Reporter for now */
+  if (err instanceof GaxiosError) return;
+
   process.exit(-1);
 });
 
