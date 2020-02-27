@@ -82,4 +82,17 @@ describe('GET /geocoder/features', () => {
 
     expect(res.statusCode).toBe(400);
   });
+  it('converts comma-separated query-parameters to string array', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url:
+        '/geocoder/features?query=Trondheim&lat=63.43&lon=10.34&layers=venue,address'
+    });
+    expect(svc.getFeatures).toBeCalledWith({
+      lat: 63.43,
+      lon: 10.34,
+      query: 'Trondheim',
+      layers: ['venue', 'address']
+    });
+  });
 });
