@@ -1,7 +1,7 @@
 import { name, version } from '../package.json';
 
 import { Boom } from '@hapi/boom';
-
+import { GoogleAuth } from 'google-auth-library';
 /* Set up tracing if running in production */
 if (process.env.NODE_ENV === 'production') {
   console.info('starting tace agent...');
@@ -20,34 +20,48 @@ import stopsRoutes from './api/stops';
 import journeyRoutes from './api/journey';
 import agentRoutes from './api/agent';
 
+import registerMetricsExporter from './utils/metrics';
+
 process.on('unhandledRejection', err => {
   console.error(err);
-  process.exit(1);
+  process.exit(-1);
 });
 
 (async () => {
-  const server = createServer({
-    port: process.env['PORT'] || '8080'
-  });
-  const enturService = enturClient({});
-  await initializePlugins(server);
-  server.route({
-    method: '*',
-    path: '/{any*}',
-    handler: (request, h) =>
-      new Boom('The requested resource was not found.', { statusCode: 404 })
-  });
-  stopsRoutes(server)(stopsService(enturService));
-  geocoderRoutes(server)(geocoderService(enturService));
-  journeyRoutes(server)(journeyService(enturService));
-  agentRoutes(server)(
-    agentService(stopsService(enturService), journeyService(enturService))
-  );
+  try {
+    const auth = new GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform'
+    });
+    const projectId = await auth.getProjectId();
 
-  await server.initialize();
-  await server.start();
+    const server = createServer({
+      port: process.env['PORT'] || '8080'
+    });
+    const enturService = enturClient({});
+    await initializePlugins(server);
+    server.route({
+      method: '*',
+      path: '/{any*}',
+      handler: (request, h) =>
+        new Boom('The requested resource was not found.', { statusCode: 404 })
+    });
+    stopsRoutes(server)(stopsService(enturService));
+    geocoderRoutes(server)(geocoderService(enturService));
+    journeyRoutes(server)(journeyService(enturService));
+    agentRoutes(server)(
+      agentService(stopsService(enturService), journeyService(enturService))
+    );
+    registerMetricsExporter(projectId);
+    await server.initialize();
+    await server.start();
 
-  server
-    .logger()
-    .info(`${name} (${version}) listening on ${server.settings.port}`);
+    server
+      .logger()
+      .info(`${name} (${version}) listening on ${server.settings.port}`);
+  } catch (error) {
+    console.error(
+      `failed to initialize server: ${error?.message}, terminating process.`
+    );
+    process.exit(-1);
+  }
 })();

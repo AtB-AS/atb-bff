@@ -42,6 +42,7 @@
     "@types/hapi__hapi": "^19.0.2",
     "agentkeepalive": "^4.1.0",
     "date-fns": "^2.10.0",
+    "google-auth-library": "^5.10.1",
     "hapi-api-version": "^2.3.1",
     "hapi-pino": "^6.3.0",
     "hapi-pulse": "^3.0.0",
