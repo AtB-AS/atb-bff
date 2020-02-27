@@ -4,12 +4,7 @@ export const getFeaturesRequest = Joi.object({
   query: Joi.string().required(),
   lon: Joi.number(),
   lat: Joi.number(),
-  layers: Joi.string().custom(val => {
-    if (val && typeof val === 'string') {
-      return val.split(',');
-    }
-    return val;
-  }),
+  layers: Joi.string(),
   'boundary.rect.min_lat': Joi.number(),
   'boundary.rect.max_lat': Joi.number(),
   'boundary.rect.min_lon': Joi.number(),
