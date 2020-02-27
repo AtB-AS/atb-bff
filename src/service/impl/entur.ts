@@ -8,12 +8,10 @@ import {
   TagMap,
   AggregationType
 } from '@opencensus/core';
-import { StackdriverStatsExporter } from '@opencensus/exporter-stackdriver';
 
-const MEASURE_INTERVAL = 60 * 1000;
+const MEASURE_INTERVAL = 120 * 1000;
 const ENDPOINT_RE = /(http.?:\/\/\S+?\/)(\w+)/;
 
-// The latency in milliseconds
 const enturRps = globalStats.createMeasureDouble(
   'entur/requests',
   MeasureUnit.UNIT,
@@ -31,11 +29,6 @@ const rpsView = globalStats.createView(
 );
 globalStats.registerView(rpsView);
 
-const exporter = new StackdriverStatsExporter({
-  projectId: 'atb-mobility-platform'
-});
-globalStats.registerExporter(exporter);
-
 const agent = new Agent({
   keepAlive: true
 });
@@ -50,40 +43,43 @@ type EndpointTotal = {
   [endpint: string]: number;
 };
 
+const reportMetrics = (requests: EndpointMeasure[]) => {
+  const totals = requests.reduce((total, measure) => {
+    if (total[measure.endpoint] === undefined) {
+      total[measure.endpoint] = 1;
+    } else {
+      total[measure.endpoint] += 1;
+    }
+    return total;
+  }, {} as EndpointTotal);
+
+  const metrics = Object.entries(totals).map(([endpoint, reqs]) => ({
+    measure: enturRps,
+    value: reqs,
+    tag: endpoint
+  }));
+
+  metrics.forEach(m => {
+    const tagmap = new TagMap();
+    tagmap.set(endpointTagKey, { value: m.tag });
+    globalStats.record(
+      [
+        {
+          measure: m.measure,
+          value: m.value
+        }
+      ],
+      tagmap
+    );
+  });
+};
+
 const service = (config: Config) => {
-  let requests: EndpointMeasure[] = [];
+  let metric: EndpointMeasure[] = [];
 
   setInterval(() => {
-    const totals = requests.reduce((total, measure) => {
-      if (total[measure.endpoint] === undefined) {
-        total[measure.endpoint] = 1;
-      } else {
-        total[measure.endpoint] += 1;
-      }
-      return total;
-    }, {} as EndpointTotal);
-
-    const metrics = Object.entries(totals).map(([endpoint, reqs]) => ({
-      measure: enturRps,
-      value: reqs,
-      tag: endpoint
-    }));
-
-    metrics.forEach(m => {
-      const tagmap = new TagMap();
-      tagmap.set(endpointTagKey, { value: m.tag });
-      globalStats.record(
-        [
-          {
-            measure: m.measure,
-            value: m.value
-          }
-        ],
-        tagmap
-      );
-    });
-
-    requests = [];
+    reportMetrics(metric);
+    metric = [];
   }, MEASURE_INTERVAL);
 
   return createService({
@@ -94,7 +90,7 @@ const service = (config: Config) => {
       if (match) {
         endpoint = match[2];
       }
-      requests = [...requests, { endpoint }];
+      metric = [...metric, { endpoint }];
 
       return fetch(url, {
         agent,
