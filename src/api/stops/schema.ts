@@ -35,6 +35,14 @@ export const getStopPlaceQuaysRequest = {
   })
 };
 
+export const getStopPlacesByNameRequest = {
+  query: Joi.object({
+    query: Joi.string().required(),
+    lat: Joi.number(),
+    lon: Joi.number()
+  }).and('lat', 'lon')
+};
+
 export const getDeparturesForServiceJourneyRequest = {
   params: Joi.object({
     id: Joi.string().required()

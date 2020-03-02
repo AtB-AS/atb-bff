@@ -7,6 +7,9 @@ import { randomPort } from './common';
 
 let server: Hapi.Server;
 const svc: jest.Mocked<IStopsService> = {
+  getStopPlacesByName: jest.fn((...args: any): any =>
+    Result.ok(Promise.resolve([]))
+  ),
   getDeparturesBetweenStopPlaces: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),
@@ -73,11 +76,11 @@ describe('GET /stops/{id}/departures', () => {
     expect(res.statusCode).toBe(200);
   });
 });
-describe('GET /stops', () => {
+describe('GET /stops/nearest', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stops?lat=63.3818027&lon=10.3677379'
+      url: '/stops/nearest?lat=63.3818027&lon=10.3677379'
     });
 
     expect(res.statusCode).toBe(200);
@@ -86,9 +89,25 @@ describe('GET /stops', () => {
   it('responds with 400 for missing required parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stops?invalid=wut'
+      url: '/stops/nearest?invalid=wut'
     });
 
+    expect(res.statusCode).toBe(400);
+  });
+});
+describe('GET /stops', () => {
+  it('responds with 200', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/stops?query=Prinsens gate&lat=63.433&lon=10.399'
+    });
+    expect(res.statusCode).toBe(200);
+  });
+  it('responds with 400 for invalid parameters', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/stops?query=Konges gate&lon=10.399'
+    });
     expect(res.statusCode).toBe(400);
   });
 });

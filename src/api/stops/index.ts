@@ -9,7 +9,8 @@ import {
   getStopPlaceQuaysRequest,
   getDeparturesFromQuayRequest,
   getDeparturesForServiceJourneyRequest,
-  getDeparturesBetweenStopPlacesRequest
+  getDeparturesBetweenStopPlacesRequest,
+  getStopPlacesByNameRequest
 } from './schema';
 import {
   StopPlaceQuery,
@@ -17,7 +18,8 @@ import {
   DeparturesForServiceJourneyQuery,
   QuaysForStopPlaceQuery,
   DeparturesFromQuayQuery,
-  DeparturesBetweenStopPlacesQuery
+  DeparturesBetweenStopPlacesQuery,
+  StopPlaceByNameQuery
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -111,7 +113,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/stops',
+    path: '/v1/stops/nearest',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceByPositionRequest,
@@ -120,6 +122,19 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuery;
       return (await service.getStopPlacesByPosition(query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/v1/stops',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getStopPlacesByNameRequest,
+      description: 'Find stops matching query'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as StopPlaceByNameQuery;
+      return (await service.getStopPlacesByName(query)).unwrap();
     }
   });
   server.route({
