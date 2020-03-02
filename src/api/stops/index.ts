@@ -111,7 +111,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/stops',
+    path: '/v1/nearest',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceByPositionRequest,
