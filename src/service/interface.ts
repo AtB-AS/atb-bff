@@ -23,7 +23,8 @@ import {
   ReverseFeaturesQuery,
   StopPlaceQuery,
   TripPatternsQuery,
-  TripQuery
+  TripQuery,
+  StopPlaceByNameQuery
 } from './types';
 import { AgentError } from './impl/agent';
 
@@ -46,7 +47,9 @@ export interface IGeocoderService {
 
 export interface IStopsService {
   getStopPlace(id: string): Promise<Result<StopPlaceDetails | null, APIError>>;
-
+  getStopPlacesByName(
+    query: StopPlaceByNameQuery
+  ): Promise<Result<StopPlaceDetails[], APIError>>;
   getDeparturesBetweenStopPlaces(
     query: DeparturesBetweenStopPlacesQuery,
     params?: DeparturesBetweenStopPlacesParams

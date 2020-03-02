@@ -39,6 +39,12 @@ export interface StopPlaceQuery {
   distance?: number;
 }
 
+export interface StopPlaceByNameQuery {
+  query: string;
+  lat?: number;
+  lon?: number;
+}
+
 export interface DeparturesFromStopPlaceQuery {
   start?: Date;
   timeRange?: number;

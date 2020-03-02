@@ -1,7 +1,8 @@
 import { Result } from '@badrap/result';
-import { EnturService } from '@entur/sdk';
+import { EnturService, StopPlaceDetails } from '@entur/sdk';
 import { IStopsService } from '../interface';
 import { APIError } from '../types';
+import { getStopPlacesByNameRequest } from '../../api/stops/schema';
 
 export default (service: EnturService): IStopsService => ({
   async getDeparturesBetweenStopPlaces({ from, to }, params) {
@@ -12,6 +13,28 @@ export default (service: EnturService): IStopsService => ({
         params
       );
       return Result.ok(departures);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+  async getStopPlacesByName({ query, lat, lon }) {
+    try {
+      const coordinates =
+        lat && lon ? { latitude: lat, longitude: lon } : undefined;
+      const features = await service.getFeatures(query, coordinates, {
+        layers: ['venue']
+      });
+      const isStop = /^NSR:StopPlace:\d+$/;
+
+      const stopIDs = features
+        .filter(f => f.properties.id.match(isStop))
+        .map(s => s.properties.id);
+
+      const stops = (await service.getStopPlaces(stopIDs)).filter(
+        s => s !== undefined
+      ) as StopPlaceDetails[];
+
+      return Result.ok(stops);
     } catch (error) {
       return Result.err(new APIError(error));
     }
