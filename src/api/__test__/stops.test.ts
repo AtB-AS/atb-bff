@@ -7,6 +7,9 @@ import { randomPort } from './common';
 
 let server: Hapi.Server;
 const svc: jest.Mocked<IStopsService> = {
+  getNearestDepartures: jest.fn((...args: any): any =>
+    Result.ok(Promise.resolve([]))
+  ),
   getStopPlacesByName: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),
@@ -107,6 +110,22 @@ describe('GET /stops', () => {
     const res = await server.inject({
       method: 'get',
       url: '/stops?query=Konges gate&lon=10.399'
+    });
+    expect(res.statusCode).toBe(400);
+  });
+});
+describe('GET /departures/nearest', () => {
+  it('responds with 200', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/departures/nearest?lat=63.361901&lon=10.377521'
+    });
+    expect(res.statusCode).toBe(200);
+  });
+  it('responds with 400 for invalid parameters', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: '/departures/nearest?lon=10.399'
     });
     expect(res.statusCode).toBe(400);
   });

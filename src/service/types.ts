@@ -1,4 +1,4 @@
-import { Location, QueryMode } from '@entur/sdk';
+import { Location, QueryMode, DeparturesById } from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 
@@ -32,6 +32,11 @@ export type ReverseFeaturesQuery = {
   limit?: number;
   layers?: string[];
 };
+
+export interface NearestDeparturesQuery {
+  lat: number;
+  lon: number;
+}
 
 export interface StopPlaceQuery {
   lat: number;
@@ -108,6 +113,10 @@ export type NextDepartureFromCoordinateQuery = {
   lat: number;
   lon: number;
   to: string;
+};
+
+export type DeparturesByIdWithStopName = DeparturesById & {
+  name: string;
 };
 
 export class APIError extends Error {

@@ -1,8 +1,12 @@
 import { Result } from '@badrap/result';
-import { EnturService, StopPlaceDetails } from '@entur/sdk';
+import {
+  EnturService,
+  StopPlaceDetails,
+  EstimatedCall,
+  DeparturesById
+} from '@entur/sdk';
 import { IStopsService } from '../interface';
-import { APIError } from '../types';
-import { getStopPlacesByNameRequest } from '../../api/stops/schema';
+import { APIError, DeparturesByIdWithStopName } from '../types';
 
 export default (service: EnturService): IStopsService => ({
   async getDeparturesBetweenStopPlaces({ from, to }, params) {
@@ -96,6 +100,29 @@ export default (service: EnturService): IStopsService => ({
         longitude: lon
       });
       return Result.ok(places);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+  async getNearestDepartures({ lat, lon, ...query }) {
+    try {
+      const stops = await service.getStopPlacesByPosition({
+        latitude: lat,
+        longitude: lon
+      });
+      const stopIds = stops.map(s => s.id);
+      const departures = (
+        await service.getDeparturesFromStopPlaces(stopIds)
+      ).filter(d => d !== undefined) as DeparturesById[];
+
+      const departuresWithStopName: DeparturesByIdWithStopName[] = departures.map(
+        d => ({
+          ...d,
+          name: stops.find(s => s.id === d.id)?.name ?? 'UNKNOWN'
+        })
+      );
+
+      return Result.ok(departuresWithStopName);
     } catch (error) {
       return Result.err(new APIError(error));
     }
