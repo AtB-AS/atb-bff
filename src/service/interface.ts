@@ -6,7 +6,8 @@ import {
   Quay,
   StopPlace,
   StopPlaceDetails,
-  TripPattern
+  TripPattern,
+  DeparturesById
 } from '@entur/sdk';
 import {
   APIError,
@@ -24,7 +25,9 @@ import {
   StopPlaceQuery,
   TripPatternsQuery,
   TripQuery,
-  StopPlaceByNameQuery
+  StopPlaceByNameQuery,
+  NearestDeparturesQuery,
+  DeparturesByIdWithStopName
 } from './types';
 import { AgentError } from './impl/agent';
 
@@ -46,6 +49,9 @@ export interface IGeocoderService {
 }
 
 export interface IStopsService {
+  getNearestDepartures(
+    query: NearestDeparturesQuery
+  ): Promise<Result<DeparturesByIdWithStopName[], APIError>>;
   getStopPlace(id: string): Promise<Result<StopPlaceDetails | null, APIError>>;
   getStopPlacesByName(
     query: StopPlaceByNameQuery

@@ -10,7 +10,8 @@ import {
   getDeparturesFromQuayRequest,
   getDeparturesForServiceJourneyRequest,
   getDeparturesBetweenStopPlacesRequest,
-  getStopPlacesByNameRequest
+  getStopPlacesByNameRequest,
+  getNearestDeparturesRequest
 } from './schema';
 import {
   StopPlaceQuery,
@@ -19,7 +20,8 @@ import {
   QuaysForStopPlaceQuery,
   DeparturesFromQuayQuery,
   DeparturesBetweenStopPlacesQuery,
-  StopPlaceByNameQuery
+  StopPlaceByNameQuery,
+  NearestDeparturesQuery
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -94,6 +96,20 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
 
       return await service.getDeparturesForServiceJourney(id, { date });
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/v1/departures/nearest',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getNearestDeparturesRequest,
+      description: 'Get departures from stops near coordinates'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as NearestDeparturesQuery;
+
+      return (await service.getNearestDepartures(query)).unwrap();
     }
   });
   server.route({

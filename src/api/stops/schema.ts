@@ -26,6 +26,13 @@ export const getStopPlaceDeparturesRequest = {
 };
 export const getDeparturesFromQuayRequest = getStopPlaceDeparturesRequest;
 
+export const getNearestDeparturesRequest = {
+  query: Joi.object({
+    lat: Joi.number().required(),
+    lon: Joi.number().required()
+  })
+};
+
 export const getStopPlaceQuaysRequest = {
   params: Joi.object({
     id: Joi.string().required()
