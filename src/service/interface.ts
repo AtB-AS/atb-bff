@@ -51,7 +51,7 @@ export interface IGeocoderService {
 export interface IStopsService {
   getNearestDepartures(
     query: NearestDeparturesQuery
-  ): Promise<Result<DeparturesByIdWithStopName[], APIError>>;
+  ): Promise<Result<{ [key: string]: EstimatedCall }, APIError>>;
   getStopPlace(id: string): Promise<Result<StopPlaceDetails | null, APIError>>;
   getStopPlacesByName(
     query: StopPlaceByNameQuery

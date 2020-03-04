@@ -2,8 +2,8 @@ import { Result } from '@badrap/result';
 import {
   EnturService,
   StopPlaceDetails,
-  EstimatedCall,
-  DeparturesById
+  DeparturesById,
+  EstimatedCall
 } from '@entur/sdk';
 import { IStopsService } from '../interface';
 import { APIError, DeparturesByIdWithStopName } from '../types';
@@ -106,23 +106,36 @@ export default (service: EnturService): IStopsService => ({
   },
   async getNearestDepartures({ lat, lon, ...query }) {
     try {
-      const stops = await service.getStopPlacesByPosition({
-        latitude: lat,
-        longitude: lon
-      });
-      const stopIds = stops.map(s => s.id);
-      const departures = (
-        await service.getDeparturesFromStopPlaces(stopIds)
-      ).filter(d => d !== undefined) as DeparturesById[];
-
-      const departuresWithStopName: DeparturesByIdWithStopName[] = departures.map(
-        d => ({
-          ...d,
-          name: stops.find(s => s.id === d.id)?.name ?? 'UNKNOWN'
+      const stopIds = (
+        await service.getStopPlacesByPosition({
+          latitude: lat,
+          longitude: lon
         })
-      );
+      ).map(s => s.id);
+      const departures = (
+        await service.getDeparturesFromStopPlaces(stopIds, {
+          timeRange: 3600,
+          start: new Date(Date.now() + 1 * 60 * 1000)
+        })
+      )
+        .filter((d): d is DeparturesById => d !== undefined)
+        .reduce(
+          (estimatedCalls, stopPlace) =>
+            estimatedCalls.concat(stopPlace.departures),
+          [] as EstimatedCall[]
+        )
+        .sort(
+          (d1, d2) =>
+            new Date(d2.expectedDepartureTime).getTime() -
+            new Date(d1.expectedDepartureTime).getTime()
+        )
+        .reduceRight((uniqueDepartures, departure) => {
+          uniqueDepartures[departure.serviceJourney.id] = departure;
 
-      return Result.ok(departuresWithStopName);
+          return uniqueDepartures;
+        }, {} as { [key: string]: EstimatedCall });
+
+      return Result.ok(departures);
     } catch (error) {
       return Result.err(new APIError(error));
     }
