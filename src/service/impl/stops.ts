@@ -3,7 +3,8 @@ import {
   EnturService,
   StopPlaceDetails,
   DeparturesById,
-  EstimatedCall
+  EstimatedCall,
+  StopPlace
 } from '@entur/sdk';
 import { IStopsService } from '../interface';
 import { APIError, DeparturesByIdWithStopName } from '../types';
@@ -105,37 +106,32 @@ export default (service: EnturService): IStopsService => ({
     }
   },
   async getNearestDepartures({ lat, lon, ...query }) {
+    const when = new Date(Date.now() + 1 * 60 * 1000);
+    const byDepartureTime = (a: EstimatedCall, b: EstimatedCall): number =>
+      new Date(b.expectedDepartureTime).getTime() -
+      new Date(a.expectedDepartureTime).getTime();
+    const byFlattening = (a: any[], b: any[]) => a.concat(b);
+    const overServiceJourneyId = (
+      a: { [key: string]: EstimatedCall },
+      b: EstimatedCall
+    ) => ({ ...a, [b.serviceJourney.id]: b });
+    const toDepartures = (stop: StopPlace): Promise<EstimatedCall[]> =>
+      service.getDeparturesFromStopPlace(stop.id, {
+        timeRange: 10 * 60,
+        start: when
+      });
     try {
-      const stopIds = (
-        await service.getStopPlacesByPosition({
-          latitude: lat,
-          longitude: lon
-        })
-      ).map(s => s.id);
-      const departures = (
-        await service.getDeparturesFromStopPlaces(stopIds, {
-          timeRange: 3600,
-          start: new Date(Date.now() + 1 * 60 * 1000)
-        })
-      )
-        .filter((d): d is DeparturesById => d !== undefined)
-        .reduce(
-          (estimatedCalls, stopPlace) =>
-            estimatedCalls.concat(stopPlace.departures),
-          [] as EstimatedCall[]
-        )
-        .sort(
-          (d1, d2) =>
-            new Date(d2.expectedDepartureTime).getTime() -
-            new Date(d1.expectedDepartureTime).getTime()
-        )
-        .reduceRight((uniqueDepartures, departure) => {
-          uniqueDepartures[departure.serviceJourney.id] = departure;
+      const stops = await service.getStopPlacesByPosition({
+        latitude: lat,
+        longitude: lon
+      });
 
-          return uniqueDepartures;
-        }, {} as { [key: string]: EstimatedCall });
+      const departures = (await Promise.all(stops.map(toDepartures)))
+        .reduce(byFlattening)
+        .sort(byDepartureTime)
+        .reduceRight(overServiceJourneyId, {});
 
-      return Result.ok(departures);
+      return Result.ok(Object.values(departures));
     } catch (error) {
       return Result.err(new APIError(error));
     }
