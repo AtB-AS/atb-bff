@@ -22,6 +22,7 @@ export const createServer = (opts: ServerOptions) => {
     port: opts.port,
     address: '0.0.0.0',
     routes: {
+      cors: true,
       validate: {
         failAction: async (request, h, err) => err
       }
