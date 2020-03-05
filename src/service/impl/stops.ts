@@ -131,7 +131,7 @@ export default (service: EnturService): IStopsService => ({
         .sort(byDepartureTime)
         .reduceRight(overServiceJourneyId, {});
 
-      return Result.ok(Object.values(departures));
+      return Result.ok(Object.values(departures).sort(byDepartureTime));
     } catch (error) {
       return Result.err(new APIError(error));
     }
