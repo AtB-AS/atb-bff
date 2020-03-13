@@ -88,6 +88,15 @@ const service = (config: Config) => {
 
   return createService({
     clientName: process.env.CLIENT_NAME || 'atb-mittatb',
+
+    /* Use environment variable ENTUR_ENV to override usage of production version of Entur
+       APIs. Set variable to dev or staging to use development or staging enviroment. */
+    hosts: process.env.ENTUR_ENV ? {
+      journeyPlanner:  `https://api.${process.env.ENTUR_ENV}.entur.io/journey-planner/v2`,
+      geocoder: `https://api.${process.env.ENTUR_ENV}.entur.io/geocoder/v1`,
+      nsr: `https://api.${process.env.ENTUR_ENV}.entur.io/stop-places/v1`,
+    }: undefined,
+    
     fetch: (url, init) => {
       let endpoint = 'UNKNOWN';
       const match = url.match(ENDPOINT_RE);
