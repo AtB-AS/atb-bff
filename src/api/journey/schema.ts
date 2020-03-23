@@ -26,7 +26,7 @@ export const postJourneyRequest = {
     }).required(),
     searchDate: Joi.date(),
     arriveBy: Joi.bool().default(false),
-    modes: Joi.array().default(['foot', 'bus']),
+    modes: Joi.array().default(['foot', 'bus', 'tram']),
     limit: Joi.number().default(5),
     wheelchairAccessible: Joi.bool().default(false)
   }).options({ abortEarly: false })
