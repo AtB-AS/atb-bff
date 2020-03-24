@@ -6,9 +6,11 @@ import {
   EstimatedCall,
   StopPlace
 } from '@entur/sdk';
+import haversineDistance from 'haversine-distance';
 import { IStopsService } from '../interface';
 import { APIError, DeparturesByIdWithStopName } from '../types';
 
+type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 export default (service: EnturService): IStopsService => ({
   async getDeparturesBetweenStopPlaces({ from, to }, params) {
     try {
@@ -110,16 +112,37 @@ export default (service: EnturService): IStopsService => ({
     const byDepartureTime = (a: EstimatedCall, b: EstimatedCall): number =>
       new Date(b.expectedDepartureTime).getTime() -
       new Date(a.expectedDepartureTime).getTime();
+    const byDistance = (
+      a: EstimatedCallWithStop,
+      b: EstimatedCallWithStop
+    ): number =>
+      haversineDistance(
+        { latitude: a.stop.latitude, longitude: a.stop.longitude },
+        { latitude: lat, longitude: lon }
+      ) -
+      haversineDistance(
+        { latitude: b.stop.latitude, longitude: b.stop.longitude },
+        { latitude: lat, longitude: lon }
+      );
     const byFlattening = (a: any[], b: any[]) => a.concat(b);
     const overServiceJourneyId = (
       a: { [key: string]: EstimatedCall },
       b: EstimatedCall
     ) => ({ ...a, [b.serviceJourney.id]: b });
-    const toDepartures = (stop: StopPlace): Promise<EstimatedCall[]> =>
-      service.getDeparturesFromStopPlace(stop.id, {
+    const toDepartures = async (
+      stop: StopPlaceDetails
+    ): Promise<EstimatedCallWithStop[]> => {
+      const departures = await service.getDeparturesFromStopPlace(stop.id, {
         timeRange: 10 * 60,
         start: when
       });
+      return departures.map(e => {
+        return {
+          ...e,
+          stop
+        };
+      });
+    };
     try {
       const stops = await service.getStopPlacesByPosition({
         latitude: lat,
@@ -128,7 +151,7 @@ export default (service: EnturService): IStopsService => ({
 
       const departures = (await Promise.all(stops.map(toDepartures)))
         .reduce(byFlattening)
-        .sort(byDepartureTime)
+        .sort(byDistance)
         .reduceRight(overServiceJourneyId, {});
 
       return Result.ok(Object.values(departures).sort(byDepartureTime));
