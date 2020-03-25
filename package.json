@@ -18,7 +18,7 @@
     "@types/hapi__inert": "^5.2.0",
     "@types/hapi__vision": "^5.5.1",
     "@types/jest": "^24.9.1",
-    "@types/node": "^13.9.3",
+    "@types/node": "^13.9.4",
     "@types/node-fetch": "^2.5.5",
     "@types/pino": "^5.17.0",
     "@types/uuid": "^7.0.2",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@badrap/result": "^0.2.6",
-    "@entur/sdk": "^1.4.2",
+    "@entur/sdk": "^1.4.3",
     "@google-cloud/trace-agent": "^4.2.5",
     "@hapi/boom": "^9.1.0",
     "@hapi/hapi": "^19.1.1",
