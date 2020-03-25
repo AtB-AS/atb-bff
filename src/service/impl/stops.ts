@@ -110,8 +110,8 @@ export default (service: EnturService): IStopsService => ({
   async getNearestDepartures({ lat, lon, ...query }) {
     const when = new Date(Date.now() + 1 * 60 * 1000);
     const byDepartureTime = (a: EstimatedCall, b: EstimatedCall): number =>
-      new Date(b.expectedDepartureTime).getTime() -
-      new Date(a.expectedDepartureTime).getTime();
+      new Date(a.expectedDepartureTime).getTime() -
+      new Date(b.expectedDepartureTime).getTime();
     const byDistance = (
       a: EstimatedCallWithStop,
       b: EstimatedCallWithStop
