@@ -135,6 +135,10 @@ export class APIError extends Error {
           this.statusCode = 503;
       }
     }
-    return boomify(this, { statusCode: this.statusCode });
+    console.error(error);
+    return boomify(this, {
+      statusCode: this.statusCode,
+      message: error.message
+    });
   }
 }
