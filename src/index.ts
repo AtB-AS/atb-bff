@@ -23,6 +23,7 @@ import agentRoutes from './api/agent';
 import registerMetricsExporter from './utils/metrics';
 
 import { GaxiosError } from 'gaxios';
+import { PubSub } from '@google-cloud/pubsub';
 
 process.on('unhandledRejection', err => {
   console.error(err);
@@ -50,11 +51,15 @@ process.on('unhandledRejection', err => {
       handler: (request, h) =>
         new Boom('The requested resource was not found.', { statusCode: 404 })
     });
+
+    const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
+    const js = journeyService(enturService, pubSubClient);
+
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService));
-    journeyRoutes(server)(journeyService(enturService));
+    journeyRoutes(server)(js);
     agentRoutes(server)(
-      agentService(stopsService(enturService), journeyService(enturService))
+      agentService(stopsService(enturService), js)
     );
     registerMetricsExporter(projectId);
     await server.initialize();
