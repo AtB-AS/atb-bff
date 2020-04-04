@@ -7,19 +7,23 @@ import { PubSub } from '@google-cloud/pubsub';
 import { getEnv } from '../../utils/getenv';
 
 const ENV = getEnv();
+const topicName = `analytics_trip_search`;
 
 export default (
   service: EnturService,
   pubSubClient: PubSub
 ): IJourneyService => {
-  const topic = `analytics_trip_search`;
-  const batchedPublisher = pubSubClient.topic(topic, {
-    batching: {
-      maxMessages: 10,
-      maxMilliseconds: 10 * 1000
-    }
+
+  // createTopic might fail if the topic already exists; ignore.
+  pubSubClient.createTopic(topicName).catch(() => {
   });
 
+  const batchedPublisher = pubSubClient.topic(topicName, {
+    batching: {
+      maxMessages: 100,
+      maxMilliseconds: 5 * 1000
+    }
+  });
   return {
     async getTrips({ from, to, when }) {
       try {
@@ -31,9 +35,8 @@ export default (
     },
     async getTripPatterns(query) {
       try {
-        batchedPublisher
-          .publish(Buffer.from(JSON.stringify(query)), { environment: ENV })
-          .catch(err => console.error(err));
+        await batchedPublisher
+          .publish(Buffer.from(JSON.stringify(query)), { environment: ENV });
         const trips = await service.getTripPatterns(query);
         return Result.ok(trips);
       } catch (error) {
