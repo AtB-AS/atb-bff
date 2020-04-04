@@ -22,7 +22,7 @@ export default (service: EnturService, pubSubClient: PubSub): IGeocoderService =
   return {
     async getFeatures({ query, lat, lon, ...params }) {
       try {
-        await batchedPublisher
+        batchedPublisher
           .publish(Buffer.from(JSON.stringify(query)), { environment: ENV });
         const features = await service.getFeatures(
           query,

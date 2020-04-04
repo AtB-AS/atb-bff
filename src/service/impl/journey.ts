@@ -35,7 +35,7 @@ export default (
     },
     async getTripPatterns(query) {
       try {
-        await batchedPublisher
+        batchedPublisher
           .publish(Buffer.from(JSON.stringify(query)), { environment: ENV });
         const trips = await service.getTripPatterns(query);
         return Result.ok(trips);
