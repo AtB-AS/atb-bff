@@ -56,7 +56,7 @@ process.on('unhandledRejection', err => {
     const js = journeyService(enturService, pubSubClient);
 
     stopsRoutes(server)(stopsService(enturService));
-    geocoderRoutes(server)(geocoderService(enturService));
+    geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
     agentRoutes(server)(
       agentService(stopsService(enturService), js)
