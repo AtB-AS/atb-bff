@@ -2,13 +2,17 @@ import createService from '@entur/sdk';
 import fetch from 'node-fetch';
 import { HttpsAgent as Agent } from 'agentkeepalive';
 import { v4 as uuid } from 'uuid';
-
+import pThrottle from 'p-throttle';
 import {
   globalStats,
   MeasureUnit,
   TagMap,
   AggregationType
 } from '@opencensus/core';
+
+// The actual spike limit set in ApiGee is 120/s, do 100/s to be safe.
+const RATE_LIMIT_N = 10;
+const RATE_LIMIT_RES_MS = 100;
 
 const MEASURE_INTERVAL = 120 * 1000;
 const ENDPOINT_RE = /(http.?:\/\/\S+?\/)(\w+)/;
@@ -87,20 +91,25 @@ const service = (config: Config) => {
   }, MEASURE_INTERVAL);
 
   return createService({
-    clientName: process.env.CLIENT_NAME || 'atb-mittatb',
-    fetch: (url, init) => {
-      let endpoint = 'UNKNOWN';
-      const match = url.match(ENDPOINT_RE);
-      if (match) {
-        endpoint = match[2];
-      }
-      metric = [...metric, { endpoint }];
+    clientName: process.env.CLIENT_NAME || 'atb - bff',
+    fetch: pThrottle(
+      (url, init) => {
+        const now = new Date();
+        let endpoint = 'UNKNOWN';
+        const match = url.match(ENDPOINT_RE);
+        if (match) {
+          endpoint = match[2];
+        }
+        metric = [...metric, { endpoint }];
 
-      return fetch(url, {
-        agent,
-        ...init
-      });
-    }
+        return fetch(url, {
+          agent,
+          ...init
+        });
+      },
+      RATE_LIMIT_N,
+      RATE_LIMIT_RES_MS
+    )
   });
 };
 export default service;
