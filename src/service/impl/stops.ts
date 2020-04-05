@@ -1,16 +1,11 @@
 import { Result } from '@badrap/result';
-import {
-  EnturService,
-  StopPlaceDetails,
-  DeparturesById,
-  EstimatedCall,
-  StopPlace
-} from '@entur/sdk';
+import { EnturService, StopPlaceDetails, EstimatedCall } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import { IStopsService } from '../interface';
-import { APIError, DeparturesByIdWithStopName } from '../types';
+import { APIError } from '../types';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
+
 export default (service: EnturService): IStopsService => ({
   async getDeparturesBetweenStopPlaces({ from, to }, params) {
     try {
@@ -124,37 +119,34 @@ export default (service: EnturService): IStopsService => ({
         { latitude: b.stop.latitude, longitude: b.stop.longitude },
         { latitude: lat, longitude: lon }
       );
-    const byFlattening = (a: any[], b: any[]) => a.concat(b);
+    const byFlattening = <T>(a: T[], b: T[]) => a.concat(b);
     const overServiceJourneyId = (
       a: { [key: string]: EstimatedCall },
       b: EstimatedCall
     ) => ({ ...a, [b.serviceJourney.id]: b });
     const toDepartures = async (
       stop: StopPlaceDetails
-    ): Promise<EstimatedCallWithStop[]> => {
-      const departures = await service.getDeparturesFromStopPlace(stop.id, {
-        timeRange: 10 * 60,
-        start: when
-      });
-      return departures.map(e => {
-        return {
-          ...e,
-          stop
-        };
-      });
-    };
+    ): Promise<EstimatedCallWithStop[]> =>
+      (
+        await service.getDeparturesFromStopPlace(stop.id, {
+          timeRange: 10 * 60,
+          start: when
+        })
+      ).map(d => ({ ...d, stop }));
     try {
       const stops = await service.getStopPlacesByPosition({
         latitude: lat,
         longitude: lon
       });
+      const departures = await Promise.all(stops.map(toDepartures));
+      const departuresByDistanceAndTime = Object.values(
+        departures
+          .reduce(byFlattening, [])
+          .sort(byDistance)
+          .reduceRight(overServiceJourneyId, {})
+      ).sort(byDepartureTime);
 
-      const departures = (await Promise.all(stops.map(toDepartures)))
-        .reduce(byFlattening)
-        .sort(byDistance)
-        .reduceRight(overServiceJourneyId, {});
-
-      return Result.ok(Object.values(departures).sort(byDepartureTime));
+      return Result.ok(departuresByDistanceAndTime);
     } catch (error) {
       return Result.err(new APIError(error));
     }
