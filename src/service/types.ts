@@ -36,6 +36,9 @@ export type ReverseFeaturesQuery = {
 export interface NearestDeparturesQuery {
   lat: number;
   lon: number;
+  offset: number;
+  walkSpeed: number;
+  includeIrrelevant: boolean;
 }
 
 export interface StopPlaceQuery {

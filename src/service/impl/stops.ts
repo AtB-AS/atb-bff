@@ -103,7 +103,24 @@ export default (service: EnturService): IStopsService => ({
     }
   },
   async getNearestDepartures({ lat, lon, ...query }) {
-    const when = new Date(Date.now() + 1 * 60 * 1000);
+    const start = new Date(Date.now() + query.offset);
+    const now = Date.now();
+    const irrelevant = (d: EstimatedCallWithStop) => {
+      if (query.includeIrrelevant) return true;
+
+      const walkTimeMS =
+        query.walkSpeed *
+        haversineDistance(
+          { lat, lon },
+          { lat: d.stop.latitude, lon: d.stop.longitude }
+        ) *
+        1000;
+
+      const arrival = now + walkTimeMS;
+      const departure = new Date(d.expectedDepartureTime).getTime();
+
+      return arrival < departure;
+    };
     const byDepartureTime = (a: EstimatedCall, b: EstimatedCall): number =>
       new Date(a.expectedDepartureTime).getTime() -
       new Date(b.expectedDepartureTime).getTime();
@@ -129,8 +146,8 @@ export default (service: EnturService): IStopsService => ({
     ): Promise<EstimatedCallWithStop[]> =>
       (
         await service.getDeparturesFromStopPlace(stop.id, {
-          timeRange: 10 * 60,
-          start: when
+          start,
+          limit: 10
         })
       ).map(d => ({ ...d, stop }));
     try {
@@ -142,6 +159,7 @@ export default (service: EnturService): IStopsService => ({
       const departuresByDistanceAndTime = Object.values(
         departures
           .reduce(byFlattening, [])
+          .filter(irrelevant)
           .sort(byDistance)
           .reduceRight(overServiceJourneyId, {})
       ).sort(byDepartureTime);

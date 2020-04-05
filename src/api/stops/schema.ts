@@ -1,5 +1,7 @@
 import Joi from '@hapi/joi';
 
+const ONE_MINUTE = 60 * 1000;
+
 export const getStopPlaceRequest = {
   params: Joi.object({
     id: Joi.string().required()
@@ -29,7 +31,10 @@ export const getDeparturesFromQuayRequest = getStopPlaceDeparturesRequest;
 export const getNearestDeparturesRequest = {
   query: Joi.object({
     lat: Joi.number().required(),
-    lon: Joi.number().required()
+    lon: Joi.number().required(),
+    offset: Joi.number().default(ONE_MINUTE),
+    walkSpeed: Joi.number().default(1.3),
+    includeIrrelevant: Joi.bool().default(false)
   })
 };
 
