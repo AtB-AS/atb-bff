@@ -11,17 +11,19 @@ export const getJourneyRequest = {
 export const postJourneyRequest = {
   payload: Joi.object({
     from: Joi.object({
+      place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
-        latitude: Joi.number().required(),
-        longitude: Joi.number().required()
+        latitude: Joi.number(),
+        longitude: Joi.number()
       })
     }).required(),
     to: Joi.object({
+      place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
-        latitude: Joi.number().required(),
-        longitude: Joi.number().required()
+        latitude: Joi.number(),
+        longitude: Joi.number()
       })
     }).required(),
     searchDate: Joi.date(),
