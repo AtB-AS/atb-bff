@@ -27,7 +27,9 @@ import {
   TripQuery,
   StopPlaceByNameQuery,
   NearestDeparturesQuery,
-  DeparturesByIdWithStopName
+  DeparturesByIdWithStopName,
+  SingleTripPatternQuery,
+  TripPatternQuery
 } from './types';
 import { AgentError } from './impl/agent';
 
@@ -93,6 +95,9 @@ export interface IStopsService {
 export interface IJourneyService {
   getTrips(query: TripQuery): Promise<Result<TripPattern[], APIError>>;
 
+  getTripPattern(
+    query: TripPatternQuery
+  ): Promise<Result<TripPattern | null, APIError>>;
   getTripPatterns(
     query: TripPatternsQuery
   ): Promise<Result<TripPattern[], APIError>>;

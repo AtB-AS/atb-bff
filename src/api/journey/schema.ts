@@ -8,6 +8,12 @@ export const getJourneyRequest = {
   })
 };
 
+export const getSingleTripPattern = {
+  query: Joi.object({
+    id: Joi.string().required()
+  })
+};
+
 export const postJourneyRequest = {
   payload: Joi.object({
     from: Joi.object({

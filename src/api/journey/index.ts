@@ -1,7 +1,17 @@
 import Hapi from '@hapi/hapi';
 import { IJourneyService } from '../../service/interface';
-import { TripQuery, TripPatternsQuery } from '../../service/types';
-import { postJourneyRequest, getJourneyRequest } from './schema';
+import {
+  TripQuery,
+  TripPatternsQuery,
+  SingleTripPatternQuery
+} from '../../service/types';
+import {
+  postJourneyRequest,
+  getJourneyRequest,
+  getSingleTripPattern
+} from './schema';
+import { parseTripPatternId } from '../../utils/journey-utils';
+import * as Boom from '@hapi/boom';
 
 export default (server: Hapi.Server) => (service: IJourneyService) => {
   server.route({
@@ -28,6 +38,29 @@ export default (server: Hapi.Server) => (service: IJourneyService) => {
     handler: async (request, h) => {
       const query = (request.payload as unknown) as TripPatternsQuery;
       return (await service.getTripPatterns(query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/v1/journey/single-trip',
+    options: {
+      description: 'Get one specific trip pattern from generated ID',
+      tags: ['api', 'journey'],
+      validate: getSingleTripPattern
+    },
+    handler: async (request, h) => {
+      const idParam = (request.query as unknown) as SingleTripPatternQuery;
+      const idObject = parseTripPatternId(
+        idParam.id,
+        postJourneyRequest.payload
+      );
+      return (await service.getTripPattern(idObject)).unwrap(
+        value =>
+          !value
+            ? Boom.notFound('Trip not found or is no longer availeble.')
+            : value,
+        error => Boom.internal(error.message)
+      );
     }
   });
 };

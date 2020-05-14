@@ -84,6 +84,15 @@ export interface TripPatternsQuery {
   wheelchairAccessible: boolean;
 }
 
+export interface SingleTripPatternQuery {
+  id: string;
+}
+
+export interface TripPatternQuery {
+  query: TripPatternsQuery;
+  serviceIds: string[];
+}
+
 export interface NearestPlacesQuery {
   lat: number;
   lon: number;
