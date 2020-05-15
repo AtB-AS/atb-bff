@@ -40,7 +40,6 @@ export default (
         });
         console.log(query);
         const trips = await service.getTripPatterns(query);
-        console.log(trips);
         return Result.ok(addIdsToTrips(trips, query));
       } catch (error) {
         return Result.err(new APIError(error));
