@@ -82,7 +82,6 @@ function findTripsMatchingServiceIds(
   const sIdsAsString = (sIds: string[]) => sIds.join(',');
   const originalServiceIds = sIdsAsString(serviceIds);
   return trips.find(trip => {
-    console.log(sIdsAsString(getServiceIds(trip)), originalServiceIds);
     return sIdsAsString(getServiceIds(trip)) === originalServiceIds;
   });
 }
