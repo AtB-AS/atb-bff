@@ -38,7 +38,6 @@ export default (
         batchedPublisher.publish(Buffer.from(JSON.stringify(query)), {
           environment: ENV
         });
-        console.log(query);
         const trips = await service.getTripPatterns(query);
         return Result.ok(addIdsToTrips(trips, query));
       } catch (error) {
