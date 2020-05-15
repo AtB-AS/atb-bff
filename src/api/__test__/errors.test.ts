@@ -30,6 +30,7 @@ errorCodesToTest.forEach(e =>
 );
 const svc: jest.Mocked<IJourneyService> = {
   getTripPatterns: jest.fn((args: any): any => Result.ok(Promise.resolve([]))),
+  getTripPattern: jest.fn((args: any): any => Result.ok(Promise.resolve([]))),
   getTrips: failingServiceCall
 };
 
