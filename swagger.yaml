@@ -1,0 +1,25 @@
+swagger: '2.0'
+info:
+  title: atb-bff
+  description: ATB BFF
+  version: 1.0.0
+host: atb-bff-jlmnrncfba-ew.a.run.app
+schemes:
+  - https
+produces:
+  - application/json
+x-google-backend:
+  address: https://atb-bff-jlmnrncfba-ew.a.run.app
+  path_translation: APPEND_PATH_TO_ADDRESS
+paths:
+  /bff/health:
+    get:
+      tags:
+        - Health
+      summary: Get health status
+      operationId: health
+      responses:
+        '200':
+          description: Everything OK
+        '500':
+          description: Service unhealthy
