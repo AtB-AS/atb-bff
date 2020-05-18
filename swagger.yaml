@@ -17,7 +17,7 @@ paths:
       tags:
         - Health
       summary: Get health status
-      operationId: health
+      operationId: bffHealth
       responses:
         '200':
           description: Everything OK
