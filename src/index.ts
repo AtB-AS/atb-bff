@@ -19,6 +19,7 @@ import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
 import journeyRoutes from './api/journey';
 import agentRoutes from './api/agent';
+import healthRoutes from './api/health';
 
 import registerMetricsExporter from './utils/metrics';
 
@@ -54,7 +55,7 @@ process.on('unhandledRejection', err => {
 
     const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
     const js = journeyService(enturService, pubSubClient);
-
+    healthRoutes(server);
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
