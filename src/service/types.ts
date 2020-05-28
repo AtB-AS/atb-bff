@@ -77,7 +77,7 @@ export interface TripQuery {
 export interface TripPatternsQuery {
   from: Location;
   to: Location;
-  searchDate: Date;
+  searchDate?: Date;
   arriveBy: boolean;
   limit: number;
   modes: QueryMode[];
