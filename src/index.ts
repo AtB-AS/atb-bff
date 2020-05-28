@@ -62,12 +62,13 @@ process.on('unhandledRejection', err => {
     agentRoutes(server)(
       agentService(stopsService(enturService), js)
     );
+
     registerMetricsExporter(projectId);
     await server.initialize();
     await server.start();
 
     server
-      .logger()
+      .logger
       .info(`${name} (${version}) listening on ${server.settings.port}`);
   } catch (error) {
     console.error(
