@@ -42,7 +42,6 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
           statusCode: 404
         });
       }
-
       return stop.unwrap();
     }
   });

@@ -9,6 +9,7 @@ import hapiApiVersion from 'hapi-api-version';
 
 import stackdriverLabel from './plugins/stackdriver-label';
 import logFmtPlugin from './plugins/logfmt';
+import url from 'url';
 
 interface ServerOptions {
   port: string;
@@ -34,7 +35,13 @@ export const initializePlugins = async (server: hapi.Server) => {
   await server.register({
     plugin: logFmtPlugin,
     options: {
-      stream: process.stdout
+      stream: process.stdout,
+      defaults: request => ({
+        ts: new Date(request.info.received).toISOString(),
+        method: request.method.toUpperCase(),
+        url: url.format(request.url, { search: false }),
+        query: request.url.searchParams.toString()
+      })
     }
   });
 
