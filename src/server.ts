@@ -1,7 +1,6 @@
 import http from 'http';
 
 import hapi from '@hapi/hapi';
-import hapiPino from 'hapi-pino';
 import hapiPulse from 'hapi-pulse';
 import hapiSwagger from 'hapi-swagger';
 import hapiInert from '@hapi/inert';
@@ -9,6 +8,9 @@ import hapiVision from '@hapi/vision';
 import hapiApiVersion from 'hapi-api-version';
 
 import stackdriverLabel from './plugins/stackdriver-label';
+import logFmtPlugin from './plugins/logfmt';
+import atbHeaders from './plugins/atb-headers';
+import url from 'url';
 
 interface ServerOptions {
   port: string;
@@ -32,21 +34,29 @@ export const createServer = (opts: ServerOptions) => {
 
 export const initializePlugins = async (server: hapi.Server) => {
   await server.register({
+    plugin: atbHeaders
+  });
+  await server.register({
+    plugin: logFmtPlugin,
+    options: {
+      stream: process.env.NODE_ENV === 'test' ? undefined : process.stdout,
+      defaultFields: request => ({
+        ts: new Date(request.info.received).toISOString(),
+        method: request.method.toUpperCase(),
+        url: url.format(request.url, { search: false }),
+        requestId: request.requestId,
+        installId: request.installId
+      })
+    }
+  });
+
+  await server.register({
     plugin: stackdriverLabel,
     options: {
       headers: ['Atb-Install-Id']
     }
   });
-  await server.register({
-    plugin: hapiPino,
-    options: {
-      logEvents:
-        process.env['NODE_ENV'] === 'test'
-          ? null
-          : ['onPostStart', 'onPostStop', 'response', 'request-error'],
-      prettyPrint: process.env['NODE_ENV'] !== 'production'
-    }
-  });
+
   await server.register([hapiVision, hapiInert, hapiPulse]);
   await server.register({
     plugin: hapiApiVersion,

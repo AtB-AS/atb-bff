@@ -1,5 +1,3 @@
-import { name, version } from '../package.json';
-
 import { Boom } from '@hapi/boom';
 import { GoogleAuth } from 'google-auth-library';
 /* Set up tracing if running in production */
@@ -66,10 +64,6 @@ process.on('unhandledRejection', err => {
     registerMetricsExporter(projectId);
     await server.initialize();
     await server.start();
-
-    server
-      .logger
-      .info(`${name} (${version}) listening on ${server.settings.port}`);
   } catch (error) {
     console.error(
       `failed to initialize server: ${error?.message}, terminating process.`
