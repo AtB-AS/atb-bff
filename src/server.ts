@@ -39,7 +39,7 @@ export const initializePlugins = async (server: hapi.Server) => {
   await server.register({
     plugin: logFmtPlugin,
     options: {
-      stream: process.stdout,
+      stream: process.env.NODE_ENV === 'test' ? undefined : process.stdout,
       defaultFields: request => ({
         ts: new Date(request.info.received).toISOString(),
         method: request.method.toUpperCase(),
