@@ -40,7 +40,7 @@ export const initializePlugins = async (server: hapi.Server) => {
     plugin: logFmtPlugin,
     options: {
       stream: process.stdout,
-      defaults: request => ({
+      defaultFields: request => ({
         ts: new Date(request.info.received).toISOString(),
         method: request.method.toUpperCase(),
         url: url.format(request.url, { search: false }),
