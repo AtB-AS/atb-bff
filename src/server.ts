@@ -44,7 +44,6 @@ export const initializePlugins = async (server: hapi.Server) => {
         ts: new Date(request.info.received).toISOString(),
         method: request.method.toUpperCase(),
         url: url.format(request.url, { search: false }),
-        query: request.url.searchParams.toString(),
         requestId: request.requestId,
         installId: request.installId
       })

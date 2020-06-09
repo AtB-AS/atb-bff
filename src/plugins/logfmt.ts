@@ -6,7 +6,7 @@ import { Boom } from '@hapi/boom';
 
 interface LogFmtOptions {
   stream?: stream.Writable;
-  defaultFields?: (request: Hapi.Request) => Record<string, string>;
+  defaultFields?: (request: Hapi.Request) => Record<string, string | undefined>;
 }
 
 const discardLogger = new stream.Writable({
@@ -14,6 +14,21 @@ const discardLogger = new stream.Writable({
     setImmediate(callback);
   }
 });
+
+const flatten = (
+  obj: object,
+  prefix: string = '',
+  res: Record<string, any> = {}
+) =>
+  Object.entries(obj).reduce((r, [key, val]) => {
+    const k = `${prefix}${key}`;
+    if (typeof val === 'object') {
+      flatten(val, `${k}_`, r);
+    } else {
+      res[k] = val;
+    }
+    return r;
+  }, res);
 
 const plugin: Hapi.Plugin<LogFmtOptions> = {
   dependencies: 'atb-headers',
@@ -27,32 +42,25 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
 
       return {
         log: () => l.log({}, options.stream),
-        with: (...keyval: string[]) => {
-          if (keyval.length % 2 !== 0) {
-            keyval = [...keyval, ''];
-          }
-
-          l = l.namespace(
-            keyval.reduce<Record<string, string>>((a, c, i, ar) => {
-              if (i % 2 !== 0) {
-                return a;
-              }
-              a[c] = ar[i + 1];
-              return a;
-            }, {})
-          );
-        }
+        with: obj => (l = l.namespace(obj))
       };
     };
     server.decorate('request', 'logfmt', logger, { apply: true });
+    server.ext('onPreHandler', (request, h, err) => {
+      request.logfmt.with(flatten(request.query));
+      /* if (request.payload && typeof request.payload !== 'string') {
+        request.logfmt.with(flatten(request.payload));
+      }*/
+      return h.continue;
+    });
     server.ext('onPreResponse', (request, h, err) => {
       if (request.response instanceof Boom) {
-        request.logfmt.with('err', request.response.message);
+        request.logfmt.with({ err: request.response.message });
       }
       return h.continue;
     });
     server.events.on('response', request => {
-      request.logfmt.with('code', request.raw.res.statusCode.toString());
+      request.logfmt.with({ code: request.raw.res.statusCode.toString() });
       request.logfmt.log();
     });
   },

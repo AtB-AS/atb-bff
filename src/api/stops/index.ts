@@ -36,7 +36,6 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     handler: async (request, h) => {
       const { id } = request.params;
       const stop = await service.getStopPlace(id);
-
       if (stop.isOk && stop.value === null) {
         return new Boom(`stop with id ${id} not found`, {
           statusCode: 404
@@ -57,7 +56,6 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       const { id } = request.params;
       const query = (request.query as unknown) as QuaysForStopPlaceQuery;
       const quays = await service.getQuaysForStopPlace(id, query);
-
       if (quays.isOk && quays.value === null) {
         return new Boom(`stop with id ${id} not found`, {
           statusCode: 404
@@ -93,7 +91,6 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       const {
         date
       } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
-
       return await service.getDeparturesForServiceJourney(id, { date });
     }
   });
@@ -107,7 +104,6 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as NearestDeparturesQuery;
-
       return (await service.getNearestDepartures(query)).unwrap();
     }
   });
@@ -122,7 +118,6 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     handler: async (request, h) => {
       const { id } = request.params;
       const query = (request.query as unknown) as DeparturesFromStopPlaceQuery;
-
       return (await service.getDeparturesFromStopPlace(id, query)).unwrap();
     }
   });
