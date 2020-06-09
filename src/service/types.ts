@@ -147,7 +147,6 @@ export class APIError extends Error {
           this.statusCode = 503;
       }
     }
-    console.error(error);
     return boomify(this, {
       statusCode: this.statusCode,
       message: error.message
