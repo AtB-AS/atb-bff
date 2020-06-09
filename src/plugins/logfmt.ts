@@ -1,39 +1,47 @@
 import Hapi, { Server } from '@hapi/hapi';
 import logfmt from 'logfmt';
 import * as stream from 'stream';
-import { LogFmt } from '../types/logfmt';
+import { Logger } from '../types/logfmt';
 
 interface LogFmtOptions {
-  stream?: stream.Writable
-  defaults?: (request: Hapi.Request) => Record<string, string>
+  stream?: stream.Writable;
+  defaultFields?: (request: Hapi.Request) => Record<string, string>;
 }
 
+const discardLogger = new stream.Writable(
+  {
+    write(chunk, encoding, callback) {
+      setImmediate(callback);
+    }
+  }
+);
+
 const plugin: Hapi.Plugin<LogFmtOptions> = {
+  dependencies: 'atb-headers',
   register: async (server: Server, options: LogFmtOptions) => {
-    const logger = (request: Hapi.Request): LogFmt => {
+    const logger = (request: Hapi.Request): Logger => {
       let l = logfmt.time('took');
-      if (!options.stream) options.stream = process.stdout;
-      if (options.defaults) {
-        l = l.namespace(options.defaults(request));
+      if (!options.stream) options.stream = discardLogger;
+      if (options.defaultFields) {
+        l = l.namespace(options.defaultFields(request));
       }
 
       return {
-        log: (...keyval: string[]) => {
-          if (keyval.length == 0) {
-            l.log({}, options.stream);
-          }
-
+        log: () => l.log({}, options.stream),
+        with: (...keyval: string[]) => {
           if (keyval.length % 2 !== 0) {
             keyval = [...keyval, ''];
           }
 
-          l = l.namespace(keyval.reduce((a, c, i, ar) => {
-            if (i % 2 !== 0) {
+          l = l.namespace(
+            keyval.reduce<Record<string, string>>((a, c, i, ar) => {
+              if (i % 2 !== 0) {
+                return a;
+              }
+              a[c] = ar[i + 1];
               return a;
-            }
-            a[c] = ar[i + 1];
-            return a;
-          }, {} as Record<string, string>));
+            }, {})
+          );
         }
       };
     };
