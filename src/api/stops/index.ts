@@ -11,7 +11,8 @@ import {
   getDeparturesForServiceJourneyRequest,
   getDeparturesBetweenStopPlacesRequest,
   getStopPlacesByNameRequest,
-  getNearestDeparturesRequest
+  getNearestDeparturesRequest,
+  getDeparturesRequest
 } from './schema';
 import {
   StopPlaceQuery,
@@ -21,7 +22,9 @@ import {
   DeparturesFromQuayQuery,
   DeparturesBetweenStopPlacesQuery,
   StopPlaceByNameQuery,
-  NearestDeparturesQuery
+  NearestDeparturesQuery,
+  FeatureLocation,
+  DeparturesFromLocationQuery
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -125,6 +128,21 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       const query = (request.query as unknown) as DeparturesFromStopPlaceQuery;
 
       return (await service.getDeparturesFromStopPlace(id, query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/v1/departures',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getDeparturesRequest,
+      description: 'Get departures from feature location'
+    },
+    handler: async (request, h) => {
+      const locaton = (request.payload as unknown) as FeatureLocation;
+      const query = (request.query as unknown) as DeparturesFromLocationQuery;
+
+      return (await service.getDepartures(locaton, query)).unwrap();
     }
   });
   server.route({
