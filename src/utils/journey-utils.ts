@@ -1,6 +1,10 @@
 import Joi from '@hapi/joi';
 import { TripPattern } from '@entur/sdk';
 import { TripPatternsQuery, TripPatternQuery } from '../service/types';
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent
+} from 'lz-string';
 
 export function generateId(trip: TripPattern, query: TripPatternsQuery) {
   const fields: TripPatternsQuery = {
@@ -8,8 +12,8 @@ export function generateId(trip: TripPattern, query: TripPatternsQuery) {
     ...query
   };
   const serviceIds = getServiceIds(trip);
-  return Buffer.from(JSON.stringify({ query: fields, serviceIds })).toString(
-    'base64'
+  return compressToEncodedURIComponent(
+    JSON.stringify({ query: fields, serviceIds })
   );
 }
 
@@ -22,7 +26,11 @@ export function parseTripPatternId(
   queryValidator: Joi.ObjectSchema<any>
 ): TripPatternQuery {
   try {
-    const fields = JSON.parse(Buffer.from(id, 'base64').toString());
+    const value = decompressFromEncodedURIComponent(id);
+    if (!value) {
+      throw new Error();
+    }
+    const fields = JSON.parse(value);
     fields.query = queryValidator.validate(fields.query).value;
 
     if (isTripPatternsQuery(fields.query) && Array.isArray(fields.serviceIds)) {

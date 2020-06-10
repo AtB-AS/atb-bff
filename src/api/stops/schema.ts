@@ -26,6 +26,21 @@ export const getStopPlaceDeparturesRequest = {
     includeNonBoarding: Joi.bool()
   })
 };
+export const getDeparturesRequest = {
+  payload: Joi.object({
+    layer: Joi.string(),
+    id: Joi.string(),
+    coordinates: Joi.object({ longitude: Joi.number(), latitude: Joi.number() })
+  }).options({ allowUnknown: true }),
+
+  query: Joi.object({
+    limit: Joi.number().default(5),
+    includeNonBoarding: Joi.bool().default(false),
+    offset: Joi.number().default(ONE_MINUTE),
+    walkSpeed: Joi.number().default(1.3),
+    includeIrrelevant: Joi.bool().default(false)
+  })
+};
 export const getDeparturesFromQuayRequest = getStopPlaceDeparturesRequest;
 
 export const getNearestDeparturesRequest = {
