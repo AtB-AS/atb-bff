@@ -16,7 +16,7 @@ import * as Boom from '@hapi/boom';
 export default (server: Hapi.Server) => (service: IJourneyService) => {
   server.route({
     method: 'GET',
-    path: '/v1/journey/trip',
+    path: '/bff/v1/journey/trip',
     options: {
       description: 'Find trip patterns with a simple query',
       tags: ['api', 'journey'],
@@ -29,7 +29,7 @@ export default (server: Hapi.Server) => (service: IJourneyService) => {
   });
   server.route({
     method: 'POST',
-    path: '/v1/journey/trip',
+    path: '/bff/v1/journey/trip',
     options: {
       description: 'Find trip patterns',
       tags: ['api', 'journey'],
@@ -42,7 +42,7 @@ export default (server: Hapi.Server) => (service: IJourneyService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/journey/single-trip',
+    path: '/bff/v1/journey/single-trip',
     options: {
       description: 'Get one specific trip pattern from generated ID',
       tags: ['api', 'journey'],

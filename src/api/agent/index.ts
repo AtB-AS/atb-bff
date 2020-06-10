@@ -13,7 +13,7 @@ import {
 export default (server: Hapi.Server) => (agentService: IAgentService) => {
   server.route({
     method: 'GET',
-    path: '/v1/agent/next-departure-between',
+    path: '/bff/v1/agent/next-departure-between',
     options: {
       tags: ['api', 'agent'],
       validate: getNextDeparturesRequest,
@@ -29,7 +29,7 @@ export default (server: Hapi.Server) => (agentService: IAgentService) => {
 
   server.route({
     method: 'GET',
-    path: '/v1/agent/next-departure-between-nearest',
+    path: '/bff/v1/agent/next-departure-between-nearest',
     options: {
       tags: ['api', 'agent'],
       validate: getNextDepartureBetweenNearestRequest

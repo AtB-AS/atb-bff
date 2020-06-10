@@ -27,7 +27,7 @@ import {
 export default (server: Hapi.Server) => (service: IStopsService) => {
   server.route({
     method: 'GET',
-    path: '/v1/stop/{id}',
+    path: '/bff/v1stop/{id}',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceRequest,
@@ -46,7 +46,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/stop/{id}/quays',
+    path: '/bff/v1stop/{id}/quays',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceQuaysRequest,
@@ -66,7 +66,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/quay/{id}/departures',
+    path: '/bff/v1quay/{id}/departures',
     options: {
       tags: ['api', 'stops'],
       validate: getDeparturesFromQuayRequest,
@@ -80,7 +80,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/servicejourney/{id}/departures',
+    path: '/bff/v1servicejourney/{id}/departures',
     options: {
       tags: ['api', 'stops'],
       validate: getDeparturesForServiceJourneyRequest,
@@ -96,7 +96,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/departures/nearest',
+    path: '/bff/v1/departures/nearest',
     options: {
       tags: ['api', 'stops'],
       validate: getNearestDeparturesRequest,
@@ -109,7 +109,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/stop/{id}/departures',
+    path: '/bff/v1/stop/{id}/departures',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceDeparturesRequest,
@@ -123,7 +123,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/stops/nearest',
+    path: '/bff/v1/stops/nearest',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceByPositionRequest,
@@ -136,7 +136,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/stops',
+    path: '/bff/v1/stops',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlacesByNameRequest,
@@ -149,7 +149,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/departures',
+    path: '/bff/v1/departures',
     options: {
       tags: ['api', 'stops'],
       validate: getDeparturesBetweenStopPlacesRequest,

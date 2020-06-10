@@ -30,7 +30,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
 
   server.route({
     method: 'GET',
-    path: '/v1/geocoder/features',
+    path: '/bff/v1/geocoder/features',
     options: {
       description: 'Find features matching query',
       tags: ['api', 'geocoder'],
@@ -49,7 +49,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
   });
   server.route({
     method: 'GET',
-    path: '/v1/geocoder/reverse',
+    path: '/bff/v1/geocoder/reverse',
     options: {
       description:
         'Find addresses, POIs and stop places near the given coordinates',
