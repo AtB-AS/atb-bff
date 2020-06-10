@@ -6,8 +6,7 @@ import {
   Quay,
   StopPlace,
   StopPlaceDetails,
-  TripPattern,
-  DeparturesById
+  TripPattern
 } from '@entur/sdk';
 import {
   APIError,
@@ -27,9 +26,10 @@ import {
   TripQuery,
   StopPlaceByNameQuery,
   NearestDeparturesQuery,
-  DeparturesByIdWithStopName,
-  SingleTripPatternQuery,
-  TripPatternQuery
+  TripPatternQuery,
+  FeatureLocation,
+  DeparturesWithStop,
+  DeparturesFromLocationQuery
 } from './types';
 import { AgentError } from './impl/agent';
 
@@ -76,6 +76,11 @@ export interface IStopsService {
     id: string,
     query: DeparturesFromStopPlaceQuery
   ): Promise<Result<EstimatedCall[], APIError>>;
+
+  getDepartures(
+    location: FeatureLocation,
+    query: DeparturesFromLocationQuery
+  ): Promise<Result<DeparturesWithStop[], APIError>>;
 
   getDeparturesFromQuay(
     id: string,

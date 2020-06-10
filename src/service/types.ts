@@ -1,4 +1,12 @@
-import { Location, QueryMode, DeparturesById } from '@entur/sdk';
+import {
+  Location,
+  QueryMode,
+  DeparturesById,
+  Feature,
+  StopPlaceDetails,
+  Quay,
+  Departure
+} from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 
@@ -6,6 +14,10 @@ export interface Coordinates {
   latitude: number;
   longitude: number;
 }
+
+export type FeatureLocation = Feature['properties'] & {
+  coordinates: { longitude: number; latitude: number };
+};
 
 export type FeaturesQuery = {
   query: string;
@@ -58,6 +70,14 @@ export interface DeparturesFromStopPlaceQuery {
   timeRange?: number;
   limit?: number;
   includeNonBoarding?: boolean;
+}
+
+export interface DeparturesFromLocationQuery {
+  offset: number;
+  walkSpeed: number;
+  includeIrrelevant: boolean;
+  limit: number;
+  includeNonBoarding: boolean;
 }
 
 export interface DeparturesFromQuayQuery {
@@ -129,6 +149,13 @@ export type NextDepartureFromCoordinateQuery = {
 
 export type DeparturesByIdWithStopName = DeparturesById & {
   name: string;
+};
+
+export type DeparturesWithStop = {
+  stop: StopPlaceDetails;
+  quays: {
+    [quayId: string]: { quay: Quay; departures: Array<Departure> };
+  };
 };
 
 export class APIError extends Error {
