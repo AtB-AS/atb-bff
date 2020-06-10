@@ -107,7 +107,13 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops'],
       validate: getNearestDeparturesRequest,
-      description: 'Get departures from stops near coordinates'
+      description:
+        'Get departures from stops near coordinates. Deprecated: Use /v1/departures instead',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as NearestDeparturesQuery;
@@ -121,28 +127,19 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceDeparturesRequest,
-      description: 'Get departures from StopPlace'
+      description:
+        'Get departures from StopPlace. Deprecated: Use /v1/departures instead',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const { id } = request.params;
       const query = (request.query as unknown) as DeparturesFromStopPlaceQuery;
 
       return (await service.getDeparturesFromStopPlace(id, query)).unwrap();
-    }
-  });
-  server.route({
-    method: 'POST',
-    path: '/v1/departures',
-    options: {
-      tags: ['api', 'stops'],
-      validate: getDeparturesRequest,
-      description: 'Get departures from feature location'
-    },
-    handler: async (request, h) => {
-      const locaton = (request.payload as unknown) as FeatureLocation;
-      const query = (request.query as unknown) as DeparturesFromLocationQuery;
-
-      return (await service.getDepartures(locaton, query)).unwrap();
     }
   });
   server.route({
@@ -182,6 +179,21 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     handler: async (request, h) => {
       const query = (request.query as unknown) as DeparturesBetweenStopPlacesQuery;
       return (await service.getDeparturesBetweenStopPlaces(query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/v1/departures',
+    options: {
+      tags: ['api', 'stops', 'departures'],
+      validate: getDeparturesRequest,
+      description: 'Get departures from feature location'
+    },
+    handler: async (request, h) => {
+      const locaton = (request.payload as unknown) as FeatureLocation;
+      const query = (request.query as unknown) as DeparturesFromLocationQuery;
+
+      return (await service.getDepartures(locaton, query)).unwrap();
     }
   });
 };
