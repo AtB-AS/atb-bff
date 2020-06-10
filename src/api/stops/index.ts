@@ -46,7 +46,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/bff/v1stop/{id}/quays',
+    path: '/bff/v1/stop/{id}/quays',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceQuaysRequest,
@@ -66,7 +66,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/bff/v1quay/{id}/departures',
+    path: '/bff/v1/quay/{id}/departures',
     options: {
       tags: ['api', 'stops'],
       validate: getDeparturesFromQuayRequest,
@@ -80,7 +80,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'GET',
-    path: '/bff/v1servicejourney/{id}/departures',
+    path: '/bff/v1/servicejourney/{id}/departures',
     options: {
       tags: ['api', 'stops'],
       validate: getDeparturesForServiceJourneyRequest,
