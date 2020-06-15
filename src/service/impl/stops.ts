@@ -104,32 +104,8 @@ export default (service: EnturService): IStopsService => {
         query: DeparturesFromLocationQuery
       ) => {
         const start = new Date(Date.now() + query.offset);
-        const now = Date.now();
-        const hasLatLon = (quay?: Quay) =>
-          quay && quay?.stopPlace.latitude && quay?.stopPlace.longitude;
         let distanceTo = (latTarget: number, lonTarget: number) =>
-          haversineDistance(
-            { lat, lon },
-            {
-              lat: latTarget,
-              lon: lonTarget
-            }
-          );
-        const irrelevant = (d: EstimatedCall) => {
-          if (query.includeIrrelevant) return true;
-          const walkTimeMS = !hasLatLon(d.quay)
-            ? 0
-            : query.walkSpeed *
-              distanceTo(
-                d.quay?.stopPlace.latitude!,
-                d.quay?.stopPlace.longitude!
-              ) *
-              1000;
-
-          const arrival = now + walkTimeMS;
-          const departure = new Date(d.expectedDepartureTime).getTime();
-          return arrival < departure;
-        };
+          haversineDistance({ lat, lon }, { lat: latTarget, lon: lonTarget });
         const byDistance = (
           a: DeparturesWithStop,
           b: DeparturesWithStop
@@ -140,12 +116,10 @@ export default (service: EnturService): IStopsService => {
           stop: StopPlaceDetails
         ): Promise<DeparturesWithStop> =>
           groupByQuays(
-            (
-              await service.getDeparturesFromStopPlace(stop.id, {
-                start,
-                limit: query.limit ?? 5 * 3
-              })
-            ).filter(irrelevant),
+            await service.getDeparturesFromStopPlace(stop.id, {
+              start,
+              limit: query.limit ?? 5 * 3
+            }),
             stop,
             query.limit
           );
@@ -217,23 +191,6 @@ export default (service: EnturService): IStopsService => {
     },
     async getNearestDepartures({ lat, lon, ...query }) {
       const start = new Date(Date.now() + query.offset);
-      const now = Date.now();
-      const irrelevant = (d: EstimatedCallWithStop) => {
-        if (query.includeIrrelevant) return true;
-
-        const walkTimeMS =
-          query.walkSpeed *
-          haversineDistance(
-            { lat, lon },
-            { lat: d.stop.latitude, lon: d.stop.longitude }
-          ) *
-          1000;
-
-        const arrival = now + walkTimeMS;
-        const departure = new Date(d.expectedDepartureTime).getTime();
-
-        return arrival < departure;
-      };
       const byDepartureTime = (a: EstimatedCall, b: EstimatedCall): number =>
         new Date(a.expectedDepartureTime).getTime() -
         new Date(b.expectedDepartureTime).getTime();
@@ -272,7 +229,6 @@ export default (service: EnturService): IStopsService => {
         const departuresByDistanceAndTime = Object.values(
           departures
             .reduce(byFlattening, [])
-            .filter(irrelevant)
             .sort(byDistance)
             .reduceRight(overServiceJourneyId, {})
         ).sort(byDepartureTime);
