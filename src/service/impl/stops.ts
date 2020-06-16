@@ -118,7 +118,7 @@ export default (service: EnturService): IStopsService => {
           groupByQuays(
             await service.getDeparturesFromStopPlace(stop.id, {
               start,
-              limit: query.limit ?? 5 * 3
+              limit: query.limit * 3
             }),
             stop,
             query.limit
@@ -141,9 +141,10 @@ export default (service: EnturService): IStopsService => {
           return Result.ok([groupByQuays(data, stop, query.limit)]);
         }
 
-        const data = await getDeparturesFromLocation(location.coordinates, {
-          ...query
-        });
+        const data = await getDeparturesFromLocation(
+          location.coordinates,
+          query
+        );
         return Result.ok(data);
       } catch (error) {
         return Result.err(new APIError(error));
