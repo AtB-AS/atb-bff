@@ -44,7 +44,7 @@ export const postJourneyRequest = {
       'water',
       'air'
     ]),
-    limit: Joi.number().default(5),
+    limit: Joi.number().default(10),
     wheelchairAccessible: Joi.bool().default(false)
   }).options({ abortEarly: false })
 };
