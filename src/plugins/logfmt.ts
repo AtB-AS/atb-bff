@@ -5,6 +5,7 @@ import { Logger } from '../types/logfmt';
 import { Boom } from '@hapi/boom';
 
 interface LogFmtOptions {
+  json: boolean;
   stream?: stream.Writable;
   defaultFields?: (request: Hapi.Request) => Record<string, string | undefined>;
 }
@@ -35,22 +36,27 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
   register: async (server: Server, options: LogFmtOptions) => {
     const logger = (request: Hapi.Request): Logger => {
       let l = logfmt.time('took');
+      l.stringify = JSON.stringify;
       if (!options.stream) options.stream = discardLogger;
       if (options.defaultFields) {
         l = l.namespace(options.defaultFields(request));
       }
 
       return {
-        log: () => l.log({}, options.stream),
+        log: () => {
+          if (options.json) l.stringify = JSON.stringify;
+          l.log({}, options.stream);
+        },
         with: obj => (l = l.namespace(obj))
       };
     };
     server.decorate('request', 'logfmt', logger, { apply: true });
     server.ext('onPreHandler', (request, h, err) => {
       request.logfmt.with(flatten(request.query));
-      /* if (request.payload && typeof request.payload !== 'string') {
+
+      if (request.payload && typeof request.payload !== 'string') {
         request.logfmt.with(flatten(request.payload));
-      }*/
+      }
       return h.continue;
     });
     server.ext('onPreResponse', (request, h, err) => {
