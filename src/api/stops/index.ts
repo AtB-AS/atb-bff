@@ -30,7 +30,7 @@ import {
 export default (server: Hapi.Server) => (service: IStopsService) => {
   server.route({
     method: 'GET',
-    path: '/bff/v1stop/{id}',
+    path: '/bff/v1/stop/{id}',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceRequest,

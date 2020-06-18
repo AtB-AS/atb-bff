@@ -27,11 +27,11 @@ afterAll(async () => {
   await server.stop();
 });
 
-describe('GET /geocoder/reverse', () => {
+describe('GET /bff/v1/geocoder/reverse', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/reverse?lat=63.43&lon=10.34'
+      url: '/bff/v1/geocoder/reverse?lat=63.43&lon=10.34'
     });
 
     expect(res.statusCode).toBe(200);
@@ -39,7 +39,7 @@ describe('GET /geocoder/reverse', () => {
   it('calls the service with the correct arguments', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/reverse?lat=63.43&lon=10.34'
+      url: '/bff/v1/geocoder/reverse?lat=63.43&lon=10.34'
     });
 
     expect(svc.getFeaturesReverse).toBeCalledWith({ lat: 63.43, lon: 10.34 });
@@ -47,17 +47,17 @@ describe('GET /geocoder/reverse', () => {
   it('responds with 400 for missing required parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/reverse?radius=10'
+      url: '/bff/v1/geocoder/reverse?radius=10'
     });
 
     expect(res.statusCode).toBe(400);
   });
 });
-describe('GET /geocoder/features', () => {
+describe('GET /bff/v1/geocoder/features', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/features?query=Trondheim&lat=63.43&lon=10.34'
+      url: '/bff/v1/geocoder/features?query=Trondheim&lat=63.43&lon=10.34'
     });
 
     expect(res.statusCode).toBe(200);
@@ -65,7 +65,7 @@ describe('GET /geocoder/features', () => {
   it('calls the service with the correct arguments', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/features?query=Trondheim&lat=63.43&lon=10.34'
+      url: '/bff/v1/geocoder/features?query=Trondheim&lat=63.43&lon=10.34'
     });
 
     expect(svc.getFeatures).toBeCalledWith({
@@ -77,7 +77,7 @@ describe('GET /geocoder/features', () => {
   it('responds with 400 for malformed queries', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/geocoder/features?query='
+      url: '/bff/v1/geocoder/features?query='
     });
 
     expect(res.statusCode).toBe(400);
@@ -86,7 +86,7 @@ describe('GET /geocoder/features', () => {
     const res = await server.inject({
       method: 'get',
       url:
-        '/geocoder/features?query=Trondheim&lat=63.43&lon=10.34&layers=venue,address'
+        '/bff/v1/geocoder/features?query=Trondheim&lat=63.43&lon=10.34&layers=venue,address'
     });
     expect(svc.getFeatures).toBeCalledWith({
       lat: 63.43,

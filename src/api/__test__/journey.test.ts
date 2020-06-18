@@ -29,11 +29,11 @@ afterAll(async () => {
   await server.stop();
 });
 
-describe('GET /journey/trip', () => {
+describe('GET /bff/v1/journey/trip', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/journey/trip?from=Trondheim&to=Oslo'
+      url: '/bff/v1/journey/trip?from=Trondheim&to=Oslo'
     });
 
     expect(res.statusCode).toBe(200);
@@ -42,18 +42,18 @@ describe('GET /journey/trip', () => {
   it('responds with 400 for missing required parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/journey/trip?from=Trondheim'
+      url: '/bff/v1/journey/trip?from=Trondheim'
     });
 
     expect(res.statusCode).toBe(400);
   });
 });
 
-describe('POST /journey/trip', () => {
+describe('POST /bff/v1/journey/trip', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'post',
-      url: '/journey/trip',
+      url: '/bff/v1/journey/trip',
       payload: {
         from: {
           name: 'Trondheim',
@@ -76,7 +76,7 @@ describe('POST /journey/trip', () => {
   });
 });
 
-describe('GET /journey/single-trip', () => {
+describe('GET /bff/v1/journey/single-trip', () => {
   it('responds with 200', async () => {
     const pastQuery: TripPatternsQuery = {
       from: {
@@ -111,7 +111,7 @@ describe('GET /journey/single-trip', () => {
     const id = generateId(pastTrip, pastQuery);
     const res = await server.inject({
       method: 'get',
-      url: `/journey/single-trip?id=${id}`
+      url: `/bff/v1/journey/single-trip?id=${id}`
     });
 
     expect(res.statusCode).toBe(200);
