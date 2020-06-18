@@ -37,8 +37,7 @@ export const getDeparturesRequest = {
     limit: Joi.number().default(5),
     includeNonBoarding: Joi.bool().default(false),
     offset: Joi.number().default(ONE_MINUTE),
-    walkSpeed: Joi.number().default(1.3),
-    includeIrrelevant: Joi.bool().default(false)
+    walkSpeed: Joi.number().default(1.3)
   })
 };
 export const getDeparturesFromQuayRequest = getStopPlaceDeparturesRequest;

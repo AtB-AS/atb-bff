@@ -48,12 +48,12 @@ afterAll(async () => {
   await server.stop();
 });
 
-describe('GET /journey/trip', () => {
+describe('GET /bff/v1/journey/trip', () => {
   errorCodesToTest.forEach(err => {
     it(`responds with 503 for upstream error ${err}`, async () => {
       const res = await server.inject({
         method: 'get',
-        url: '/journey/trip?from=Trondheim&to=Oslo'
+        url: '/bff/v1/journey/trip?from=Trondheim&to=Oslo'
       });
       expect(res.statusCode).toBe(503);
     });

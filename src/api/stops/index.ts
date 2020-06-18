@@ -30,7 +30,7 @@ import {
 export default (server: Hapi.Server) => (service: IStopsService) => {
   server.route({
     method: 'GET',
-    path: '/bff/v1stop/{id}',
+    path: '/bff/v1/stop/{id}',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceRequest,
@@ -104,7 +104,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       tags: ['api', 'stops'],
       validate: getNearestDeparturesRequest,
       description:
-        'Get departures from stops near coordinates. Deprecated: Use /v1/departures instead',
+        'Get departures from stops near coordinates. Deprecated: Use POST /v1/departures-from-location instead',
       plugins: {
         'hapi-swagger': {
           deprecated: true
@@ -123,7 +123,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       tags: ['api', 'stops'],
       validate: getStopPlaceDeparturesRequest,
       description:
-        'Get departures from StopPlace. Deprecated: Use /v1/departures instead',
+        'Get departures from StopPlace. Deprecated: Use POST /v1/departures-from-location instead',
       plugins: {
         'hapi-swagger': {
           deprecated: true
@@ -177,7 +177,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
   });
   server.route({
     method: 'POST',
-    path: '/v1/departures',
+    path: '/bff/v1/departures-from-location',
     options: {
       tags: ['api', 'stops', 'departures'],
       validate: getDeparturesRequest,

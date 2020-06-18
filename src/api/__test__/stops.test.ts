@@ -52,11 +52,11 @@ afterAll(async () => {
   await server.stop();
 });
 
-describe('GET /stop/{id}', () => {
+describe('GET /bff/v1/stop/{id}', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stop/NSR:StopPlace:337'
+      url: '/bff/v1/stop/NSR:StopPlace:337'
     });
 
     expect(res.statusCode).toBe(200);
@@ -64,27 +64,27 @@ describe('GET /stop/{id}', () => {
   it('responds with 404 for missing id', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stop/'
+      url: '/bff/v1/stop'
     });
 
     expect(res.statusCode).toBe(404);
   });
 });
-describe('GET /stops/{id}/departures', () => {
+describe('GET /bff/v1/stops/{id}/departures', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stop/NSR:StopPlace:44042/departures'
+      url: '/bff/v1/stop/NSR:StopPlace:44042/departures'
     });
 
     expect(res.statusCode).toBe(200);
   });
 });
-describe('GET /stops/nearest', () => {
+describe('GET /bff/v1/stops/nearest', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stops/nearest?lat=63.3818027&lon=10.3677379'
+      url: '/bff/v1/stops/nearest?lat=63.3818027&lon=10.3677379'
     });
 
     expect(res.statusCode).toBe(200);
@@ -93,55 +93,55 @@ describe('GET /stops/nearest', () => {
   it('responds with 400 for missing required parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stops/nearest?invalid=wut'
+      url: '/bff/v1/stops/nearest?invalid=wut'
     });
 
     expect(res.statusCode).toBe(400);
   });
 });
-describe('GET /stops', () => {
+describe('GET /bff/v1/stops', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stops?query=Prinsens gate&lat=63.433&lon=10.399'
+      url: '/bff/v1/stops?query=Prinsens gate&lat=63.433&lon=10.399'
     });
     expect(res.statusCode).toBe(200);
   });
   it('responds with 400 for invalid parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/stops?query=Konges gate&lon=10.399'
+      url: '/bff/v1/stops?query=Konges gate&lon=10.399'
     });
     expect(res.statusCode).toBe(400);
   });
 });
-describe('GET /departures/nearest', () => {
+describe('GET /bff/v1/departures/nearest', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/departures/nearest?lat=63.361901&lon=10.377521'
+      url: '/bff/v1/departures/nearest?lat=63.361901&lon=10.377521'
     });
     expect(res.statusCode).toBe(200);
   });
   it('responds with 400 for invalid parameters', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/departures/nearest?lon=10.399'
+      url: '/bff/v1/departures/nearest?lon=10.399'
     });
     expect(res.statusCode).toBe(400);
   });
 });
-describe('GET /departures', () => {
+describe('GET /bff/v1/departures', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
+      url: '/bff/v1/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
     });
   });
   it('parses query parameters correctly', async () => {
     const res = await server.inject({
       method: 'get',
-      url: '/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
+      url: '/bff/v1/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
     });
     expect(svc.getDeparturesBetweenStopPlaces).toBeCalledWith({
       from: 'NSR:StopPlace:42624',
