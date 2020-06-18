@@ -75,7 +75,6 @@ export interface DeparturesFromStopPlaceQuery {
 export interface DeparturesFromLocationQuery {
   offset: number;
   walkSpeed: number;
-  includeIrrelevant: boolean;
   limit: number;
   includeNonBoarding: boolean;
 }
