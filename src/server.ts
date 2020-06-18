@@ -33,12 +33,14 @@ export const createServer = (opts: ServerOptions) => {
 };
 
 export const initializePlugins = async (server: hapi.Server) => {
+
   await server.register({
     plugin: atbHeaders
   });
   await server.register({
     plugin: logFmtPlugin,
     options: {
+      json: true,
       stream: process.env.NODE_ENV === 'test' ? undefined : process.stdout,
       defaultFields: request => ({
         ts: new Date(request.info.received).toISOString(),
