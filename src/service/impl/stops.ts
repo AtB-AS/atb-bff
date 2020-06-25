@@ -13,6 +13,7 @@ import {
   DeparturesFromLocationQuery,
   FeatureLocation
 } from '../types';
+import sortBy from 'lodash.sortby';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -79,7 +80,7 @@ export default (service: EnturService): IStopsService => {
         stop: StopPlaceDetails,
         limit: number
       ) => {
-        return calls.reduce(
+        const unsortedObject = calls.reduce(
           function(obj, call) {
             const quayId = call.quay?.id ?? 'unknown';
             if (!obj.quays[quayId]) {
@@ -98,6 +99,19 @@ export default (service: EnturService): IStopsService => {
             quays: {}
           } as DeparturesWithStop
         );
+
+        const sortedQuays = sortBy(
+          Object.values(unsortedObject.quays),
+          item => item.quay.id
+        );
+        let sorted: DeparturesWithStop['quays'] = {};
+        for (let quays of sortedQuays) {
+          sorted[quays.quay.id] = quays;
+        }
+        return {
+          ...unsortedObject,
+          quays: sorted
+        };
       };
       const getDeparturesFromLocation = async (
         { latitude: lat, longitude: lon }: FeatureLocation['coordinates'],
