@@ -35,6 +35,7 @@ export const postJourneyRequest = {
     searchDate: Joi.date(),
     arriveBy: Joi.bool().default(false),
 
+    minimumTransferTime: Joi.number().default(30),
     modes: Joi.array().default([
       'foot',
       'bus',
