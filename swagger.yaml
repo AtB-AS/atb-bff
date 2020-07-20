@@ -3,13 +3,13 @@ info:
   title: atb-bff
   description: ATB BFF
   version: 1.0.0
-host: atb-bff-staging-jlmnrncfba-ew.a.run.app
+host: atb-bff-prod-jlmnrncfba-ew.a.run.app
 schemes:
   - https
 produces:
   - application/json
 x-google-backend:
-  address: https://atb-bff-staging-jlmnrncfba-ew.a.run.app
+  address: https://atb-bff-prod-jlmnrncfba-ew.a.run.app
   path_translation: APPEND_PATH_TO_ADDRESS
 paths:
   '/bff/v1/departures':
