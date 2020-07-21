@@ -1,19 +1,14 @@
 import { Result } from '@badrap/result';
-import {
-  EnturService,
-  StopPlaceDetails,
-  EstimatedCall,
-  Quay
-} from '@entur/sdk';
+import { EnturService, StopPlaceDetails, EstimatedCall } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
-import { IStopsService } from '../interface';
+import { IStopsService } from '../../interface';
+import { APIError, DeparturesWithStop } from '../../types';
 import {
-  APIError,
-  DeparturesWithStop,
-  DeparturesFromLocationQuery,
-  FeatureLocation
-} from '../types';
-import sortBy from 'lodash.sortby';
+  getDeparturesFromStops,
+  getDeparturesFromLocation,
+  StopPlaceDetailsWithEstimatedCalls,
+  EstimatedQuay
+} from './departures';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -75,91 +70,33 @@ export default (service: EnturService): IStopsService => {
       }
     },
     async getDepartures(location, query) {
-      const groupByQuays = (
-        calls: EstimatedCall[],
-        stop: StopPlaceDetails,
-        limit: number
-      ) => {
-        const unsortedObject = calls.reduce(
-          function(obj, call) {
-            const quayId = call.quay?.id ?? 'unknown';
-            if (!obj.quays[quayId]) {
-              obj.quays[quayId] = {
-                quay: call.quay!,
-                departures: []
-              };
-            }
-            if (obj.quays[quayId].departures.length >= limit) return obj;
-
-            obj.quays[quayId].departures.push(call);
-            return obj;
-          },
-          {
-            stop,
-            quays: {}
-          } as DeparturesWithStop
-        );
-
-        const sortedQuays = sortBy(
-          Object.values(unsortedObject.quays),
-          item => item.quay.id
-        );
-        let sorted: DeparturesWithStop['quays'] = {};
-        for (let quays of sortedQuays) {
-          sorted[quays.quay.id] = quays;
+      const mapToQuayObject = (
+        quays?: EstimatedQuay[]
+      ): DeparturesWithStop['quays'] => {
+        if (!quays) return {};
+        let obj: DeparturesWithStop['quays'] = {};
+        for (let item of quays) {
+          const { estimatedCalls, ...quay } = item;
+          obj[item.id] = {
+            quay,
+            departures: estimatedCalls
+          };
         }
-        return {
-          ...unsortedObject,
-          quays: sorted
-        };
+        return obj;
       };
-      const getDeparturesFromLocation = async (
-        { latitude: lat, longitude: lon }: FeatureLocation['coordinates'],
-        query: DeparturesFromLocationQuery
-      ) => {
-        const start = new Date(Date.now() + query.offset);
-        let distanceTo = (latTarget: number, lonTarget: number) =>
-          haversineDistance({ lat, lon }, { lat: latTarget, lon: lonTarget });
-        const byDistance = (
-          a: DeparturesWithStop,
-          b: DeparturesWithStop
-        ): number =>
-          distanceTo(a.stop.latitude ?? 0, a.stop.longitude ?? 0) -
-          distanceTo(b.stop.latitude ?? 0, b.stop.longitude ?? 0);
-        const toDepartures = async (
-          stop: StopPlaceDetails
-        ): Promise<DeparturesWithStop> =>
-          groupByQuays(
-            await service.getDeparturesFromStopPlace(stop.id, {
-              start,
-              limit: query.limit * 3
-            }),
-            stop,
-            query.limit
-          );
+      const mapToDeparturesWithStop = ({
+        quays,
+        ...stop
+      }: StopPlaceDetailsWithEstimatedCalls): DeparturesWithStop => ({
+        stop,
+        quays: mapToQuayObject(quays)
+      });
 
-        const stops = await service.getStopPlacesByPosition({
-          latitude: lat,
-          longitude: lon
-        });
-        const departures = await Promise.all(stops.map(toDepartures));
-        return departures.sort(byDistance);
-      };
       try {
-        if (location.layer === 'venue') {
-          const stop = await service.getStopPlace(location.id);
-          const data = await service.getDeparturesFromStopPlace(location.id, {
-            limit: query.limit * 3,
-            includeNonBoarding: query.includeNonBoarding
-          });
-          return Result.ok([groupByQuays(data, stop, query.limit)]);
-        }
-
-        const data = await getDeparturesFromLocation(
-          location.coordinates,
-          query
-        );
-        return Result.ok(data);
+        const result = await (location.layer === 'venue'
+          ? getDeparturesFromStops(location.id, query.limit)
+          : getDeparturesFromLocation(location.coordinates, 500, query.limit));
+        return Result.ok(result.map(mapToDeparturesWithStop));
       } catch (error) {
         return Result.err(new APIError(error));
       }
