@@ -31,7 +31,8 @@ import {
   DeparturesWithStop,
   DeparturesFromLocationQuery,
   DeparturesMetadata,
-  DeparturesRealtimeData
+  DeparturesRealtimeData,
+  DepartureRealtimeQuery
 } from './types';
 import { AgentError } from './impl/agent';
 
