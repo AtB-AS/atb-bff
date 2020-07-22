@@ -2,18 +2,34 @@ import { Result } from '@badrap/result';
 import { EnturService, StopPlaceDetails, EstimatedCall } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import { IStopsService } from '../../interface';
-import { APIError, DeparturesWithStop } from '../../types';
+import { APIError, DepartureRealtimeQuery } from '../../types';
 import {
   getDeparturesFromStops,
-  getDeparturesFromLocation,
-  StopPlaceDetailsWithEstimatedCalls,
-  EstimatedQuay
+  getDeparturesFromLocation
 } from './departures';
+import { getRealtimeDepartureTime } from './departure-time';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
 export default (service: EnturService): IStopsService => {
   const api: IStopsService = {
+    async getDepartures(location, query) {
+      const result = await (location.layer === 'venue'
+        ? getDeparturesFromStops(location.id, query)
+        : getDeparturesFromLocation(location.coordinates, 500, query));
+
+      return result.map(d => d.data);
+    },
+    async getDeparturesPaging(location, query) {
+      return location.layer === 'venue'
+        ? getDeparturesFromStops(location.id, query)
+        : getDeparturesFromLocation(location.coordinates, 500, query);
+    },
+    async getDepartureRealtime(query: DepartureRealtimeQuery) {
+      return getRealtimeDepartureTime(query.quayIds, query.lineIds);
+    },
+
+    // @TODO All below here should be deprecated and removed...
     async getDeparturesBetweenStopPlaces({ from, to }, params) {
       try {
         const departures = await service.getDeparturesBetweenStopPlaces(
@@ -65,38 +81,6 @@ export default (service: EnturService): IStopsService => {
         const departures = await service.getDeparturesFromStopPlace(id, query);
 
         return Result.ok(departures);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
-    async getDepartures(location, query) {
-      const mapToQuayObject = (
-        quays?: EstimatedQuay[]
-      ): DeparturesWithStop['quays'] => {
-        if (!quays) return {};
-        let obj: DeparturesWithStop['quays'] = {};
-        for (let item of quays) {
-          const { estimatedCalls, ...quay } = item;
-          obj[item.id] = {
-            quay,
-            departures: estimatedCalls
-          };
-        }
-        return obj;
-      };
-      const mapToDeparturesWithStop = ({
-        quays,
-        ...stop
-      }: StopPlaceDetailsWithEstimatedCalls): DeparturesWithStop => ({
-        stop,
-        quays: mapToQuayObject(quays)
-      });
-
-      try {
-        const result = await (location.layer === 'venue'
-          ? getDeparturesFromStops(location.id, query.limit)
-          : getDeparturesFromLocation(location.coordinates, 500, query.limit));
-        return Result.ok(result.map(mapToDeparturesWithStop));
       } catch (error) {
         return Result.err(new APIError(error));
       }

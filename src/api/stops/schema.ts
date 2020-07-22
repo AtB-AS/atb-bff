@@ -26,6 +26,7 @@ export const getStopPlaceDeparturesRequest = {
     includeNonBoarding: Joi.bool()
   })
 };
+
 export const getDeparturesRequest = {
   payload: Joi.object({
     layer: Joi.string(),
@@ -35,11 +36,29 @@ export const getDeparturesRequest = {
 
   query: Joi.object({
     limit: Joi.number().default(5),
+
+    // Paging
+    pageSize: Joi.number().default(10),
+    pageOffset: Joi.number().default(0),
+
     includeNonBoarding: Joi.bool().default(false),
-    offset: Joi.number().default(ONE_MINUTE),
-    walkSpeed: Joi.number().default(1.3)
+    // Deprecated fields
+    offset: Joi.number()
+      .default(ONE_MINUTE)
+      .description('Deprecated'),
+    walkSpeed: Joi.number()
+      .default(1.3)
+      .description('Deprecated')
   })
 };
+
+export const getDepartureRealtime = {
+  payload: Joi.object({
+    quayIds: Joi.array().items(Joi.string()),
+    lineIds: Joi.array().items(Joi.string())
+  })
+};
+
 export const getDeparturesFromQuayRequest = getStopPlaceDeparturesRequest;
 
 export const getNearestDeparturesRequest = {

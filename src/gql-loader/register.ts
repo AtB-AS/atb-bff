@@ -1,3 +1,8 @@
+// Code based on Webpack Loader from https://github.com/apollographql/graphql-tag
+// The MIT License (MIT)
+// Copyright (c) 2020 Meteor Development Group, Inc.
+// Changes Copyright (c) 2020 Mikael Brevik in https://github.com/apollographql/graphql-import
+
 import { readFileSync } from 'fs';
 import gql from 'graphql-tag';
 import {

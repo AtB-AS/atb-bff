@@ -1,0 +1,26 @@
+query(
+  $quayIds: [String]!
+  $lineIds: [String]!
+  $timeRange: Int!
+  $numPerLine: Int!
+) {
+  quays(ids: $quayIds) {
+    id
+    estimatedCalls(
+      whiteListed: { lines: $lineIds }
+      numberOfDeparturesPerLineAndDestinationDisplay: $numPerLine
+      timeRange: $timeRange
+    ) {
+      realtime
+      serviceJourney {
+        id
+      }
+      expectedArrivalTime
+      expectedDepartureTime
+      actualArrivalTime
+      actualDepartureTime
+      aimedArrivalTime
+      aimedDepartureTime
+    }
+  }
+}

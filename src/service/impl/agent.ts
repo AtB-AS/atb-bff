@@ -78,7 +78,6 @@ export default (
     });
 
     if (departures.isErr) {
-      console.error(departures.error);
       return Result.err(
         new AgentError('Fant ingen avganger mellom stoppesteder.')
       );
