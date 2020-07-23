@@ -10,11 +10,11 @@ const link = new HttpLink({
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
     errorPolicy: 'ignore'
   },
   query: {
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'network-only',
     errorPolicy: 'all'
   }
 };
