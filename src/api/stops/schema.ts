@@ -36,12 +36,12 @@ export const getDeparturesRequest = {
 
   query: Joi.object({
     limit: Joi.number().default(5),
+    startTime: Joi.date(),
 
     // Paging
     pageSize: Joi.number().default(10),
     pageOffset: Joi.number().default(0),
 
-    includeNonBoarding: Joi.bool().default(false),
     // Deprecated fields
     offset: Joi.number()
       .default(ONE_MINUTE)
@@ -53,9 +53,10 @@ export const getDeparturesRequest = {
 };
 
 export const getDepartureRealtime = {
-  payload: Joi.object({
+  query: Joi.object({
     quayIds: Joi.array().items(Joi.string()),
-    lineIds: Joi.array().items(Joi.string())
+    startTime: Joi.date(),
+    limit: Joi.number().default(5)
   })
 };
 

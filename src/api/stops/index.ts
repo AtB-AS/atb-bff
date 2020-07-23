@@ -208,7 +208,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     }
   });
   server.route({
-    method: 'POST',
+    method: 'GET',
     path: '/bff/v1/departures-realtime',
     options: {
       tags: ['api', 'stops', 'departures', 'realtime'],
@@ -217,7 +217,7 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
         'Get updated realtime information of all lines and quays passed as data'
     },
     handler: async (request, h) => {
-      const query = (request.payload as unknown) as DepartureRealtimeQuery;
+      const query = (request.query as unknown) as DepartureRealtimeQuery;
       return (await service.getDepartureRealtime(query)).unwrap();
     }
   });

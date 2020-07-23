@@ -19,6 +19,7 @@ import { Result } from '@badrap/result';
 import paginate from '../../pagination';
 import sortBy from 'lodash.sortby';
 import haversineDistance from 'haversine-distance';
+import { populateCacheIfNotThere } from './departure-time';
 
 export type ServiceJourneyWithDirection = ServiceJourney & {
   directionType: 'inbound' | 'outbound' | 'clockwise' | 'anticlockwise';
@@ -40,6 +41,23 @@ export type StopDepartures = {
   stopPlaces: StopPlaceDetailsWithEstimatedCalls[];
 };
 
+function populateRealtimeCache(
+  data: DeparturesWithStop[],
+  options: DeparturesFromLocationQuery
+) {
+  // Take all quays up until latest page, to populate correct cache (what the client) has fetched so far.
+  const quayIds = data
+    .slice(0, options.pageOffset + options.pageSize)
+    .flatMap(stop => Object.keys(stop.quays));
+
+  // Fire and forget, no need to wait for promise
+  return populateCacheIfNotThere({
+    limit: options.limit,
+    startTime: options.startTime,
+    quayIds
+  });
+}
+
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
   distance: number = 500,
@@ -49,9 +67,8 @@ export async function getDeparturesFromLocation(
 
   const variables = {
     ...bbox,
-    includeCancelledTrips: true,
-    omitNonBoarding: !options.includeNonBoarding,
     timeRange: 72000,
+    startTime: options.startTime,
     limit: options.limit
   };
 
@@ -71,6 +88,8 @@ export async function getDeparturesFromLocation(
       result.data.stopPlacesByBbox.map(mapToDeparturesWithStop),
       coordinates
     );
+
+    populateRealtimeCache(data, options);
 
     return Result.ok(
       paginate(
@@ -97,9 +116,8 @@ export async function getDeparturesFromStops(
     query: operations.ById,
     variables: {
       ids: [id],
-      includeCancelledTrips: true,
-      omitNonBoarding: !options.includeNonBoarding,
       timeRange: 72000,
+      startTime: options.startTime,
       limit: options.limit
     }
   });
@@ -108,8 +126,10 @@ export async function getDeparturesFromStops(
     return Result.err(new APIError(result.errors));
   }
 
-  const data = result.data.stopPlaces.map(mapToDeparturesWithStop);
   try {
+    const data = result.data.stopPlaces.map(mapToDeparturesWithStop);
+    populateRealtimeCache(data, options);
+
     return Result.ok(
       paginate(data, {
         pageOffset: options.pageOffset,

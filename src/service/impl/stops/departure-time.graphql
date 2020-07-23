@@ -1,15 +1,17 @@
 query(
   $quayIds: [String]!
-  $lineIds: [String]!
+  $startTime: DateTime!
   $timeRange: Int!
-  $numPerLine: Int!
+  $limit: Int!
 ) {
   quays(ids: $quayIds) {
     id
     estimatedCalls(
-      whiteListed: { lines: $lineIds }
-      numberOfDeparturesPerLineAndDestinationDisplay: $numPerLine
+      startTime: $startTime
+      numberOfDepartures: $limit
       timeRange: $timeRange
+      omitNonBoarding: false
+      includeCancelledTrips: false
     ) {
       realtime
       serviceJourney {

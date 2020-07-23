@@ -1,19 +1,19 @@
 query ById(
   $ids: [String]!
+  $startTime: DateTime!
   $timeRange: Int!
   $limit: Int!
-  $omitNonBoarding: Boolean!
-  $includeCancelledTrips: Boolean!
 ) {
   stopPlaces(ids: $ids) {
     ...stopPlaceFields
     quays(filterByInUse: true) {
       ...quayFields
       estimatedCalls(
+        startTime: $startTime
         timeRange: $timeRange
         numberOfDepartures: $limit
-        omitNonBoarding: $omitNonBoarding
-        includeCancelledTrips: $includeCancelledTrips
+        omitNonBoarding: false
+        includeCancelledTrips: false
       ) {
         ...estimatedCallFields
       }
@@ -27,9 +27,8 @@ query ByBBox(
   $maxLng: Float
   $maxLat: Float
   $timeRange: Int!
+  $startTime: DateTime!
   $limit: Int!
-  $omitNonBoarding: Boolean!
-  $includeCancelledTrips: Boolean!
 ) {
   stopPlacesByBbox(
     minimumLatitude: $minLat
@@ -41,10 +40,11 @@ query ByBBox(
     quays(filterByInUse: true) {
       ...quayFields
       estimatedCalls(
+        startTime: $startTime
         timeRange: $timeRange
         numberOfDepartures: $limit
-        omitNonBoarding: $omitNonBoarding
-        includeCancelledTrips: $includeCancelledTrips
+        omitNonBoarding: false
+        includeCancelledTrips: false
       ) {
         ...estimatedCallFields
       }

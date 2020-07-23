@@ -73,13 +73,14 @@ export interface DeparturesFromStopPlaceQuery {
 }
 
 export type DeparturesFromLocationQuery = PaginatedQuery<{
+  startTime: Date;
   limit: number;
-  includeNonBoarding: boolean;
 }>;
 
 export type DepartureRealtimeQuery = {
   quayIds: string[];
-  lineIds: string[];
+  startTime: Date;
+  limit: number;
 };
 
 export interface DeparturesFromQuayQuery {
@@ -188,12 +189,14 @@ export type RealtimeData = {
   serviceJourneyId: string;
   timeData: {
     realtime: boolean;
-    expectedArrivalTime: string;
     expectedDepartureTime: string;
-    actualArrivalTime: string;
-    actualDepartureTime: string;
-    aimedArrivalTime: string;
-    aimedDepartureTime: string;
+
+    // Currently only using expectedDepartureTime
+    // expectedArrivalTime: string;
+    // actualArrivalTime: string;
+    // actualDepartureTime: string;
+    // aimedArrivalTime: string;
+    // aimedDepartureTime: string;
   };
 };
 

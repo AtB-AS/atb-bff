@@ -26,7 +26,7 @@ export default (service: EnturService): IStopsService => {
         : getDeparturesFromLocation(location.coordinates, 500, query);
     },
     async getDepartureRealtime(query: DepartureRealtimeQuery) {
-      return getRealtimeDepartureTime(query.quayIds, query.lineIds);
+      return getRealtimeDepartureTime(query);
     },
 
     // @TODO All below here should be deprecated and removed...
