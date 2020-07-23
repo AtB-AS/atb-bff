@@ -13,7 +13,8 @@ import {
   getStopPlacesByNameRequest,
   getNearestDeparturesRequest,
   getDeparturesRequest,
-  getDepartureRealtime
+  getDepartureRealtime,
+  getDeparturesPagingRequest
 } from './schema';
 import {
   StopPlaceQuery,
@@ -26,7 +27,8 @@ import {
   NearestDeparturesQuery,
   FeatureLocation,
   DeparturesFromLocationQuery,
-  DepartureRealtimeQuery
+  DepartureRealtimeQuery,
+  DeparturesFromLocationPagingQuery
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -197,12 +199,12 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     path: '/bff/v1/departures-from-location-paging',
     options: {
       tags: ['api', 'stops', 'departures'],
-      validate: getDeparturesRequest,
+      validate: getDeparturesPagingRequest,
       description: 'Get departures from feature location'
     },
     handler: async (request, h) => {
       const locaton = (request.payload as unknown) as FeatureLocation;
-      const query = (request.query as unknown) as DeparturesFromLocationQuery;
+      const query = (request.query as unknown) as DeparturesFromLocationPagingQuery;
 
       return (await service.getDeparturesPaging(locaton, query)).unwrap();
     }

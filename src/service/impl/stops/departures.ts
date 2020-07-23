@@ -13,7 +13,7 @@ import {
   DeparturesWithStop,
   APIError,
   DeparturesMetadata,
-  DeparturesFromLocationQuery
+  DeparturesFromLocationPagingQuery
 } from '../../types';
 import { Result } from '@badrap/result';
 import paginate from '../../pagination';
@@ -43,7 +43,7 @@ export type StopDepartures = {
 
 function populateRealtimeCache(
   data: DeparturesWithStop[],
-  options: DeparturesFromLocationQuery
+  options: DeparturesFromLocationPagingQuery
 ) {
   // Take all quays up until latest page, to populate correct cache (what the client) has fetched so far.
   const quayIds = data
@@ -61,7 +61,7 @@ function populateRealtimeCache(
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
   distance: number = 500,
-  options: DeparturesFromLocationQuery
+  options: DeparturesFromLocationPagingQuery
 ): Promise<Result<DeparturesMetadata, APIError>> {
   const bbox = convertPositionToBbox(coordinates, distance);
 
@@ -108,7 +108,7 @@ export async function getDeparturesFromLocation(
 
 export async function getDeparturesFromStops(
   id: string,
-  options: DeparturesFromLocationQuery
+  options: DeparturesFromLocationPagingQuery
 ): Promise<Result<DeparturesMetadata, APIError>> {
   const result = await client.query<{
     stopPlaces: StopPlaceDetailsWithEstimatedCalls[];

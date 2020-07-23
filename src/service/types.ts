@@ -72,7 +72,13 @@ export interface DeparturesFromStopPlaceQuery {
   includeNonBoarding?: boolean;
 }
 
-export type DeparturesFromLocationQuery = PaginatedQuery<{
+export interface DeparturesFromLocationQuery {
+  offset: number;
+  walkSpeed: number;
+  includeNonBoarding: boolean;
+}
+
+export type DeparturesFromLocationPagingQuery = PaginatedQuery<{
   startTime: Date;
   limit: number;
 }>;

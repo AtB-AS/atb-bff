@@ -32,7 +32,8 @@ import {
   DeparturesFromLocationQuery,
   DeparturesMetadata,
   DeparturesRealtimeData,
-  DepartureRealtimeQuery
+  DepartureRealtimeQuery,
+  DeparturesFromLocationPagingQuery
 } from './types';
 import { AgentError } from './impl/agent';
 
@@ -61,7 +62,7 @@ export interface IStopsService {
 
   getDeparturesPaging(
     location: FeatureLocation,
-    query: DeparturesFromLocationQuery
+    query: DeparturesFromLocationPagingQuery
   ): Promise<Result<DeparturesMetadata, APIError>>;
 
   getDepartureRealtime(

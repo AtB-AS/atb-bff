@@ -13,10 +13,16 @@ type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
 export default (service: EnturService): IStopsService => {
   const api: IStopsService = {
-    async getDepartures(location, query) {
+    async getDepartures(location) {
+      const opts = {
+        pageOffset: 0,
+        pageSize: 10,
+        startTime: new Date(),
+        limit: 5
+      };
       const result = await (location.layer === 'venue'
-        ? getDeparturesFromStops(location.id, query)
-        : getDeparturesFromLocation(location.coordinates, 500, query));
+        ? getDeparturesFromStops(location.id, opts)
+        : getDeparturesFromLocation(location.coordinates, 500, opts));
 
       return result.map(d => d.data);
     },
