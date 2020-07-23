@@ -136,13 +136,6 @@ function mapDeparture(
       timeData: {
         realtime: departure.realtime,
         expectedDepartureTime: departure.expectedDepartureTime
-
-        // Currently only use expectedDepartureTime
-        // expectedArrivalTime: departure.expectedArrivalTime,
-        // actualArrivalTime: departure.actualArrivalTime,
-        // actualDepartureTime: departure.actualDepartureTime,
-        // aimedArrivalTime: departure.aimedArrivalTime,
-        // aimedDepartureTime: departure.aimedDepartureTime
       }
     };
   }

@@ -190,13 +190,6 @@ export type RealtimeData = {
   timeData: {
     realtime: boolean;
     expectedDepartureTime: string;
-
-    // Currently only using expectedDepartureTime
-    // expectedArrivalTime: string;
-    // actualArrivalTime: string;
-    // actualDepartureTime: string;
-    // aimedArrivalTime: string;
-    // aimedDepartureTime: string;
   };
 };
 
