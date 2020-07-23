@@ -1,7 +1,7 @@
 // Code based on Webpack Loader from https://github.com/apollographql/graphql-tag
 // The MIT License (MIT)
 // Copyright (c) 2020 Meteor Development Group, Inc.
-// Changes Copyright (c) 2020 Mikael Brevik in https://github.com/apollographql/graphql-import
+// Changes Copyright (c) 2020 Mikael Brevik in https://github.com/mikaelbr/graphql-node-import
 
 import { readFileSync } from 'fs';
 import gql from 'graphql-tag';
@@ -36,12 +36,12 @@ const handleModule = (m: NodeJS.Module, filename: string) => {
   m.exports = doc;
   m.exports.content = content;
 
-  let operationCount = doc.definitions.reduce(function(accum, op) {
+  let operationCount = doc.definitions.reduce(function (accum, op) {
     return op.kind === 'OperationDefinition' ? accum + 1 : accum;
   }, 0);
 
   var definitionRefs: { [name: string]: Set<string> } = {};
-  wDoc.definitions.forEach(function(def: ASTNode) {
+  wDoc.definitions.forEach(function (def: ASTNode) {
     if (isExecutableDefinitionNode(def)) {
       var refs = new Set<string>();
       collectFragmentReferences(def, refs);
@@ -104,17 +104,17 @@ function collectFragmentReferences(node: ASTNode, refs: Set<string>) {
     }
   }
   if (isExecutableDefinitionNode(node)) {
-    node.selectionSet?.selections?.forEach(function(selection) {
+    node.selectionSet?.selections?.forEach(function (selection) {
       collectFragmentReferences(selection, refs);
     });
   }
   if (isExecutableDefinitionNode(node)) {
-    (node.variableDefinitions ?? []).forEach(function(def) {
+    (node.variableDefinitions ?? []).forEach(function (def) {
       collectFragmentReferences(def, refs);
     });
   }
   if (isDocumentNode(node)) {
-    node.definitions.forEach(function(def) {
+    node.definitions.forEach(function (def) {
       collectFragmentReferences(def, refs);
     });
   }
@@ -156,18 +156,18 @@ function oneQuery(
   while (newRefs.size > 0) {
     var prevRefs = newRefs;
     newRefs = new Set();
-    prevRefs.forEach(function(refName) {
+    prevRefs.forEach(function (refName) {
       if (!allRefs.has(refName)) {
         allRefs.add(refName);
         var childRefs = definitionRefs[refName] || new Set();
-        childRefs.forEach(function(childRef) {
+        childRefs.forEach(function (childRef) {
           newRefs.add(childRef);
         });
       }
     });
   }
 
-  allRefs.forEach(function(refName) {
+  allRefs.forEach(function (refName) {
     var op = find(doc, refName)[0];
     if (op) {
       newDoc.definitions = newDoc.definitions.concat(op);
@@ -196,7 +196,7 @@ function expandImports(source: string, doc: WritableDocumentNode) {
 function unique(defs: readonly DefinitionNode[]) {
   var names: { [name: string]: boolean } = {};
 
-  return defs.filter(function(def) {
+  return defs.filter(function (def) {
     if (def.kind !== 'FragmentDefinition') return true;
     var name = def.name.value;
     if (names[name]) {
