@@ -1,5 +1,4 @@
-import client from '../graphql-client';
-import query from './departure-time.graphql';
+import client from '../../../graphql/graphql-client';
 import {
   APIError,
   DeparturesRealtimeData,
@@ -8,35 +7,17 @@ import {
 } from '../../types';
 import { Result } from '@badrap/result';
 
-type DepartureRealtimeDataFromGraphQL = {
-  quays: Array<{
-    id: string;
-    estimatedCalls: Array<{
-      realtime: boolean;
-      serviceJourney: {
-        line: {
-          id: string;
-        };
-        id: string;
-      };
-      expectedArrivalTime: string;
-      expectedDepartureTime: string;
-      actualArrivalTime: string;
-      actualDepartureTime: string;
-      aimedArrivalTime: string;
-      aimedDepartureTime: string;
-    }>;
-  }>;
-};
+import {
+  GetDepartureRealtimeDocument,
+  GetDepartureRealtimeQuery,
+  GetDepartureRealtimeQueryVariables,
+  EstimatedCallFragment
+} from './departure-time.graphql-gen';
+import { Maybe } from '../../../graphql/types';
 
-type Variables = {
-  quayIds: string[];
-  startTime: Date;
-  limit: number;
-  timeRange: number;
-};
-
-const createVariables = (query: DepartureRealtimeQuery) => ({
+const createVariables = (
+  query: DepartureRealtimeQuery
+): GetDepartureRealtimeQueryVariables => ({
   ...query,
   timeRange: 72000
 });
@@ -54,8 +35,11 @@ export async function populateCacheIfNotThere(
 
     if (previousResult) return;
 
-    await client.query<DepartureRealtimeDataFromGraphQL>({
-      query,
+    await client.query<
+      GetDepartureRealtimeQuery,
+      GetDepartureRealtimeQueryVariables
+    >({
+      query: GetDepartureRealtimeDocument,
       variables: createVariables(inputQuery)
     });
   } catch (e) {}
@@ -67,8 +51,12 @@ export async function getRealtimeDepartureTime(
   try {
     const variables = createVariables(inputQuery);
     const previousResult = getPreviousExpectedFromCache(variables);
-    const result = await client.query<DepartureRealtimeDataFromGraphQL>({
-      query,
+    const result = await client.query<
+      GetDepartureRealtimeQuery,
+      GetDepartureRealtimeQueryVariables
+    >({
+      query: GetDepartureRealtimeDocument,
+
       variables
     });
 
@@ -90,11 +78,12 @@ type PreviousDepartureTimeLookup = {
 };
 
 function mapToDepartureRealtime(
-  input: DepartureRealtimeDataFromGraphQL,
+  input: GetDepartureRealtimeQuery,
   previousResultLookup?: PreviousDepartureTimeLookup
 ): DeparturesRealtimeData {
   let obj: DeparturesRealtimeData = {};
   for (let quay of input.quays) {
+    if (!quay) continue;
     const departures = mapDeparture(
       quay.estimatedCalls,
       previousResultLookup?.[quay.id]
@@ -114,19 +103,19 @@ function mapToDepartureRealtime(
 }
 
 function mapDeparture(
-  input: DepartureRealtimeDataFromGraphQL['quays'][0]['estimatedCalls'],
+  input: EstimatedCallFragment[],
   previousResultLookup?: PreviousDepartureTimeLookupService
 ) {
   let obj: DepartureRealtimeData['departures'] = {};
   for (let departure of input) {
-    const serviceJourneyId = departure.serviceJourney.id;
+    const serviceJourneyId = departure.serviceJourney!.id;
     const previousData = previousResultLookup?.[serviceJourneyId];
 
     // Only include if new time is different than previous time.
     // This is to reduce unneccesary data
     if (
       previousData?.time === departure.expectedDepartureTime &&
-      previousData.realtime === departure.realtime
+      previousData?.realtime === departure.realtime
     ) {
       continue;
     }
@@ -134,7 +123,7 @@ function mapDeparture(
     obj[serviceJourneyId] = {
       serviceJourneyId,
       timeData: {
-        realtime: departure.realtime,
+        realtime: departure.realtime ?? false,
         expectedDepartureTime: departure.expectedDepartureTime
       }
     };
@@ -142,10 +131,15 @@ function mapDeparture(
   return obj;
 }
 
-function getPreviousExpectedFromCache(variables: Variables) {
+function getPreviousExpectedFromCache(
+  variables: GetDepartureRealtimeQueryVariables
+) {
   try {
-    const result = client.readQuery<DepartureRealtimeDataFromGraphQL>({
-      query,
+    const result = client.readQuery<
+      GetDepartureRealtimeQuery,
+      GetDepartureRealtimeQueryVariables
+    >({
+      query: GetDepartureRealtimeDocument,
       variables
     });
     if (!result) {
@@ -158,16 +152,16 @@ function getPreviousExpectedFromCache(variables: Variables) {
   }
 }
 
-function mapToPreviousResultsHash(input: DepartureRealtimeDataFromGraphQL) {
+function mapToPreviousResultsHash(input: GetDepartureRealtimeQuery) {
   let previousExpectedDepartureTimeLookup: PreviousDepartureTimeLookup = {};
   for (let quay of input.quays) {
     const quayId = quay.id;
     previousExpectedDepartureTimeLookup[quayId] = {};
     for (let departure of quay.estimatedCalls) {
-      const serviceJourneyId = departure.serviceJourney.id;
+      const serviceJourneyId = departure.serviceJourney!.id;
       previousExpectedDepartureTimeLookup[quayId][serviceJourneyId] = {
         time: departure.expectedDepartureTime,
-        realtime: departure.realtime
+        realtime: departure.realtime ?? false
       };
     }
   }

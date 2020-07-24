@@ -22,10 +22,10 @@ query ById(
 }
 
 query ByBBox(
-  $minLat: Float
-  $minLng: Float
-  $maxLng: Float
-  $maxLat: Float
+  $minLat: Float!
+  $minLng: Float!
+  $maxLng: Float!
+  $maxLat: Float!
   $timeRange: Int!
   $startTime: DateTime!
   $limit: Int!

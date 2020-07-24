@@ -1,5 +1,4 @@
-import client from '../graphql-client';
-import { operations } from './departures-from-stops.graphql';
+import client from '../../../graphql/graphql-client';
 import {
   EstimatedCall,
   StopPlaceDetails,
@@ -20,6 +19,15 @@ import paginate from '../../pagination';
 import sortBy from 'lodash.sortby';
 import haversineDistance from 'haversine-distance';
 import { populateCacheIfNotThere } from './departure-time';
+import {
+  ByBBoxDocument,
+  ByBBoxQueryVariables,
+  ByBBoxQuery,
+  ByIdQuery,
+  ByIdDocument,
+  ByIdQueryVariables,
+  EstimatedCallFieldsFragment
+} from './departures-from-stops.graphql-gen';
 
 export type ServiceJourneyWithDirection = ServiceJourney & {
   directionType: 'inbound' | 'outbound' | 'clockwise' | 'anticlockwise';
@@ -41,23 +49,6 @@ export type StopDepartures = {
   stopPlaces: StopPlaceDetailsWithEstimatedCalls[];
 };
 
-function populateRealtimeCache(
-  data: DeparturesWithStop[],
-  options: DeparturesFromLocationPagingQuery
-) {
-  // Take all quays up until latest page, to populate correct cache (what the client) has fetched so far.
-  const quayIds = data
-    .slice(0, options.pageOffset + options.pageSize)
-    .flatMap(stop => Object.keys(stop.quays));
-
-  // Fire and forget, no need to wait for promise
-  return populateCacheIfNotThere({
-    limit: options.limit,
-    startTime: options.startTime,
-    quayIds
-  });
-}
-
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
   distance: number = 500,
@@ -72,10 +63,8 @@ export async function getDeparturesFromLocation(
     limit: options.limit
   };
 
-  const result = await client.query<{
-    stopPlacesByBbox: StopPlaceDetailsWithEstimatedCalls[];
-  }>({
-    query: operations.ByBBox,
+  const result = await client.query<ByBBoxQuery, ByBBoxQueryVariables>({
+    query: ByBBoxDocument,
     variables
   });
 
@@ -110,10 +99,8 @@ export async function getDeparturesFromStops(
   id: string,
   options: DeparturesFromLocationPagingQuery
 ): Promise<Result<DeparturesMetadata, APIError>> {
-  const result = await client.query<{
-    stopPlaces: StopPlaceDetailsWithEstimatedCalls[];
-  }>({
-    query: operations.ById,
+  const result = await client.query<ByIdQuery, ByIdQueryVariables>({
+    query: ByIdDocument,
     variables: {
       ids: [id],
       timeRange: 72000,
@@ -173,16 +160,20 @@ function sortQuays(departures: DeparturesWithStop[]): DeparturesWithStop[] {
   });
 }
 
+type StopDataInternal = ByIdQuery['stopPlaces'][0];
+
+type QuayDataInternal = NonNullable<StopDataInternal['quays']>[0];
+
 const mapToQuayObject = (
-  quays?: EstimatedQuay[]
+  quays?: QuayDataInternal[]
 ): DeparturesWithStop['quays'] => {
   if (!quays) return {};
   let obj: DeparturesWithStop['quays'] = {};
   for (let item of quays) {
     const { estimatedCalls, ...quay } = item;
     obj[item.id] = {
-      quay,
-      departures: estimatedCalls
+      quay: quay as Quay,
+      departures: estimatedCalls as EstimatedCall[]
     };
   }
   return obj;
@@ -191,7 +182,24 @@ const mapToQuayObject = (
 const mapToDeparturesWithStop = ({
   quays,
   ...stop
-}: StopPlaceDetailsWithEstimatedCalls): DeparturesWithStop => ({
-  stop,
+}: StopDataInternal): DeparturesWithStop => ({
+  stop: stop as StopPlaceDetails,
   quays: mapToQuayObject(quays)
 });
+
+function populateRealtimeCache(
+  data: DeparturesWithStop[],
+  options: DeparturesFromLocationPagingQuery
+) {
+  // Take all quays up until latest page, to populate correct cache (what the client) has fetched so far.
+  const quayIds = data
+    .slice(0, options.pageOffset + options.pageSize)
+    .flatMap(stop => Object.keys(stop.quays));
+
+  // Fire and forget, no need to wait for promise
+  return populateCacheIfNotThere({
+    limit: options.limit,
+    startTime: options.startTime,
+    quayIds
+  });
+}
