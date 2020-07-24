@@ -39,9 +39,8 @@ process.on('unhandledRejection', err => {
     });
     const projectId = await auth.getProjectId();
 
-    const server = createServer({
-      port: process.env['PORT'] || '8080'
-    });
+    const port = process.env['PORT'] || '8080';
+    const server = createServer({ port });
     const enturService = enturClient({});
     await initializePlugins(server);
     server.route({
@@ -57,13 +56,13 @@ process.on('unhandledRejection', err => {
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
-    agentRoutes(server)(
-      agentService(stopsService(enturService), js)
-    );
+    agentRoutes(server)(agentService(stopsService(enturService), js));
 
     registerMetricsExporter(projectId);
     await server.initialize();
     await server.start();
+
+    console.log(`[STARTED] Running on port ${port}`);
   } catch (error) {
     console.error(
       `failed to initialize server: ${error?.message}, terminating process.`
