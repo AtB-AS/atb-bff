@@ -29,7 +29,11 @@ import {
   TripPatternQuery,
   FeatureLocation,
   DeparturesWithStop,
-  DeparturesFromLocationQuery
+  DeparturesFromLocationQuery,
+  DeparturesMetadata,
+  DeparturesRealtimeData,
+  DepartureRealtimeQuery,
+  DeparturesFromLocationPagingQuery
 } from './types';
 import { AgentError } from './impl/agent';
 
@@ -51,6 +55,21 @@ export interface IGeocoderService {
 }
 
 export interface IStopsService {
+  getDepartures(
+    location: FeatureLocation,
+    query: DeparturesFromLocationQuery
+  ): Promise<Result<DeparturesWithStop[], APIError>>;
+
+  getDeparturesPaging(
+    location: FeatureLocation,
+    query: DeparturesFromLocationPagingQuery
+  ): Promise<Result<DeparturesMetadata, APIError>>;
+
+  getDepartureRealtime(
+    query: DepartureRealtimeQuery
+  ): Promise<Result<DeparturesRealtimeData, APIError>>;
+
+  // @TODO Deprecate all these
   getNearestDepartures(
     query: NearestDeparturesQuery
   ): Promise<Result<EstimatedCall[], APIError>>;
@@ -76,11 +95,6 @@ export interface IStopsService {
     id: string,
     query: DeparturesFromStopPlaceQuery
   ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getDepartures(
-    location: FeatureLocation,
-    query: DeparturesFromLocationQuery
-  ): Promise<Result<DeparturesWithStop[], APIError>>;
 
   getDeparturesFromQuay(
     id: string,

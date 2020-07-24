@@ -37,3 +37,17 @@ API endpoints live in `api/`.
 
 The current implementation uses [@entur/sdk](https://github.com/entur/sdk) as an
 abstraction on top of Entur's GraphQL endpoints.
+
+## GraphQL Code Generation
+
+For endpoints that uses GraphQL directly we generate types and code using
+`graphql-code-gen`. If the queries, scheme, operations or fragments change,
+generate the code using scripts:
+
+```
+npm run gql-gen
+```
+
+This will make a TypeScript representation of the `.graphql` file in the same
+location but with `.graphql-gen.ts` extension. You can use these directly as
+queries.
