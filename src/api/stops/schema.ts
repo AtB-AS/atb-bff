@@ -65,7 +65,7 @@ export const getDeparturesPagingRequest = {
 
 export const getDepartureRealtime = {
   query: Joi.object({
-    quayIds: Joi.array().items(Joi.string()),
+    quayIds: Joi.array().items(Joi.string()).default([]),
     startTime: Joi.date(),
     limit: Joi.number().default(5)
   })
