@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
-import http from 'http';
 import { createServer, initializePlugins } from '../../server';
-import geocoderRoutes from '../geocoder';
+import * as routes from '../../api/geocoder';
+
 import { IGeocoderService } from '../../service/interface';
 import { Result } from '@badrap/result';
 import { randomPort } from './common';
@@ -18,8 +18,27 @@ beforeAll(async () => {
     port: randomPort()
   });
 
-  await initializePlugins(server);
-  geocoderRoutes(server)(svc);
+  await server.register([
+    {
+      plugin: routes.getFeatures,
+      options: {
+        deps: svc
+      },
+      routes: {
+        prefix: '/bff'
+      }
+    },
+    {
+      plugin: routes.getFeaturesReverse,
+      options: {
+        deps: svc
+      },
+      routes: {
+        prefix: '/bff'
+      }
+    }
+  ]);
+
   await server.initialize();
   await server.start();
 });

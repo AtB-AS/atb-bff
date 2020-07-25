@@ -3,8 +3,6 @@ import http from 'http';
 import hapi from '@hapi/hapi';
 import hapiPulse from 'hapi-pulse';
 import hapiSwagger from 'hapi-swagger';
-import hapiInert from '@hapi/inert';
-import hapiVision from '@hapi/vision';
 import hapiApiVersion from 'hapi-api-version';
 
 import stackdriverLabel from './plugins/stackdriver-label';
@@ -33,7 +31,6 @@ export const createServer = (opts: ServerOptions) => {
 };
 
 export const initializePlugins = async (server: hapi.Server) => {
-
   await server.register({
     plugin: atbHeaders
   });
@@ -59,7 +56,7 @@ export const initializePlugins = async (server: hapi.Server) => {
     }
   });
 
-  await server.register([hapiVision, hapiInert, hapiPulse]);
+  await server.register(hapiPulse);
   await server.register({
     plugin: hapiApiVersion,
     options: {
@@ -71,6 +68,8 @@ export const initializePlugins = async (server: hapi.Server) => {
   await server.register({
     plugin: hapiSwagger,
     options: {
+      documentationPage: false,
+      swaggerUI: false,
       info: {
         title: 'API Documentation',
         description: 'Description goes here',

@@ -8,11 +8,11 @@ if (process.env.NODE_ENV === 'production') {
 
 import { createServer, initializePlugins } from './server';
 import enturClient from './service/impl/entur';
-import geocoderService from './service/impl/geocoder';
 import stopsService from './service/impl/stops';
 import journeyService from './service/impl/journey';
 
-import geocoderRoutes from './api/geocoder';
+import { getFeatures, getFeaturesReverse } from './api/geocoder';
+import createGeocoderService from './lib/services/geocoder';
 import stopsRoutes from './api/stops';
 import journeyRoutes from './api/journey';
 import healthRoutes from './api/health';
@@ -51,9 +51,15 @@ process.on('unhandledRejection', err => {
 
     const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
     const js = journeyService(enturService, pubSubClient);
+    await server.register(createGeocoderService(enturService));
+    await server.register([getFeatures, getFeaturesReverse], {
+      routes: {
+        prefix: '/bff'
+      }
+    });
+
     healthRoutes(server);
     stopsRoutes(server)(stopsService(enturService));
-    geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
 
     registerMetricsExporter(projectId);
