@@ -16,6 +16,22 @@ Build and run the docker image:
 
 `docker run --rm --env PORT=8080 -p 8080:8080 -it $(docker build -q .)`
 
+## Deploying
+
+Staging is deployed automatically using Cloud Build triggered on main branch.
+Production code is deployed from `prod` branch currently (subject to change).
+
+DNS gateway uses Swagger documentation to open specific endpoints. This means if
+you change the public API in any case you will have to update the
+[`swagger.yaml` file](./swagger.yaml) in root:
+
+```sh
+npm run swagger-gen
+```
+
+and comitting the code generated. Remember to check the git diff to see if
+everything looks ok.
+
 ## Architecture
 
 The runtime is written in TypeScript and runs on Node.js

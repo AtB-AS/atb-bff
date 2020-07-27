@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   title: atb-bff
   description: ATB BFF
@@ -12,7 +12,7 @@ x-google-backend:
   address: https://atb-bff-staging-jlmnrncfba-ew.a.run.app
   path_translation: APPEND_PATH_TO_ADDRESS
 paths:
-  '/bff/v1/departures':
+  /bff/v1/departures:
     get:
       summary: Find departures between stop places
       operationId: getBffV1Departures
@@ -32,13 +32,13 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures-realtime':
+  /bff/v1/departures-realtime:
     get:
-      summary:
-        Get updated realtime information of all lines and quays passed as data
+      summary: Get updated realtime information of all lines and quays passed as data
       operationId: getBffV1Departuresrealtime
       parameters:
         - type: array
+          default: []
           items:
             type: string
           collectionFormat: multi
@@ -59,7 +59,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stops':
+  /bff/v1/stops:
     get:
       summary: Find stops matching query
       operationId: getBffV1Stops
@@ -81,7 +81,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/agent/next-departure-between':
+  /bff/v1/agent/next-departure-between:
     get:
       summary: Get next departures between stops
       operationId: getBffV1AgentNextdeparturebetween
@@ -101,7 +101,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/agent/next-departure-between-nearest':
+  /bff/v1/agent/next-departure-between-nearest:
     get:
       operationId: getBffV1AgentNextdeparturebetweennearest
       parameters:
@@ -124,11 +124,10 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures/nearest':
+  /bff/v1/departures/nearest:
     get:
-      summary:
-        'Get departures from stops near coordinates. Deprecated: Use POST
-        /v1/departures-from-location instead'
+      summary: "Get departures from stops near coordinates. Deprecated: Use POST
+        /v1/departures-from-location instead"
       operationId: getBffV1DeparturesNearest
       parameters:
         - type: number
@@ -159,7 +158,7 @@ paths:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/geocoder/features':
+  /bff/v1/geocoder/features:
     get:
       summary: Find features matching query
       operationId: getBffV1GeocoderFeatures
@@ -205,7 +204,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/geocoder/reverse':
+  /bff/v1/geocoder/reverse:
     get:
       summary: Find addresses, POIs and stop places near the given coordinates
       operationId: getBffV1GeocoderReverse
@@ -234,7 +233,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/journey/single-trip':
+  /bff/v1/journey/single-trip:
     get:
       summary: Get one specific trip pattern from generated ID
       operationId: getBffV1JourneySingletrip
@@ -250,7 +249,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/journey/trip':
+  /bff/v1/journey/trip:
     get:
       summary: Find trip patterns with a simple query
       operationId: getBffV1JourneyTrip
@@ -281,7 +280,7 @@ paths:
         - in: body
           name: body
           schema:
-            '$ref': '#/definitions/Model2'
+            $ref: "#/definitions/Model2"
       tags:
         - bff
       responses:
@@ -289,7 +288,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stop/{id}':
+  "/bff/v1/stop/{id}":
     get:
       summary: Get details for a StopPlace
       operationId: getBffV1StopId
@@ -305,7 +304,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stops/nearest':
+  /bff/v1/stops/nearest:
     get:
       summary: Find stops near coordinates
       operationId: getBffV1StopsNearest
@@ -328,7 +327,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/quay/{id}/departures':
+  "/bff/v1/quay/{id}/departures":
     get:
       summary: Get departures from Quay
       operationId: getBffV1QuayIdDepartures
@@ -357,7 +356,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/servicejourney/{id}/departures':
+  "/bff/v1/servicejourney/{id}/departures":
     get:
       summary: Get departures for Service Journey
       operationId: getBffV1ServicejourneyIdDepartures
@@ -377,11 +376,10 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stop/{id}/departures':
+  "/bff/v1/stop/{id}/departures":
     get:
-      summary:
-        'Get departures from StopPlace. Deprecated: Use POST
-        /v1/departures-from-location instead'
+      summary: "Get departures from StopPlace. Deprecated: Use POST
+        /v1/departures-from-location instead"
       operationId: getBffV1StopIdDepartures
       parameters:
         - type: string
@@ -409,7 +407,7 @@ paths:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/stop/{id}/quays':
+  "/bff/v1/stop/{id}/quays":
     get:
       summary: Get all quays that belongs to a StopPlace
       operationId: getBffV1StopIdQuays
@@ -429,7 +427,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures-from-location':
+  /bff/v1/departures-from-location:
     post:
       summary: Get departures from feature location
       operationId: postBffV1Departuresfromlocation
@@ -453,7 +451,7 @@ paths:
         - in: body
           name: body
           schema:
-            '$ref': '#/definitions/Model1'
+            $ref: "#/definitions/Model1"
       tags:
         - bff
       responses:
@@ -461,7 +459,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures-from-location-paging':
+  /bff/v1/departures-from-location-paging:
     post:
       summary: Get departures from feature location
       operationId: postBffV1Departuresfromlocationpaging
@@ -495,7 +493,7 @@ paths:
         - in: body
           name: body
           schema:
-            '$ref': '#/definitions/Model1'
+            $ref: "#/definitions/Model1"
       tags:
         - bff
       responses:
@@ -519,7 +517,7 @@ definitions:
       id:
         type: string
       coordinates:
-        '$ref': '#/definitions/coordinates'
+        $ref: "#/definitions/coordinates"
   from:
     type: object
     properties:
@@ -529,7 +527,7 @@ definitions:
         type: string
         default: UNKNOWN
       coordinates:
-        '$ref': '#/definitions/coordinates'
+        $ref: "#/definitions/coordinates"
   modes:
     type: array
     default:
@@ -546,9 +544,9 @@ definitions:
     type: object
     properties:
       from:
-        '$ref': '#/definitions/from'
+        $ref: "#/definitions/from"
       to:
-        '$ref': '#/definitions/from'
+        $ref: "#/definitions/from"
       searchDate:
         type: string
         format: date
@@ -559,7 +557,7 @@ definitions:
         type: number
         default: 30
       modes:
-        '$ref': '#/definitions/modes'
+        $ref: "#/definitions/modes"
       limit:
         type: number
         default: 10
