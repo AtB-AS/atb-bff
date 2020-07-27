@@ -11,12 +11,10 @@ import enturClient from './service/impl/entur';
 import geocoderService from './service/impl/geocoder';
 import stopsService from './service/impl/stops';
 import journeyService from './service/impl/journey';
-import agentService from './service/impl/agent';
 
 import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
 import journeyRoutes from './api/journey';
-import agentRoutes from './api/agent';
 import healthRoutes from './api/health';
 
 import registerMetricsExporter from './utils/metrics';
@@ -57,9 +55,6 @@ process.on('unhandledRejection', err => {
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
-    agentRoutes(server)(
-      agentService(stopsService(enturService), js)
-    );
 
     registerMetricsExporter(projectId);
     await server.initialize();
