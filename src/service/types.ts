@@ -140,21 +140,10 @@ export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
 
-export interface NextDepartureFromStopQuery {
-  from: string;
-  to: string;
-}
-
 export interface DeparturesBetweenStopPlacesParams {
   limit?: number;
   start?: Date;
 }
-
-export type NextDepartureFromCoordinateQuery = {
-  lat: number;
-  lon: number;
-  to: string;
-};
 
 export type DeparturesByIdWithStopName = DeparturesById & {
   name: string;
