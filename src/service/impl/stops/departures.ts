@@ -139,10 +139,19 @@ function sortAndFilterStops(
           lon: a.stop.longitude
         })
       : 0;
-  return sortBy(
-    unsortedObject.filter(stop => Object.values(stop.quays).length > 0),
-    distanceTo
-  );
+  return sortBy(unsortedObject.filter(hasQuaysAndDepartures), distanceTo);
+}
+
+function hasQuaysAndDepartures(stop: DeparturesWithStop) {
+  const quays = Object.values(stop.quays);
+  if (!quays.length) {
+    return false;
+  }
+  if (quays.some(q => q.departures.length > 0)) {
+    return true;
+  }
+
+  return false;
 }
 
 function sortQuays(departures: DeparturesWithStop[]): DeparturesWithStop[] {
