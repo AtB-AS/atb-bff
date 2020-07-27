@@ -65,7 +65,10 @@ export async function getDeparturesFromLocation(
 
   const result = await client.query<ByBBoxQuery, ByBBoxQueryVariables>({
     query: ByBBoxDocument,
-    variables
+    variables,
+    // We can cache here as we pass in startTime and use
+    // the departure time query to update the time.
+    fetchPolicy: 'cache-first'
   });
 
   if (result.errors) {
@@ -106,7 +109,11 @@ export async function getDeparturesFromStops(
       timeRange: 72000,
       startTime: options.startTime,
       limit: options.limit
-    }
+    },
+
+    // We can cache here as we pass in startTime and use
+    // the departure time query to update the time.
+    fetchPolicy: 'cache-first'
   });
 
   if (result.errors) {
