@@ -12,7 +12,9 @@ import {
   getDeparturesBetweenStopPlacesRequest,
   getStopPlacesByNameRequest,
   getNearestDeparturesRequest,
-  getDeparturesRequest
+  getDeparturesRequest,
+  getDepartureRealtime,
+  getDeparturesPagingRequest
 } from './schema';
 import {
   StopPlaceQuery,
@@ -24,7 +26,9 @@ import {
   StopPlaceByNameQuery,
   NearestDeparturesQuery,
   FeatureLocation,
-  DeparturesFromLocationQuery
+  DeparturesFromLocationQuery,
+  DepartureRealtimeQuery,
+  DeparturesFromLocationPagingQuery
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -188,6 +192,35 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       const query = (request.query as unknown) as DeparturesFromLocationQuery;
 
       return (await service.getDepartures(locaton, query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/bff/v1/departures-from-location-paging',
+    options: {
+      tags: ['api', 'stops', 'departures'],
+      validate: getDeparturesPagingRequest,
+      description: 'Get departures from feature location'
+    },
+    handler: async (request, h) => {
+      const locaton = (request.payload as unknown) as FeatureLocation;
+      const query = (request.query as unknown) as DeparturesFromLocationPagingQuery;
+
+      return (await service.getDeparturesPaging(locaton, query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/bff/v1/departures-realtime',
+    options: {
+      tags: ['api', 'stops', 'departures', 'realtime'],
+      validate: getDepartureRealtime,
+      description:
+        'Get updated realtime information of all lines and quays passed as data'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as DepartureRealtimeQuery;
+      return (await service.getDepartureRealtime(query)).unwrap();
     }
   });
 };

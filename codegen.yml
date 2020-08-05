@@ -1,0 +1,33 @@
+overwrite: true
+schema: 'https://api.entur.io/journey-planner/v2/graphql'
+documents: ./src/**/*.graphql
+generates:
+  src/graphql/types.ts:
+    config:
+      maybeValue: T
+      skipTypename: true
+      exportFragmentSpreadSubTypes: true
+      preResolveTypes: true
+    plugins:
+      - typescript
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .graphql-gen.ts
+      baseTypesPath: graphql/types.ts
+    config:
+      withHooks: false
+      withComponent: false
+      withHOC: false
+      withResultType: false
+      skipTypename: true
+      # This causes some types to be wrong (e.g. in departure query dates are any type)
+      # but it makes using the types waay easier. Necessary evil in my mind.
+      preResolveTypes: true
+      exportFragmentSpreadSubTypes: true
+      # Looks like almost all types in the GraphQL server is optional but actually are set. The Maybe combinator
+      # is a pain to work with when traversing the types.
+      maybeValue: T
+    plugins:
+      - 'typescript-operations'
+      - 'typescript-react-apollo'

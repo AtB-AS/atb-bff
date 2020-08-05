@@ -75,9 +75,19 @@ export interface DeparturesFromStopPlaceQuery {
 export interface DeparturesFromLocationQuery {
   offset: number;
   walkSpeed: number;
-  limit: number;
   includeNonBoarding: boolean;
 }
+
+export type DeparturesFromLocationPagingQuery = PaginatedQuery<{
+  startTime: Date;
+  limit: number;
+}>;
+
+export type DepartureRealtimeQuery = {
+  quayIds: string[];
+  startTime: Date;
+  limit: number;
+};
 
 export interface DeparturesFromQuayQuery {
   start?: Date;
@@ -130,21 +140,10 @@ export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
 
-export interface NextDepartureFromStopQuery {
-  from: string;
-  to: string;
-}
-
 export interface DeparturesBetweenStopPlacesParams {
   limit?: number;
   start?: Date;
 }
-
-export type NextDepartureFromCoordinateQuery = {
-  lat: number;
-  lon: number;
-  to: string;
-};
 
 export type DeparturesByIdWithStopName = DeparturesById & {
   name: string;
@@ -155,6 +154,47 @@ export type DeparturesWithStop = {
   quays: {
     [quayId: string]: { quay: Quay; departures: Array<Departure> };
   };
+};
+
+export type PaginationInput = {
+  pageSize: number;
+  pageOffset: number;
+};
+
+export type PaginatedQuery<T> = PaginationInput & T;
+
+export type Paginated<T extends any[] | []> =
+  | ({
+      hasNext: true;
+      nextPageOffset: number;
+
+      data: T;
+      totalResults: number;
+    } & PaginationInput)
+  | ({
+      hasNext: false;
+
+      data: T;
+      totalResults: number;
+    } & PaginationInput);
+
+export type DeparturesMetadata = Paginated<DeparturesWithStop[]>;
+
+export type RealtimeData = {
+  serviceJourneyId: string;
+  timeData: {
+    realtime: boolean;
+    expectedDepartureTime: string;
+  };
+};
+
+export type DepartureRealtimeData = {
+  quayId: string;
+  departures: { [serviceJourneyId: string]: RealtimeData };
+};
+
+export type DeparturesRealtimeData = {
+  [quayId: string]: DepartureRealtimeData;
 };
 
 export class APIError extends Error {
