@@ -58,7 +58,7 @@ export async function getDeparturesFromLocation(
 
   const variables = {
     ...bbox,
-    timeRange: 72000,
+    timeRange: 86400 * 2, // Two days
     startTime: options.startTime,
     limit: options.limit
   };
@@ -106,7 +106,7 @@ export async function getDeparturesFromStops(
     query: ByIdDocument,
     variables: {
       ids: [id],
-      timeRange: 72000,
+      timeRange: 86400 * 2, // Two days
       startTime: options.startTime,
       limit: options.limit
     },
