@@ -150,7 +150,13 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuery;
-      return (await service.getStopPlacesByPosition(query)).unwrap();
+      return (
+        await service.getStopPlacesByBbox({
+          coordinates: { latitude: query.lat, longitude: query.lon },
+          distance: query.distance ?? 500,
+          filterByInUse: true
+        })
+      ).unwrap();
     }
   });
   server.route({

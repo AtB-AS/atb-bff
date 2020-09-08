@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@badrap/result": "^0.2.6",
-    "@entur/sdk": "^1.7.2",
+    "@entur/sdk": "^1.11.0",
     "@google-cloud/pubsub": "^2.3.0",
     "@google-cloud/trace-agent": "^5.1.0",
     "@hapi/boom": "^9.1.0",

@@ -5,7 +5,9 @@ import {
   Feature,
   StopPlaceDetails,
   Quay,
-  Departure
+  Departure,
+  TransportMode,
+  TransportSubmode
 } from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
@@ -87,6 +89,33 @@ export type DepartureRealtimeQuery = {
   quayIds: string[];
   startTime: Date;
   limit: number;
+};
+
+export type StopPlacesByBboxQuery = {
+  coordinates: Coordinates;
+  distance: number;
+  filterByInUse?: boolean;
+};
+
+export type StopPlacesByBboxData = {
+  id: string;
+  latitude?: number;
+  longitude?: number;
+  name: string;
+  quays?: Array<{
+    id: string;
+    name: string;
+    longitude?: number;
+    latitude?: number;
+    stopPlace?: {
+      transportMode?: string;
+      transportSubmode?: string;
+      id: string;
+      latitude?: number;
+      longitude?: number;
+      name: string;
+    };
+  }>;
 };
 
 export interface DeparturesFromQuayQuery {
@@ -196,6 +225,8 @@ export type DepartureRealtimeData = {
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
+
+export type Asdf = {};
 
 export class APIError extends Error {
   public statusCode?: number = 500;

@@ -1,0 +1,34 @@
+query GetStopPlacesByBbox(
+  $minLat: Float!
+  $maxLat: Float!
+  $minLng: Float!
+  $maxLng: Float!
+  $filterByInUse: Boolean!
+) {
+  stopPlacesByBbox(
+    minimumLatitude: $minLat
+    maximumLatitude: $maxLat
+    minimumLongitude: $minLng
+    maximumLongitude: $maxLng
+    filterByInUse: $filterByInUse
+  ) {
+    id
+    latitude
+    longitude
+    name
+    quays(filterByInUse: $filterByInUse) {
+      id
+      name
+      longitude
+      latitude
+      stopPlace {
+        transportMode
+        transportSubmode
+        id
+        latitude
+        longitude
+        name
+      }
+    }
+  }
+}

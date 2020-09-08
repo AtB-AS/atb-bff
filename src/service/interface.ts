@@ -31,7 +31,9 @@ import {
   DeparturesMetadata,
   DeparturesRealtimeData,
   DepartureRealtimeQuery,
-  DeparturesFromLocationPagingQuery
+  DeparturesFromLocationPagingQuery,
+  StopPlacesByBboxQuery,
+  StopPlacesByBboxData
 } from './types';
 
 export interface IGeocoderService {
@@ -56,6 +58,10 @@ export interface IStopsService {
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
+
+  getStopPlacesByBbox(
+    query: StopPlacesByBboxQuery
+  ): Promise<Result<StopPlacesByBboxData[], APIError>>;
 
   // @TODO Deprecate all these
   getNearestDepartures(

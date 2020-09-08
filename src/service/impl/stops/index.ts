@@ -2,12 +2,17 @@ import { Result } from '@badrap/result';
 import { EnturService, StopPlaceDetails, EstimatedCall } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import { IStopsService } from '../../interface';
-import { APIError, DepartureRealtimeQuery } from '../../types';
+import {
+  APIError,
+  DepartureRealtimeQuery,
+  StopPlacesByBboxQuery
+} from '../../types';
 import {
   getDeparturesFromStops,
   getDeparturesFromLocation
 } from './departures';
 import { getRealtimeDepartureTime } from './departure-time';
+import { stopPlacesByBbox } from './stop-places-by-bbox';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -33,6 +38,13 @@ export default (service: EnturService): IStopsService => {
     },
     async getDepartureRealtime(query: DepartureRealtimeQuery) {
       return getRealtimeDepartureTime(query);
+    },
+    async getStopPlacesByBbox(query: StopPlacesByBboxQuery) {
+      return stopPlacesByBbox(
+        query.coordinates,
+        query.distance,
+        query.filterByInUse
+      );
     },
 
     // @TODO All below here should be deprecated and removed...
