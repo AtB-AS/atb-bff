@@ -29,6 +29,9 @@ const svc: jest.Mocked<IStopsService> = {
   getDepartureRealtime: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),
+  getStopPlacesByBbox: jest.fn((...args: any): any =>
+    Result.ok(Promise.resolve([]))
+  ),
   getNearestPlaces: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),
