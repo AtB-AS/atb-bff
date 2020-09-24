@@ -41,7 +41,7 @@ export type EstimatedCallFieldsFragment = { actualArrivalTime?: Types.Maybe<any>
 
 export type NoticeFieldsFragment = { text?: Types.Maybe<string> };
 
-export type QuayFieldsFragment = { id: string, name: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, situations: Array<Types.Maybe<SituationFieldsFragment>>, stopPlace?: Types.Maybe<StopPlaceFieldsFragment> };
+export type QuayFieldsFragment = { id: string, name: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, latitude?: Types.Maybe<number>, longitude?: Types.Maybe<number>, situations: Array<Types.Maybe<SituationFieldsFragment>>, stopPlace?: Types.Maybe<StopPlaceFieldsFragment> };
 
 export type SituationFieldsFragment = { situationNumber?: Types.Maybe<string>, reportType?: Types.Maybe<Types.ReportType>, summary: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, description: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, advice: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, detail: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, lines: Array<Types.Maybe<LineFieldsFragment>>, validityPeriod?: Types.Maybe<{ startTime?: Types.Maybe<any>, endTime?: Types.Maybe<any> }>, infoLinks?: Types.Maybe<Array<Types.Maybe<{ uri?: Types.Maybe<string>, label?: Types.Maybe<string> }>>> };
 
@@ -142,6 +142,8 @@ export const QuayFieldsFragmentDoc = gql`
   name
   description
   publicCode
+  latitude
+  longitude
   situations {
     ...situationFields
   }

@@ -90,6 +90,8 @@ fragment quayFields on Quay {
   name
   description
   publicCode
+  latitude
+  longitude
   situations {
     ...situationFields
   }
