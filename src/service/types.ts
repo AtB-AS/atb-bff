@@ -97,6 +97,10 @@ export interface DeparturesFromQuayQuery {
   includeCancelledTrips: boolean;
 }
 
+export interface EnrollmentQuery {
+  inviteKey: string;
+}
+
 export interface TripQuery {
   from: string;
   to: string;

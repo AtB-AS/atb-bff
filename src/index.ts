@@ -16,6 +16,7 @@ import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
 import journeyRoutes from './api/journey';
 import healthRoutes from './api/health';
+import enrollmentRoutes from './api/enrollment';
 
 import registerMetricsExporter from './utils/metrics';
 
@@ -55,6 +56,7 @@ process.on('unhandledRejection', err => {
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
+    enrollmentRoutes(server)();
 
     registerMetricsExporter(projectId);
     await server.initialize();

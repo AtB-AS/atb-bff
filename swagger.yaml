@@ -461,6 +461,7 @@ paths:
           schema:
             type: string
           description: Successful
+
   '/bff/v1/departures-from-location-paging':
     post:
       summary: Get departures from feature location
@@ -496,6 +497,22 @@ paths:
           name: body
           schema:
             '$ref': '#/definitions/Model1'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  '/bff/v1/enrollment/group':
+    post:
+      summary: Enroll in beta groups with invite key
+      operationId: postBffV1EnrollmentGroup
+      parameters:
+        - type: string
+          name: inviteKey
+          in: query
+          required: true
       tags:
         - bff
       responses:

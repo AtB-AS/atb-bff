@@ -1388,6 +1388,11 @@ export type EstimatedCall = {
   /** Whether the updated estimates are expected to be inaccurate. */
   predictionInaccurate?: Maybe<Scalars['Boolean']>;
   realtimeState?: Maybe<RealtimeState>;
+  /**
+   * OccupancyStatus.
+   * @deprecated Not yet officially supported.
+   */
+  occupancyStatus?: Maybe<Occupancy>;
   /** Whether vehicle may be boarded at quay. */
   forBoarding?: Maybe<Scalars['Boolean']>;
   /** Whether vehicle may be alighted at quay. */
@@ -1425,6 +1430,25 @@ export enum RealtimeState {
   Added = 'Added',
   /** The service journey information has been updated and resulted in a different journey pattern compared to the journey pattern of the scheduled service journey. */
   Modified = 'modified'
+}
+
+export enum Occupancy {
+  /** The Occupancy is unknown. DEFAULT. */
+  Unknown = 'unknown',
+  /** The vehicle is considered empty by most measures, and has few or no passengers onboard, but is still accepting passengers. */
+  Empty = 'empty',
+  /** The vehicle has a large percentage of seats available. What percentage of free seats out of the total seats available is to be considered large enough to fall into this category is determined at the discretion of the producer. */
+  ManySeatsAvailable = 'manySeatsAvailable',
+  /** The vehicle has a small percentage of seats available. What percentage of free seats out of the total seats available is to be considered small enough to fall into this category is determined at the discretion of the producer. */
+  FewSeatsAvailable = 'fewSeatsAvailable',
+  /** The vehicle can currently accommodate only standing passengers. */
+  StandingRoomOnly = 'standingRoomOnly',
+  /** The vehicle can currently accommodate only standing passengers and has limited space for them. */
+  CrushedStandingRoomOnly = 'crushedStandingRoomOnly',
+  /** The vehicle is considered full by most measures, but may still be allowing passengers to board. */
+  Full = 'full',
+  /** The vehicle can not accept passengers. */
+  NotAcceptingPassengers = 'notAcceptingPassengers'
 }
 
 export type KeyValue = {
