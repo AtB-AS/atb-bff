@@ -11,5 +11,4 @@ COPY package*.json ./
 RUN npm install --production
 
 ENV NODE_ENV=production
-ENV TICKET_INVITE_KEY=$ticket_invite_key
 CMD npm start
