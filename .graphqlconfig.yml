@@ -1,5 +1,0 @@
-include: 'src/**/*.ts'
-extensions:
-  endpoints:
-    Entur:
-      url: https://api.entur.io/journey-planner/v2/graphql

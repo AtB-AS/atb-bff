@@ -97,6 +97,10 @@ export interface DeparturesFromQuayQuery {
   includeCancelledTrips: boolean;
 }
 
+export interface EnrollmentQuery {
+  inviteKey: string;
+}
+
 export interface TripQuery {
   from: string;
   to: string;
@@ -149,10 +153,18 @@ export type DeparturesByIdWithStopName = DeparturesById & {
   name: string;
 };
 
+export type QuayWithCoordinates = Quay & {
+  latitude?: number;
+  longitude?: number;
+};
+
 export type DeparturesWithStop = {
   stop: StopPlaceDetails;
   quays: {
-    [quayId: string]: { quay: Quay; departures: Array<Departure> };
+    [quayId: string]: {
+      quay: QuayWithCoordinates;
+      departures: Array<Departure>;
+    };
   };
 };
 

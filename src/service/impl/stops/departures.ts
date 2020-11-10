@@ -1,53 +1,33 @@
-import client from '../../../graphql/graphql-client';
-import {
-  EstimatedCall,
-  StopPlaceDetails,
-  Quay,
-  Situation,
-  ServiceJourney,
-  convertPositionToBbox,
-  Coordinates
-} from '@entur/sdk';
-import {
-  DeparturesWithStop,
-  APIError,
-  DeparturesMetadata,
-  DeparturesFromLocationPagingQuery
-} from '../../types';
 import { Result } from '@badrap/result';
-import paginate from '../../pagination';
-import sortBy from 'lodash.sortby';
+import {
+  convertPositionToBbox,
+  Coordinates,
+  EstimatedCall,
+  Quay,
+  ServiceJourney,
+  Situation,
+  StopPlaceDetails
+} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
+import sortBy from 'lodash.sortby';
+import client from '../../../graphql/graphql-client';
+import paginate from '../../pagination';
+import {
+  APIError,
+  DeparturesFromLocationPagingQuery,
+  DeparturesMetadata,
+  DeparturesWithStop
+} from '../../types';
 import { populateCacheIfNotThere } from './departure-time';
 import {
   ByBBoxDocument,
-  ByBBoxQueryVariables,
   ByBBoxQuery,
-  ByIdQuery,
+  ByBBoxQueryVariables,
   ByIdDocument,
+  ByIdQuery,
   ByIdQueryVariables,
-  EstimatedCallFieldsFragment
+  QuayFieldsFragment
 } from './departures-from-stops.graphql-gen';
-
-export type ServiceJourneyWithDirection = ServiceJourney & {
-  directionType: 'inbound' | 'outbound' | 'clockwise' | 'anticlockwise';
-};
-
-export type EstimatedCallWithDirection = EstimatedCall & {
-  serviceJourney: ServiceJourneyWithDirection;
-};
-
-export type EstimatedQuay = Quay & { situations?: Situation[] } & {
-  estimatedCalls: EstimatedCallWithDirection[];
-};
-
-export type StopPlaceDetailsWithEstimatedCalls = StopPlaceDetails & {
-  quays?: EstimatedQuay[];
-};
-
-export type StopDepartures = {
-  stopPlaces: StopPlaceDetailsWithEstimatedCalls[];
-};
 
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
@@ -58,7 +38,7 @@ export async function getDeparturesFromLocation(
 
   const variables = {
     ...bbox,
-    timeRange: 72000,
+    timeRange: 86400 * 2, // Two days
     startTime: options.startTime,
     limit: options.limit
   };
@@ -106,7 +86,7 @@ export async function getDeparturesFromStops(
     query: ByIdDocument,
     variables: {
       ids: [id],
-      timeRange: 72000,
+      timeRange: 86400 * 2, // Two days
       startTime: options.startTime,
       limit: options.limit
     },
