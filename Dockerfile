@@ -1,14 +1,20 @@
-FROM node:latest AS build
+FROM node:slim AS proddeps
 WORKDIR /app
-COPY . .
-RUN npm install
-RUN npm run build
-
-FROM node:latest
-WORKDIR /app
-COPY --from=build /app/dist ./dist
 COPY package*.json ./
 RUN npm install --production
+
+FROM node:latest AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM node:slim
+WORKDIR /app
+COPY package.json .
+COPY --from=proddeps /app/node_modules ./node_modules
+COPY --from=build /app/dist ./dist
 
 ENV NODE_ENV=production
 CMD npm start
