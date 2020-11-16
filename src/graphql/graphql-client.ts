@@ -9,7 +9,11 @@ const link = new HttpLink({
   // node-fetch uses a different signature than the browser implemented fetch
   // But we use node-fetch's agent option in other parts of the project.
   // The functionallity overlaps so this works as expected.
-  fetch: (fetch as unknown) as WindowOrWorkerGlobalScope['fetch']
+  fetch: (fetch as unknown) as WindowOrWorkerGlobalScope['fetch'],
+
+  headers: {
+    'ET-Client-Name': process.env.CLIENT_NAME || 'atb - bff'
+  }
 });
 
 const defaultOptions: DefaultOptions = {
