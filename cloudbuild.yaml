@@ -1,7 +1,7 @@
 steps:
   - name: 'gcr.io/kaniko-project/executor:latest'
     args:
-      - --destination=gcr.io/$PROJECT_ID/$REPO_NAME:latest
+      - --destination=gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA
       - --cache=true
       - --dockerfile=Dockerfile
     id: build
@@ -12,7 +12,7 @@ steps:
       - deploy
       - $REPO_NAME-$_APP_ENV
       - --image
-      - gcr.io/$PROJECT_ID/$REPO_NAME:latest
+      - gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA
       - --region
       - europe-west1
       - --platform
