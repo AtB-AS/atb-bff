@@ -8,6 +8,7 @@ import {
   getDeparturesFromLocation
 } from './departures';
 import { getRealtimeDepartureTime } from './departure-time';
+import { formatISO } from 'date-fns';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -197,7 +198,7 @@ export default (service: EnturService): IStopsService => {
       try {
         const departures = await service.getDeparturesForServiceJourney(
           id,
-          date?.toISOString()
+          date ? formatISO(date, { representation: 'date' }) : undefined
         );
 
         return Result.ok(departures);
