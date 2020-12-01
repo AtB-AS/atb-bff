@@ -1,7 +1,8 @@
-import ApolloClient, { DefaultOptions } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient, { DefaultOptions } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
+import { ET_CLIENT_NAME } from '../config/env';
 
 const link = new HttpLink({
   uri: 'https://api.entur.io/journey-planner/v2/graphql',
@@ -12,7 +13,7 @@ const link = new HttpLink({
   fetch: (fetch as unknown) as WindowOrWorkerGlobalScope['fetch'],
 
   headers: {
-    'ET-Client-Name': process.env.CLIENT_NAME || 'atb - bff'
+    'ET-Client-Name': ET_CLIENT_NAME
   }
 });
 
