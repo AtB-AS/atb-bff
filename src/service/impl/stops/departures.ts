@@ -4,8 +4,6 @@ import {
   Coordinates,
   EstimatedCall,
   Quay,
-  ServiceJourney,
-  Situation,
   StopPlaceDetails
 } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
@@ -25,8 +23,7 @@ import {
   ByBBoxQueryVariables,
   ByIdDocument,
   ByIdQuery,
-  ByIdQueryVariables,
-  QuayFieldsFragment
+  ByIdQueryVariables
 } from './departures-from-stops.graphql-gen';
 
 export async function getDeparturesFromLocation(

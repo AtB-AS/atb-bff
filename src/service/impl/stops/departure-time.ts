@@ -1,19 +1,17 @@
+import { Result } from '@badrap/result';
 import client from '../../../graphql/graphql-client';
 import {
   APIError,
-  DeparturesRealtimeData,
   DepartureRealtimeData,
-  DepartureRealtimeQuery
+  DepartureRealtimeQuery,
+  DeparturesRealtimeData
 } from '../../types';
-import { Result } from '@badrap/result';
-
 import {
+  EstimatedCallFragment,
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
-  GetDepartureRealtimeQueryVariables,
-  EstimatedCallFragment
+  GetDepartureRealtimeQueryVariables
 } from './departure-time.graphql-gen';
-import { Maybe } from '../../../graphql/types';
 
 const createVariables = (
   query: DepartureRealtimeQuery
