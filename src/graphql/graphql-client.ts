@@ -19,7 +19,7 @@ const link = new HttpLink({
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     errorPolicy: 'ignore'
   },
   query: {
@@ -28,8 +28,10 @@ const defaultOptions: DefaultOptions = {
   }
 };
 
+export const cache = new InMemoryCache();
+
 export default new ApolloClient({
   link,
-  cache: new InMemoryCache(),
+  cache,
   defaultOptions
 });

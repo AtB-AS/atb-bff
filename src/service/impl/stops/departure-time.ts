@@ -38,7 +38,8 @@ export async function populateCacheIfNotThere(
       GetDepartureRealtimeQueryVariables
     >({
       query: GetDepartureRealtimeDocument,
-      variables: createVariables(inputQuery)
+      variables: createVariables(inputQuery),
+      fetchPolicy: 'cache-first'
     });
   } catch (e) {}
 }
@@ -54,14 +55,12 @@ export async function getRealtimeDepartureTime(
       GetDepartureRealtimeQueryVariables
     >({
       query: GetDepartureRealtimeDocument,
-
       variables
     });
 
     if (result.errors) {
       return Result.err(new APIError(result.errors));
     }
-
     return Result.ok(mapToDepartureRealtime(result.data, previousResult));
   } catch (error) {
     return Result.err(new APIError(error));
