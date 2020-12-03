@@ -19,7 +19,6 @@ type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 export default (service: EnturService): IStopsService => {
   const api: IStopsService = {
     async getDeparturesGrouped(payload, query) {
-      console.log(query);
       return payload.location.layer === 'venue'
         ? getDeparturesGrouped(payload.location.id, query, payload.favorites)
         : getDeparturesGroupedNearest(

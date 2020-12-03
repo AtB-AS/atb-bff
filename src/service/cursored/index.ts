@@ -28,7 +28,6 @@ export function generateCursorData<T>(
   nextCursorData?: NextCursorData,
   query?: CursoredQuery<unknown>
 ): CursoredData<T> {
-  console.log(query, stringify(query));
   const metadata: CursoredData<T>['metadata'] = !nextCursorData?.hasNextPage
     ? {
         hasNextPage: false
