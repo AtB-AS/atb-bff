@@ -330,10 +330,24 @@ export enum VertexType {
 
 /** List of legs constituting a suggested sequence of rides and links for a specific trip. */
 export type TripPattern = {
-  /** Time that the trip departs. */
+  /**
+   * Time that the trip departs.
+   * @deprecated Replaced with expectedStartTime
+   */
   startTime?: Maybe<Scalars['DateTime']>;
-  /** Time that the trip arrives. */
+  /**
+   * Time that the trip arrives.
+   * @deprecated Replaced with expectedEndTime
+   */
   endTime?: Maybe<Scalars['DateTime']>;
+  /** The aimed date and time the trip starts. */
+  aimedStartTime?: Maybe<Scalars['DateTime']>;
+  /** The expected, realtime adjusted date and time the trip starts. */
+  expectedStartTime?: Maybe<Scalars['DateTime']>;
+  /** The aimed date and time the trip ends. */
+  aimedEndTime?: Maybe<Scalars['DateTime']>;
+  /** The expected, realtime adjusted date and time the trip ends. */
+  expectedEndTime?: Maybe<Scalars['DateTime']>;
   /** Duration of the trip, in seconds. */
   duration?: Maybe<Scalars['Long']>;
   /** This sums the direct durations of each leg. Be careful about using this, as it is not equal to the duration between startTime and endTime. See the directDuration documentation on Leg. */
@@ -693,21 +707,28 @@ export enum BookingMethod {
 }
 
 export enum PurchaseWhen {
-  TimeOfTravelOnly = 'timeOfTravelOnly',
-  DayOfTravelOnly = 'dayOfTravelOnly',
-  UntilPreviousDay = 'untilPreviousDay',
   AdvanceOnly = 'advanceOnly',
+  UntilPreviousDay = 'untilPreviousDay',
+  DayOfTravelOnly = 'dayOfTravelOnly',
   AdvanceAndDayOfTravel = 'advanceAndDayOfTravel',
+  TimeOfTravelOnly = 'timeOfTravelOnly',
+  SubscriptionChargeMoment = 'subscriptionChargeMoment',
   Other = 'other'
 }
 
 
 export enum PurchaseMoment {
   OnReservation = 'onReservation',
+  InAdvance = 'inAdvance',
+  InAdvanceOnly = 'inAdvanceOnly',
   BeforeBoarding = 'beforeBoarding',
+  BeforeBoardingOnly = 'beforeBoardingOnly',
   OnBoarding = 'onBoarding',
+  OnBoardingOnly = 'onBoardingOnly',
   AfterBoarding = 'afterBoarding',
+  OnCheckIn = 'onCheckIn',
   OnCheckOut = 'onCheckOut',
+  SubscriptionOnly = 'subscriptionOnly',
   Other = 'other'
 }
 

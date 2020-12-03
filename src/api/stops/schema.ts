@@ -1,4 +1,5 @@
 import Joi from '@hapi/joi';
+import { DepartureGroupsQuery } from '../../service/types';
 
 const ONE_MINUTE = 60 * 1000;
 
@@ -42,6 +43,7 @@ export const getDeparturesRequest = {
   })
 };
 
+// @deprecated Should be removed
 export const getDeparturesPagingRequest = {
   payload: Joi.object({
     layer: Joi.string(),
@@ -51,7 +53,7 @@ export const getDeparturesPagingRequest = {
 
   query: Joi.object({
     limit: Joi.number().default(5),
-    startTime: Joi.date(),
+    startTime: Joi.date().default(() => new Date()),
 
     // Paging
     pageSize: Joi.number().default(10),
@@ -60,6 +62,39 @@ export const getDeparturesPagingRequest = {
     // Deprecated fields
     offset: Joi.number().default(ONE_MINUTE).description('Deprecated'),
     walkSpeed: Joi.number().default(1.3).description('Deprecated')
+  })
+};
+
+export const getDeparturesCursoredRequest = {
+  payload: Joi.object({
+    location: Joi.alt([
+      Joi.object({
+        layer: 'venue',
+        id: Joi.string()
+      }),
+      Joi.object({
+        layer: 'address',
+        coordinates: Joi.object({
+          longitude: Joi.number(),
+          latitude: Joi.number()
+        })
+      })
+    ]).required(),
+    favorites: Joi.array().items(
+      Joi.object({
+        quayId: Joi.string(),
+        displayText: Joi.string(),
+        lineId: Joi.string()
+      })
+    )
+  }),
+  query: Joi.object<DepartureGroupsQuery>({
+    limitPerLine: Joi.number().default(5),
+    startTime: Joi.date().default(() => new Date()),
+
+    // Paging
+    pageSize: Joi.number().default(3),
+    cursor: Joi.string()
   })
 };
 

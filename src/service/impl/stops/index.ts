@@ -9,11 +9,31 @@ import {
 } from './departures';
 import { getRealtimeDepartureTime } from './departure-time';
 import { formatISO } from 'date-fns';
+import {
+  getDeparturesGrouped,
+  getDeparturesGroupedNearest
+} from './departure-group';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
 export default (service: EnturService): IStopsService => {
   const api: IStopsService = {
+    async getDeparturesGrouped(payload, query) {
+      console.log(query);
+      return payload.location.layer === 'venue'
+        ? getDeparturesGrouped(payload.location.id, query, payload.favorites)
+        : getDeparturesGroupedNearest(
+            payload.location.coordinates,
+            1000,
+            query,
+            payload.favorites
+          );
+    },
+    async getDepartureRealtime(query: DepartureRealtimeQuery) {
+      return getRealtimeDepartureTime(query);
+    },
+
+    // @TODO These should be deprecated
     async getDepartures(location) {
       const opts = {
         pageOffset: 0,
@@ -31,9 +51,6 @@ export default (service: EnturService): IStopsService => {
       return location.layer === 'venue'
         ? getDeparturesFromStops(location.id, query)
         : getDeparturesFromLocation(location.coordinates, 500, query);
-    },
-    async getDepartureRealtime(query: DepartureRealtimeQuery) {
-      return getRealtimeDepartureTime(query);
     },
 
     // @TODO All below here should be deprecated and removed...

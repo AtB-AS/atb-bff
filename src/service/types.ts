@@ -9,6 +9,7 @@ import {
 } from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
+import { CursoredQuery } from './cursored';
 
 export interface Coordinates {
   latitude: number;
@@ -17,6 +18,12 @@ export interface Coordinates {
 
 export type FeatureLocation = Feature['properties'] & {
   coordinates: { longitude: number; latitude: number };
+};
+
+export type FavoriteDeparture = {
+  quayId: string;
+  displayText: string;
+  lineId: string;
 };
 
 export type FeaturesQuery = {
@@ -81,6 +88,24 @@ export interface DeparturesFromLocationQuery {
 export type DeparturesFromLocationPagingQuery = PaginatedQuery<{
   startTime: Date;
   limit: number;
+}>;
+
+export type DepartureGroupsPayload = {
+  location:
+    | {
+        layer: 'address';
+        coordinates: { longitude: number; latitude: number };
+      }
+    | {
+        layer: 'venue';
+        id: string;
+      };
+  favorites?: FavoriteDeparture[];
+};
+
+export type DepartureGroupsQuery = CursoredQuery<{
+  startTime: Date;
+  limitPerLine: number;
 }>;
 
 export type DepartureRealtimeQuery = {
