@@ -21,7 +21,7 @@ export type FeatureLocation = Feature['properties'] & {
 };
 
 export type FavoriteDeparture = {
-  quayId: string;
+  stopId: string;
   displayText: string;
   lineId: string;
 };

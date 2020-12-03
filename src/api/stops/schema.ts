@@ -82,7 +82,7 @@ export const getDeparturesCursoredRequest = {
     ]).required(),
     favorites: Joi.array().items(
       Joi.object({
-        quayId: Joi.string().required(),
+        stopId: Joi.string().required(),
         displayText: Joi.string().required(),
         lineId: Joi.string().required()
       })
