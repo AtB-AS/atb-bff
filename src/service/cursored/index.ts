@@ -28,6 +28,7 @@ export function generateCursorData<T>(
   nextCursorData?: NextCursorData,
   query?: CursoredQuery<unknown>
 ): CursoredData<T> {
+  console.log(query, stringify(query));
   const metadata: CursoredData<T>['metadata'] = !nextCursorData?.hasNextPage
     ? {
         hasNextPage: false
@@ -35,7 +36,7 @@ export function generateCursorData<T>(
     : {
         hasNextPage: true,
         nextCursor: nextCursorData.nextCursor!,
-        nextUrlParams: stringify({
+        nextUrlParams: stringifyWithDate({
           ...query,
           cursor: nextCursorData.nextCursor!
         })
@@ -45,4 +46,17 @@ export function generateCursorData<T>(
     data,
     metadata
   };
+}
+
+function stringifyWithDate(obj: { [key: string]: any }): string {
+  for (const key in obj) {
+    const item = obj[key];
+    if (isDate(item)) {
+      obj[key] = item.toISOString();
+    }
+  }
+  return stringify(obj);
+}
+function isDate(a: any): a is Date {
+  return a instanceof Date;
 }
