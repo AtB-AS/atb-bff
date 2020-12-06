@@ -1,9 +1,10 @@
 query GroupsById(
-  $ids: [String]!
+  $ids: [String]
   $startTime: DateTime!
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
+  $filterByLineIds: [String]
 ) {
   stopPlaces(ids: $ids) {
     ...group_stopPlaceFields
@@ -44,6 +45,7 @@ query GroupsById(
         numberOfDeparturesPerLineAndDestinationDisplay: 1
         omitNonBoarding: false
         includeCancelledTrips: false
+        whiteListed: { lines: $filterByLineIds }
       ) {
         ...group_estimatedCallFields
       }
@@ -61,6 +63,7 @@ query GroupsByNearest(
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
+  $filterByLineIds: [String]
 ) {
   nearest(
     latitude: $lat
@@ -70,6 +73,7 @@ query GroupsByNearest(
     maximumDistance: $distance
     filterByPlaceTypes: stopPlace
     filterByInUse: true
+    filterByIds: { lines: $filterByLineIds }
   ) {
     pageInfo {
       hasNextPage
@@ -120,6 +124,7 @@ query GroupsByNearest(
                 numberOfDeparturesPerLineAndDestinationDisplay: 1
                 omitNonBoarding: false
                 includeCancelledTrips: false
+                whiteListed: { lines: $filterByLineIds }
               ) {
                 ...group_estimatedCallFields
               }

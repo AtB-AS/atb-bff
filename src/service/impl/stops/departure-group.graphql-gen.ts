@@ -3,11 +3,12 @@ import * as Types from '../../../graphql/types';
 import gql from 'graphql-tag';
 
 export type GroupsByIdQueryVariables = Types.Exact<{
-  ids: Array<Types.Maybe<Types.Scalars['String']>>;
+  ids?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
+  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
 }>;
 
 
@@ -29,6 +30,8 @@ export type GroupsByNearestQueryVariables = Types.Exact<{
   timeRange: Types.Scalars['Int'];
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
+  filterByIds?: Types.Maybe<Types.InputFilters>;
+  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
 }>;
 
 
@@ -160,7 +163,7 @@ export const Group_StopPlaceFieldsFragmentDoc = gql`
 }
     `;
 export const GroupsByIdDocument = gql`
-    query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!) {
+    query GroupsById($ids: [String], $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [String]) {
   stopPlaces(ids: $ids) {
     ...group_stopPlaceFields
     quays(filterByInUse: true) {
@@ -186,7 +189,7 @@ export const GroupsByIdDocument = gql`
           }
         }
       }
-      estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false) {
+      estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
         ...group_estimatedCallFields
       }
     }
@@ -198,8 +201,8 @@ ${Group_NoticeFieldsFragmentDoc}
 ${Group_SituationFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;
 export const GroupsByNearestDocument = gql`
-    query GroupsByNearest($lat: Float!, $lng: Float!, $distance: Int!, $startTime: DateTime!, $fromCursor: String, $pageSize: Int, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!) {
-  nearest(latitude: $lat, longitude: $lng, after: $fromCursor, first: $pageSize, maximumDistance: $distance, filterByPlaceTypes: stopPlace, filterByInUse: true) {
+    query GroupsByNearest($lat: Float!, $lng: Float!, $distance: Int!, $startTime: DateTime!, $fromCursor: String, $pageSize: Int, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByIds: InputFilters, $filterByLineIds: [String]) {
+  nearest(latitude: $lat, longitude: $lng, after: $fromCursor, first: $pageSize, maximumDistance: $distance, filterByPlaceTypes: stopPlace, filterByInUse: true, filterByIds: $filterByIds) {
     pageInfo {
       hasNextPage
       endCursor
@@ -234,7 +237,7 @@ export const GroupsByNearestDocument = gql`
                   }
                 }
               }
-              estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false) {
+              estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
                 ...group_estimatedCallFields
               }
             }
