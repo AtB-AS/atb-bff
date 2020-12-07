@@ -12,221 +12,222 @@ x-google-backend:
   address: https://atb-bff-staging-jlmnrncfba-ew.a.run.app
   path_translation: APPEND_PATH_TO_ADDRESS
 paths:
-  '/bff/v1/departures':
+  /bff/v1/departures:
     get:
       summary: Find departures between stop places
       operationId: getBffV1Departures
       parameters:
-      - type: string
-        name: from
-        in: query
-        required: true
-      - type: string
-        name: to
-        in: query
-        required: true
+        - type: string
+          name: from
+          in: query
+          required: true
+        - type: string
+          name: to
+          in: query
+          required: true
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/departures-realtime':
+  /bff/v1/departures-realtime:
     get:
       summary: Get updated realtime information of all lines and quays passed as data
       operationId: getBffV1Departuresrealtime
       parameters:
-      - type: array
-        default: []
-        items:
-          type: string
-        collectionFormat: multi
-        name: quayIds
-        in: query
-      - type: string
-        format: date
-        name: startTime
-        in: query
-      - type: number
-        default: 5
-        name: limit
-        in: query
+        - type: array
+          default: []
+          items:
+            type: string
+          collectionFormat: multi
+          name: quayIds
+          in: query
+        - type: string
+          format: date
+          name: startTime
+          in: query
+        - type: number
+          default: 5
+          name: limit
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stops':
+  /bff/v1/stops:
     get:
       summary: Find stops matching query
       operationId: getBffV1Stops
       parameters:
-      - type: string
-        name: query
-        in: query
-        required: true
-      - type: number
-        name: lat
-        in: query
-      - type: number
-        name: lon
-        in: query
+        - type: string
+          name: query
+          in: query
+          required: true
+        - type: number
+          name: lat
+          in: query
+        - type: number
+          name: lon
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/departures/nearest':
+  /bff/v1/departures/nearest:
     get:
-      summary: 'Get departures from stops near coordinates. Deprecated: Use POST /v1/departures-from-location
-        instead'
+      summary: >-
+        Get departures from stops near coordinates. Deprecated: Use POST
+        /v1/departures-from-location instead
       operationId: getBffV1DeparturesNearest
       parameters:
-      - type: number
-        name: lat
-        in: query
-        required: true
-      - type: number
-        name: lon
-        in: query
-        required: true
-      - type: number
-        default: 60000
-        name: offset
-        in: query
-      - type: number
-        default: 1.3
-        name: walkSpeed
-        in: query
-      - type: boolean
-        default: false
-        name: includeIrrelevant
-        in: query
+        - type: number
+          name: lat
+          in: query
+          required: true
+        - type: number
+          name: lon
+          in: query
+          required: true
+        - type: number
+          default: 60000
+          name: offset
+          in: query
+        - type: number
+          default: 1.3
+          name: walkSpeed
+          in: query
+        - type: boolean
+          default: false
+          name: includeIrrelevant
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/geocoder/features':
+  /bff/v1/geocoder/features:
     get:
       summary: Find features matching query
       operationId: getBffV1GeocoderFeatures
       parameters:
-      - type: string
-        name: query
-        in: query
-        required: true
-      - type: number
-        name: lon
-        in: query
-      - type: number
-        name: lat
-        in: query
-      - type: string
-        name: layers
-        in: query
-      - type: number
-        name: boundary.rect.min_lat
-        in: query
-      - type: number
-        name: boundary.rect.max_lat
-        in: query
-      - type: number
-        name: boundary.rect.min_lon
-        in: query
-      - type: number
-        name: boundary.rect.max_lon
-        in: query
-      - type: string
-        name: country
-        in: query
-      - type: string
-        name: sources
-        in: query
-      - type: number
-        name: limit
-        in: query
+        - type: string
+          name: query
+          in: query
+          required: true
+        - type: number
+          name: lon
+          in: query
+        - type: number
+          name: lat
+          in: query
+        - type: string
+          name: layers
+          in: query
+        - type: number
+          name: boundary.rect.min_lat
+          in: query
+        - type: number
+          name: boundary.rect.max_lat
+          in: query
+        - type: number
+          name: boundary.rect.min_lon
+          in: query
+        - type: number
+          name: boundary.rect.max_lon
+          in: query
+        - type: string
+          name: country
+          in: query
+        - type: string
+          name: sources
+          in: query
+        - type: number
+          name: limit
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/geocoder/reverse':
+  /bff/v1/geocoder/reverse:
     get:
-      summary: Find addresses, POIs and stop places near the given coordinates
+      summary: 'Find addresses, POIs and stop places near the given coordinates'
       operationId: getBffV1GeocoderReverse
       parameters:
-      - type: number
-        name: lat
-        in: query
-        required: true
-      - type: number
-        name: lon
-        in: query
-        required: true
-      - type: string
-        name: layers
-        in: query
-      - type: number
-        name: radius
-        in: query
-      - type: number
-        name: limit
-        in: query
+        - type: number
+          name: lat
+          in: query
+          required: true
+        - type: number
+          name: lon
+          in: query
+          required: true
+        - type: string
+          name: layers
+          in: query
+        - type: number
+          name: radius
+          in: query
+        - type: number
+          name: limit
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/journey/single-trip':
+  /bff/v1/journey/single-trip:
     get:
       summary: Get one specific trip pattern from generated ID
       operationId: getBffV1JourneySingletrip
       parameters:
-      - type: string
-        name: id
-        in: query
-        required: true
+        - type: string
+          name: id
+          in: query
+          required: true
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/journey/trip':
+  /bff/v1/journey/trip:
     get:
       summary: Find trip patterns with a simple query
       operationId: getBffV1JourneyTrip
       parameters:
-      - type: string
-        name: from
-        in: query
-        required: true
-      - type: string
-        name: to
-        in: query
-        required: true
-      - type: string
-        format: date
-        name: when
-        in: query
+        - type: string
+          name: from
+          in: query
+          required: true
+        - type: string
+          name: to
+          in: query
+          required: true
+        - type: string
+          format: date
+          name: when
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -236,12 +237,12 @@ paths:
       summary: Find trip patterns
       operationId: postBffV1JourneyTrip
       parameters:
-      - in: body
-        name: body
-        schema:
-          '$ref': '#/definitions/Model5'
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Model5'
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -252,35 +253,35 @@ paths:
       summary: Get details for a StopPlace
       operationId: getBffV1StopId
       parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
+        - type: string
+          name: id
+          in: path
+          required: true
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stops/nearest':
+  /bff/v1/stops/nearest:
     get:
       summary: Find stops near coordinates
       operationId: getBffV1StopsNearest
       parameters:
-      - type: number
-        name: lat
-        in: query
-        required: true
-      - type: number
-        name: lon
-        in: query
-        required: true
-      - type: number
-        name: distance
-        in: query
+        - type: number
+          name: lat
+          in: query
+          required: true
+        - type: number
+          name: lon
+          in: query
+          required: true
+        - type: number
+          name: distance
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -292,25 +293,25 @@ paths:
       summary: Get departures from Quay
       operationId: getBffV1QuayIdDepartures
       parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-      - type: string
-        format: date
-        name: start
-        in: query
-      - type: number
-        name: timeRange
-        in: query
-      - type: number
-        name: limit
-        in: query
-      - type: boolean
-        name: includeNonBoarding
-        in: query
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          format: date
+          name: start
+          in: query
+        - type: number
+          name: timeRange
+          in: query
+        - type: number
+          name: limit
+          in: query
+        - type: boolean
+          name: includeNonBoarding
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -321,16 +322,16 @@ paths:
       summary: Get departures for Service Journey
       operationId: getBffV1ServicejourneyIdDepartures
       parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-      - type: string
-        format: date
-        name: date
-        in: query
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          format: date
+          name: date
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -338,29 +339,30 @@ paths:
           description: Successful
   '/bff/v1/stop/{id}/departures':
     get:
-      summary: 'Get departures from StopPlace. Deprecated: Use POST /v1/departures-from-location
-        instead'
+      summary: >-
+        Get departures from StopPlace. Deprecated: Use POST
+        /v1/departures-from-location instead
       operationId: getBffV1StopIdDepartures
       parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-      - type: string
-        format: date
-        name: start
-        in: query
-      - type: number
-        name: timeRange
-        in: query
-      - type: number
-        name: limit
-        in: query
-      - type: boolean
-        name: includeNonBoarding
-        in: query
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          format: date
+          name: start
+          in: query
+        - type: number
+          name: timeRange
+          in: query
+        - type: number
+          name: limit
+          in: query
+        - type: boolean
+          name: includeNonBoarding
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -372,141 +374,141 @@ paths:
       summary: Get all quays that belongs to a StopPlace
       operationId: getBffV1StopIdQuays
       parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-      - type: boolean
-        default: false
-        name: filterByInUse
-        in: query
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: boolean
+          default: false
+          name: filterByInUse
+          in: query
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures-from-location':
+  /bff/v1/departures-from-location:
     post:
       summary: Get departures from feature location
       operationId: postBffV1Departuresfromlocation
       parameters:
-      - type: number
-        default: 5
-        name: limit
-        in: query
-      - type: boolean
-        default: false
-        name: includeNonBoarding
-        in: query
-      - type: number
-        default: 60000
-        name: offset
-        in: query
-      - type: number
-        default: 1.3
-        name: walkSpeed
-        in: query
-      - in: body
-        name: body
-        schema:
-          '$ref': '#/definitions/Model1'
+        - type: number
+          default: 5
+          name: limit
+          in: query
+        - type: boolean
+          default: false
+          name: includeNonBoarding
+          in: query
+        - type: number
+          default: 60000
+          name: offset
+          in: query
+        - type: number
+          default: 1.3
+          name: walkSpeed
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Model1'
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/departures-from-location-paging':
+  /bff/v1/departures-from-location-paging:
     post:
       summary: Get departures from feature location
       operationId: postBffV1Departuresfromlocationpaging
       parameters:
-      - type: number
-        default: 5
-        name: limit
-        in: query
-      - type: string
-        format: date
-        default: '2020-12-07T13:56:39.320Z'
-        name: startTime
-        in: query
-      - type: number
-        default: 10
-        name: pageSize
-        in: query
-      - type: number
-        default: 0
-        name: pageOffset
-        in: query
-      - type: number
-        description: Deprecated
-        default: 60000
-        name: offset
-        in: query
-      - type: number
-        description: Deprecated
-        default: 1.3
-        name: walkSpeed
-        in: query
-      - in: body
-        name: body
-        schema:
-          '$ref': '#/definitions/Model1'
+        - type: number
+          default: 5
+          name: limit
+          in: query
+        - type: string
+          format: date
+          default: '2020-12-07T13:56:39.320Z'
+          name: startTime
+          in: query
+        - type: number
+          default: 10
+          name: pageSize
+          in: query
+        - type: number
+          default: 0
+          name: pageOffset
+          in: query
+        - type: number
+          description: Deprecated
+          default: 60000
+          name: offset
+          in: query
+        - type: number
+          description: Deprecated
+          default: 1.3
+          name: walkSpeed
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Model1'
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/departures-grouped':
+  /bff/v1/departures-grouped:
     post:
       summary: Get departures grouped on lines from feature location
       operationId: postBffV1Departuresgrouped
       parameters:
-      - type: number
-        default: 5
-        name: limitPerLine
-        in: query
-      - type: string
-        format: date
-        default: '2020-12-07T13:56:39.338Z'
-        name: startTime
-        in: query
-      - type: number
-        default: 3
-        name: pageSize
-        in: query
-      - type: string
-        name: cursor
-        in: query
-      - in: body
-        name: body
-        schema:
-          '$ref': '#/definitions/Model4'
+        - type: number
+          default: 5
+          name: limitPerLine
+          in: query
+        - type: string
+          format: date
+          default: '2020-12-07T13:56:39.338Z'
+          name: startTime
+          in: query
+        - type: number
+          default: 3
+          name: pageSize
+          in: query
+        - type: string
+          name: cursor
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Model4'
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
             type: string
           description: Successful
-  '/bff/v1/enrollment/group':
+  /bff/v1/enrollment/group:
     post:
       summary: Enroll in beta groups with invite key
       operationId: postBffV1EnrollmentGroup
       parameters:
-      - type: string
-        name: inviteKey
-        in: query
-        required: true
+        - type: string
+          name: inviteKey
+          in: query
+          required: true
       tags:
-      - bff
+        - bff
       responses:
         default:
           schema:
@@ -528,15 +530,15 @@ definitions:
       id:
         type: string
       coordinates:
-        '$ref': '#/definitions/coordinates'
+        $ref: '#/definitions/coordinates'
   Model2:
     type: object
     properties:
       layer:
         type: string
         enum:
-        - override: true
-        - venue
+          - override: true
+          - venue
       id:
         type: string
   Model3:
@@ -549,25 +551,25 @@ definitions:
       lineId:
         type: string
     required:
-    - stopId
-    - lineName
-    - lineId
+      - stopId
+      - lineName
+      - lineId
   favorites:
     type: array
     items:
-      '$ref': '#/definitions/Model3'
+      $ref: '#/definitions/Model3'
   Model4:
     type: object
     properties:
       location:
-        '$ref': '#/definitions/Model2'
+        $ref: '#/definitions/Model2'
         x-alternatives:
-        - '$ref': '#/x-alt-definitions/location'
-        - '$ref': '#/x-alt-definitions/Model1'
+          - $ref: '#/x-alt-definitions/location'
+          - $ref: '#/x-alt-definitions/Model1'
       favorites:
-        '$ref': '#/definitions/favorites'
+        $ref: '#/definitions/favorites'
     required:
-    - location
+      - location
   from:
     type: object
     properties:
@@ -577,26 +579,26 @@ definitions:
         type: string
         default: UNKNOWN
       coordinates:
-        '$ref': '#/definitions/coordinates'
+        $ref: '#/definitions/coordinates'
   modes:
     type: array
     default:
-    - foot
-    - bus
-    - tram
-    - rail
-    - metro
-    - water
-    - air
+      - foot
+      - bus
+      - tram
+      - rail
+      - metro
+      - water
+      - air
     items:
       type: string
   Model5:
     type: object
     properties:
       from:
-        '$ref': '#/definitions/from'
+        $ref: '#/definitions/from'
       to:
-        '$ref': '#/definitions/from'
+        $ref: '#/definitions/from'
       searchDate:
         type: string
         format: date
@@ -607,7 +609,7 @@ definitions:
         type: number
         default: 30
       modes:
-        '$ref': '#/definitions/modes'
+        $ref: '#/definitions/modes'
       limit:
         type: number
         default: 10
@@ -615,8 +617,8 @@ definitions:
         type: boolean
         default: false
     required:
-    - from
-    - to
+      - from
+      - to
 x-alt-definitions:
   location:
     type: object
@@ -624,8 +626,8 @@ x-alt-definitions:
       layer:
         type: string
         enum:
-        - override: true
-        - venue
+          - override: true
+          - venue
       id:
         type: string
   coordinates:
@@ -641,7 +643,7 @@ x-alt-definitions:
       layer:
         type: string
         enum:
-        - override: true
-        - address
+          - override: true
+          - address
       coordinates:
-        '$ref': '#/x-alt-definitions/coordinates'
+        $ref: '#/x-alt-definitions/coordinates'
