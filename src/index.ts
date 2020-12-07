@@ -53,7 +53,7 @@ process.on('unhandledRejection', err => {
     const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
     const js = journeyService(enturService, pubSubClient);
     healthRoutes(server);
-    stopsRoutes(server)(stopsService(enturService));
+    stopsRoutes(server)(stopsService(enturService, pubSubClient));
     geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
     journeyRoutes(server)(js);
     enrollmentRoutes(server)();
