@@ -14,11 +14,18 @@ export type GroupsByIdQueryVariables = Types.Exact<{
 
 export type GroupsByIdQuery = { stopPlaces: Array<Types.Maybe<(
     { quays?: Types.Maybe<Array<Types.Maybe<(
-      { times: Array<Types.Maybe<{ expectedArrivalTime?: Types.Maybe<any>, aimedArrivalTime?: Types.Maybe<any>, predictionInaccurate?: Types.Maybe<boolean>, realtime?: Types.Maybe<boolean>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string } }> }>>, estimatedCalls: Array<Types.Maybe<Group_EstimatedCallFieldsFragment>> }
+      { times: Array<Types.Maybe<Group_Times_EstimatedCallFieldsFragment>>, estimatedCalls: Array<Types.Maybe<Group_EstimatedCallFieldsFragment>> }
       & Group_QuayFieldsFragment
     )>>> }
     & Group_StopPlaceFieldsFragment
   )>> };
+
+export type QuayIdInStopsQueryVariables = Types.Exact<{
+  stopIds: Array<Types.Maybe<Types.Scalars['String']>>;
+}>;
+
+
+export type QuayIdInStopsQuery = { stopPlaces: Array<Types.Maybe<{ id: string, quays?: Types.Maybe<Array<Types.Maybe<{ id: string }>>> }>> };
 
 export type GroupsByNearestQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
@@ -30,20 +37,22 @@ export type GroupsByNearestQueryVariables = Types.Exact<{
   timeRange: Types.Scalars['Int'];
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
-  filterByIds?: Types.Maybe<Types.InputFilters>;
+  filterInput?: Types.Maybe<Types.InputFilters>;
   filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
 }>;
 
 
 export type GroupsByNearestQuery = { nearest?: Types.Maybe<{ pageInfo: { hasNextPage: boolean, endCursor?: Types.Maybe<string> }, edges?: Types.Maybe<Array<Types.Maybe<{ cursor: string, node?: Types.Maybe<{ distance?: Types.Maybe<number>, place?: Types.Maybe<(
           { quays?: Types.Maybe<Array<Types.Maybe<(
-            { times: Array<Types.Maybe<{ expectedArrivalTime?: Types.Maybe<any>, aimedArrivalTime?: Types.Maybe<any>, predictionInaccurate?: Types.Maybe<boolean>, realtime?: Types.Maybe<boolean>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string } }> }>>, estimatedCalls: Array<Types.Maybe<Group_EstimatedCallFieldsFragment>> }
+            { times: Array<Types.Maybe<Group_Times_EstimatedCallFieldsFragment>>, estimatedCalls: Array<Types.Maybe<Group_EstimatedCallFieldsFragment>> }
             & Group_QuayFieldsFragment
           )>>> }
           & Group_StopPlaceFieldsFragment
         )> }> }>>> }> };
 
 export type Group_EstimatedCallFieldsFragment = { destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, serviceJourney?: Types.Maybe<Group_ServiceJourneyFieldsFragment> };
+
+export type Group_Times_EstimatedCallFieldsFragment = { expectedArrivalTime?: Types.Maybe<any>, aimedArrivalTime?: Types.Maybe<any>, predictionInaccurate?: Types.Maybe<boolean>, realtime?: Types.Maybe<boolean>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string } }> };
 
 export type Group_NoticeFieldsFragment = { text?: Types.Maybe<string> };
 
@@ -140,6 +149,30 @@ export const Group_EstimatedCallFieldsFragmentDoc = gql`
 }
     ${Group_NoticeFieldsFragmentDoc}
 ${Group_ServiceJourneyFieldsFragmentDoc}`;
+export const Group_Times_EstimatedCallFieldsFragmentDoc = gql`
+    fragment group_times_estimatedCallFields on EstimatedCall {
+  destinationDisplay {
+    frontText
+  }
+  expectedArrivalTime
+  aimedArrivalTime
+  predictionInaccurate
+  realtime
+  notices {
+    ...group_noticeFields
+  }
+  situations {
+    ...group_situationFields
+  }
+  serviceJourney {
+    id
+    line {
+      id
+    }
+  }
+}
+    ${Group_NoticeFieldsFragmentDoc}
+${Group_SituationFieldsFragmentDoc}`;
 export const Group_QuayFieldsFragmentDoc = gql`
     fragment group_quayFields on Quay {
   id
@@ -168,26 +201,8 @@ export const GroupsByIdDocument = gql`
     ...group_stopPlaceFields
     quays(filterByInUse: true) {
       ...group_quayFields
-      times: estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine, numberOfDepartures: $totalLimit, omitNonBoarding: false, includeCancelledTrips: false) {
-        destinationDisplay {
-          frontText
-        }
-        expectedArrivalTime
-        aimedArrivalTime
-        predictionInaccurate
-        realtime
-        notices {
-          ...group_noticeFields
-        }
-        situations {
-          ...group_situationFields
-        }
-        serviceJourney {
-          id
-          line {
-            id
-          }
-        }
+      times: estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine, numberOfDepartures: $totalLimit, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
+        ...group_times_estimatedCallFields
       }
       estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
         ...group_estimatedCallFields
@@ -197,12 +212,21 @@ export const GroupsByIdDocument = gql`
 }
     ${Group_StopPlaceFieldsFragmentDoc}
 ${Group_QuayFieldsFragmentDoc}
-${Group_NoticeFieldsFragmentDoc}
-${Group_SituationFieldsFragmentDoc}
+${Group_Times_EstimatedCallFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;
+export const QuayIdInStopsDocument = gql`
+    query QuayIdInStops($stopIds: [String]!) {
+  stopPlaces(ids: $stopIds) {
+    id
+    quays(filterByInUse: true) {
+      id
+    }
+  }
+}
+    `;
 export const GroupsByNearestDocument = gql`
-    query GroupsByNearest($lat: Float!, $lng: Float!, $distance: Int!, $startTime: DateTime!, $fromCursor: String, $pageSize: Int, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByIds: InputFilters, $filterByLineIds: [String]) {
-  nearest(latitude: $lat, longitude: $lng, after: $fromCursor, first: $pageSize, maximumDistance: $distance, filterByPlaceTypes: stopPlace, filterByInUse: true, filterByIds: $filterByIds) {
+    query GroupsByNearest($lat: Float!, $lng: Float!, $distance: Int!, $startTime: DateTime!, $fromCursor: String, $pageSize: Int, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterInput: InputFilters, $filterByLineIds: [String]) {
+  nearest(latitude: $lat, longitude: $lng, after: $fromCursor, first: $pageSize, maximumDistance: $distance, filterByPlaceTypes: stopPlace, filterByInUse: true, filterByIds: $filterInput) {
     pageInfo {
       hasNextPage
       endCursor
@@ -216,26 +240,8 @@ export const GroupsByNearestDocument = gql`
             ...group_stopPlaceFields
             quays {
               ...group_quayFields
-              times: estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine, numberOfDepartures: $totalLimit, omitNonBoarding: false, includeCancelledTrips: false) {
-                destinationDisplay {
-                  frontText
-                }
-                expectedArrivalTime
-                aimedArrivalTime
-                predictionInaccurate
-                realtime
-                notices {
-                  ...group_noticeFields
-                }
-                situations {
-                  ...group_situationFields
-                }
-                serviceJourney {
-                  id
-                  line {
-                    id
-                  }
-                }
+              times: estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine, numberOfDepartures: $totalLimit, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
+                ...group_times_estimatedCallFields
               }
               estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
                 ...group_estimatedCallFields
@@ -249,6 +255,5 @@ export const GroupsByNearestDocument = gql`
 }
     ${Group_StopPlaceFieldsFragmentDoc}
 ${Group_QuayFieldsFragmentDoc}
-${Group_NoticeFieldsFragmentDoc}
-${Group_SituationFieldsFragmentDoc}
+${Group_Times_EstimatedCallFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;

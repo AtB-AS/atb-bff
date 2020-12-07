@@ -17,26 +17,9 @@ query GroupsById(
         numberOfDepartures: $totalLimit
         omitNonBoarding: false
         includeCancelledTrips: false
+        whiteListed: { lines: $filterByLineIds }
       ) {
-        destinationDisplay {
-          frontText
-        }
-        expectedArrivalTime
-        aimedArrivalTime
-        predictionInaccurate
-        realtime
-        notices {
-          ...group_noticeFields
-        }
-        situations {
-          ...group_situationFields
-        }
-        serviceJourney {
-          id
-          line {
-            id
-          }
-        }
+        ...group_times_estimatedCallFields
       }
       estimatedCalls(
         startTime: $startTime
@@ -53,6 +36,15 @@ query GroupsById(
   }
 }
 
+query QuayIdInStops($stopIds: [String]!) {
+  stopPlaces(ids: $stopIds) {
+    id
+    quays(filterByInUse: true) {
+      id
+    }
+  }
+}
+
 query GroupsByNearest(
   $lat: Float!
   $lng: Float!
@@ -63,6 +55,7 @@ query GroupsByNearest(
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
+  $filterInput: InputFilters
   $filterByLineIds: [String]
 ) {
   nearest(
@@ -73,7 +66,7 @@ query GroupsByNearest(
     maximumDistance: $distance
     filterByPlaceTypes: stopPlace
     filterByInUse: true
-    filterByIds: { lines: $filterByLineIds }
+    filterByIds: $filterInput
   ) {
     pageInfo {
       hasNextPage
@@ -96,26 +89,9 @@ query GroupsByNearest(
                 numberOfDepartures: $totalLimit
                 omitNonBoarding: false
                 includeCancelledTrips: false
+                whiteListed: { lines: $filterByLineIds }
               ) {
-                destinationDisplay {
-                  frontText
-                }
-                expectedArrivalTime
-                aimedArrivalTime
-                predictionInaccurate
-                realtime
-                notices {
-                  ...group_noticeFields
-                }
-                situations {
-                  ...group_situationFields
-                }
-                serviceJourney {
-                  id
-                  line {
-                    id
-                  }
-                }
+                ...group_times_estimatedCallFields
               }
               estimatedCalls(
                 startTime: $startTime
@@ -145,6 +121,28 @@ fragment group_estimatedCallFields on EstimatedCall {
   }
   serviceJourney {
     ...group_serviceJourneyFields
+  }
+}
+
+fragment group_times_estimatedCallFields on EstimatedCall {
+  destinationDisplay {
+    frontText
+  }
+  expectedArrivalTime
+  aimedArrivalTime
+  predictionInaccurate
+  realtime
+  notices {
+    ...group_noticeFields
+  }
+  situations {
+    ...group_situationFields
+  }
+  serviceJourney {
+    id
+    line {
+      id
+    }
   }
 }
 

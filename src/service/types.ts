@@ -22,7 +22,7 @@ export type FeatureLocation = Feature['properties'] & {
 
 export type FavoriteDeparture = {
   stopId: string;
-  displayText: string;
+  lineName: string;
   lineId: string;
 };
 

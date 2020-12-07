@@ -15,7 +15,10 @@ import {
   GroupsByIdQueryVariables,
   GroupsByNearestDocument,
   GroupsByNearestQuery,
-  GroupsByNearestQueryVariables
+  GroupsByNearestQueryVariables,
+  QuayIdInStopsDocument,
+  QuayIdInStopsQuery,
+  QuayIdInStopsQueryVariables
 } from './departure-group.graphql-gen';
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;
@@ -26,6 +29,28 @@ export async function getDeparturesGroupedNearest(
   options: DepartureGroupsQuery,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
+  let favoriteQuayIds: string[] | undefined = undefined;
+  if (favorites?.length) {
+    const quayIdsResult = await client.query<
+      QuayIdInStopsQuery,
+      QuayIdInStopsQueryVariables
+    >({
+      query: QuayIdInStopsDocument,
+      variables: {
+        stopIds: favorites.map(f => f.stopId)
+      },
+      fetchPolicy: 'cache-first'
+    });
+
+    if (quayIdsResult.errors) {
+      return Result.err(new APIError(quayIdsResult.errors));
+    }
+
+    favoriteQuayIds = quayIdsResult.data.stopPlaces
+      .flatMap(s => s.quays?.map(q => q.id))
+      .filter(Boolean) as string[];
+  }
+
   const variables: GroupsByNearestQueryVariables = {
     lat: coordinates.latitude,
     lng: coordinates.longitude,
@@ -47,7 +72,14 @@ export async function getDeparturesGroupedNearest(
     // Used for paging, skip until `cursor` and only fetch `pageSize` number.
     fromCursor: options.cursor,
     // This limits number of stop places.
-    pageSize: options.pageSize
+    pageSize: options.pageSize,
+
+    filterByLineIds: favorites?.map(f => f.lineId),
+    filterInput: favoriteQuayIds
+      ? {
+          quays: favoriteQuayIds
+        }
+      : undefined
   };
 
   const result = await client.query<
@@ -65,7 +97,10 @@ export async function getDeparturesGroupedNearest(
   try {
     const edges = result.data.nearest?.edges ?? [];
     const stopPlaces = edges.map(i => i.node?.place);
-    const data = mapQueryToGroups(stopPlaces as GroupsByIdQuery['stopPlaces']);
+    const data = mapQueryToGroups(
+      stopPlaces as GroupsByIdQuery['stopPlaces'],
+      favorites
+    );
 
     const pageInfo = result.data.nearest?.pageInfo;
     return Result.ok(
@@ -90,12 +125,13 @@ export async function getDeparturesGrouped(
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   const ids = Array.isArray(id) ? id : [id];
 
-  const variables = {
+  const variables: GroupsByIdQueryVariables = {
     ids,
     timeRange: 86400 * 2, // Two days
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,
-    totalLimit: options.limitPerLine * 10
+    totalLimit: options.limitPerLine * 10,
+    filterByLineIds: favorites?.map(f => f.lineId)
   };
 
   const result = await client.query<GroupsByIdQuery, GroupsByIdQueryVariables>({
@@ -108,7 +144,7 @@ export async function getDeparturesGrouped(
   }
 
   try {
-    const data = mapQueryToGroups(result.data.stopPlaces);
+    const data = mapQueryToGroups(result.data.stopPlaces, favorites);
     return Result.ok(generateCursorData(data, { hasNextPage: false }, options));
   } catch (error) {
     return Result.err(new APIError(error));
@@ -192,11 +228,18 @@ function toKey(lineId?: string, frontText?: String) {
 }
 
 function mapQueryToGroups(
-  stopPlaces?: GroupsByIdQuery['stopPlaces']
+  stopPlaces?: GroupsByIdQuery['stopPlaces'],
+  favorites?: FavoriteDeparture[]
 ): StopPlaceGroup[] {
   if (!stopPlaces) {
     return [];
   }
+
+  const isFavorite = (item: DepartureLineInfo) =>
+    !favorites ||
+    favorites.some(
+      f => item.lineName === f.lineName && item.lineId === f.lineId
+    );
 
   return stopPlaces.filter(Boolean).map(function (stopPlace) {
     const { quays, ...stopPlaceInfo } = stopPlace;
@@ -219,7 +262,7 @@ function mapQueryToGroups(
         let lines: QuayGroup['group'] = [];
 
         for (let [lineGroup, times] of Object.entries(groups)) {
-          const lineInfoEntry = lineInfoGroups[lineGroup][0];
+          const lineInfoEntry = lineInfoGroups[lineGroup]?.[0];
           if (!lineInfoEntry) {
             continue;
           }
@@ -231,6 +274,10 @@ function mapQueryToGroups(
             notices: (lineInfoEntry.notices as Notice[]) ?? [],
             lineId: lineInfoEntry.serviceJourney?.line.id ?? ''
           };
+
+          if (!isFavorite(lineInfo)) {
+            continue;
+          }
 
           const departures = times.map<DepartureTime>(function (time) {
             return {
