@@ -266,9 +266,7 @@ function pub(topic: Topic, data: object) {
 }
 
 function createAllTopics(pubSubClient: PubSub) {
-  [topicName, topicNameGroups, topicNameRealtime].forEach(async function () {
-    try {
-      await pubSubClient.createTopic(topicNameGroups);
-    } catch (e) {}
-  });
+  [topicName, topicNameGroups, topicNameRealtime].forEach(topic =>
+    pubSubClient.createTopic(topic).catch(() => {})
+  );
 }
