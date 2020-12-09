@@ -96,7 +96,6 @@ export async function getDeparturesGroupedNearest(
   try {
     const edges = result.data.nearest?.edges ?? [];
     const stopPlaces = edges.map(i => i.node?.place);
-    console.log(JSON.stringify(stopPlaces));
     const data = mapQueryToGroups(
       stopPlaces as GroupsByIdQuery['stopPlaces'],
       favorites
