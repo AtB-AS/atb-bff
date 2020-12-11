@@ -79,7 +79,9 @@ export const getDeparturesCursoredRequest = {
           latitude: Joi.number()
         })
       })
-    ]).required(),
+    ])
+      .options({ stripUnknown: true })
+      .required(),
     favorites: Joi.array().items(
       Joi.object({
         stopId: Joi.string().required(),
