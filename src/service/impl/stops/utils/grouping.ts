@@ -1,5 +1,9 @@
 import groupBy from 'lodash.groupby';
-import { ReportType } from '../../../../graphql/types';
+import {
+  ReportType,
+  TransportMode,
+  TransportSubmode
+} from '../../../../graphql/types';
 import { FavoriteDeparture } from '../../../types';
 import { GroupsByIdQuery } from '../departure-group.graphql-gen';
 
@@ -29,6 +33,8 @@ type Situation = {
 type DepartureLineInfo = {
   lineName: string;
   lineNumber: string;
+  transportMode?: TransportMode;
+  transportSubmode?: TransportSubmode;
   quayId: string;
   notices: Notice[];
   lineId: string;
@@ -122,6 +128,9 @@ export default function mapQueryToGroups(
           const lineInfo: DepartureLineInfo = {
             lineName: lineInfoEntry.destinationDisplay?.frontText ?? '',
             lineNumber: lineInfoEntry.serviceJourney?.line.publicCode ?? '',
+            transportMode: lineInfoEntry.serviceJourney?.line.transportMode,
+            transportSubmode:
+              lineInfoEntry.serviceJourney?.line.transportSubmode,
             quayId: quay.id,
             notices: (lineInfoEntry.notices as Notice[]) ?? [],
             lineId: lineInfoEntry.serviceJourney?.line.id ?? ''

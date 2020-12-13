@@ -60,7 +60,7 @@ export type Group_QuayFieldsFragment = { id: string, name: string, description?:
 
 export type Group_SituationFieldsFragment = { situationNumber?: Types.Maybe<string>, reportType?: Types.Maybe<Types.ReportType>, summary: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, description: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, advice: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, validityPeriod?: Types.Maybe<{ startTime?: Types.Maybe<any>, endTime?: Types.Maybe<any> }>, infoLinks?: Types.Maybe<Array<Types.Maybe<{ uri?: Types.Maybe<string>, label?: Types.Maybe<string> }>>> };
 
-export type Group_LineFieldsFragment = { description?: Types.Maybe<string>, flexibleLineType?: Types.Maybe<Types.FlexibleLineType>, id: string, name?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>> };
+export type Group_LineFieldsFragment = { description?: Types.Maybe<string>, flexibleLineType?: Types.Maybe<Types.FlexibleLineType>, id: string, name?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, publicCode?: Types.Maybe<string>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>> };
 
 export type Group_StopPlaceFieldsFragment = { id: string, description?: Types.Maybe<string>, name: string, latitude?: Types.Maybe<number>, longitude?: Types.Maybe<number> };
 
@@ -103,6 +103,8 @@ export const Group_LineFieldsFragmentDoc = gql`
   flexibleLineType
   id
   name
+  transportMode
+  transportSubmode
   notices {
     ...group_noticeFields
   }

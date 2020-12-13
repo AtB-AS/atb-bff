@@ -192,6 +192,8 @@ fragment group_lineFields on Line {
   flexibleLineType
   id
   name
+  transportMode
+  transportSubmode
   notices {
     ...group_noticeFields
   }
