@@ -44,6 +44,7 @@ type DepartureTime = {
   time: string;
   aimedTime: string;
   realtime?: boolean;
+  predictionInaccurate?: boolean;
   situations: Situation[];
   serviceJourneyId?: string;
 };
@@ -142,8 +143,9 @@ export default function mapQueryToGroups(
 
           const departures = times.map<DepartureTime>(function (time) {
             return {
-              time: time.expectedArrivalTime,
-              aimedTime: time.aimedArrivalTime,
+              time: time.expectedDepartureTime,
+              aimedTime: time.aimedDepartureTime,
+              predictionInaccurate: time.predictionInaccurate,
               realtime: time.realtime,
               situations: time.situations,
               serviceJourneyId: time.serviceJourney?.id

@@ -52,7 +52,7 @@ export type GroupsByNearestQuery = { nearest?: Types.Maybe<{ pageInfo: { hasNext
 
 export type Group_EstimatedCallFieldsFragment = { destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, serviceJourney?: Types.Maybe<Group_ServiceJourneyFieldsFragment> };
 
-export type Group_Times_EstimatedCallFieldsFragment = { expectedArrivalTime?: Types.Maybe<any>, aimedArrivalTime?: Types.Maybe<any>, predictionInaccurate?: Types.Maybe<boolean>, realtime?: Types.Maybe<boolean>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string } }> };
+export type Group_Times_EstimatedCallFieldsFragment = { expectedDepartureTime?: Types.Maybe<any>, aimedDepartureTime?: Types.Maybe<any>, predictionInaccurate?: Types.Maybe<boolean>, realtime?: Types.Maybe<boolean>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string } }> };
 
 export type Group_NoticeFieldsFragment = { text?: Types.Maybe<string> };
 
@@ -156,8 +156,8 @@ export const Group_Times_EstimatedCallFieldsFragmentDoc = gql`
   destinationDisplay {
     frontText
   }
-  expectedArrivalTime
-  aimedArrivalTime
+  expectedDepartureTime
+  aimedDepartureTime
   predictionInaccurate
   realtime
   notices {

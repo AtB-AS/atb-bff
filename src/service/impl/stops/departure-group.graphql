@@ -128,8 +128,8 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   destinationDisplay {
     frontText
   }
-  expectedArrivalTime
-  aimedArrivalTime
+  expectedDepartureTime
+  aimedDepartureTime
   predictionInaccurate
   realtime
   notices {
