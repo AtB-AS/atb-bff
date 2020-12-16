@@ -30,6 +30,7 @@ export type FeaturesQuery = {
   'boundary.country'?: string;
   sources?: string[];
   layers?: string[];
+  tariff_zone_authorities?: string;
   limit?: number;
 };
 
