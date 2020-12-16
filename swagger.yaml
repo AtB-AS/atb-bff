@@ -136,6 +136,9 @@ paths:
         - type: string
           name: layers
           in: query
+        - type: string
+          name: tariff_zone_authorities
+          in: query
         - type: number
           name: boundary.rect.min_lat
           in: query

@@ -10,6 +10,7 @@ export const getFeaturesRequest = Joi.object({
     }
     return val;
   }),
+  tariff_zone_authorities: Joi.string(),
   'boundary.rect.min_lat': Joi.number(),
   'boundary.rect.max_lat': Joi.number(),
   'boundary.rect.min_lon': Joi.number(),
