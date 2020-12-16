@@ -1,19 +1,64 @@
 import { Result } from '@badrap/result';
-import { EnturService, StopPlaceDetails, EstimatedCall } from '@entur/sdk';
+import { EnturService, EstimatedCall, StopPlaceDetails } from '@entur/sdk';
+import { PubSub, Topic } from '@google-cloud/pubsub';
+import { formatISO } from 'date-fns';
 import haversineDistance from 'haversine-distance';
 import { IStopsService } from '../../interface';
 import { APIError, DepartureRealtimeQuery } from '../../types';
+import { getEnv } from '../../../utils/getenv';
 import {
-  getDeparturesFromStops,
-  getDeparturesFromLocation
-} from './departures';
+  getDeparturesGrouped,
+  getDeparturesGroupedNearest
+} from './departure-group';
 import { getRealtimeDepartureTime } from './departure-time';
-import { formatISO } from 'date-fns';
+import {
+  getDeparturesFromLocation,
+  getDeparturesFromStops
+} from './departures';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
-export default (service: EnturService): IStopsService => {
+const ENV = getEnv();
+const topicName = `analytics_departures_search`;
+const topicNameGroups = `analytics_departure_groups_search`;
+const topicNameRealtime = `analytics_departure_realtime`;
+
+export default (service: EnturService, pubSubClient: PubSub): IStopsService => {
+  // createTopic might fail if the topic already exists; ignore.
+  createAllTopics(pubSubClient);
+
+  const pubOpts = {
+    batching: {
+      maxMessages: 100,
+      maxMilliseconds: 5 * 1000
+    }
+  };
+
+  const batchedPublisher = pubSubClient.topic(topicName, pubOpts);
+  const batchedPublisherGroups = pubSubClient.topic(topicNameGroups, pubOpts);
+  const batchedPublisherRealtime = pubSubClient.topic(
+    topicNameRealtime,
+    pubOpts
+  );
+
   const api: IStopsService = {
+    async getDeparturesGrouped(payload, query) {
+      pub(batchedPublisherGroups, { payload, query });
+      return payload.location.layer === 'venue'
+        ? getDeparturesGrouped(payload.location.id, query, payload.favorites)
+        : getDeparturesGroupedNearest(
+            payload.location.coordinates,
+            1000,
+            query,
+            payload.favorites
+          );
+    },
+    async getDepartureRealtime(query: DepartureRealtimeQuery) {
+      pub(batchedPublisherRealtime, { query });
+      return getRealtimeDepartureTime(query);
+    },
+
+    // @TODO These should be deprecated
     async getDepartures(location) {
       const opts = {
         pageOffset: 0,
@@ -28,12 +73,10 @@ export default (service: EnturService): IStopsService => {
       return result.map(d => d.data);
     },
     async getDeparturesPaging(location, query) {
+      pub(batchedPublisher, { location, query });
       return location.layer === 'venue'
         ? getDeparturesFromStops(location.id, query)
         : getDeparturesFromLocation(location.coordinates, 500, query);
-    },
-    async getDepartureRealtime(query: DepartureRealtimeQuery) {
-      return getRealtimeDepartureTime(query);
     },
 
     // @TODO All below here should be deprecated and removed...
@@ -213,3 +256,17 @@ export default (service: EnturService): IStopsService => {
 
   return api;
 };
+
+function pub(topic: Topic, data: object) {
+  try {
+    topic.publish(Buffer.from(JSON.stringify(data)), {
+      environment: ENV
+    });
+  } catch (e) {}
+}
+
+function createAllTopics(pubSubClient: PubSub) {
+  [topicName, topicNameGroups, topicNameRealtime].forEach(topic =>
+    pubSubClient.createTopic(topic).catch(() => {})
+  );
+}

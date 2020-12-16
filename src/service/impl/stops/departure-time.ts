@@ -1,19 +1,17 @@
+import { Result } from '@badrap/result';
 import client from '../../../graphql/graphql-client';
 import {
   APIError,
-  DeparturesRealtimeData,
   DepartureRealtimeData,
-  DepartureRealtimeQuery
+  DepartureRealtimeQuery,
+  DeparturesRealtimeData
 } from '../../types';
-import { Result } from '@badrap/result';
-
 import {
+  EstimatedCallFragment,
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
-  GetDepartureRealtimeQueryVariables,
-  EstimatedCallFragment
+  GetDepartureRealtimeQueryVariables
 } from './departure-time.graphql-gen';
-import { Maybe } from '../../../graphql/types';
 
 const createVariables = (
   query: DepartureRealtimeQuery
@@ -40,7 +38,8 @@ export async function populateCacheIfNotThere(
       GetDepartureRealtimeQueryVariables
     >({
       query: GetDepartureRealtimeDocument,
-      variables: createVariables(inputQuery)
+      variables: createVariables(inputQuery),
+      fetchPolicy: 'cache-first'
     });
   } catch (e) {}
 }
@@ -56,14 +55,12 @@ export async function getRealtimeDepartureTime(
       GetDepartureRealtimeQueryVariables
     >({
       query: GetDepartureRealtimeDocument,
-
       variables
     });
 
     if (result.errors) {
       return Result.err(new APIError(result.errors));
     }
-
     return Result.ok(mapToDepartureRealtime(result.data, previousResult));
   } catch (error) {
     return Result.err(new APIError(error));

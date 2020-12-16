@@ -14,7 +14,8 @@ import {
   getNearestDeparturesRequest,
   getDeparturesRequest,
   getDepartureRealtime,
-  getDeparturesPagingRequest
+  getDeparturesPagingRequest,
+  getDeparturesCursoredRequest
 } from './schema';
 import {
   StopPlaceQuery,
@@ -28,7 +29,9 @@ import {
   FeatureLocation,
   DeparturesFromLocationQuery,
   DepartureRealtimeQuery,
-  DeparturesFromLocationPagingQuery
+  DeparturesFromLocationPagingQuery,
+  DepartureGroupsQuery,
+  DepartureGroupsPayload
 } from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
@@ -146,7 +149,12 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceByPositionRequest,
-      description: 'Find stops near coordinates'
+      description: 'Find stops near coordinates',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuery;
@@ -159,7 +167,12 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlacesByNameRequest,
-      description: 'Find stops matching query'
+      description: 'Find stops matching query',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceByNameQuery;
@@ -172,7 +185,12 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops'],
       validate: getDeparturesBetweenStopPlacesRequest,
-      description: 'Find departures between stop places'
+      description: 'Find departures between stop places',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as DeparturesBetweenStopPlacesQuery;
@@ -185,7 +203,12 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops', 'departures'],
       validate: getDeparturesRequest,
-      description: 'Get departures from feature location'
+      description: 'Get departures from feature location',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const locaton = (request.payload as unknown) as FeatureLocation;
@@ -200,13 +223,32 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
     options: {
       tags: ['api', 'stops', 'departures'],
       validate: getDeparturesPagingRequest,
-      description: 'Get departures from feature location'
+      description: 'Get departures from feature location',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
-      const locaton = (request.payload as unknown) as FeatureLocation;
+      const location = (request.payload as unknown) as FeatureLocation;
       const query = (request.query as unknown) as DeparturesFromLocationPagingQuery;
+      return (await service.getDeparturesPaging(location, query)).unwrap();
+    }
+  });
 
-      return (await service.getDeparturesPaging(locaton, query)).unwrap();
+  server.route({
+    method: 'POST',
+    path: '/bff/v1/departures-grouped',
+    options: {
+      tags: ['api', 'stops', 'departures'],
+      validate: getDeparturesCursoredRequest,
+      description: 'Get departures grouped on lines from feature location'
+    },
+    handler: async (request, h) => {
+      const location = (request.payload as unknown) as DepartureGroupsPayload;
+      const query = (request.query as unknown) as DepartureGroupsQuery;
+      return (await service.getDeparturesGrouped(location, query)).unwrap();
     }
   });
   server.route({
