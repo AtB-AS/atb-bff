@@ -94,10 +94,13 @@ export default function mapQueryToGroups(
     return [];
   }
 
-  const isFavorite = (item: DepartureLineInfo) =>
+  const isFavorite = (item: DepartureLineInfo, stopId: string) =>
     !favorites ||
     favorites.some(
-      f => item.lineName === f.lineName && item.lineId === f.lineId
+      f =>
+        item.lineName === f.lineName &&
+        item.lineId === f.lineId &&
+        stopId === f.stopId
     );
 
   return stopPlaces.filter(Boolean).map(function (stopPlace) {
@@ -137,7 +140,7 @@ export default function mapQueryToGroups(
             lineId: lineInfoEntry.serviceJourney?.line.id ?? ''
           };
 
-          if (!isFavorite(lineInfo)) {
+          if (!isFavorite(lineInfo, stopPlaceInfo.id)) {
             continue;
           }
 
