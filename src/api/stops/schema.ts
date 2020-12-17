@@ -87,7 +87,7 @@ export const getDeparturesCursoredRequest = {
         stopId: Joi.string().required(),
         lineName: Joi.string().required(),
         lineId: Joi.string().required()
-      })
+      }).options({ stripUnknown: true })
     )
   }),
   query: Joi.object<DepartureGroupsQuery>({
