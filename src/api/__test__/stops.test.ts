@@ -4,6 +4,10 @@ import stopsRoutes from '../stops';
 import { IStopsService } from '../../service/interface';
 import { Result } from '@badrap/result';
 import { randomPort } from './common';
+import {
+  DepartureGroupsPayload,
+  DepartureGroupsQuery
+} from '../../service/types';
 
 let server: Hapi.Server;
 const svc: jest.Mocked<IStopsService> = {
@@ -41,6 +45,10 @@ const svc: jest.Mocked<IStopsService> = {
   getStopPlace: jest.fn((...args: any): any => Result.ok('ok')),
   getStopPlacesByPosition: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
+  ),
+  getDeparturesGrouped: jest.fn(
+    (location: DepartureGroupsPayload, query: DepartureGroupsQuery): any =>
+      Result.ok(Promise.resolve({}))
   )
 };
 

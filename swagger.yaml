@@ -12,7 +12,7 @@ x-google-backend:
   address: https://atb-bff-prod-jlmnrncfba-ew.a.run.app
   path_translation: APPEND_PATH_TO_ADDRESS
 paths:
-  '/bff/v1/departures':
+  /bff/v1/departures:
     get:
       summary: Find departures between stop places
       operationId: getBffV1Departures
@@ -32,13 +32,14 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures-realtime':
+      deprecated: true
+  /bff/v1/departures-realtime:
     get:
-      summary:
-        Get updated realtime information of all lines and quays passed as data
+      summary: Get updated realtime information of all lines and quays passed as data
       operationId: getBffV1Departuresrealtime
       parameters:
         - type: array
+          default: []
           items:
             type: string
           collectionFormat: multi
@@ -59,7 +60,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stops':
+  /bff/v1/stops:
     get:
       summary: Find stops matching query
       operationId: getBffV1Stops
@@ -81,54 +82,12 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/agent/next-departure-between':
+      deprecated: true
+  /bff/v1/departures/nearest:
     get:
-      summary: Get next departures between stops
-      operationId: getBffV1AgentNextdeparturebetween
-      parameters:
-        - type: string
-          name: from
-          in: query
-          required: true
-        - type: string
-          name: to
-          in: query
-          required: true
-      tags:
-        - bff
-      responses:
-        default:
-          schema:
-            type: string
-          description: Successful
-  '/bff/v1/agent/next-departure-between-nearest':
-    get:
-      operationId: getBffV1AgentNextdeparturebetweennearest
-      parameters:
-        - type: string
-          name: to
-          in: query
-          required: true
-        - type: string
-          name: lat
-          in: query
-          required: true
-        - type: string
-          name: lon
-          in: query
-          required: true
-      tags:
-        - bff
-      responses:
-        default:
-          schema:
-            type: string
-          description: Successful
-  '/bff/v1/departures/nearest':
-    get:
-      summary:
-        'Get departures from stops near coordinates. Deprecated: Use POST
-        /v1/departures-from-location instead'
+      summary: >-
+        Get departures from stops near coordinates. Deprecated: Use POST
+        /v1/departures-from-location instead
       operationId: getBffV1DeparturesNearest
       parameters:
         - type: number
@@ -159,7 +118,7 @@ paths:
             type: string
           description: Successful
       deprecated: true
-  '/bff/v1/geocoder/features':
+  /bff/v1/geocoder/features:
     get:
       summary: Find features matching query
       operationId: getBffV1GeocoderFeatures
@@ -176,6 +135,9 @@ paths:
           in: query
         - type: string
           name: layers
+          in: query
+        - type: string
+          name: tariff_zone_authorities
           in: query
         - type: number
           name: boundary.rect.min_lat
@@ -205,9 +167,9 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/geocoder/reverse':
+  /bff/v1/geocoder/reverse:
     get:
-      summary: Find addresses, POIs and stop places near the given coordinates
+      summary: 'Find addresses, POIs and stop places near the given coordinates'
       operationId: getBffV1GeocoderReverse
       parameters:
         - type: number
@@ -234,7 +196,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/journey/single-trip':
+  /bff/v1/journey/single-trip:
     get:
       summary: Get one specific trip pattern from generated ID
       operationId: getBffV1JourneySingletrip
@@ -250,7 +212,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/journey/trip':
+  /bff/v1/journey/trip:
     get:
       summary: Find trip patterns with a simple query
       operationId: getBffV1JourneyTrip
@@ -281,7 +243,7 @@ paths:
         - in: body
           name: body
           schema:
-            '$ref': '#/definitions/Model2'
+            $ref: '#/definitions/Model5'
       tags:
         - bff
       responses:
@@ -305,7 +267,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/stops/nearest':
+  /bff/v1/stops/nearest:
     get:
       summary: Find stops near coordinates
       operationId: getBffV1StopsNearest
@@ -328,6 +290,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   '/bff/v1/quay/{id}/departures':
     get:
       summary: Get departures from Quay
@@ -379,9 +342,9 @@ paths:
           description: Successful
   '/bff/v1/stop/{id}/departures':
     get:
-      summary:
-        'Get departures from StopPlace. Deprecated: Use POST
-        /v1/departures-from-location instead'
+      summary: >-
+        Get departures from StopPlace. Deprecated: Use POST
+        /v1/departures-from-location instead
       operationId: getBffV1StopIdDepartures
       parameters:
         - type: string
@@ -429,7 +392,7 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/departures-from-location':
+  /bff/v1/departures-from-location:
     post:
       summary: Get departures from feature location
       operationId: postBffV1Departuresfromlocation
@@ -453,7 +416,7 @@ paths:
         - in: body
           name: body
           schema:
-            '$ref': '#/definitions/Model1'
+            $ref: '#/definitions/Model1'
       tags:
         - bff
       responses:
@@ -461,8 +424,8 @@ paths:
           schema:
             type: string
           description: Successful
-
-  '/bff/v1/departures-from-location-paging':
+      deprecated: true
+  /bff/v1/departures-from-location-paging:
     post:
       summary: Get departures from feature location
       operationId: postBffV1Departuresfromlocationpaging
@@ -473,6 +436,7 @@ paths:
           in: query
         - type: string
           format: date
+          default: '2020-12-07T13:56:39.320Z'
           name: startTime
           in: query
         - type: number
@@ -496,7 +460,7 @@ paths:
         - in: body
           name: body
           schema:
-            '$ref': '#/definitions/Model1'
+            $ref: '#/definitions/Model1'
       tags:
         - bff
       responses:
@@ -504,7 +468,40 @@ paths:
           schema:
             type: string
           description: Successful
-  '/bff/v1/enrollment/group':
+      deprecated: true
+  /bff/v1/departures-grouped:
+    post:
+      summary: Get departures grouped on lines from feature location
+      operationId: postBffV1Departuresgrouped
+      parameters:
+        - type: number
+          default: 5
+          name: limitPerLine
+          in: query
+        - type: string
+          format: date
+          default: '2020-12-07T13:56:39.338Z'
+          name: startTime
+          in: query
+        - type: number
+          default: 3
+          name: pageSize
+          in: query
+        - type: string
+          name: cursor
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Model4'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v1/enrollment/group:
     post:
       summary: Enroll in beta groups with invite key
       operationId: postBffV1EnrollmentGroup
@@ -536,7 +533,46 @@ definitions:
       id:
         type: string
       coordinates:
-        '$ref': '#/definitions/coordinates'
+        $ref: '#/definitions/coordinates'
+  Model2:
+    type: object
+    properties:
+      layer:
+        type: string
+        enum:
+          - override: true
+          - venue
+      id:
+        type: string
+  Model3:
+    type: object
+    properties:
+      stopId:
+        type: string
+      lineName:
+        type: string
+      lineId:
+        type: string
+    required:
+      - stopId
+      - lineName
+      - lineId
+  favorites:
+    type: array
+    items:
+      $ref: '#/definitions/Model3'
+  Model4:
+    type: object
+    properties:
+      location:
+        $ref: '#/definitions/Model2'
+        x-alternatives:
+          - $ref: '#/x-alt-definitions/location'
+          - $ref: '#/x-alt-definitions/Model1'
+      favorites:
+        $ref: '#/definitions/favorites'
+    required:
+      - location
   from:
     type: object
     properties:
@@ -546,7 +582,7 @@ definitions:
         type: string
         default: UNKNOWN
       coordinates:
-        '$ref': '#/definitions/coordinates'
+        $ref: '#/definitions/coordinates'
   modes:
     type: array
     default:
@@ -559,13 +595,13 @@ definitions:
       - air
     items:
       type: string
-  Model2:
+  Model5:
     type: object
     properties:
       from:
-        '$ref': '#/definitions/from'
+        $ref: '#/definitions/from'
       to:
-        '$ref': '#/definitions/from'
+        $ref: '#/definitions/from'
       searchDate:
         type: string
         format: date
@@ -576,7 +612,7 @@ definitions:
         type: number
         default: 30
       modes:
-        '$ref': '#/definitions/modes'
+        $ref: '#/definitions/modes'
       limit:
         type: number
         default: 10
@@ -586,3 +622,31 @@ definitions:
     required:
       - from
       - to
+x-alt-definitions:
+  location:
+    type: object
+    properties:
+      layer:
+        type: string
+        enum:
+          - override: true
+          - venue
+      id:
+        type: string
+  coordinates:
+    type: object
+    properties:
+      longitude:
+        type: number
+      latitude:
+        type: number
+  Model1:
+    type: object
+    properties:
+      layer:
+        type: string
+        enum:
+          - override: true
+          - address
+      coordinates:
+        $ref: '#/x-alt-definitions/coordinates'

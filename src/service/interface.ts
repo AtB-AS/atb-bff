@@ -8,6 +8,7 @@ import {
   StopPlaceDetails,
   TripPattern
 } from '@entur/sdk';
+import { DepartureGroupMetadata } from './impl/stops/departure-group';
 import {
   APIError,
   DeparturesBetweenStopPlacesParams,
@@ -31,7 +32,9 @@ import {
   DeparturesMetadata,
   DeparturesRealtimeData,
   DepartureRealtimeQuery,
-  DeparturesFromLocationPagingQuery
+  DeparturesFromLocationPagingQuery,
+  DepartureGroupsQuery,
+  DepartureGroupsPayload
 } from './types';
 
 export interface IGeocoderService {
@@ -43,6 +46,17 @@ export interface IGeocoderService {
 }
 
 export interface IStopsService {
+  getDeparturesGrouped(
+    location: DepartureGroupsPayload,
+    query: DepartureGroupsQuery
+  ): Promise<Result<DepartureGroupMetadata, APIError>>;
+
+  getDepartureRealtime(
+    query: DepartureRealtimeQuery
+  ): Promise<Result<DeparturesRealtimeData, APIError>>;
+
+  // @TODO Deprecate all
+
   getDepartures(
     location: FeatureLocation,
     query: DeparturesFromLocationQuery
@@ -52,10 +66,6 @@ export interface IStopsService {
     location: FeatureLocation,
     query: DeparturesFromLocationPagingQuery
   ): Promise<Result<DeparturesMetadata, APIError>>;
-
-  getDepartureRealtime(
-    query: DepartureRealtimeQuery
-  ): Promise<Result<DeparturesRealtimeData, APIError>>;
 
   // @TODO Deprecate all these
   getNearestDepartures(
