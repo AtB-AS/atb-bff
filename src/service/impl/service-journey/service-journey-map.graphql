@@ -1,0 +1,19 @@
+query MapInfoByServiceJourneyId(
+  $serviceJourneyId: String!
+  $currentQuayId: String!
+) {
+  serviceJourney(id: $serviceJourneyId) {
+    pointsOnLink {
+      length
+      points
+    }
+    line {
+      transportMode
+      transportSubmode
+    }
+  }
+  quay(id: $currentQuayId) {
+    latitude
+    longitude
+  }
+}

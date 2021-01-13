@@ -174,6 +174,10 @@ export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
 
+export interface ServiceJourneyMapInfoQuery {
+  currentQuayId: string;
+}
+
 export interface DeparturesBetweenStopPlacesParams {
   limit?: number;
   start?: Date;
@@ -238,6 +242,8 @@ export type DepartureRealtimeData = {
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
+
+export type ServiceJourneyMapInfoData = {};
 
 export class APIError extends Error {
   public statusCode?: number = 500;

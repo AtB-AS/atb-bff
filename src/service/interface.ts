@@ -34,7 +34,9 @@ import {
   DepartureRealtimeQuery,
   DeparturesFromLocationPagingQuery,
   DepartureGroupsQuery,
-  DepartureGroupsPayload
+  DepartureGroupsPayload,
+  ServiceJourneyMapInfoQuery,
+  ServiceJourneyMapInfoData
 } from './types';
 
 export interface IGeocoderService {
@@ -43,6 +45,13 @@ export interface IGeocoderService {
   getFeaturesReverse(
     query: ReverseFeaturesQuery
   ): Promise<Result<Feature[], APIError>>;
+}
+
+export interface IServiceJourneyService {
+  getServiceJourneyMapInfo(
+    serviceJouerneyId: string,
+    query: ServiceJourneyMapInfoQuery
+  ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
 }
 
 export interface IStopsService {
