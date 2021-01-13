@@ -39,6 +39,10 @@ export type FeaturesQuery = {
   layers?: string[];
   tariff_zone_authorities?: string;
   limit?: number;
+
+  'focus.weight'?: number;
+  'focus.function'?: 'linear' | 'exp';
+  'focus.scale'?: 'string';
 };
 
 export interface QuaysForStopPlaceQuery {
