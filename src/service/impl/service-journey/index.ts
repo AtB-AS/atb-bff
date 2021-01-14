@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { GraphQLClient } from '../../../graphql/graphql-client';
+import client from '../../../graphql/graphql-client';
 import { IServiceJourneyService } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
 import {
@@ -8,7 +8,7 @@ import {
   MapInfoByServiceJourneyIdQueryVariables
 } from './service-journey-map.graphql-gen';
 
-export default (client: GraphQLClient): IServiceJourneyService => {
+export default function serviceJourneyService(): IServiceJourneyService {
   return {
     async getServiceJourneyMapInfo(
       serviceJourneyId: string,
@@ -37,4 +37,4 @@ export default (client: GraphQLClient): IServiceJourneyService => {
       }
     }
   };
-};
+}
