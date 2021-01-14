@@ -62,11 +62,14 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
     server.ext('onPreResponse', (request, h, err) => {
       if (request.response instanceof Boom) {
         request.logfmt.with({ err: request.response.message });
+        request.logfmt.with({ stackTrace: request.response.stack });
       }
       return h.continue;
     });
     server.events.on('response', request => {
-      request.logfmt.with({ code: request.raw.res.statusCode.toString() });
+      if (request.raw.res && request.raw.res.statusCode) {
+        request.logfmt.with({ code: request.raw.res.statusCode.toString() });
+      }
       request.logfmt.log();
     });
   },
