@@ -7,6 +7,7 @@ import {
   MapInfoByServiceJourneyIdQuery,
   MapInfoByServiceJourneyIdQueryVariables
 } from './service-journey-map.graphql-gen';
+import { mapToMapLegs } from './utils';
 
 export default function serviceJourneyService(): IServiceJourneyService {
   return {
@@ -31,7 +32,7 @@ export default function serviceJourneyService(): IServiceJourneyService {
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
-        return Result.ok(result.data);
+        return Result.ok(mapToMapLegs(result.data));
       } catch (error) {
         return Result.err(new APIError(error));
       }
