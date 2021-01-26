@@ -6,7 +6,8 @@ import {
   StopPlaceDetails,
   Quay,
   Departure,
-  LegMode
+  LegMode,
+  PointsOnLink
 } from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
@@ -245,13 +246,18 @@ export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
 
-export type MapLegs = {
+export type MapLeg = {
   mode?: LegMode;
+  faded?: boolean;
   transportSubmode?: TransportSubmode;
-  legsPolylines: string[];
+  pointsOnLink: PointsOnLink;
 };
 
-export type ServiceJourneyMapInfoData = MapLegs;
+export type ServiceJourneyMapInfoData = {
+  mapLegs: MapLeg[];
+  start?: Coordinates;
+  stop?: Coordinates;
+};
 
 export class APIError extends Error {
   public statusCode?: number = 500;

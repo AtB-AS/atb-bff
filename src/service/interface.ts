@@ -52,6 +52,11 @@ export interface IServiceJourneyService {
     serviceJouerneyId: string,
     query: ServiceJourneyMapInfoQuery
   ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
+
+  getDeparturesForServiceJourney(
+    id: string,
+    query: DeparturesForServiceJourneyQuery
+  ): Promise<Result<EstimatedCall[] | null, APIError>>;
 }
 
 export interface IStopsService {
@@ -92,11 +97,6 @@ export interface IStopsService {
   getStopPlacesByPosition(
     query: StopPlaceQuery
   ): Promise<Result<StopPlace[], APIError>>;
-
-  getDeparturesForServiceJourney(
-    id: string,
-    query: DeparturesForServiceJourneyQuery
-  ): Promise<Result<EstimatedCall[] | null, APIError>>;
 
   getDeparturesFromStopPlace(
     id: string,

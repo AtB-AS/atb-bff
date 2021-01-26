@@ -236,21 +236,6 @@ export default (service: EnturService, pubSubClient: PubSub): IStopsService => {
         }
         return Result.err(new APIError(error));
       }
-    },
-    async getDeparturesForServiceJourney(id, { date }) {
-      try {
-        const departures = await service.getDeparturesForServiceJourney(
-          id,
-          date ? formatISO(date, { representation: 'date' }) : undefined
-        );
-
-        return Result.ok(departures);
-      } catch (error) {
-        const re = /Entur SDK: No data available/;
-        if (error.message.match(re)) return Result.ok(null);
-
-        return Result.err(new APIError(error));
-      }
     }
   };
 

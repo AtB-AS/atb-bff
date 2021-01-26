@@ -1,17 +1,19 @@
+import { Coordinates } from '@entur/sdk';
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
-import { MapLegs } from '../../types';
+import { MapLeg, ServiceJourneyMapInfoData } from '../../types';
 import { MapInfoByServiceJourneyIdQuery } from './service-journey-map.graphql-gen';
 
 type PolylinePair = [lat: number, lng: number];
 
-const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 20;
+const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 3;
 
-export function mapToMapLegs(data: MapInfoByServiceJourneyIdQuery): MapLegs {
-  const item: MapLegs = {
+export function mapToMapLegs(
+  data: MapInfoByServiceJourneyIdQuery
+): ServiceJourneyMapInfoData {
+  const baseItem = {
     mode: data.serviceJourney?.line.transportMode,
-    transportSubmode: data.serviceJourney?.line.transportSubmode,
-    legsPolylines: []
+    transportSubmode: data.serviceJourney?.line.transportSubmode
   };
   const quayCoordinates: PolylinePair = [
     data.quay?.latitude ?? 0,
@@ -22,42 +24,61 @@ export function mapToMapLegs(data: MapInfoByServiceJourneyIdQuery): MapLegs {
     data.serviceJourney?.pointsOnLink?.points ?? ''
   );
 
-  const splitIndex = coordinates.findIndex(c =>
-    arrayEquals(c, quayCoordinates)
+  const splitIndex = coordinates.findIndex(
+    c =>
+      haversineDistance(c, quayCoordinates) <=
+      COORDINATE_DISTANCE_THRESHOLD_IN_METERS
   );
 
-  if (splitIndex) {
-    return {
-      ...item,
-      legsPolylines: [
-        polyline.encode(coordinates.slice(0, splitIndex)),
-        polyline.encode(coordinates.slice(splitIndex))
-      ]
-    };
+  let mapLegs: MapLeg[] = [];
+  if (splitIndex >= 0) {
+    const first = coordinates.slice(0, splitIndex);
+    const second = coordinates.slice(splitIndex);
+    mapLegs = [
+      {
+        ...baseItem,
+        faded: true,
+        pointsOnLink: {
+          length: first.length,
+          points: polyline.encode(first)
+        }
+      },
+      {
+        ...baseItem,
+        faded: false,
+        pointsOnLink: {
+          length: second.length,
+          points: polyline.encode(second)
+        }
+      }
+    ];
+  } else {
+    mapLegs = [
+      {
+        ...baseItem,
+        faded: false,
+        pointsOnLink: {
+          length: coordinates.length,
+          points: polyline.encode(coordinates)
+        }
+      }
+    ];
   }
 
-  let legsPolylines = [];
-  let current: PolylinePair[] = [];
-  for (let coords of coordinates) {
-    if (
-      haversineDistance(coords, quayCoordinates) <=
-      COORDINATE_DISTANCE_THRESHOLD_IN_METERS
-    ) {
-      legsPolylines.push(polyline.encode(current));
-      current = [coords];
-    } else {
-      current.push(coords);
-    }
-  }
-  legsPolylines.push(polyline.encode(current));
-  return { ...item, legsPolylines };
+  return {
+    start: polypairToCoordinates(coordinates[0]),
+    stop: polypairToCoordinates(coordinates[coordinates.length - 1]),
+    mapLegs
+  };
 }
 
-function arrayEquals<T>(a: T[], b: T[]) {
-  return (
-    Array.isArray(a) &&
-    Array.isArray(b) &&
-    a.length === b.length &&
-    a.every((val, index) => val === b[index])
-  );
+function polypairToCoordinates(
+  position?: PolylinePair
+): Coordinates | undefined {
+  if (!position) return position;
+  const [latitude, longitude] = position;
+  return {
+    latitude,
+    longitude
+  };
 }
