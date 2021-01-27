@@ -58,6 +58,7 @@ export function mapToMapLegs(
   }
 
   const before = splitIndexFrom < 0 ? [] : coordinates.slice(0, splitIndexFrom);
+  // mainLeg should include quay also, so splitIndex - 1.
   const mainLeg = coordinates.slice(
     splitIndexFrom < 0 ? 0 : splitIndexFrom - 1,
     splitIndexTo < 0 ? coordinates.length : splitIndexTo
