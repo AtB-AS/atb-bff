@@ -1,6 +1,7 @@
 query MapInfoByServiceJourneyId(
   $serviceJourneyId: String!
-  $currentQuayId: String!
+  $fromQuayId: String!
+  $toQuayId: String!
 ) {
   serviceJourney(id: $serviceJourneyId) {
     pointsOnLink {
@@ -12,7 +13,11 @@ query MapInfoByServiceJourneyId(
       transportSubmode
     }
   }
-  quay(id: $currentQuayId) {
+  fromQuay: quay(id: $fromQuayId) {
+    latitude
+    longitude
+  }
+  toQuay: quay(id: $toQuayId) {
     latitude
     longitude
   }

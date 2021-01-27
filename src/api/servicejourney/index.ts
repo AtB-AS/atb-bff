@@ -25,8 +25,8 @@ export default function serviceJourneyRoutes(server: Hapi.Server) {
     server.method('getServiceJourneyMapInfo', getServiceJourneyMapInfo, {
       generateKey: (
         serviceJouerneyId: string,
-        { currentQuayId }: ServiceJourneyMapInfoQuery
-      ) => qs.stringify({ serviceJouerneyId, currentQuayId }),
+        { fromQuayId, toQuayId }: ServiceJourneyMapInfoQuery
+      ) => qs.stringify({ serviceJouerneyId, fromQuayId, toQuayId }),
       cache: {
         expiresIn: DEFAULT_CACHE_TTL,
         generateTimeout: EXTERNAL_API_TIMEOUT

@@ -5,7 +5,8 @@ export const getServiceJoruneyMapDataRequest = {
     id: Joi.string().required()
   }).required(),
   query: Joi.object({
-    currentQuayId: Joi.string()
+    fromQuayId: Joi.string(),
+    toQuayId: Joi.string()
   })
 };
 

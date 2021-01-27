@@ -178,7 +178,8 @@ export interface DeparturesForServiceJourneyQuery {
 }
 
 export interface ServiceJourneyMapInfoQuery {
-  currentQuayId: string;
+  fromQuayId?: string;
+  toQuayId?: string;
 }
 
 export interface DeparturesBetweenStopPlacesParams {

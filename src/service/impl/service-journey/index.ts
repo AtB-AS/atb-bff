@@ -22,8 +22,10 @@ export default function serviceJourneyService(
       try {
         const variables: MapInfoByServiceJourneyIdQueryVariables = {
           serviceJourneyId,
-          currentQuayId: query.currentQuayId
+          fromQuayId: query.fromQuayId ?? '',
+          toQuayId: query.toQuayId ?? ''
         };
+
         const result = await client.query<
           MapInfoByServiceJourneyIdQuery,
           MapInfoByServiceJourneyIdQueryVariables
