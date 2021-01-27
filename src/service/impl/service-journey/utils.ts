@@ -57,11 +57,12 @@ export function mapToMapLegs(
     return defaultValue;
   }
 
-  const before = splitIndexFrom < 0 ? [] : coordinates.slice(0, splitIndexFrom);
-  // mainLeg should include quay also, so splitIndex - 1.
+  // before should also include quay.
+  const before =
+    splitIndexFrom < 0 ? [] : coordinates.slice(0, splitIndexFrom + 1);
   const mainLeg = coordinates.slice(
-    splitIndexFrom < 0 ? 0 : splitIndexFrom - 1,
-    splitIndexTo < 0 ? coordinates.length : splitIndexTo
+    splitIndexFrom < 0 ? 0 : splitIndexFrom,
+    splitIndexTo < 0 ? coordinates.length : splitIndexTo + 1
   );
   const after = splitIndexTo < 0 ? [] : coordinates.slice(splitIndexTo);
 
