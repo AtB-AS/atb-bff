@@ -1,4 +1,4 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { DefaultOptions } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
@@ -35,3 +35,5 @@ export default new ApolloClient({
   cache,
   defaultOptions
 });
+
+export type GraphQLClient = ApolloClient<NormalizedCacheObject>;

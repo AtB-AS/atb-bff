@@ -5,11 +5,14 @@ import {
   Feature,
   StopPlaceDetails,
   Quay,
-  Departure
+  Departure,
+  LegMode,
+  PointsOnLink
 } from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 import { CursoredQuery } from './cursored';
+import { TransportSubmode } from '../graphql/types';
 
 export interface Coordinates {
   latitude: number;
@@ -174,6 +177,11 @@ export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
 
+export interface ServiceJourneyMapInfoQuery {
+  fromQuayId?: string;
+  toQuayId?: string;
+}
+
 export interface DeparturesBetweenStopPlacesParams {
   limit?: number;
   start?: Date;
@@ -237,6 +245,19 @@ export type DepartureRealtimeData = {
 
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
+};
+
+export type MapLeg = {
+  mode?: LegMode;
+  faded?: boolean;
+  transportSubmode?: TransportSubmode;
+  pointsOnLink: PointsOnLink;
+};
+
+export type ServiceJourneyMapInfoData = {
+  mapLegs: MapLeg[];
+  start?: Coordinates;
+  stop?: Coordinates;
 };
 
 export class APIError extends Error {

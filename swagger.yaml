@@ -340,6 +340,28 @@ paths:
           schema:
             type: string
           description: Successful
+  '/bff/v1/servicejourney/{id}/polyline':
+    get:
+      summary: Get departures for Service Journey
+      operationId: getBffV1ServicejourneyIdPolyline
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          name: fromQuayId
+          in: query
+        - type: string
+          name: toQuayId
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   '/bff/v1/stop/{id}/departures':
     get:
       summary: >-
@@ -436,7 +458,7 @@ paths:
           in: query
         - type: string
           format: date
-          default: '2020-12-07T13:56:39.320Z'
+          default: '2021-01-27T09:48:19.330Z'
           name: startTime
           in: query
         - type: number
@@ -480,7 +502,7 @@ paths:
           in: query
         - type: string
           format: date
-          default: '2020-12-07T13:56:39.338Z'
+          default: '2021-01-27T09:48:19.354Z'
           name: startTime
           in: query
         - type: number
