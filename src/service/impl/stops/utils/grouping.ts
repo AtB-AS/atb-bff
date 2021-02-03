@@ -1,4 +1,5 @@
 import groupBy from 'lodash.groupby';
+import sortBy from 'lodash.sortby';
 import {
   ReportType,
   TransportMode,
@@ -169,7 +170,10 @@ export default function mapQueryToGroups(
 
     return {
       stopPlace: stopPlaceInfo,
-      quays: quayGroups
+      quays: sortBy(quayGroups, [
+        group => group.quay.publicCode,
+        group => group.quay.id
+      ])
     };
   });
 }
