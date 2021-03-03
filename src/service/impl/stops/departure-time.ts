@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import client from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import {
   APIError,
   DepartureRealtimeData,
@@ -11,7 +11,7 @@ import {
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
   GetDepartureRealtimeQueryVariables
-} from './departure-time.graphql-gen';
+} from './journey-gql/departure-time.graphql-gen';
 
 const createVariables = (
   query: DepartureRealtimeQuery
@@ -33,7 +33,7 @@ export async function populateCacheIfNotThere(
 
     if (previousResult) return;
 
-    await client.query<
+    await journeyPlannerClient.query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
@@ -50,7 +50,7 @@ export async function getRealtimeDepartureTime(
   try {
     const variables = createVariables(inputQuery);
     const previousResult = getPreviousExpectedFromCache(variables);
-    const result = await client.query<
+    const result = await journeyPlannerClient.query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
@@ -132,7 +132,7 @@ function getPreviousExpectedFromCache(
   variables: GetDepartureRealtimeQueryVariables
 ) {
   try {
-    const result = client.readQuery<
+    const result = journeyPlannerClient.readQuery<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({

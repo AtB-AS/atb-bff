@@ -1,5 +1,8 @@
 import polyline from '@mapbox/polyline';
-import { TransportMode, TransportSubmode } from '../../../../graphql/types';
+import {
+  TransportMode,
+  TransportSubmode
+} from '../../../../graphql/journey-types';
 import { MapLeg } from '../../../types';
 import { mapToMapLegs } from '../utils';
 

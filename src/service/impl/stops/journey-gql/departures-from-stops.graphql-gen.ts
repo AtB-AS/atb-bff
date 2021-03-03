@@ -1,4 +1,4 @@
-import * as Types from '../../../graphql/types';
+import * as Types from '../../../../graphql/journey-types';
 
 import gql from 'graphql-tag';
 

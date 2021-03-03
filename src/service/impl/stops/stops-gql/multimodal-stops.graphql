@@ -1,0 +1,10 @@
+query QuaysInMultimodal($stopId: String!) {
+  stopPlace(id: $stopId) {
+    ... on ParentStopPlace {
+      id
+      children {
+        id
+      }
+    }
+  }
+}

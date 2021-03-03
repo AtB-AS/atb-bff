@@ -4,9 +4,9 @@ import {
   ReportType,
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/types';
+} from '../../../../graphql/journey-types';
 import { FavoriteDeparture } from '../../../types';
-import { GroupsByIdQuery } from '../departure-group.graphql-gen';
+import { GroupsByIdQuery } from '../journey-gql/departure-group.graphql-gen';
 
 type Notice = { text?: string };
 type Situation = {

@@ -59,6 +59,10 @@ export type QueryType = {
   serviceJourney?: Maybe<ServiceJourney>;
   /** Get all service journeys */
   serviceJourneys: Array<Maybe<ServiceJourney>>;
+  /** Get a single dated service journey based on its id */
+  datedServiceJourney?: Maybe<DatedServiceJourney>;
+  /** List dated service journeys */
+  datedServiceJourneys: Array<Maybe<DatedServiceJourney>>;
   /** Get all bike rental stations */
   bikeRentalStations: Array<Maybe<BikeRentalStation>>;
   /** Get a single bike rental station based on its id */
@@ -239,6 +243,20 @@ export type QueryTypeServiceJourneysArgs = {
   lines?: Maybe<Array<Maybe<Scalars['String']>>>;
   privateCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
   activeDates?: Maybe<Array<Maybe<Scalars['Date']>>>;
+  authorities?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+
+export type QueryTypeDatedServiceJourneyArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryTypeDatedServiceJourneysArgs = {
+  lines?: Maybe<Array<Maybe<Scalars['String']>>>;
+  serviceJourneys?: Maybe<Array<Maybe<Scalars['String']>>>;
+  operatingDays?: Maybe<Array<Maybe<Scalars['Date']>>>;
+  alterations?: Maybe<Array<Maybe<ServiceAlteration>>>;
   authorities?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
@@ -429,6 +447,8 @@ export type Leg = {
   toEstimatedCall?: Maybe<EstimatedCall>;
   /** For ride legs, the line. For non-ride legs, null. */
   line?: Maybe<Line>;
+  /** For ride legs, the dated service journey if it exist in planned data. If not, null. */
+  datedServiceJourney?: Maybe<DatedServiceJourney>;
   /** For ride legs, the service journey. For non-ride legs, null. */
   serviceJourney?: Maybe<ServiceJourney>;
   /** For ride legs, intermediate quays between the Place where the leg originates and the Place where the leg ends. For non-ride legs, empty list. */
@@ -982,6 +1002,7 @@ export type PtSituationElement = {
   organisation?: Maybe<Organisation>;
   lines: Array<Maybe<Line>>;
   serviceJourneys: Array<Maybe<ServiceJourney>>;
+  datedServiceJourneys: Array<Maybe<DatedServiceJourney>>;
   quays: Array<Maybe<Quay>>;
   stopPlaces: Array<Maybe<StopPlace>>;
   /** Get all journey patterns for this situation element */
@@ -1275,8 +1296,12 @@ export type DestinationDisplay = {
 export type ServiceJourney = {
   id: Scalars['ID'];
   line: Line;
+  /** Return a list of operating/service days a ServiceJourney run on. Cancellation/replaced alterations is not included. */
   activeDates: Array<Maybe<Scalars['Date']>>;
-  /** Whether journey is as planned, a cancellation or an extra journey. Default is as planned */
+  /**
+   * For a Whether journey is as planned, a cancellation, an extra journey or replaced.
+   * @deprecated The service-alteration might be different for each service day, so this method is not always giving the correct result. This method will return 'null' if there is a mix of different alterations.
+   */
   serviceAlteration?: Maybe<ServiceAlteration>;
   /** The transport submode of the journey, if different from lines transport submode. */
   transportSubmode?: Maybe<TransportSubmode>;
@@ -1539,6 +1564,20 @@ export type Organisation = {
   fareUrl?: Maybe<Scalars['String']>;
   lines: Array<Maybe<Line>>;
   /** Get all situations active for the organisation */
+  situations: Array<Maybe<PtSituationElement>>;
+};
+
+/** A planned vehicle journey with passengers on a given date. */
+export type DatedServiceJourney = {
+  id: Scalars['ID'];
+  /** Return the operating/service day the ServiceJourney run on. */
+  operatingDay: Scalars['Date'];
+  /** Whether journey is as planned, a cancellation, an extra journey or replaced. */
+  serviceAlteration?: Maybe<ServiceAlteration>;
+  serviceJourney: ServiceJourney;
+  /** The DatedServiceJourney replaced by this DSJ. This is based on planed alterations, not real-time cancelations. */
+  replacementFor?: Maybe<DatedServiceJourney>;
+  /** Get all situations active for the DatedServiceJourney */
   situations: Array<Maybe<PtSituationElement>>;
 };
 
