@@ -1,8 +1,5 @@
 import { Result } from '@badrap/result';
-import {
-  journeyPlannerClient,
-  stopPlacesClient
-} from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import {
   APIError,
@@ -21,11 +18,6 @@ import {
   QuayIdInStopsQuery,
   QuayIdInStopsQueryVariables
 } from './journey-gql/departure-group.graphql-gen';
-import {
-  QuaysInMultimodalDocument,
-  QuaysInMultimodalQuery,
-  QuaysInMultimodalQueryVariables
-} from './stops-gql/multimodal-stops.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;
@@ -130,7 +122,7 @@ export async function getDeparturesGrouped(
   options: DepartureGroupsQuery,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
-  let ids = await multiModalStopsToNormalStops(Array.isArray(id) ? id : [id]);
+  let ids = Array.isArray(id) ? id : [id];
 
   const variables: GroupsByIdQueryVariables = {
     ids,
@@ -159,37 +151,4 @@ export async function getDeparturesGrouped(
   } catch (error) {
     return Result.err(new APIError(error));
   }
-}
-
-async function multiModalStopsToNormalStops(ids: string[]) {
-  // Some stops can be multi modal, meaningstops can have children
-  // stops which again has quays. This checks if given stop is multimodal
-  // and if it is, fetch all other stops that are
-  // children of that stop place _or_ the parent stop place..
-  const expandedMultiModalStops = await Promise.all(
-    ids.map(async function (stopId) {
-      const potentialChildrenResult = await stopPlacesClient.query<
-        QuaysInMultimodalQuery,
-        QuaysInMultimodalQueryVariables
-      >({
-        query: QuaysInMultimodalDocument,
-        variables: { stopId }
-      });
-
-      // If no data or error, just treat it as normal stop place.
-      // Data will stil show but not perfectly.
-      const data = potentialChildrenResult.data?.stopPlace;
-      if (potentialChildrenResult.errors || !data) {
-        return [stopId];
-      }
-
-      // Find all children or just default to itself.
-      const ret = (data[0]?.children
-        ?.map(c => c.id)
-        .filter(Boolean) as string[]) ?? [stopId];
-      return ret;
-    })
-  );
-
-  return expandedMultiModalStops.flat();
 }

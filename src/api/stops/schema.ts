@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { DepartureGroupsQuery } from '../../service/types';
 
 const ONE_MINUTE = 60 * 1000;

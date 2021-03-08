@@ -34,7 +34,7 @@ export function mapToMapLegs(
         ...baseItem,
         faded: false,
         pointsOnLink: data.serviceJourney?.pointsOnLink as PointsOnLink
-      }
+      } as MapLeg
     ]
   };
 
@@ -71,14 +71,14 @@ export function mapToMapLegs(
     faded: boolean
   ): MapLeg | undefined =>
     item.length
-      ? {
+      ? ({
           ...baseItem,
           faded,
           pointsOnLink: {
             length: item.length,
             points: polyline.encode(item)
           }
-        }
+        } as MapLeg)
       : undefined;
   const mapLegs: MapLeg[] = [
     itemIfDefined(before, true),

@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { TripPattern } from '@entur/sdk';
 import { TripPatternsQuery, TripPatternQuery } from '../service/types';
 import {

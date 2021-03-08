@@ -18,10 +18,6 @@ generates:
       extension: .graphql-gen.ts
       baseTypesPath: graphql/journey-types.ts
     config:
-      withHooks: false
-      withComponent: false
-      withHOC: false
-      withResultType: false
       skipTypename: true
       # This causes some types to be wrong (e.g. in departure query dates are any type)
       # but it makes using the types waay easier. Necessary evil in my mind.
@@ -32,7 +28,7 @@ generates:
       maybeValue: T
     plugins:
       - 'typescript-operations'
-      - 'typescript-react-apollo'
+      - 'typescript-generic-sdk'
   src/graphql/stops-types.ts:
     documents: ./src/**/stops-gql/*.graphql
     schema: 'https://api.entur.io/stop-places/v1/graphql'
@@ -51,10 +47,6 @@ generates:
       extension: .graphql-gen.ts
       baseTypesPath: ../graphql/stops-types.ts
     config:
-      withHooks: false
-      withComponent: false
-      withHOC: false
-      withResultType: false
       skipTypename: true
       # This causes some types to be wrong (e.g. in departure query dates are any type)
       # but it makes using the types waay easier. Necessary evil in my mind.
@@ -65,4 +57,4 @@ generates:
       maybeValue: T
     plugins:
       - 'typescript-operations'
-      - 'typescript-react-apollo'
+      - 'typescript-generic-sdk'

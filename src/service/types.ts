@@ -43,6 +43,8 @@ export type FeaturesQuery = {
   tariff_zone_authorities?: string;
   limit?: number;
 
+  multiModal: 'parent' | 'child' | 'all';
+
   'focus.weight'?: number;
   'focus.function'?: 'linear' | 'exp';
   'focus.scale'?: 'string';

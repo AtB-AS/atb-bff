@@ -1,9 +1,9 @@
 import * as Types from '../../../../graphql/journey-types';
 
+import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-
 export type GetDepartureRealtimeQueryVariables = Types.Exact<{
-  quayIds: Array<Types.Maybe<Types.Scalars['String']>>;
+  quayIds: Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>;
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limit: Types.Scalars['Int'];
@@ -32,9 +32,24 @@ export const GetDepartureRealtimeDocument = gql`
     query GetDepartureRealtime($quayIds: [String]!, $startTime: DateTime!, $timeRange: Int!, $limit: Int!) {
   quays(ids: $quayIds) {
     id
-    estimatedCalls(startTime: $startTime, numberOfDepartures: $limit, timeRange: $timeRange, omitNonBoarding: false, includeCancelledTrips: false) {
+    estimatedCalls(
+      startTime: $startTime
+      numberOfDepartures: $limit
+      timeRange: $timeRange
+      omitNonBoarding: false
+      includeCancelledTrips: false
+    ) {
       ...estimatedCall
     }
   }
 }
     ${EstimatedCallFragmentDoc}`;
+export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C>(requester: Requester<C>) {
+  return {
+    GetDepartureRealtime(variables: GetDepartureRealtimeQueryVariables, options?: C): Promise<GetDepartureRealtimeQuery> {
+      return requester<GetDepartureRealtimeQuery, GetDepartureRealtimeQueryVariables>(GetDepartureRealtimeDocument, variables, options);
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

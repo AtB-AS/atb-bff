@@ -2,7 +2,7 @@ import { Result } from '@badrap/result';
 import {
   convertPositionToBbox,
   Coordinates,
-  EstimatedCall,
+  Departure,
   Quay,
   StopPlaceDetails
 } from '@entur/sdk';
@@ -164,8 +164,8 @@ const mapToQuayObject = (
   for (let item of quays) {
     const { estimatedCalls, ...quay } = item;
     obj[item.id] = {
-      quay: quay as Quay,
-      departures: estimatedCalls as EstimatedCall[]
+      quay: (quay as unknown) as Quay,
+      departures: (estimatedCalls as unknown) as Departure[]
     };
   }
   return obj;
@@ -175,7 +175,7 @@ const mapToDeparturesWithStop = ({
   quays,
   ...stop
 }: StopDataInternal): DeparturesWithStop => ({
-  stop: stop as StopPlaceDetails,
+  stop: (stop as unknown) as StopPlaceDetails,
   quays: mapToQuayObject(quays)
 });
 

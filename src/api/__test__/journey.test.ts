@@ -100,6 +100,8 @@ describe('GET /bff/v1/journey/single-trip', () => {
       wheelchairAccessible: true
     };
     const pastTrip = {
+      expectedStartTime: '2020-05-14T20:02:00+0200',
+      expectedEndTime: '2020-05-14T20:02:00+0200',
       startTime: '2020-05-14T20:02:00+0200',
       endTime: '2020-05-14T20:07:05+0200',
       directDuration: 305,
@@ -107,7 +109,7 @@ describe('GET /bff/v1/journey/single-trip', () => {
       distance: 814.0718743106913,
       walkDistance: 81.07607692557397,
       legs: []
-    };
+    } as TripPattern;
     const id = generateId(pastTrip, pastQuery);
     const res = await server.inject({
       method: 'get',

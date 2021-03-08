@@ -1,9 +1,9 @@
 import { Result } from '@badrap/result';
-import { EnturService } from '@entur/sdk';
 import { formatISO } from 'date-fns';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { IServiceJourneyService } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
+import { EnturServiceAPI } from '../entur';
 import {
   MapInfoByServiceJourneyIdDocument,
   MapInfoByServiceJourneyIdQuery,
@@ -12,7 +12,7 @@ import {
 import { mapToMapLegs } from './utils';
 
 export default function serviceJourneyService(
-  service: EnturService
+  service: EnturServiceAPI
 ): IServiceJourneyService {
   return {
     async getServiceJourneyMapInfo(
