@@ -1,7 +1,2 @@
-projects:
-  journeyPlanner:
-    schema: 'https://api.entur.io/journey-planner/v2/graphql'
-    documents: 'src/**/journey-gql/*.{graphql,js,ts,jsx,tsx}'
-  stopPlaces:
-    schema: 'https://api.entur.io/stop-places/v1/graphql'
-    documents: 'src/**/stops-gql/*.{graphql,js,ts,jsx,tsx}'
+schema: 'https://api.entur.io/journey-planner/v2/graphql'
+documents: 'src/**/*.{graphql,js,ts,jsx,tsx'
