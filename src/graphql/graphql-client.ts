@@ -16,7 +16,6 @@ const defaultOptions: DefaultOptions = {
 };
 
 const urlJourneyPlanner = 'https://api.entur.io/journey-planner/v2/graphql';
-const urlStopPlaces = 'https://api.entur.io/stop-places/v1/graphql';
 
 function createClient(url: string) {
   const cache = new InMemoryCache();
@@ -41,6 +40,5 @@ function createClient(url: string) {
 }
 
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
-export const stopPlacesClient = createClient(urlStopPlaces);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;
