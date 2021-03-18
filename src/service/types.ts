@@ -12,7 +12,7 @@ import {
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 import { CursoredQuery } from './cursored';
-import { TransportSubmode } from '../graphql/types';
+import { TransportSubmode } from '../graphql/journey-types';
 
 export interface Coordinates {
   latitude: number;
@@ -42,6 +42,8 @@ export type FeaturesQuery = {
   layers?: string[];
   tariff_zone_authorities?: string;
   limit?: number;
+
+  multiModal: 'parent' | 'child' | 'all';
 
   'focus.weight'?: number;
   'focus.function'?: 'linear' | 'exp';

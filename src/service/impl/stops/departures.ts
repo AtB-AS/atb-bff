@@ -2,13 +2,13 @@ import { Result } from '@badrap/result';
 import {
   convertPositionToBbox,
   Coordinates,
-  EstimatedCall,
+  Departure,
   Quay,
   StopPlaceDetails
 } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
-import client from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import paginate from '../../pagination';
 import {
   APIError,
@@ -24,7 +24,7 @@ import {
   ByIdDocument,
   ByIdQuery,
   ByIdQueryVariables
-} from './departures-from-stops.graphql-gen';
+} from './journey-gql/departures-from-stops.graphql-gen';
 
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
@@ -40,7 +40,10 @@ export async function getDeparturesFromLocation(
     limit: options.limit
   };
 
-  const result = await client.query<ByBBoxQuery, ByBBoxQueryVariables>({
+  const result = await journeyPlannerClient.query<
+    ByBBoxQuery,
+    ByBBoxQueryVariables
+  >({
     query: ByBBoxDocument,
     variables
   });
@@ -76,7 +79,10 @@ export async function getDeparturesFromStops(
   id: string,
   options: DeparturesFromLocationPagingQuery
 ): Promise<Result<DeparturesMetadata, APIError>> {
-  const result = await client.query<ByIdQuery, ByIdQueryVariables>({
+  const result = await journeyPlannerClient.query<
+    ByIdQuery,
+    ByIdQueryVariables
+  >({
     query: ByIdDocument,
     variables: {
       ids: [id],
@@ -158,8 +164,8 @@ const mapToQuayObject = (
   for (let item of quays) {
     const { estimatedCalls, ...quay } = item;
     obj[item.id] = {
-      quay: quay as Quay,
-      departures: estimatedCalls as EstimatedCall[]
+      quay: (quay as unknown) as Quay,
+      departures: (estimatedCalls as unknown) as Departure[]
     };
   }
   return obj;
@@ -169,7 +175,7 @@ const mapToDeparturesWithStop = ({
   quays,
   ...stop
 }: StopDataInternal): DeparturesWithStop => ({
-  stop: stop as StopPlaceDetails,
+  stop: (stop as unknown) as StopPlaceDetails,
   quays: mapToQuayObject(quays)
 });
 

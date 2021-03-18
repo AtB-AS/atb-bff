@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import client from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import {
   APIError,
@@ -17,7 +17,7 @@ import {
   QuayIdInStopsDocument,
   QuayIdInStopsQuery,
   QuayIdInStopsQueryVariables
-} from './departure-group.graphql-gen';
+} from './journey-gql/departure-group.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;
@@ -30,7 +30,7 @@ export async function getDeparturesGroupedNearest(
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   let favoriteQuayIds: string[] | undefined = undefined;
   if (favorites?.length) {
-    const quayIdsResult = await client.query<
+    const quayIdsResult = await journeyPlannerClient.query<
       QuayIdInStopsQuery,
       QuayIdInStopsQueryVariables
     >({
@@ -81,7 +81,7 @@ export async function getDeparturesGroupedNearest(
       : undefined
   };
 
-  const result = await client.query<
+  const result = await journeyPlannerClient.query<
     GroupsByNearestQuery,
     GroupsByNearestQueryVariables
   >({
@@ -122,7 +122,7 @@ export async function getDeparturesGrouped(
   options: DepartureGroupsQuery,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
-  const ids = Array.isArray(id) ? id : [id];
+  let ids = Array.isArray(id) ? id : [id];
 
   const variables: GroupsByIdQueryVariables = {
     ids,
@@ -133,7 +133,10 @@ export async function getDeparturesGrouped(
     filterByLineIds: favorites?.map(f => f.lineId)
   };
 
-  const result = await client.query<GroupsByIdQuery, GroupsByIdQueryVariables>({
+  const result = await journeyPlannerClient.query<
+    GroupsByIdQuery,
+    GroupsByIdQueryVariables
+  >({
     query: GroupsByIdDocument,
     variables
   });

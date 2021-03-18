@@ -71,7 +71,8 @@ describe('GET /bff/v1/geocoder/features', () => {
     expect(svc.getFeatures).toBeCalledWith({
       lat: 63.43,
       lon: 10.34,
-      query: 'Trondheim'
+      query: 'Trondheim',
+      multiModal: 'child'
     });
   });
   it('responds with 400 for malformed queries', async () => {
@@ -92,7 +93,8 @@ describe('GET /bff/v1/geocoder/features', () => {
       lat: 63.43,
       lon: 10.34,
       query: 'Trondheim',
-      layers: ['venue', 'address']
+      layers: ['venue', 'address'],
+      multiModal: 'child'
     });
   });
 });

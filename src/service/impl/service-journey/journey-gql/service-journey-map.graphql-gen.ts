@@ -1,7 +1,7 @@
-import * as Types from '../../../graphql/types';
+import * as Types from '../../../../graphql/journey-types';
 
+import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-
 export type MapInfoByServiceJourneyIdQueryVariables = Types.Exact<{
   serviceJourneyId: Types.Scalars['String'];
   fromQuayId: Types.Scalars['String'];
@@ -34,3 +34,12 @@ export const MapInfoByServiceJourneyIdDocument = gql`
   }
 }
     `;
+export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C>(requester: Requester<C>) {
+  return {
+    MapInfoByServiceJourneyId(variables: MapInfoByServiceJourneyIdQueryVariables, options?: C): Promise<MapInfoByServiceJourneyIdQuery> {
+      return requester<MapInfoByServiceJourneyIdQuery, MapInfoByServiceJourneyIdQueryVariables>(MapInfoByServiceJourneyIdDocument, variables, options);
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

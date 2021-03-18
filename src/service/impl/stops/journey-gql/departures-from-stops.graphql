@@ -35,6 +35,7 @@ query ByBBox(
     minimumLongitude: $minLng
     maximumLatitude: $maxLat
     maximumLongitude: $maxLng
+    multiModalMode: child
   ) {
     ...stopPlaceFields
     quays(filterByInUse: true) {

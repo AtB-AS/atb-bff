@@ -2,7 +2,7 @@ import { Coordinates, PointsOnLink } from '@entur/sdk';
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
 import { MapLeg, ServiceJourneyMapInfoData } from '../../types';
-import { MapInfoByServiceJourneyIdQuery } from './service-journey-map.graphql-gen';
+import { MapInfoByServiceJourneyIdQuery } from './journey-gql/service-journey-map.graphql-gen';
 
 type PolylinePair = [lat: number, lng: number];
 
@@ -34,7 +34,7 @@ export function mapToMapLegs(
         ...baseItem,
         faded: false,
         pointsOnLink: data.serviceJourney?.pointsOnLink as PointsOnLink
-      }
+      } as MapLeg
     ]
   };
 
@@ -71,14 +71,14 @@ export function mapToMapLegs(
     faded: boolean
   ): MapLeg | undefined =>
     item.length
-      ? {
+      ? ({
           ...baseItem,
           faded,
           pointsOnLink: {
             length: item.length,
             points: polyline.encode(item)
           }
-        }
+        } as MapLeg)
       : undefined;
   const mapLegs: MapLeg[] = [
     itemIfDefined(before, true),

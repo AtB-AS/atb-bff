@@ -1,14 +1,14 @@
-import * as Types from '../../../graphql/types';
+import * as Types from '../../../../graphql/journey-types';
 
+import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-
 export type GroupsByIdQueryVariables = Types.Exact<{
-  ids?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
+  ids?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>>;
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
-  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
+  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>>;
 }>;
 
 
@@ -21,7 +21,7 @@ export type GroupsByIdQuery = { stopPlaces: Array<Types.Maybe<(
   )>> };
 
 export type QuayIdInStopsQueryVariables = Types.Exact<{
-  stopIds: Array<Types.Maybe<Types.Scalars['String']>>;
+  stopIds: Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
@@ -38,7 +38,7 @@ export type GroupsByNearestQueryVariables = Types.Exact<{
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
   filterInput?: Types.Maybe<Types.InputFilters>;
-  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>>>;
+  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>>;
 }>;
 
 
@@ -203,10 +203,26 @@ export const GroupsByIdDocument = gql`
     ...group_stopPlaceFields
     quays(filterByInUse: true) {
       ...group_quayFields
-      times: estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine, numberOfDepartures: $totalLimit, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
+      times: estimatedCalls(
+        startTime: $startTime
+        timeRange: $timeRange
+        numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
+        numberOfDepartures: $totalLimit
+        omitNonBoarding: false
+        includeCancelledTrips: false
+        whiteListed: {lines: $filterByLineIds}
+      ) {
         ...group_times_estimatedCallFields
       }
-      estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
+      estimatedCalls(
+        startTime: $startTime
+        timeRange: $timeRange
+        numberOfDepartures: $totalLimit
+        numberOfDeparturesPerLineAndDestinationDisplay: 1
+        omitNonBoarding: false
+        includeCancelledTrips: false
+        whiteListed: {lines: $filterByLineIds}
+      ) {
         ...group_estimatedCallFields
       }
     }
@@ -228,7 +244,17 @@ export const QuayIdInStopsDocument = gql`
     `;
 export const GroupsByNearestDocument = gql`
     query GroupsByNearest($lat: Float!, $lng: Float!, $distance: Int!, $startTime: DateTime!, $fromCursor: String, $pageSize: Int, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterInput: InputFilters, $filterByLineIds: [String]) {
-  nearest(latitude: $lat, longitude: $lng, after: $fromCursor, first: $pageSize, maximumDistance: $distance, filterByPlaceTypes: stopPlace, filterByInUse: true, filterByIds: $filterInput) {
+  nearest(
+    latitude: $lat
+    longitude: $lng
+    after: $fromCursor
+    first: $pageSize
+    maximumDistance: $distance
+    filterByPlaceTypes: stopPlace
+    filterByInUse: true
+    filterByIds: $filterInput
+    multiModalMode: child
+  ) {
     pageInfo {
       hasNextPage
       endCursor
@@ -242,10 +268,26 @@ export const GroupsByNearestDocument = gql`
             ...group_stopPlaceFields
             quays {
               ...group_quayFields
-              times: estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine, numberOfDepartures: $totalLimit, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
+              times: estimatedCalls(
+                startTime: $startTime
+                timeRange: $timeRange
+                numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
+                numberOfDepartures: $totalLimit
+                omitNonBoarding: false
+                includeCancelledTrips: false
+                whiteListed: {lines: $filterByLineIds}
+              ) {
                 ...group_times_estimatedCallFields
               }
-              estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $totalLimit, numberOfDeparturesPerLineAndDestinationDisplay: 1, omitNonBoarding: false, includeCancelledTrips: false, whiteListed: {lines: $filterByLineIds}) {
+              estimatedCalls(
+                startTime: $startTime
+                timeRange: $timeRange
+                numberOfDepartures: $totalLimit
+                numberOfDeparturesPerLineAndDestinationDisplay: 1
+                omitNonBoarding: false
+                includeCancelledTrips: false
+                whiteListed: {lines: $filterByLineIds}
+              ) {
                 ...group_estimatedCallFields
               }
             }
@@ -259,3 +301,18 @@ export const GroupsByNearestDocument = gql`
 ${Group_QuayFieldsFragmentDoc}
 ${Group_Times_EstimatedCallFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;
+export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C>(requester: Requester<C>) {
+  return {
+    GroupsById(variables: GroupsByIdQueryVariables, options?: C): Promise<GroupsByIdQuery> {
+      return requester<GroupsByIdQuery, GroupsByIdQueryVariables>(GroupsByIdDocument, variables, options);
+    },
+    QuayIdInStops(variables: QuayIdInStopsQueryVariables, options?: C): Promise<QuayIdInStopsQuery> {
+      return requester<QuayIdInStopsQuery, QuayIdInStopsQueryVariables>(QuayIdInStopsDocument, variables, options);
+    },
+    GroupsByNearest(variables: GroupsByNearestQueryVariables, options?: C): Promise<GroupsByNearestQuery> {
+      return requester<GroupsByNearestQuery, GroupsByNearestQueryVariables>(GroupsByNearestDocument, variables, options);
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

@@ -67,6 +67,7 @@ query GroupsByNearest(
     filterByPlaceTypes: stopPlace
     filterByInUse: true
     filterByIds: $filterInput
+    multiModalMode: child
   ) {
     pageInfo {
       hasNextPage
