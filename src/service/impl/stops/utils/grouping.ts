@@ -171,9 +171,18 @@ export default function mapQueryToGroups(
     return {
       stopPlace: stopPlaceInfo,
       quays: sortBy(quayGroups, [
-        group => group.quay.publicCode,
+        group => sortByNumberIfPossible(group.quay.publicCode),
         group => group.quay.id
       ])
     };
   });
+}
+
+function sortByNumberIfPossible(val?: string) {
+  if (!val) return val;
+  const parsed = parseInt(val, 10);
+  if (Number.isNaN(parsed)) {
+    return val;
+  }
+  return parsed;
 }
