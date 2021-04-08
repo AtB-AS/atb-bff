@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { DepartureGroupsQuery } from '../../service/types';
 
 const ONE_MINUTE = 60 * 1000;
@@ -135,15 +135,6 @@ export const getStopPlacesByNameRequest = {
     lat: Joi.number(),
     lon: Joi.number()
   }).and('lat', 'lon')
-};
-
-export const getDeparturesForServiceJourneyRequest = {
-  params: Joi.object({
-    id: Joi.string().required()
-  }).required(),
-  query: Joi.object({
-    date: Joi.date()
-  })
 };
 
 export const getDeparturesBetweenStopPlacesRequest = {

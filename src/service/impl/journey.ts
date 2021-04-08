@@ -1,4 +1,4 @@
-import { EnturService, TripPattern } from '@entur/sdk';
+import { TripPattern } from '@entur/sdk';
 import { IJourneyService } from '../interface';
 import { Result } from '@badrap/result';
 import { APIError, TripPatternsQuery } from '../types';
@@ -6,12 +6,13 @@ import { APIError, TripPatternsQuery } from '../types';
 import { PubSub } from '@google-cloud/pubsub';
 import { getEnv } from '../../utils/getenv';
 import { generateId, getServiceIds } from '../../utils/journey-utils';
+import { EnturServiceAPI } from './entur';
 
 const ENV = getEnv();
 const topicName = `analytics_trip_search`;
 
 export default (
-  service: EnturService,
+  service: EnturServiceAPI,
   pubSubClient: PubSub
 ): IJourneyService => {
   // createTopic might fail if the topic already exists; ignore.

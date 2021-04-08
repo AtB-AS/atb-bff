@@ -1,9 +1,9 @@
-import * as Types from '../../../graphql/types';
+import * as Types from '../../../../graphql/journey-types';
 
+import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-
 export type ByIdQueryVariables = Types.Exact<{
-  ids: Array<Types.Maybe<Types.Scalars['String']>>;
+  ids: Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>;
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limit: Types.Scalars['Int'];
@@ -215,7 +215,13 @@ export const ByIdDocument = gql`
     ...stopPlaceFields
     quays(filterByInUse: true) {
       ...quayFields
-      estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $limit, omitNonBoarding: false, includeCancelledTrips: false) {
+      estimatedCalls(
+        startTime: $startTime
+        timeRange: $timeRange
+        numberOfDepartures: $limit
+        omitNonBoarding: false
+        includeCancelledTrips: false
+      ) {
         ...estimatedCallFields
       }
     }
@@ -226,11 +232,23 @@ ${QuayFieldsFragmentDoc}
 ${EstimatedCallFieldsFragmentDoc}`;
 export const ByBBoxDocument = gql`
     query ByBBox($minLat: Float!, $minLng: Float!, $maxLng: Float!, $maxLat: Float!, $timeRange: Int!, $startTime: DateTime!, $limit: Int!) {
-  stopPlacesByBbox(minimumLatitude: $minLat, minimumLongitude: $minLng, maximumLatitude: $maxLat, maximumLongitude: $maxLng) {
+  stopPlacesByBbox(
+    minimumLatitude: $minLat
+    minimumLongitude: $minLng
+    maximumLatitude: $maxLat
+    maximumLongitude: $maxLng
+    multiModalMode: child
+  ) {
     ...stopPlaceFields
     quays(filterByInUse: true) {
       ...quayFields
-      estimatedCalls(startTime: $startTime, timeRange: $timeRange, numberOfDepartures: $limit, omitNonBoarding: false, includeCancelledTrips: false) {
+      estimatedCalls(
+        startTime: $startTime
+        timeRange: $timeRange
+        numberOfDepartures: $limit
+        omitNonBoarding: false
+        includeCancelledTrips: false
+      ) {
         ...estimatedCallFields
       }
     }
@@ -239,3 +257,15 @@ export const ByBBoxDocument = gql`
     ${StopPlaceFieldsFragmentDoc}
 ${QuayFieldsFragmentDoc}
 ${EstimatedCallFieldsFragmentDoc}`;
+export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C>(requester: Requester<C>) {
+  return {
+    ById(variables: ByIdQueryVariables, options?: C): Promise<ByIdQuery> {
+      return requester<ByIdQuery, ByIdQueryVariables>(ByIdDocument, variables, options);
+    },
+    ByBBox(variables: ByBBoxQueryVariables, options?: C): Promise<ByBBoxQuery> {
+      return requester<ByBBoxQuery, ByBBoxQueryVariables>(ByBBoxDocument, variables, options);
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

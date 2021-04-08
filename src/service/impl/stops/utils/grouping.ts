@@ -1,11 +1,12 @@
 import groupBy from 'lodash.groupby';
+import sortBy from 'lodash.sortby';
 import {
   ReportType,
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/types';
+} from '../../../../graphql/journey-types';
 import { FavoriteDeparture } from '../../../types';
-import { GroupsByIdQuery } from '../departure-group.graphql-gen';
+import { GroupsByIdQuery } from '../journey-gql/departure-group.graphql-gen';
 
 type Notice = { text?: string };
 type Situation = {
@@ -169,7 +170,19 @@ export default function mapQueryToGroups(
 
     return {
       stopPlace: stopPlaceInfo,
-      quays: quayGroups
+      quays: sortBy(quayGroups, [
+        group => sortByNumberIfPossible(group.quay.publicCode),
+        group => group.quay.id
+      ])
     };
   });
+}
+
+function sortByNumberIfPossible(val?: string) {
+  if (!val) return val;
+  const parsed = parseInt(val, 10);
+  if (Number.isNaN(parsed)) {
+    return val;
+  }
+  return parsed;
 }

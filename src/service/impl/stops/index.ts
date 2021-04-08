@@ -1,11 +1,11 @@
 import { Result } from '@badrap/result';
-import { EnturService, EstimatedCall, StopPlaceDetails } from '@entur/sdk';
+import { EstimatedCall, StopPlaceDetails } from '@entur/sdk';
 import { PubSub, Topic } from '@google-cloud/pubsub';
-import { formatISO } from 'date-fns';
 import haversineDistance from 'haversine-distance';
+import { getEnv } from '../../../utils/getenv';
 import { IStopsService } from '../../interface';
 import { APIError, DepartureRealtimeQuery } from '../../types';
-import { getEnv } from '../../../utils/getenv';
+import { EnturServiceAPI } from '../entur';
 import {
   getDeparturesGrouped,
   getDeparturesGroupedNearest
@@ -23,7 +23,10 @@ const topicName = `analytics_departures_search`;
 const topicNameGroups = `analytics_departure_groups_search`;
 const topicNameRealtime = `analytics_departure_realtime`;
 
-export default (service: EnturService, pubSubClient: PubSub): IStopsService => {
+export default (
+  service: EnturServiceAPI,
+  pubSubClient: PubSub
+): IStopsService => {
   // createTopic might fail if the topic already exists; ignore.
   createAllTopics(pubSubClient);
 
@@ -117,7 +120,7 @@ export default (service: EnturService, pubSubClient: PubSub): IStopsService => {
     async getStopPlace(id) {
       try {
         const stop = await service.getStopPlace(id);
-        return Result.ok(stop);
+        return Result.ok(stop ?? null);
       } catch (error) {
         if (error instanceof Error) {
           const re = /Entur SDK: No data available/;
@@ -226,7 +229,9 @@ export default (service: EnturService, pubSubClient: PubSub): IStopsService => {
     },
     async getQuaysForStopPlace(id, query) {
       try {
-        const quays = await service.getQuaysForStopPlace(id, query);
+        const quays = await service.getQuaysForStopPlace(id, {
+          includeUnusedQuays: query.filterByInUse
+        });
 
         return Result.ok(quays);
       } catch (error) {
@@ -234,21 +239,6 @@ export default (service: EnturService, pubSubClient: PubSub): IStopsService => {
           const re = /Entur SDK: No data available/;
           if (error.message.match(re)) return Result.ok(null);
         }
-        return Result.err(new APIError(error));
-      }
-    },
-    async getDeparturesForServiceJourney(id, { date }) {
-      try {
-        const departures = await service.getDeparturesForServiceJourney(
-          id,
-          date ? formatISO(date, { representation: 'date' }) : undefined
-        );
-
-        return Result.ok(departures);
-      } catch (error) {
-        const re = /Entur SDK: No data available/;
-        if (error.message.match(re)) return Result.ok(null);
-
         return Result.err(new APIError(error));
       }
     }
