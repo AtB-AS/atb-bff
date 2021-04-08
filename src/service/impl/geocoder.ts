@@ -8,14 +8,10 @@ import { getEnv } from '../../utils/getenv';
 const ENV = getEnv();
 const topicName = `analytics_geocoder_features`;
 
-const FOCUS_WEIGHT = parseInt(process.env.GEOCODER_FOCUS_WEIGHT || '18');
-
-export default (
-  service: EnturService,
-  pubSubClient: PubSub
-): IGeocoderService => {
+export default (service: EnturService, pubSubClient: PubSub): IGeocoderService => {
   // createTopic might fail if the topic already exists; ignore.
-  pubSubClient.createTopic(topicName).catch(() => {});
+  pubSubClient.createTopic(topicName).catch(() => {
+  });
 
   const batchedPublisher = pubSubClient.topic(topicName, {
     batching: {
@@ -26,20 +22,12 @@ export default (
   return {
     async getFeatures({ query, lat, lon, ...params }) {
       try {
-        batchedPublisher.publish(Buffer.from(JSON.stringify(query)), {
-          environment: ENV
-        });
+        batchedPublisher
+          .publish(Buffer.from(JSON.stringify(query)), { environment: ENV });
         const features = await service.getFeatures(
           query,
           { latitude: lat, longitude: lon },
-          {
-            // Set default focus point settings for better results
-            // for local searches.
-            'focus.weight': FOCUS_WEIGHT,
-            'focus.scale': '200km',
-            'focus.function': 'exp',
-            ...params
-          }
+          { ...params }
         );
 
         return Result.ok(features);
@@ -60,4 +48,4 @@ export default (
       }
     }
   };
-};
+}

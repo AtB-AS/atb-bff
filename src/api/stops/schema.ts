@@ -137,6 +137,15 @@ export const getStopPlacesByNameRequest = {
   }).and('lat', 'lon')
 };
 
+export const getDeparturesForServiceJourneyRequest = {
+  params: Joi.object({
+    id: Joi.string().required()
+  }).required(),
+  query: Joi.object({
+    date: Joi.date()
+  })
+};
+
 export const getDeparturesBetweenStopPlacesRequest = {
   query: Joi.object({
     from: Joi.string().required(),

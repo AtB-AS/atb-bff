@@ -1,35 +1,38 @@
 import { Boom } from '@hapi/boom';
 import Hapi from '@hapi/hapi';
+
 import { IStopsService } from '../../service/interface';
 import {
-  DepartureGroupsPayload,
-  DepartureGroupsQuery,
-  DepartureRealtimeQuery,
-  DeparturesBetweenStopPlacesQuery,
-  DeparturesFromLocationPagingQuery,
-  DeparturesFromLocationQuery,
-  DeparturesFromQuayQuery,
-  DeparturesFromStopPlaceQuery,
-  FeatureLocation,
-  NearestDeparturesQuery,
-  QuaysForStopPlaceQuery,
-  StopPlaceByNameQuery,
-  StopPlaceQuery
-} from '../../service/types';
-import {
-  getDepartureRealtime,
-  getDeparturesBetweenStopPlacesRequest,
-  getDeparturesCursoredRequest,
-  getDeparturesFromQuayRequest,
-  getDeparturesPagingRequest,
-  getDeparturesRequest,
-  getNearestDeparturesRequest,
+  getStopPlaceRequest,
   getStopPlaceByPositionRequest,
   getStopPlaceDeparturesRequest,
   getStopPlaceQuaysRequest,
-  getStopPlaceRequest,
-  getStopPlacesByNameRequest
+  getDeparturesFromQuayRequest,
+  getDeparturesForServiceJourneyRequest,
+  getDeparturesBetweenStopPlacesRequest,
+  getStopPlacesByNameRequest,
+  getNearestDeparturesRequest,
+  getDeparturesRequest,
+  getDepartureRealtime,
+  getDeparturesPagingRequest,
+  getDeparturesCursoredRequest
 } from './schema';
+import {
+  StopPlaceQuery,
+  DeparturesFromStopPlaceQuery,
+  DeparturesForServiceJourneyQuery,
+  QuaysForStopPlaceQuery,
+  DeparturesFromQuayQuery,
+  DeparturesBetweenStopPlacesQuery,
+  StopPlaceByNameQuery,
+  NearestDeparturesQuery,
+  FeatureLocation,
+  DeparturesFromLocationQuery,
+  DepartureRealtimeQuery,
+  DeparturesFromLocationPagingQuery,
+  DepartureGroupsQuery,
+  DepartureGroupsPayload
+} from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopsService) => {
   server.route({
@@ -83,6 +86,22 @@ export default (server: Hapi.Server) => (service: IStopsService) => {
       const { id } = request.params;
       const query = (request.query as unknown) as DeparturesFromQuayQuery;
       return (await service.getDeparturesFromQuay(id, query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'GET',
+    path: '/bff/v1/servicejourney/{id}/departures',
+    options: {
+      tags: ['api', 'stops'],
+      validate: getDeparturesForServiceJourneyRequest,
+      description: 'Get departures for Service Journey'
+    },
+    handler: async (request, h) => {
+      const { id } = request.params;
+      const {
+        date
+      } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
+      return await service.getDeparturesForServiceJourney(id, { date });
     }
   });
   server.route({

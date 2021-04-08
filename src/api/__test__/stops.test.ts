@@ -20,6 +20,9 @@ const svc: jest.Mocked<IStopsService> = {
   getDeparturesBetweenStopPlaces: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),
+  getDeparturesForServiceJourney: jest.fn((...args: any): any =>
+    Result.ok(Promise.resolve([]))
+  ),
   getDeparturesFromQuay: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   ),

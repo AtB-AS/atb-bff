@@ -1,4 +1,4 @@
-FROM node:lts-slim AS proddeps
+FROM node:slim AS proddeps
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
@@ -10,7 +10,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM node:lts-slim
+FROM node:slim
 WORKDIR /app
 COPY package.json .
 COPY --from=proddeps /app/node_modules ./node_modules
