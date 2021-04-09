@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 
 export const getFeaturesRequest = Joi.object({
   query: Joi.string().required(),
@@ -10,6 +10,7 @@ export const getFeaturesRequest = Joi.object({
     }
     return val;
   }),
+  multiModal: Joi.alt('parent', 'child', 'all').default('child'),
   tariff_zone_authorities: Joi.string(),
   'boundary.rect.min_lat': Joi.number(),
   'boundary.rect.max_lat': Joi.number(),

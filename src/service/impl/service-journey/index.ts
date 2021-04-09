@@ -1,18 +1,18 @@
 import { Result } from '@badrap/result';
-import { EnturService } from '@entur/sdk';
 import { formatISO } from 'date-fns';
-import client from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { IServiceJourneyService } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
+import { EnturServiceAPI } from '../entur';
 import {
   MapInfoByServiceJourneyIdDocument,
   MapInfoByServiceJourneyIdQuery,
   MapInfoByServiceJourneyIdQueryVariables
-} from './service-journey-map.graphql-gen';
+} from './journey-gql/service-journey-map.graphql-gen';
 import { mapToMapLegs } from './utils';
 
 export default function serviceJourneyService(
-  service: EnturService
+  service: EnturServiceAPI
 ): IServiceJourneyService {
   return {
     async getServiceJourneyMapInfo(
@@ -26,7 +26,7 @@ export default function serviceJourneyService(
           toQuayId: query.toQuayId ?? ''
         };
 
-        const result = await client.query<
+        const result = await journeyPlannerClient.query<
           MapInfoByServiceJourneyIdQuery,
           MapInfoByServiceJourneyIdQueryVariables
         >({

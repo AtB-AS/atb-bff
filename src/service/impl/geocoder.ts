@@ -1,9 +1,9 @@
 import { Result } from '@badrap/result';
-import { EnturService } from '@entur/sdk';
 import { IGeocoderService } from '../interface';
 import { APIError } from '../types';
 import { PubSub } from '@google-cloud/pubsub';
 import { getEnv } from '../../utils/getenv';
+import { EnturServiceAPI } from './entur';
 
 const ENV = getEnv();
 const topicName = `analytics_geocoder_features`;
@@ -11,7 +11,7 @@ const topicName = `analytics_geocoder_features`;
 const FOCUS_WEIGHT = parseInt(process.env.GEOCODER_FOCUS_WEIGHT || '18');
 
 export default (
-  service: EnturService,
+  service: EnturServiceAPI,
   pubSubClient: PubSub
 ): IGeocoderService => {
   // createTopic might fail if the topic already exists; ignore.

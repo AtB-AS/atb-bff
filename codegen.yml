@@ -1,8 +1,8 @@
 overwrite: true
-schema: 'https://api.entur.io/journey-planner/v2/graphql'
-documents: ./src/**/*.graphql
 generates:
-  src/graphql/types.ts:
+  src/graphql/journey-types.ts:
+    documents: ./src/**/*.graphql
+    schema: 'https://api.entur.io/journey-planner/v2/graphql'
     config:
       maybeValue: T
       skipTypename: true
@@ -11,15 +11,13 @@ generates:
     plugins:
       - typescript
   src/:
+    documents: ./src/**/*.graphql
+    schema: 'https://api.entur.io/journey-planner/v2/graphql'
     preset: near-operation-file
     presetConfig:
       extension: .graphql-gen.ts
-      baseTypesPath: graphql/types.ts
+      baseTypesPath: graphql/journey-types.ts
     config:
-      withHooks: false
-      withComponent: false
-      withHOC: false
-      withResultType: false
       skipTypename: true
       # This causes some types to be wrong (e.g. in departure query dates are any type)
       # but it makes using the types waay easier. Necessary evil in my mind.
@@ -30,4 +28,4 @@ generates:
       maybeValue: T
     plugins:
       - 'typescript-operations'
-      - 'typescript-react-apollo'
+      - 'typescript-generic-sdk'

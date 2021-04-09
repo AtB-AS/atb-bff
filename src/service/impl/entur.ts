@@ -1,5 +1,5 @@
 import createService from '@entur/sdk';
-import fetch from 'node-fetch';
+import fetch, { RequestInfo, RequestInit } from 'node-fetch';
 import { HttpsAgent as Agent } from 'agentkeepalive';
 import pThrottle from 'p-throttle';
 import { ET_CLIENT_NAME } from '../../config/env';
@@ -14,19 +14,22 @@ const agent = new Agent({
 
 interface Config {}
 
+const throttle = pThrottle({
+  limit: RATE_LIMIT_N,
+  interval: RATE_LIMIT_RES_MS
+});
+
+export type EnturServiceAPI = ReturnType<typeof createService>;
+
 const service = (config: Config) => {
   return createService({
     clientName: ET_CLIENT_NAME,
-    fetch: pThrottle(
-      (url, init) => {
-        return fetch(url, {
-          agent,
-          ...init
-        });
-      },
-      RATE_LIMIT_N,
-      RATE_LIMIT_RES_MS
-    )
+    fetch: throttle((url: RequestInfo, init?: RequestInit | undefined) => {
+      return fetch(url, {
+        agent,
+        ...init
+      });
+    })
   });
 };
 
