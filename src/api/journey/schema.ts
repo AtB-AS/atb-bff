@@ -36,15 +36,9 @@ export const postJourneyRequest = {
     arriveBy: Joi.bool().default(false),
 
     minimumTransferTime: Joi.number().default(30),
-    modes: Joi.array().default([
-      'foot',
-      'bus',
-      'tram',
-      'rail',
-      'metro',
-      'water',
-      'air'
-    ]),
+    modes: Joi.array()
+      .single()
+      .default(['foot', 'bus', 'tram', 'rail', 'metro', 'water', 'air']),
     limit: Joi.number().default(10),
     wheelchairAccessible: Joi.bool().default(false)
   }).options({ abortEarly: false })

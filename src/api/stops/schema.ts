@@ -82,13 +82,15 @@ export const getDeparturesCursoredRequest = {
     ])
       .options({ stripUnknown: true })
       .required(),
-    favorites: Joi.array().items(
-      Joi.object({
-        stopId: Joi.string().required(),
-        lineName: Joi.string().required(),
-        lineId: Joi.string().required()
-      }).options({ stripUnknown: true })
-    )
+    favorites: Joi.array()
+      .single()
+      .items(
+        Joi.object({
+          stopId: Joi.string().required(),
+          lineName: Joi.string().required(),
+          lineId: Joi.string().required()
+        }).options({ stripUnknown: true })
+      )
   }),
   query: Joi.object<DepartureGroupsQuery>({
     limitPerLine: Joi.number().default(5),
@@ -102,7 +104,7 @@ export const getDeparturesCursoredRequest = {
 
 export const getDepartureRealtime = {
   query: Joi.object({
-    quayIds: Joi.array().items(Joi.string()).default([]),
+    quayIds: Joi.array().items(Joi.string()).default([]).single(),
     startTime: Joi.date(),
     limit: Joi.number().default(5)
   })
