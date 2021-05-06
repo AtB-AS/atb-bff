@@ -30,7 +30,7 @@ export default (server: Hapi.Server) => () => {
         };
       }
 
-      return Boom.notFound('Ukjent kode');
+      return Boom.badData('Ukjent kode');
     }
   });
 };

@@ -57,7 +57,7 @@ export default (server: Hapi.Server) => (service: IJourneyService) => {
       return (await service.getTripPattern(idObject)).unwrap(
         value =>
           !value
-            ? Boom.notFound('Trip not found or is no longer availeble.')
+            ? Boom.resourceGone('Trip not found or is no longer available.')
             : value,
         error => Boom.internal(error.message)
       );
