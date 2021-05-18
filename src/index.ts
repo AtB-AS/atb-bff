@@ -2,7 +2,7 @@ import { Boom } from '@hapi/boom';
 import { GoogleAuth } from 'google-auth-library';
 /* Set up tracing if running in production */
 if (process.env.NODE_ENV === 'production') {
-  console.info('starting tace agent...');
+  console.info('starting trace agent...');
   require('@google-cloud/trace-agent').start();
 }
 
@@ -52,7 +52,7 @@ process.on('unhandledRejection', err => {
         new Boom('The requested resource was not found.', { statusCode: 404 })
     });
 
-    const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
+    const pubSubClient = new PubSub({ projectId });
     const js = journeyService(enturService, pubSubClient);
     healthRoutes(server);
     stopsRoutes(server)(stopsService(enturService, pubSubClient));
