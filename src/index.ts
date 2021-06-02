@@ -24,6 +24,8 @@ import { GaxiosError } from 'gaxios';
 import { PubSub } from '@google-cloud/pubsub';
 import serviceJourneyRoutes from './api/servicejourney';
 import serviceJourneyService from './service/impl/service-journey';
+import createPublisher from './analytics/publisher';
+import { getEnv } from './utils/getenv';
 
 process.on('unhandledRejection', err => {
   console.error(err);
@@ -52,12 +54,32 @@ process.on('unhandledRejection', err => {
         new Boom('The requested resource was not found.', { statusCode: 404 })
     });
 
-    const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
-    const js = journeyService(enturService, pubSubClient);
+    const pubSub = createPublisher(
+      new PubSub({ projectId }),
+      {
+        getTripPatternsTopic:
+          process.env['PUBSUB_TOPIC_TRIP_SEARCH'] || 'analytics_trip_search',
+        getFeaturesTopic:
+          process.env['PUBSUB_TOPIC_GEOCODER_FEATURES'] ||
+          'analytics_geocoder_features',
+        departuresSearchTopic:
+          process.env['PUBSUB_TOPIC_DEPARTURES_SEARCH'] ||
+          'analytics_departures_search',
+        departuresSearchRealtimeTopic:
+          process.env['PUBSUB_TOPIC_DEPARTURES_SEARCH_REALTIME'] ||
+          'analytics_departure_realtime',
+        departuresSearchGroupsTopic:
+          process.env['PUBSUB_TOPIC_DEPARTURES_SEARCH_GROUPS'] ||
+          'analytics_departure_groups_search'
+      },
+      {
+        environment: getEnv()
+      }
+    );
     healthRoutes(server);
-    stopsRoutes(server)(stopsService(enturService, pubSubClient));
-    geocoderRoutes(server)(geocoderService(enturService, pubSubClient));
-    journeyRoutes(server)(js);
+    journeyRoutes(server)(journeyService(enturService, pubSub));
+    geocoderRoutes(server)(geocoderService(enturService, pubSub));
+    stopsRoutes(server)(stopsService(enturService, pubSub));
     serviceJourneyRoutes(server)(serviceJourneyService(enturService));
     enrollmentRoutes(server)();
 

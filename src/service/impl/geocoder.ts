@@ -1,34 +1,22 @@
 import { Result } from '@badrap/result';
 import { IGeocoderService } from '../interface';
 import { APIError } from '../types';
-import { PubSub } from '@google-cloud/pubsub';
-import { getEnv } from '../../utils/getenv';
 import { EnturServiceAPI } from './entur';
-
-const ENV = getEnv();
-const topicName = `analytics_geocoder_features`;
 
 const FOCUS_WEIGHT = parseInt(process.env.GEOCODER_FOCUS_WEIGHT || '18');
 
+interface geocoderAnalyticsPublisher {
+  getFeatures(query: string): Promise<void>
+}
+
 export default (
   service: EnturServiceAPI,
-  pubSubClient: PubSub
+  publisher: geocoderAnalyticsPublisher
 ): IGeocoderService => {
-  // createTopic might fail if the topic already exists; ignore.
-  pubSubClient.createTopic(topicName).catch(() => {});
-
-  const batchedPublisher = pubSubClient.topic(topicName, {
-    batching: {
-      maxMessages: 100,
-      maxMilliseconds: 5 * 1000
-    }
-  });
   return {
     async getFeatures({ query, lat, lon, ...params }) {
       try {
-        batchedPublisher.publish(Buffer.from(JSON.stringify(query)), {
-          environment: ENV
-        });
+        await publisher.getFeatures(query);
         const features = await service.getFeatures(
           query,
           { latitude: lat, longitude: lon },
