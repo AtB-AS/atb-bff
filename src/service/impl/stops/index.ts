@@ -1,10 +1,15 @@
 import { Result } from '@badrap/result';
 import { EstimatedCall, StopPlaceDetails } from '@entur/sdk';
-import { PubSub, Topic } from '@google-cloud/pubsub';
 import haversineDistance from 'haversine-distance';
-import { getEnv } from '../../../utils/getenv';
 import { IStopsService } from '../../interface';
-import { APIError, DepartureRealtimeQuery } from '../../types';
+import {
+  APIError,
+  DepartureGroupsPayload,
+  DepartureGroupsQuery,
+  DepartureRealtimeQuery,
+  DeparturesFromLocationPagingQuery,
+  FeatureLocation
+} from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
   getDeparturesGrouped,
@@ -18,35 +23,27 @@ import {
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
-const ENV = getEnv();
-const topicName = `analytics_departures_search`;
-const topicNameGroups = `analytics_departure_groups_search`;
-const topicNameRealtime = `analytics_departure_realtime`;
+interface departureAnalyticsPublisher {
+  departuresSearchGroups(
+    payload: DepartureGroupsPayload,
+    query: DepartureGroupsQuery
+  ): Promise<void>;
+
+  departuresSearchRealtime(query: DepartureRealtimeQuery): Promise<void>;
+
+  departuresSearch(
+    location: FeatureLocation,
+    query: DeparturesFromLocationPagingQuery
+  ): Promise<void>;
+}
 
 export default (
   service: EnturServiceAPI,
-  pubSubClient: PubSub
+  publisher: departureAnalyticsPublisher
 ): IStopsService => {
-  // createTopic might fail if the topic already exists; ignore.
-  createAllTopics(pubSubClient);
-
-  const pubOpts = {
-    batching: {
-      maxMessages: 100,
-      maxMilliseconds: 5 * 1000
-    }
-  };
-
-  const batchedPublisher = pubSubClient.topic(topicName, pubOpts);
-  const batchedPublisherGroups = pubSubClient.topic(topicNameGroups, pubOpts);
-  const batchedPublisherRealtime = pubSubClient.topic(
-    topicNameRealtime,
-    pubOpts
-  );
-
-  const api: IStopsService = {
+  return {
     async getDeparturesGrouped(payload, query) {
-      pub(batchedPublisherGroups, { payload, query });
+      await publisher.departuresSearchGroups(payload, query);
       return payload.location.layer === 'venue'
         ? getDeparturesGrouped(payload.location.id, query, payload.favorites)
         : getDeparturesGroupedNearest(
@@ -57,7 +54,7 @@ export default (
           );
     },
     async getDepartureRealtime(query: DepartureRealtimeQuery) {
-      pub(batchedPublisherRealtime, { query });
+      await publisher.departuresSearchRealtime(query);
       return getRealtimeDepartureTime(query);
     },
 
@@ -76,7 +73,7 @@ export default (
       return result.map(d => d.data);
     },
     async getDeparturesPaging(location, query) {
-      pub(batchedPublisher, { location, query });
+      await publisher.departuresSearch(location, query);
       return location.layer === 'venue'
         ? getDeparturesFromStops(location.id, query)
         : getDeparturesFromLocation(location.coordinates, 500, query);
@@ -243,20 +240,4 @@ export default (
       }
     }
   };
-
-  return api;
 };
-
-function pub(topic: Topic, data: object) {
-  try {
-    topic.publish(Buffer.from(JSON.stringify(data)), {
-      environment: ENV
-    });
-  } catch (e) {}
-}
-
-function createAllTopics(pubSubClient: PubSub) {
-  [topicName, topicNameGroups, topicNameRealtime].forEach(topic =>
-    pubSubClient.createTopic(topic).catch(() => {})
-  );
-}

@@ -3,27 +3,17 @@ import { IJourneyService } from '../interface';
 import { Result } from '@badrap/result';
 import { APIError, TripPatternsQuery } from '../types';
 
-import { PubSub } from '@google-cloud/pubsub';
-import { getEnv } from '../../utils/getenv';
 import { generateId, getServiceIds } from '../../utils/journey-utils';
 import { EnturServiceAPI } from './entur';
 
-const ENV = getEnv();
-const topicName = `analytics_trip_search`;
+interface journeyAnalyticsPublisher {
+  getTripPatterns(query: TripPatternsQuery): Promise<void>
+}
 
 export default (
   service: EnturServiceAPI,
-  pubSubClient: PubSub
+  publisher: journeyAnalyticsPublisher
 ): IJourneyService => {
-  // createTopic might fail if the topic already exists; ignore.
-  pubSubClient.createTopic(topicName).catch(() => {});
-
-  const batchedPublisher = pubSubClient.topic(topicName, {
-    batching: {
-      maxMessages: 100,
-      maxMilliseconds: 5 * 1000
-    }
-  });
 
   const api: IJourneyService = {
     async getTrips({ from, to, when }) {
@@ -36,9 +26,7 @@ export default (
     },
     async getTripPatterns(query) {
       try {
-        batchedPublisher.publish(Buffer.from(JSON.stringify(query)), {
-          environment: ENV
-        });
+        await publisher.getTripPatterns(query);
         const trips = await service.getTripPatterns(query);
         return Result.ok(addIdsToTrips(trips, query));
       } catch (error) {
