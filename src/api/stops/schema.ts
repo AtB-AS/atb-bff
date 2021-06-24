@@ -87,8 +87,9 @@ export const getDeparturesCursoredRequest = {
       .items(
         Joi.object({
           stopId: Joi.string().required(),
-          lineName: Joi.string().required(),
-          lineId: Joi.string().required()
+          lineName: Joi.string(),
+          lineId: Joi.string().required(),
+          quayId: Joi.string(),
         }).options({ stripUnknown: true })
       )
   }),

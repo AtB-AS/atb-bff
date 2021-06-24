@@ -52,7 +52,7 @@ process.on('unhandledRejection', err => {
         new Boom('The requested resource was not found.', { statusCode: 404 })
     });
 
-    const pubSubClient = new PubSub({ projectId: 'atb-mobility-platform' });
+    const pubSubClient = new PubSub({ projectId });
     const js = journeyService(enturService, pubSubClient);
     healthRoutes(server);
     stopsRoutes(server)(stopsService(enturService, pubSubClient));
