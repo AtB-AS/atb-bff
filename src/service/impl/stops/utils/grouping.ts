@@ -99,9 +99,10 @@ export default function mapQueryToGroups(
     !favorites ||
     favorites.some(
       f =>
-        item.lineName === f.lineName &&
+        (!f.lineName || item.lineName === f.lineName) &&
         item.lineId === f.lineId &&
-        stopId === f.stopId
+        stopId === f.stopId &&
+        (!f.quayId || item.quayId === f.quayId)
     );
 
   return stopPlaces.filter(Boolean).map(function (stopPlace) {
