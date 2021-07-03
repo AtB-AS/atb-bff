@@ -17,4 +17,4 @@ COPY --from=proddeps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
 ENV NODE_ENV=production
-CMD npm start
+CMD ["node", "/app/dist/index.js"]
