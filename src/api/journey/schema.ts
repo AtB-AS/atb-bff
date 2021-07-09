@@ -43,6 +43,8 @@ export const postJourneyRequest = {
     // Default in meters. 2000m = 2km. Should be somewhat high
     // for more rural areas.
     maxPreTransitWalkDistance: Joi.number().default(2000),
+    // Max meters walking on transfers. Defaults to 2000 by Entur.
+    maxTransferWalkDistance: Joi.number().default(2000),
     // Higher number = lower rating for walking. Default by entur is 4
     walkReluctance: Joi.number().default(5),
     wheelchairAccessible: Joi.bool().default(false)
