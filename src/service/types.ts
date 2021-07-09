@@ -149,6 +149,9 @@ export interface TripPatternsQuery {
   searchDate?: Date;
   arriveBy: boolean;
   limit: number;
+  maxTransferWalkDistance: number; // Meters. Defaults to 2000 in Entur
+  maxPreTransitWalkDistance: number; // Meters. Defaults to alot in Entur
+  walkReluctance: number; // Factor. Defaults to 4 in Entur
   modes: QueryMode[];
   wheelchairAccessible: boolean;
 }
