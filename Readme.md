@@ -10,7 +10,7 @@ API documentation is generated at runtime and lives in `/documentation`
 
 Clone this project:
 
-`git clone https://github.com/atb-as/bff-oneclick-planner.git`
+`git clone https://github.com/atb-as/atb-bff.git`
 
 Build and run the docker image:
 
