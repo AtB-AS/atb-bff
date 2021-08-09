@@ -97,7 +97,10 @@ describe('GET /bff/v1/journey/single-trip', () => {
       limit: 1,
       modes: [],
       searchDate: new Date(),
-      wheelchairAccessible: true
+      wheelchairAccessible: true,
+      maxPreTransitWalkDistance: 2000,
+      maxTransferWalkDistance: 2000,
+      walkReluctance: 4
     };
     const pastTrip = {
       expectedStartTime: '2020-05-14T20:02:00+0200',
