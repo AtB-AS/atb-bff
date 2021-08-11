@@ -2,7 +2,7 @@ import { Boom } from '@hapi/boom';
 import { GoogleAuth } from 'google-auth-library';
 /* Set up tracing if running in production */
 if (process.env.NODE_ENV === 'production') {
-  console.info('starting tace agent...');
+  console.info('starting trace agent...');
   require('@google-cloud/trace-agent').start();
 }
 
