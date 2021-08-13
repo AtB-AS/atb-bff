@@ -68,7 +68,7 @@ process.on('unhandledRejection', err => {
     await server.initialize();
     await server.start();
 
-    console.info('✅ Server started on port ' + port);
+    console.info('✅ Server started at http://localhost:' + port);
   } catch (error) {
     console.error(
       `failed to initialize server: ${error?.message}, terminating process.`
