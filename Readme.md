@@ -12,9 +12,24 @@ Clone this project:
 
 `git clone https://github.com/atb-as/atb-bff.git`
 
+### Docker
+
 Build and run the docker image:
 
 `docker run --rm --env PORT=8080 -p 8080:8080 -it $(docker build -q .)`
+
+### Starting locally
+
+#### Requirements
+- Node.js 14.x ([Hapi doesn't support newer versions](https://stackoverflow.com/a/65489848/5976426))
+
+Install node packages
+
+`npm install`
+
+Start the development server
+
+`npm run start:dev`
 
 ## Architecture
 
