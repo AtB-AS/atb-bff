@@ -35,13 +35,16 @@ process.on('unhandledRejection', err => {
 
 (async () => {
   try {
+    console.info('⏳ Starting server...');
+
     const auth = new GoogleAuth({
       scopes: 'https://www.googleapis.com/auth/cloud-platform'
     });
     const projectId = await auth.getProjectId();
 
+    const port = process.env['PORT'] || '8080';
     const server = createServer({
-      port: process.env['PORT'] || '8080'
+      port: port
     });
     const enturService = enturClient({});
     await initializePlugins(server);
@@ -64,6 +67,8 @@ process.on('unhandledRejection', err => {
     registerMetricsExporter(projectId);
     await server.initialize();
     await server.start();
+
+    console.info('✅ Server started on port ' + port);
   } catch (error) {
     console.error(
       `failed to initialize server: ${error?.message}, terminating process.`
