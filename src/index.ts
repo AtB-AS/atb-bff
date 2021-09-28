@@ -46,7 +46,7 @@ process.on('unhandledRejection', err => {
     const server = createServer({
       port: port
     });
-    const enturService = enturClient({});
+    const enturService = enturClient();
     await initializePlugins(server);
     server.route({
       method: '*',

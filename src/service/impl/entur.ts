@@ -2,7 +2,7 @@ import createService from '@entur/sdk';
 import fetch, { RequestInfo, RequestInit } from 'node-fetch';
 import { HttpsAgent as Agent } from 'agentkeepalive';
 import pThrottle from 'p-throttle';
-import { ET_CLIENT_NAME, ENTUR_ENV } from '../../config/env';
+import { ET_CLIENT_NAME, ENTUR_BASEURL } from '../../config/env';
 
 // The actual spike limit set in ApiGee is 120/s, do 100/s to be safe.
 const RATE_LIMIT_N = 10;
@@ -24,14 +24,13 @@ const service = () => {
     clientName: ET_CLIENT_NAME,
     /* Use environment variable ENTUR_ENV to override usage of production version of Entur
    APIs. Set variable to dev or staging to use development or staging enviroment. */
-    hosts:
-      ENTUR_ENV === 'staging'
-        ? {
-            journeyPlanner: `https://api.staging.entur.io/journey-planner/v2`,
-            geocoder: `https://api.staging.entur.io/geocoder/v1`,
-            nsr: `https://api.staging.entur.io/stop-places/v1`
-          }
-        : undefined,
+    hosts: ENTUR_BASEURL
+      ? {
+          journeyPlanner: `${ENTUR_BASEURL}/journey-planner/v2`,
+          geocoder: `${ENTUR_BASEURL}/geocoder/v1`,
+          nsr: `${ENTUR_BASEURL}/stop-places/v1`
+        }
+      : undefined,
     fetch: throttle((url: RequestInfo, init?: RequestInit | undefined) => {
       return fetch(url, {
         agent,
