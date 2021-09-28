@@ -2,7 +2,7 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { DefaultOptions } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
-import { ET_CLIENT_NAME } from '../config/env';
+import { ENTUR_BASEURL, ET_CLIENT_NAME } from '../config/env';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -15,7 +15,9 @@ const defaultOptions: DefaultOptions = {
   }
 };
 
-const urlJourneyPlanner = 'https://api.entur.io/journey-planner/v2/graphql';
+const urlJourneyPlanner = ENTUR_BASEURL
+  ? `${ENTUR_BASEURL}/journey-planner/v2/graphql`
+  : 'https://api.entur.io/journey-planner/v2/graphql';
 
 function createClient(url: string) {
   const cache = new InMemoryCache();
