@@ -14,9 +14,12 @@ Clone this project:
 
 ### Docker
 
-Build and run the docker image:
+Build and run the docker image, for local development:
 
-`docker run --rm --env PORT=8080 -p 8080:8080 -it $(docker build -q .)`
+```
+docker build --target=dev -t atb-bff:dev .
+docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
+```
 
 ### Starting locally
 
