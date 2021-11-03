@@ -152,14 +152,20 @@ export default (
         return Result.err(new APIError(error));
       }
     },
-    async getStopPlacesByPosition({ lat: latitude, lon: longitude, distance }) {
+    async getStopPlacesByPosition({
+      lat: latitude,
+      lon: longitude,
+      distance,
+      includeUnusedQuays
+    }) {
       try {
         const stops = await service.getStopPlacesByPosition(
           {
             latitude,
             longitude
           },
-          distance
+          distance,
+          { includeUnusedQuays }
         );
 
         return Result.ok(stops);

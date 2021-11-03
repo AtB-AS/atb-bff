@@ -75,6 +75,7 @@ export interface StopPlaceQuery {
   lat: number;
   lon: number;
   distance?: number;
+  includeUnusedQuays?: boolean;
 }
 
 export interface StopPlaceByNameQuery {
