@@ -11,7 +11,7 @@ import {
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
   GetDepartureRealtimeQueryVariables
-} from './journey-gql/departure-time.graphql-gen';
+} from './journey-gql/jp2/departure-time.graphql-gen';
 
 const createVariables = (
   query: DepartureRealtimeQuery

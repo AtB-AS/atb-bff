@@ -1,0 +1,27 @@
+query TripQuery($from: Location!, $to: Location!) {
+  trip(from: $from, to: $to) {
+    metadata {
+      nextDateTime
+      prevDateTime
+      searchWindowUsed
+    }
+    tripPatterns {
+      expectedStartTime
+      duration
+      walkDistance
+      legs {
+        mode
+        distance
+        line {
+          id
+          publicCode
+          name
+        }
+        fromEstimatedCall {
+          aimedDepartureTime
+          expectedDepartureTime
+        }
+      }
+    }
+  }
+}
