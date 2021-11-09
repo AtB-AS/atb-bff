@@ -9,7 +9,8 @@
     "start:dev": "ts-node --files ./src/index.ts",
     "start:watch": "nodemon",
     "test": "jest",
-    "gql-gen": "graphql-codegen --config codegen.yml"
+    "gql-gen": "graphql-codegen --config codegen.yml",
+    "gql-gen-v3": "graphql-codegen --config codegen_v3.yml"
   },
   "keywords": [],
   "author": "",
