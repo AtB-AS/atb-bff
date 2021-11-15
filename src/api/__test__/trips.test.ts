@@ -42,7 +42,6 @@ describe('GET /bff/v2/trips', () => {
       method: 'get',
       url: `/bff/v2/trips?from=${from}&to=${to}`
     });
-    console.log(res);
     expect(res.statusCode).toBe(200);
 
   });

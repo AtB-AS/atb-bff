@@ -6,8 +6,6 @@ import {journeyPlannerClient_v3} from '../../../graphql/graphql-client';
 
 export async function getTrips(query: TripQuery_v3): Promise<Result<TripsQuery, APIError>> {
 
-  console.log(`query: `);
-  console.log(query);
   try {
     const result = await journeyPlannerClient_v3.query<
       TripsQuery,
@@ -30,7 +28,6 @@ export async function getTrips(query: TripQuery_v3): Promise<Result<TripsQuery, 
 }
 
 function mapTripsData(input: TripsQuery): TripsQuery {
-  console.log(input);
   let results: TripsQuery = {
     trip: input.trip
   };
