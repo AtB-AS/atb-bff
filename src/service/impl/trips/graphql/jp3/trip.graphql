@@ -1,4 +1,4 @@
-query TripQuery($from: Location!, $to: Location!) {
+query Trips($from: Location!, $to: Location!) {
   trip(from: $from, to: $to) {
     metadata {
       nextDateTime

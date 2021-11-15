@@ -19,6 +19,10 @@ const urlJourneyPlanner = ENTUR_BASEURL
   ? `${ENTUR_BASEURL}/journey-planner/v2/graphql`
   : 'https://api.entur.io/journey-planner/v2/graphql';
 
+const urlJourneyPlanner_v3 = ENTUR_BASEURL
+  ? `${ENTUR_BASEURL}/journey-planner/v2/graphql`
+  : 'https://api.entur.io/journey-planner/v3/graphql';
+
 function createClient(url: string) {
   const cache = new InMemoryCache();
   const link = new HttpLink({
@@ -42,5 +46,8 @@ function createClient(url: string) {
 }
 
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
+
+console.log(`Creating JP3 client with url ${urlJourneyPlanner_v3}`);
+export const journeyPlannerClient_v3 = createClient(urlJourneyPlanner_v3);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;

@@ -36,8 +36,9 @@ import {
   DepartureGroupsQuery,
   DepartureGroupsPayload,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneyMapInfoData
+  ServiceJourneyMapInfoData, TripQuery_v3, TripsData
 } from './types';
+import {TripQueryQuery} from "./impl/trips/graphql/jp3/trip.graphql-gen";
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -57,6 +58,10 @@ export interface IServiceJourneyService {
     id: string,
     query: DeparturesForServiceJourneyQuery
   ): Promise<Result<EstimatedCall[] | null, APIError>>;
+}
+
+export interface ITrips_v3 {
+  getTrips(query: TripQuery_v3 ): Promise<Result<TripQueryQuery, APIError>>
 }
 
 export interface IStopsService {
@@ -128,3 +133,4 @@ export interface IJourneyService {
     query: TripPatternsQuery
   ): Promise<Result<TripPattern[], APIError>>;
 }
+
