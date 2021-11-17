@@ -125,6 +125,12 @@ export interface IStopsService {
   ): Promise<Result<NearestPlace[] | null, APIError>>;
 }
 
+export interface IStopsService_v3 {
+  getStopPlacesByPosition(
+    query: StopPlaceQuery
+  ): Promise<Result<StopPlace[], APIError>>;
+}
+
 export interface IJourneyService {
   getTrips(query: TripQuery): Promise<Result<TripPattern[], APIError>>;
 

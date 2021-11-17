@@ -1,0 +1,56 @@
+query nearestPlaces(
+  $filterByInUse: Boolean,
+  $filterByPlaceTypes: [FilterPlaceType] = quay,
+  $maximumResults: Int = 10,
+  $maximumDistance: Float!,
+  $longitude: Float!,
+  $latitude: Float!
+) {
+  nearest(
+    filterByInUse: $filterByInUse,
+    latitude: $latitude,
+    longitude: $longitude,
+    maximumDistance: $maximumDistance,
+    filterByPlaceTypes: $filterByPlaceTypes,
+    maximumResults: $maximumResults
+  ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+    edges {
+      cursor
+      node {
+        distance
+        place {
+          ... on StopPlace {
+            id
+            name
+            quays(
+              filterByInUse: $filterByInUse
+            ) {
+              id
+              description
+              name
+              publicCode
+            }
+            transportMode
+            description
+            longitude
+            latitude
+          }
+          ... on Quay {
+            id
+            name
+            latitude
+            longitude
+            publicCode
+            description
+          }
+        }
+      }
+    }
+  }
+}
