@@ -20,8 +20,8 @@ import journeyRoutes from './api/journey';
 import healthRoutes from './api/health';
 import enrollmentRoutes from './api/enrollment';
 
-import tripsRoutes from './api/trips'
-import tripsService from './service/impl/trips'
+import tripsRoutes from './api/trips';
+import tripsService from './service/impl/trips';
 
 import registerMetricsExporter from './utils/metrics';
 
