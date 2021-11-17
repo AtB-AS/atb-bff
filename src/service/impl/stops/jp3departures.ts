@@ -1,21 +1,11 @@
 import { Result } from '@badrap/result';
 import { EstimatedCall, StopPlaceDetails } from '@entur/sdk';
 import { PubSub, Topic } from '@google-cloud/pubsub';
-import haversineDistance from 'haversine-distance';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import { getEnv } from '../../../utils/getenv';
-import { IStopsService, IStopsService_v3 } from '../../interface';
-import { APIError, DepartureRealtimeQuery } from '../../types';
+import { IStopsService_v3 } from '../../interface';
+import { APIError } from '../../types';
 import { EnturServiceAPI } from '../entur';
-import {
-  getDeparturesGrouped,
-  getDeparturesGroupedNearest
-} from './departure-group';
-import { getRealtimeDepartureTime } from './departure-time';
-import {
-  getDeparturesFromLocation,
-  getDeparturesFromStops
-} from './departures';
 import {
   NearestPlacesDocument,
   NearestPlacesQuery,
