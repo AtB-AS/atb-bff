@@ -1,4 +1,4 @@
-query nearestPlacesV3($filterByInUse: Boolean, $maximumResults: Int = 10, $maximumDistance: Float!, $longitude: Float!, $latitude: Float!) {
+query nearestStopPlaces($filterByInUse: Boolean, $maximumResults: Int = 10, $maximumDistance: Float!, $longitude: Float!, $latitude: Float!) {
   nearest(
     filterByInUse: $filterByInUse
     latitude: $latitude

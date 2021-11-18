@@ -1,32 +1,29 @@
 import Hapi from '@hapi/hapi';
-import { NearestPlacesV3QueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
-import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/quay-departures.graphql-gen';
+import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
+import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/stop-departures.graphql-gen';
 import { IDeparturesService } from '../../service/interface';
-import {
-  getStopPlaceByPositionRequest,
-  getStopPlaceQuayDeparturesRequest
-} from './schema';
+import { getStopsNearestRequest, getStopDeparturesRequest } from './schema';
 
 export default (server: Hapi.Server) => (service: IDeparturesService) => {
   server.route({
     method: 'GET',
     path: '/bff/v2/departures/stops-nearest',
     options: {
-      tags: ['api', 'stops'],
-      validate: getStopPlaceByPositionRequest,
+      tags: ['api', 'departures', 'stop'],
+      validate: getStopsNearestRequest,
       description: 'Find stops near coordinates'
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as NearestPlacesV3QueryVariables;
+      const query = (request.query as unknown) as NearestStopPlacesQueryVariables;
       return (await service.getStopPlacesByPosition(query)).unwrap();
     }
   });
   server.route({
     method: 'GET',
-    path: '/bff/v2/departures/quay-departures',
+    path: '/bff/v2/departures/stop-departures',
     options: {
-      tags: ['api', 'stops'],
-      validate: getStopPlaceQuayDeparturesRequest,
+      tags: ['api', 'departures', 'quay', 'estimatedCalls'],
+      validate: getStopDeparturesRequest,
       description: 'Get stop with departures for every quay'
     },
     handler: async (request, h) => {

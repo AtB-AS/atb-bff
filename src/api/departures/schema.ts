@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const getStopPlaceByPositionRequest = {
+export const getStopsNearestRequest = {
   query: Joi.object({
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),
@@ -10,7 +10,7 @@ export const getStopPlaceByPositionRequest = {
   })
 };
 
-export const getStopPlaceQuayDeparturesRequest = {
+export const getStopDeparturesRequest = {
   query: Joi.object({
     filterByInUse: Joi.boolean(),
     id: Joi.string().required(),

@@ -7,15 +7,15 @@ import { IDeparturesService } from '../../interface';
 import { APIError } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
-  NearestPlacesV3Document,
-  NearestPlacesV3Query,
-  NearestPlacesV3QueryVariables
+  NearestStopPlacesDocument,
+  NearestStopPlacesQuery,
+  NearestStopPlacesQueryVariables
 } from './gql/jp3/stops-nearest.graphql-gen';
 import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
-} from './gql/jp3/quay-departures.graphql-gen';
+} from './gql/jp3/stop-departures.graphql-gen';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -56,10 +56,10 @@ export default (
       try {
         console.log('getstopplace');
         const result = await journeyPlannerClient_v3.query<
-          NearestPlacesV3Query,
-          NearestPlacesV3QueryVariables
+          NearestStopPlacesQuery,
+          NearestStopPlacesQueryVariables
         >({
-          query: NearestPlacesV3Document,
+          query: NearestStopPlacesDocument,
           variables: {
             latitude,
             longitude,
