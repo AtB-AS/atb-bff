@@ -11,6 +11,11 @@ import {
   NearestPlacesV3Query,
   NearestPlacesV3QueryVariables
 } from './journey-gql/jp3/nearest-places.graphql-gen';
+import {
+  StopPlaceQuayDeparturesDocument,
+  StopPlaceQuayDeparturesQuery,
+  StopPlaceQuayDeparturesQueryVariables
+} from './journey-gql/jp3/stop-place-quay-departures.graphql-gen';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -61,6 +66,36 @@ export default (
             maximumDistance,
             maximumResults,
             filterByInUse
+          }
+        });
+
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+
+        return Result.ok(result.data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+
+    async getStopPlaceQuayDepartures({
+      filterByInUse = true,
+      id,
+      numberOfDepartures = 10,
+      startTime
+    }) {
+      try {
+        const result = await journeyPlannerClient_v3.query<
+          StopPlaceQuayDeparturesQuery,
+          StopPlaceQuayDeparturesQueryVariables
+        >({
+          query: StopPlaceQuayDeparturesDocument,
+          variables: {
+            filterByInUse,
+            id,
+            numberOfDepartures,
+            startTime
           }
         });
 

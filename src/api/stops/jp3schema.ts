@@ -10,3 +10,12 @@ export const getStopPlaceByPositionRequest = {
     includeUnusedQuays: Joi.boolean()
   })
 };
+
+export const getStopPlaceQuayDeparturesRequest = {
+  query: Joi.object({
+    filterByInUse: Joi.boolean(),
+    id: Joi.string().required(),
+    numberOfDepartrues: Joi.number(),
+    startTime: Joi.string()
+  })
+};
