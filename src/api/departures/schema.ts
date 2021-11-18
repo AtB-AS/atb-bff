@@ -1,13 +1,12 @@
 import Joi from 'joi';
 
-const ONE_MINUTE = 60 * 1000;
-
 export const getStopPlaceByPositionRequest = {
   query: Joi.object({
-    lat: Joi.number().required(),
-    lon: Joi.number().required(),
-    distance: Joi.number(),
-    includeUnusedQuays: Joi.boolean()
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
+    maximumDistance: Joi.number(),
+    maximumResults: Joi.number(),
+    filterByInUse: Joi.boolean()
   })
 };
 

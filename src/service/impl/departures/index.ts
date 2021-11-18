@@ -3,19 +3,19 @@ import { EstimatedCall, StopPlaceDetails } from '@entur/sdk';
 import { PubSub, Topic } from '@google-cloud/pubsub';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import { getEnv } from '../../../utils/getenv';
-import { IStopsService_v3 } from '../../interface';
+import { IDeparturesService } from '../../interface';
 import { APIError } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
   NearestPlacesV3Document,
   NearestPlacesV3Query,
   NearestPlacesV3QueryVariables
-} from './journey-gql/jp3/nearest-places.graphql-gen';
+} from './gql/jp3/stops-nearest.graphql-gen';
 import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
-} from './journey-gql/jp3/stop-place-quay-departures.graphql-gen';
+} from './gql/jp3/quay-departures.graphql-gen';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
 
@@ -27,7 +27,7 @@ const topicNameRealtime = `analytics_departure_realtime`;
 export default (
   service: EnturServiceAPI,
   pubSubClient: PubSub
-): IStopsService_v3 => {
+): IDeparturesService => {
   // createTopic might fail if the topic already exists; ignore.
   createAllTopics(pubSubClient);
 
@@ -45,7 +45,7 @@ export default (
     pubOpts
   );
 
-  const api: IStopsService_v3 = {
+  const api: IDeparturesService = {
     async getStopPlacesByPosition({
       latitude,
       longitude,

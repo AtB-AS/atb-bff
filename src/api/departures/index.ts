@@ -1,17 +1,16 @@
-import { Boom } from '@hapi/boom';
 import Hapi from '@hapi/hapi';
-import { NearestPlacesV3QueryVariables } from '../../service/impl/stops/journey-gql/jp3/nearest-places.graphql-gen';
-import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/stops/journey-gql/jp3/stop-place-quay-departures.graphql-gen';
-import { IStopsService_v3 } from '../../service/interface';
+import { NearestPlacesV3QueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
+import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/quay-departures.graphql-gen';
+import { IDeparturesService } from '../../service/interface';
 import {
   getStopPlaceByPositionRequest,
   getStopPlaceQuayDeparturesRequest
-} from './jp3schema';
+} from './schema';
 
-export default (server: Hapi.Server) => (service: IStopsService_v3) => {
+export default (server: Hapi.Server) => (service: IDeparturesService) => {
   server.route({
     method: 'GET',
-    path: '/bff/v2/stops/nearest',
+    path: '/bff/v2/departures/stops-nearest',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceByPositionRequest,
@@ -24,7 +23,7 @@ export default (server: Hapi.Server) => (service: IStopsService_v3) => {
   });
   server.route({
     method: 'GET',
-    path: '/bff/v2/stop/quay-departures',
+    path: '/bff/v2/departures/quay-departures',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlaceQuayDeparturesRequest,
