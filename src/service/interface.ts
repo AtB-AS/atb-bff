@@ -41,6 +41,7 @@ import {
   TripsData
 } from './types';
 import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
+import { Trip } from '../graphql/journey-types_v3';
 import {
   NearestStopPlacesQueryVariables,
   NearestStopPlacesQuery

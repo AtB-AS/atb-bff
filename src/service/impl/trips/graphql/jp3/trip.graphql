@@ -7,6 +7,7 @@ query Trips($from: Location!, $to: Location!) {
     }
     tripPatterns {
       expectedStartTime
+      expectedEndTime
       duration
       walkDistance
       legs {

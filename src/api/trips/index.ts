@@ -17,7 +17,9 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
     handler: async (request, h) => {
       const query = (request.query as unknown) as TripQuery_v3;
       const result = await service.getTrips(query);
-      return result.unwrap();
+      const unwrapped = result.unwrap();
+      console.log(unwrapped);
+      return unwrapped;
     }
   });
 }
