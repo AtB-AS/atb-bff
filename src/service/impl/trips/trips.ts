@@ -28,8 +28,10 @@ export async function getTrips(query: TripQuery_v3): Promise<Result<TripsQuery, 
 }
 
 function mapTripsData(input: TripsQuery): TripsQuery {
-  let results: TripsQuery = {
-    trip: input.trip
-  };
-  return results;
+
+  input.trip?.tripPatterns.forEach(pattern=> {
+    (pattern as any).id = Math.floor((Math.random()*1000000)).toString(24)
+  })
+
+  return input;
 }
