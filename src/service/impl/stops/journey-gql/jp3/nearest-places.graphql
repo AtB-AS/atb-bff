@@ -1,17 +1,10 @@
-query nearestPlaces(
-  $filterByInUse: Boolean,
-  $filterByPlaceTypes: [FilterPlaceType] = quay,
-  $maximumResults: Int = 10,
-  $maximumDistance: Float!,
-  $longitude: Float!,
-  $latitude: Float!
-) {
+query nearestPlacesV3($filterByInUse: Boolean, $maximumResults: Int = 10, $maximumDistance: Float!, $longitude: Float!, $latitude: Float!) {
   nearest(
-    filterByInUse: $filterByInUse,
-    latitude: $latitude,
-    longitude: $longitude,
-    maximumDistance: $maximumDistance,
-    filterByPlaceTypes: $filterByPlaceTypes,
+    filterByInUse: $filterByInUse
+    latitude: $latitude
+    longitude: $longitude
+    maximumDistance: $maximumDistance
+    filterByPlaceTypes: stopPlace
     maximumResults: $maximumResults
   ) {
     pageInfo {
@@ -28,9 +21,7 @@ query nearestPlaces(
           ... on StopPlace {
             id
             name
-            quays(
-              filterByInUse: $filterByInUse
-            ) {
+            quays(filterByInUse: $filterByInUse) {
               id
               description
               name
@@ -40,14 +31,6 @@ query nearestPlaces(
             description
             longitude
             latitude
-          }
-          ... on Quay {
-            id
-            name
-            latitude
-            longitude
-            publicCode
-            description
           }
         }
       }

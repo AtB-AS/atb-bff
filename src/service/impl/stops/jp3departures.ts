@@ -7,9 +7,9 @@ import { IStopsService_v3 } from '../../interface';
 import { APIError } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
-  NearestPlacesDocument,
-  NearestPlacesQuery,
-  NearestPlacesQueryVariables
+  NearestPlacesV3Document,
+  NearestPlacesV3Query,
+  NearestPlacesV3QueryVariables
 } from './journey-gql/jp3/nearest-places.graphql-gen';
 
 type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
@@ -42,33 +42,25 @@ export default (
 
   const api: IStopsService_v3 = {
     async getStopPlacesByPosition({
-      lat: latitude,
-      lon: longitude,
-      distance = 1000,
-      includeUnusedQuays
+      latitude,
+      longitude,
+      maximumDistance = 1000,
+      maximumResults = 10,
+      filterByInUse = true
     }) {
-      console.log('getStopPlacesByPosition v3');
       try {
-        const stops = await service.getStopPlacesByPosition(
-          {
-            latitude,
-            longitude
-          },
-          distance,
-          { includeUnusedQuays }
-        );
-
+        console.log('getstopplace');
         const result = await journeyPlannerClient_v3.query<
-          NearestPlacesQuery,
-          NearestPlacesQueryVariables
+          NearestPlacesV3Query,
+          NearestPlacesV3QueryVariables
         >({
-          query: NearestPlacesDocument,
+          query: NearestPlacesV3Document,
           variables: {
             latitude,
             longitude,
-            maximumDistance: distance,
-            filterByInUse: includeUnusedQuays
-            // filterByPlaceTypes: 'quay',
+            maximumDistance,
+            maximumResults,
+            filterByInUse
           }
         });
 
@@ -76,7 +68,7 @@ export default (
           return Result.err(new APIError(result.errors));
         }
 
-        return Result.ok(stops);
+        return Result.ok(result.data);
       } catch (error) {
         return Result.err(new APIError(error));
       }

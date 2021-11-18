@@ -41,6 +41,10 @@ import {
   TripsData
 } from './types';
 import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
+import {
+  NearestPlacesV3QueryVariables,
+  NearestPlacesV3Query
+} from './impl/stops/journey-gql/jp3/nearest-places.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -127,8 +131,8 @@ export interface IStopsService {
 
 export interface IStopsService_v3 {
   getStopPlacesByPosition(
-    query: StopPlaceQuery
-  ): Promise<Result<StopPlace[], APIError>>;
+    query: NearestPlacesV3QueryVariables
+  ): Promise<Result<NearestPlacesV3Query, APIError>>;
 }
 
 export interface IJourneyService {
