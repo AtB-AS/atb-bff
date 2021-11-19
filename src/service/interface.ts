@@ -36,10 +36,20 @@ import {
   DepartureGroupsQuery,
   DepartureGroupsPayload,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneyMapInfoData, TripQuery_v3, TripsData
+  ServiceJourneyMapInfoData,
+  TripQuery_v3,
+  TripsData
 } from './types';
-import {TripsQuery} from "./impl/trips/graphql/jp3/trip.graphql-gen";
-import {Trip} from '../graphql/journey-types_v3';
+import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
+import { Trip } from '../graphql/journey-types_v3';
+import {
+  NearestStopPlacesQueryVariables,
+  NearestStopPlacesQuery
+} from './impl/departures/gql/jp3/stops-nearest.graphql-gen';
+import {
+  StopPlaceQuayDeparturesQuery,
+  StopPlaceQuayDeparturesQueryVariables
+} from './impl/departures/gql/jp3/stop-departures.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -62,7 +72,7 @@ export interface IServiceJourneyService {
 }
 
 export interface ITrips_v3 {
-  getTrips(query: TripQuery_v3 ): Promise<Result<TripsQuery, APIError>>
+  getTrips(query: TripQuery_v3): Promise<Result<TripsQuery, APIError>>;
 }
 
 export interface IStopsService {
@@ -124,6 +134,15 @@ export interface IStopsService {
   ): Promise<Result<NearestPlace[] | null, APIError>>;
 }
 
+export interface IDeparturesService {
+  getStopPlacesByPosition(
+    query: NearestStopPlacesQueryVariables
+  ): Promise<Result<NearestStopPlacesQuery, APIError>>;
+  getStopPlaceQuayDepartures(
+    query: StopPlaceQuayDeparturesQueryVariables
+  ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
+}
+
 export interface IJourneyService {
   getTrips(query: TripQuery): Promise<Result<TripPattern[], APIError>>;
 
@@ -134,4 +153,3 @@ export interface IJourneyService {
     query: TripPatternsQuery
   ): Promise<Result<TripPattern[], APIError>>;
 }
-
