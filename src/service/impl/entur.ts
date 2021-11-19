@@ -47,10 +47,10 @@ export const enturClient_v3 = () => {
    APIs. Set variable to dev or staging to use development or staging enviroment. */
     hosts: ENTUR_BASEURL
       ? {
-        journeyPlanner: `${ENTUR_BASEURL}/journey-planner/v3`,
-        geocoder: `${ENTUR_BASEURL}/geocoder/v1`,
-        nsr: `${ENTUR_BASEURL}/stop-places/v1`
-      }
+          journeyPlanner: `${ENTUR_BASEURL}/journey-planner/v3`,
+          geocoder: `${ENTUR_BASEURL}/geocoder/v1`,
+          nsr: `${ENTUR_BASEURL}/stop-places/v1`
+        }
       : undefined,
     fetch: throttle((url: RequestInfo, init?: RequestInit | undefined) => {
       return fetch(url, {
@@ -60,6 +60,5 @@ export const enturClient_v3 = () => {
     })
   });
 };
-
 
 export default service;

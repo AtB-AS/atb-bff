@@ -1,8 +1,13 @@
-import Hapi from "@hapi/hapi";
-import {IStopsService, ITrips_v3} from "../../service/interface";
-import { getTripsRequest} from "./schema";
-import {Boom} from "@hapi/boom";
-import {DeparturesFromQuayQuery, QuaysForStopPlaceQuery, TripQuery, TripQuery_v3} from "../../service/types";
+import Hapi from '@hapi/hapi';
+import { IStopsService, ITrips_v3 } from '../../service/interface';
+import { getTripsRequest } from './schema';
+import { Boom } from '@hapi/boom';
+import {
+  DeparturesFromQuayQuery,
+  QuaysForStopPlaceQuery,
+  TripQuery,
+  TripQuery_v3
+} from '../../service/types';
 
 export default (server: Hapi.Server) => (service: ITrips_v3) => {
   server.route({
@@ -22,7 +27,4 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
       return unwrapped;
     }
   });
-}
-
-
-
+};

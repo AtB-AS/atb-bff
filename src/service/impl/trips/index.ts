@@ -3,17 +3,14 @@ import { getEnv } from '../../../utils/getenv';
 import { ITrips_v3 } from '../../interface';
 import { EnturServiceAPI } from '../entur';
 
-import {getTrips} from './trips';
+import { getTrips } from './trips';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
 const topicNameGroups = `analytics_departure_groups_search`;
 const topicNameRealtime = `analytics_departure_realtime`;
 
-export default (
-  service: EnturServiceAPI,
-  pubSubClient: PubSub
-): ITrips_v3 => {
+export default (service: EnturServiceAPI, pubSubClient: PubSub): ITrips_v3 => {
   // createTopic might fail if the topic already exists; ignore.
   createAllTopics(pubSubClient);
 
@@ -33,9 +30,9 @@ export default (
 
   const api: ITrips_v3 = {
     async getTrips(query) {
-      return getTrips(query)
+      return getTrips(query);
     }
-  }
+  };
 
   return api;
 };
