@@ -10,24 +10,26 @@ export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type StopPlaceQuayDeparturesQuery = { stopPlace?: Types.Maybe<{ description?: Types.Maybe<string>, id: string, name: string, quays?: Types.Maybe<Array<Types.Maybe<{ description?: Types.Maybe<string>, id: string, name: string, estimatedCalls: Array<Types.Maybe<{ aimedDepartureTime?: Types.Maybe<any>, expectedDepartureTime?: Types.Maybe<any>, realtime?: Types.Maybe<boolean>, realtimeState?: Types.Maybe<Types.RealtimeState>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, serviceJourney?: Types.Maybe<{ id: string, privateCode?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, line: { name?: Types.Maybe<string>, id: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode> } }> }>> }>>> }> };
+export type StopPlaceQuayDeparturesQuery = { stopPlace?: Types.Maybe<{ id: string, quays?: Types.Maybe<Array<Types.Maybe<{ id: string, estimatedCalls: Array<Types.Maybe<{ aimedDepartureTime?: Types.Maybe<any>, expectedDepartureTime?: Types.Maybe<any>, realtime?: Types.Maybe<boolean>, realtimeState?: Types.Maybe<Types.RealtimeState>, quay?: Types.Maybe<{ id: string, stopPlace?: Types.Maybe<{ id: string }> }>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, serviceJourney?: Types.Maybe<{ id: string, privateCode?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, line: { name?: Types.Maybe<string>, id: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode> } }> }>> }>>> }> };
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
     query stopPlaceQuayDepartures($filterByInUse: Boolean = true, $id: String!, $numberOfDepartures: Int, $startTime: DateTime) {
   stopPlace(id: $id) {
-    description
     id
-    name
     quays(filterByInUse: $filterByInUse) {
-      description
       id
-      name
       estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime) {
         aimedDepartureTime
         expectedDepartureTime
         realtime
         realtimeState
+        quay {
+          id
+          stopPlace {
+            id
+          }
+        }
         destinationDisplay {
           frontText
         }

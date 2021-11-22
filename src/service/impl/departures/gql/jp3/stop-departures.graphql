@@ -1,17 +1,19 @@
 query stopPlaceQuayDepartures($filterByInUse: Boolean = true, $id: String!, $numberOfDepartures: Int, $startTime: DateTime) {
   stopPlace(id: $id) {
-    description
     id
-    name
     quays(filterByInUse: $filterByInUse) {
-      description
       id
-      name
       estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime) {
         aimedDepartureTime
         expectedDepartureTime
         realtime
         realtimeState
+        quay {
+          id
+          stopPlace {
+            id
+          }
+        }
         destinationDisplay {
           frontText
         }
