@@ -2,7 +2,10 @@ overwrite: true
 generates:
   src/graphql/journey-types_v3.ts:
     documents: ./src/**/jp3/*.graphql
-    schema: 'https://api.entur.io/journey-planner/v3/graphql'
+    schema:
+      - https://api.entur.io/journey-planner/v3/graphql:
+        headers:
+          ET-Client-Name: ${ET_CLIENT_NAME:'atb-bff'}
     config:
       maybeValue: T
       skipTypename: true
@@ -12,7 +15,10 @@ generates:
       - typescript
   src/:
     documents: ./src/**/jp3/*.graphql
-    schema: 'https://api.entur.io/journey-planner/v3/graphql'
+    schema:
+      - https://api.entur.io/journey-planner/v3/graphql:
+        headers:
+          ET-Client-Name: ${ET_CLIENT_NAME:'atb-bff'}
     preset: near-operation-file
     presetConfig:
       extension: .graphql-gen.ts
