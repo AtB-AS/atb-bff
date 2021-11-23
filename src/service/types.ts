@@ -146,8 +146,8 @@ export interface TripQuery {
 }
 
 export interface TripQuery_v3 {
-  from: string;
-  to: string;
+  from: Location;
+  to: Location;
   when?: Date;
 }
 

@@ -1,5 +1,5 @@
-query Trips($from: Location!, $to: Location!) {
-  trip(from: $from, to: $to) {
+query Trips($from: Location!, $to: Location!, $when: DateTime) {
+  trip(from: $from, to: $to, dateTime: $when) {
     metadata {
       nextDateTime
       prevDateTime
@@ -13,14 +13,40 @@ query Trips($from: Location!, $to: Location!) {
       legs {
         mode
         distance
+        duration
+        aimedStartTime
+        expectedEndTime
+        expectedStartTime
+        realtime
         line {
           id
           publicCode
           name
+          transportSubmode
         }
         fromEstimatedCall {
           aimedDepartureTime
           expectedDepartureTime
+          destinationDisplay {
+            frontText
+          }
+          quay {
+            publicCode
+            name
+          }
+        }
+        situations {
+          situationNumber
+          description {
+            value
+          }
+        }
+        fromPlace {
+          quay {
+            publicCode
+            name
+          }
+          name
         }
       }
     }
