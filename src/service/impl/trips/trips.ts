@@ -11,7 +11,6 @@ export async function getTrips(
   query: TripQuery_v3
 ): Promise<Result<TripsQuery, APIError>> {
   try {
-    console.log("query: ", JSON.stringify(query));
 
     const result = await journeyPlannerClient_v3.query<
       TripsQuery,
