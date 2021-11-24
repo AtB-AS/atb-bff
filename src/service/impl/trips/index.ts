@@ -6,9 +6,7 @@ import { EnturServiceAPI } from '../entur';
 import { getTrips } from './trips';
 
 const ENV = getEnv();
-const topicName = `analytics_departures_search`;
-const topicNameGroups = `analytics_departure_groups_search`;
-const topicNameRealtime = `analytics_departure_realtime`;
+const topicName = `analytics_trips_search`;
 
 export default (service: EnturServiceAPI, pubSubClient: PubSub): ITrips_v3 => {
   // createTopic might fail if the topic already exists; ignore.
@@ -22,14 +20,9 @@ export default (service: EnturServiceAPI, pubSubClient: PubSub): ITrips_v3 => {
   };
 
   const batchedPublisher = pubSubClient.topic(topicName, pubOpts);
-  const batchedPublisherGroups = pubSubClient.topic(topicNameGroups, pubOpts);
-  const batchedPublisherRealtime = pubSubClient.topic(
-    topicNameRealtime,
-    pubOpts
-  );
-
   const api: ITrips_v3 = {
     async getTrips(query) {
+      pub(batchedPublisher, { query });
       return getTrips(query);
     }
   };
@@ -46,7 +39,7 @@ function pub(topic: Topic, data: object) {
 }
 
 function createAllTopics(pubSubClient: PubSub) {
-  [topicName, topicNameGroups, topicNameRealtime].forEach(topic =>
+  [topicName].forEach(topic =>
     pubSubClient.createTopic(topic).catch(() => {})
   );
 }
