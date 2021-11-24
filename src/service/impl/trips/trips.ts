@@ -11,21 +11,17 @@ export async function getTrips(
   query: TripQuery_v3
 ): Promise<Result<TripsQuery, APIError>> {
   try {
-
     const result = await journeyPlannerClient_v3.query<
       TripsQuery,
       TripsQueryVariables
-    >(
-      {query: TripsDocument,
-        variables: query
-    });
+    >({ query: TripsDocument, variables: query });
 
     if (result.errors) {
       return Result.err(new APIError(result.errors));
     }
     return Result.ok(mapTripsData(result.data));
   } catch (error) {
-    console.log("error: ", error);
+    console.log('error: ', error);
     return Result.err(new APIError(error));
   }
 }
