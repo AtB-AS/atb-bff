@@ -36,8 +36,24 @@ describe('GET /bff/v2/trips', () => {
     });
 
     const res = await server.inject({
-      method: 'get',
-      url: `/bff/v2/trips?from=${from}&to=${to}`
+      method: 'post',
+      url: `/bff/v2/trips`,
+      payload: {
+        from: {
+          name: 'Trondheim',
+          coordinates: {
+            latitude: 63.43,
+            longitude: 10.34
+          }
+        },
+        to: {
+          name: 'Oslo',
+          coordinates: {
+            latitude: 59.9139,
+            longitude: 10.7522
+          }
+        }
+      }
     });
     expect(res.statusCode).toBe(200);
   });
