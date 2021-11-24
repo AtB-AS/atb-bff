@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-
 export const postTripsRequest = {
   payload: Joi.object({
     from: Joi.object({
