@@ -1,7 +1,7 @@
-import Hapi from '@hapi/hapi';
-import { ITrips_v3 } from '../../service/interface';
-import { getTripsRequest, postTripsRequest } from './schema';
-import { TripQuery_v3 } from '../../service/types';
+import Hapi from "@hapi/hapi";
+import {ITrips_v3} from "../../service/interface";
+import {postTripsRequest} from './schema';
+import {TripQuery_v3} from "../../service/types";
 
 export default (server: Hapi.Server) => (service: ITrips_v3) => {
   server.route({

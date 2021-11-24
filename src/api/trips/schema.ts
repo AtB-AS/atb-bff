@@ -1,12 +1,5 @@
 import Joi from 'joi';
 
-export const getTripsRequest = {
-  query: Joi.object({
-    from: Joi.object().required(),
-    to: Joi.object().required(),
-    when: Joi.date()
-  })
-};
 
 export const postTripsRequest = {
   payload: Joi.object({
@@ -26,6 +19,6 @@ export const postTripsRequest = {
         longitude: Joi.number()
       })
     }).required(),
-    searchDate: Joi.date()
+    when: Joi.date(),
   })
 };
