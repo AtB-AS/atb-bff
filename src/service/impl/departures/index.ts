@@ -1,10 +1,9 @@
 import { Result } from '@badrap/result';
-import { EstimatedCall, StopPlaceDetails } from '@entur/sdk';
 import { PubSub, Topic } from '@google-cloud/pubsub';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import { getEnv } from '../../../utils/getenv';
 import { IDeparturesService } from '../../interface';
-import { APIError } from '../../types';
+import { APIError, DepartureRealtimeQuery } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
   NearestStopPlacesDocument,
@@ -16,8 +15,7 @@ import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
 } from './gql/jp3/stop-departures.graphql-gen';
-
-type EstimatedCallWithStop = EstimatedCall & { stop: StopPlaceDetails };
+import { getRealtimeDepartureTime } from '../stops/departure-time';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -107,6 +105,10 @@ export default (
       } catch (error) {
         return Result.err(new APIError(error));
       }
+    },
+    async getDepartureRealtime(query: DepartureRealtimeQuery) {
+      pub(batchedPublisherRealtime, { query });
+      return getRealtimeDepartureTime(query, journeyPlannerClient_v3);
     }
   };
 

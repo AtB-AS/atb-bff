@@ -37,11 +37,9 @@ import {
   DepartureGroupsPayload,
   ServiceJourneyMapInfoQuery,
   ServiceJourneyMapInfoData,
-  TripQuery_v3,
-  TripsData
+  TripQuery_v3
 } from './types';
 import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
-import { Trip } from '../graphql/journey-types_v3';
 import {
   NearestStopPlacesQueryVariables,
   NearestStopPlacesQuery
@@ -141,6 +139,9 @@ export interface IDeparturesService {
   getStopPlaceQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
+  getDepartureRealtime(
+    query: DepartureRealtimeQuery
+  ): Promise<Result<DeparturesRealtimeData, APIError>>;
 }
 
 export interface IJourneyService {
