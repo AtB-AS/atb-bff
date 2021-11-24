@@ -1,6 +1,6 @@
 overwrite: true
 generates:
-  src/graphql/journey-types_v3.ts:
+  src/graphql/journeyplanner-types_v3.ts:
     documents: ./src/**/jp3/*.graphql
     schema:
       - https://api.entur.io/journey-planner/v3/graphql:
@@ -22,7 +22,7 @@ generates:
     preset: near-operation-file
     presetConfig:
       extension: .graphql-gen.ts
-      baseTypesPath: graphql/journey-types_v3.ts
+      baseTypesPath: graphql/journeyplanner-types_v3.ts
     config:
       skipTypename: true
       # This causes some types to be wrong (e.g. in departure query dates are any type)
