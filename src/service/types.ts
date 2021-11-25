@@ -145,12 +145,6 @@ export interface TripQuery {
   when?: Date;
 }
 
-export interface TripQuery_v3 {
-  from: Location;
-  to: Location;
-  when?: Date;
-}
-
 export interface TripsData {
   tripPatterns: TripsQuery;
 }

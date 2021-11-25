@@ -48,6 +48,9 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           }
           name
         }
+        serviceJourney {
+          id
+        }
       }
     }
   }
