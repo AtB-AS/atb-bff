@@ -6,11 +6,6 @@ import { IDeparturesService } from '../../interface';
 import { APIError, DepartureRealtimeQuery } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
-  NearestStopPlacesDocument,
-  NearestStopPlacesQuery,
-  NearestStopPlacesQueryVariables
-} from './gql/jp3/stops-nearest.graphql-gen';
-import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
@@ -44,39 +39,6 @@ export default (
   );
 
   const api: IDeparturesService = {
-    async getStopPlacesByPosition({
-      latitude,
-      longitude,
-      maximumDistance = 1000,
-      maximumResults = 10,
-      filterByInUse = true
-    }) {
-      try {
-        console.log('getstopplace');
-        const result = await journeyPlannerClient_v3.query<
-          NearestStopPlacesQuery,
-          NearestStopPlacesQueryVariables
-        >({
-          query: NearestStopPlacesDocument,
-          variables: {
-            latitude,
-            longitude,
-            maximumDistance,
-            maximumResults,
-            filterByInUse
-          }
-        });
-
-        if (result.errors) {
-          return Result.err(new APIError(result.errors));
-        }
-
-        return Result.ok(result.data);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
-
     async getStopPlaceQuayDepartures({
       filterByInUse = true,
       id,

@@ -41,10 +41,6 @@ import {
 } from './types';
 import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
 import {
-  NearestStopPlacesQueryVariables,
-  NearestStopPlacesQuery
-} from './impl/departures/gql/jp3/stops-nearest.graphql-gen';
-import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
 } from './impl/departures/gql/jp3/stop-departures.graphql-gen';
@@ -133,9 +129,6 @@ export interface IStopsService {
 }
 
 export interface IDeparturesService {
-  getStopPlacesByPosition(
-    query: NearestStopPlacesQueryVariables
-  ): Promise<Result<NearestStopPlacesQuery, APIError>>;
   getStopPlaceQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
