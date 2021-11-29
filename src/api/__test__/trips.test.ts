@@ -8,7 +8,9 @@ import { Result } from '@badrap/result';
 let server: Hapi.Server;
 
 const svc: jest.Mocked<ITrips_v3> = {
-  getTrips: jest.fn((...args: any): any => Result.ok(Promise.resolve([])))
+  getTrips: jest.fn((...args: any): any => Result.ok(Promise.resolve([]))),
+  getSingleTrip: jest.fn((...args: any): any => Result.ok(Promise.resolve([])))
+
 };
 
 beforeAll(async () => {
