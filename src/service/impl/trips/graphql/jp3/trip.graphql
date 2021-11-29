@@ -51,6 +51,21 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
         serviceJourney {
           id
         }
+        interchangeTo {
+          ToServiceJourney {
+            id
+          }
+        }
+        pointsOnLink {
+          points
+          length
+        }
+        intermediateEstimatedCalls {
+          quay {
+            name
+            id
+          }
+        }
       }
     }
   }
