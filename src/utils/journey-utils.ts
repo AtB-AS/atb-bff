@@ -1,7 +1,13 @@
 import Joi from 'joi';
 import { TripPattern } from '@entur/sdk';
-import { TripsQueryVariables, TripsQuery } from "../service/impl/trips/graphql/jp3/trip.graphql-gen";
-import {TripPattern as TripPattern_v3, TripsQueryWithJourneyIds} from "../types/trips";
+import {
+  TripsQueryVariables,
+  TripsQuery
+} from '../service/impl/trips/graphql/jp3/trip.graphql-gen';
+import {
+  TripPattern as TripPattern_v3,
+  TripsQueryWithJourneyIds
+} from '../types/trips';
 import { TripPatternsQuery, TripPatternQuery } from '../service/types';
 import {
   compressToEncodedURIComponent,
@@ -59,7 +65,10 @@ function isTripPatternsQuery(
  * @param trip
  * @param queryVariables
  */
-export function generateTripQueryString(trip: TripPattern_v3, queryVariables: TripsQueryVariables ) {
+export function generateTripQueryString(
+  trip: TripPattern_v3,
+  queryVariables: TripsQueryVariables
+) {
   // extract journeyIds for all legs
   const journeyIds = extractServiceJourneyIds(trip);
 
@@ -67,12 +76,12 @@ export function generateTripQueryString(trip: TripPattern_v3, queryVariables: Tr
   const tripQuery: TripsQueryVariables = {
     ...queryVariables,
     when: trip.legs[0].aimedStartTime
-  }
+  };
 
   // encode to string
   return compressToEncodedURIComponent(
-    JSON.stringify({query: tripQuery, journeyIds})
-  )
+    JSON.stringify({ query: tripQuery, journeyIds })
+  );
 }
 
 /**
@@ -81,8 +90,11 @@ export function generateTripQueryString(trip: TripPattern_v3, queryVariables: Tr
  * @param compressedQueryString
  * @param queryValidator
  */
-export function parseTripQueryString(compressedQueryString: string, queryValidator: Joi.ObjectSchema): TripsQueryWithJourneyIds {
-  const queryString = decompressFromEncodedURIComponent(compressedQueryString)
+export function parseTripQueryString(
+  compressedQueryString: string,
+  queryValidator: Joi.ObjectSchema
+): TripsQueryWithJourneyIds {
+  const queryString = decompressFromEncodedURIComponent(compressedQueryString);
   if (!queryString) {
     throw new Error();
   }
@@ -90,7 +102,7 @@ export function parseTripQueryString(compressedQueryString: string, queryValidat
   return {
     query: queryFields.query,
     journeyIds: queryFields.journeyIds
-  }
+  };
 }
 
 /**
@@ -99,10 +111,12 @@ export function parseTripQueryString(compressedQueryString: string, queryValidat
  * Journeyplanner v3
  * @param trip
  */
-export function extractServiceJourneyIds(trip: TripPattern_v3 ) {
-  return trip.legs.map(leg => {
-    return leg.serviceJourney?.id ?? null;
-  }).filter(jId => {
-    return !!jId;
-  });
+export function extractServiceJourneyIds(trip: TripPattern_v3) {
+  return trip.legs
+    .map(leg => {
+      return leg.serviceJourney?.id ?? null;
+    })
+    .filter(jId => {
+      return !!jId;
+    });
 }

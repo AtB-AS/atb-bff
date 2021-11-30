@@ -7,10 +7,9 @@ import { Result } from '@badrap/result';
 import { APIError } from '../../types';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 
-
-import * as Boom from "@hapi/boom";
-import {extractServiceJourneyIds} from "../../../utils/journey-utils";
-import * as Trips from "../../../types/trips";
+import * as Boom from '@hapi/boom';
+import { extractServiceJourneyIds } from '../../../utils/journey-utils';
+import * as Trips from '../../../types/trips';
 
 export async function getTrips(
   query: Trips.TripsQueryVariables
@@ -31,11 +30,13 @@ export async function getTrips(
   }
 }
 
-export async function getSingleTrip(query: Trips.TripsQueryWithJourneyIds): Promise<Result<Trips.TripPattern, APIError>> {
-
-  const results = await journeyPlannerClient_v3.query<TripsQuery, TripsQueryVariables>(
-    {query: TripsDocument, variables: query.query}
-  );
+export async function getSingleTrip(
+  query: Trips.TripsQueryWithJourneyIds
+): Promise<Result<Trips.TripPattern, APIError>> {
+  const results = await journeyPlannerClient_v3.query<
+    TripsQuery,
+    TripsQueryVariables
+  >({ query: TripsDocument, variables: query.query });
 
   if (results.errors) {
     return Result.err(new APIError(results.errors));
@@ -45,16 +46,18 @@ export async function getSingleTrip(query: Trips.TripsQueryWithJourneyIds): Prom
     Boom.resourceGone('Trip not found or is no longer available.');
   }
 
-  const singleTripPattern = results.data.trip?.tripPatterns.find( trip => {
-    const journeyIds = extractServiceJourneyIds(trip)
+  const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
+    const journeyIds = extractServiceJourneyIds(trip);
     if (journeyIds.length != query.journeyIds.length) return false; // Fast comparison
-    return (JSON.stringify(journeyIds) === JSON.stringify(query.journeyIds.length)) // Slow comparison
-  })
+    return (
+      JSON.stringify(journeyIds) === JSON.stringify(query.journeyIds.length)
+    ); // Slow comparison
+  });
 
   if (singleTripPattern) {
     return Result.ok(singleTripPattern);
   } else {
-    return Result.err(new Error('Trip not found or is no longer available.'))
+    return Result.err(new Error('Trip not found or is no longer available.'));
   }
 }
 

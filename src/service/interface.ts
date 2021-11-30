@@ -36,13 +36,13 @@ import {
   DepartureGroupsQuery,
   DepartureGroupsPayload,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneyMapInfoData,
+  ServiceJourneyMapInfoData
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
 } from './impl/departures/gql/jp3/stop-departures.graphql-gen';
-import * as Trips from '../types/trips'
+import * as Trips from '../types/trips';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -65,8 +65,12 @@ export interface IServiceJourneyService {
 }
 
 export interface ITrips_v3 {
-  getTrips(query: Trips.TripsQueryVariables): Promise<Result<Trips.TripsQuery, APIError>>;
-  getSingleTrip(query: Trips.TripsQueryWithJourneyIds): Promise<Result<Trips.TripPattern, APIError>>
+  getTrips(
+    query: Trips.TripsQueryVariables
+  ): Promise<Result<Trips.TripsQuery, APIError>>;
+  getSingleTrip(
+    query: Trips.TripsQueryWithJourneyIds
+  ): Promise<Result<Trips.TripPattern, APIError>>;
 }
 
 export interface IStopsService {
