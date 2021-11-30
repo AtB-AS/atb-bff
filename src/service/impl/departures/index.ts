@@ -40,7 +40,6 @@ export default (
 
   const api: IDeparturesService = {
     async getStopPlaceQuayDepartures({
-      filterByInUse = true,
       id,
       numberOfDepartures = 10,
       startTime
@@ -52,7 +51,6 @@ export default (
         >({
           query: StopPlaceQuayDeparturesDocument,
           variables: {
-            filterByInUse,
             id,
             numberOfDepartures,
             startTime

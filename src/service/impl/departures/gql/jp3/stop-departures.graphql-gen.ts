@@ -3,7 +3,6 @@ import * as Types from '../../../../../graphql/journeyplanner-types_v3';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
-  filterByInUse?: Types.Maybe<Types.Scalars['Boolean']>;
   id: Types.Scalars['String'];
   numberOfDepartures?: Types.Maybe<Types.Scalars['Int']>;
   startTime?: Types.Maybe<Types.Scalars['DateTime']>;
@@ -14,10 +13,10 @@ export type StopPlaceQuayDeparturesQuery = { stopPlace?: Types.Maybe<{ id: strin
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
-    query stopPlaceQuayDepartures($filterByInUse: Boolean = true, $id: String!, $numberOfDepartures: Int, $startTime: DateTime) {
+    query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime) {
   stopPlace(id: $id) {
     id
-    quays(filterByInUse: $filterByInUse) {
+    quays(filterByInUse: true) {
       id
       estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime) {
         expectedDepartureTime

@@ -2,7 +2,6 @@ import Joi from 'joi';
 
 export const getStopDeparturesRequest = {
   query: Joi.object({
-    filterByInUse: Joi.boolean(),
     id: Joi.string().required(),
     numberOfDepartrues: Joi.number(),
     startTime: Joi.string()
