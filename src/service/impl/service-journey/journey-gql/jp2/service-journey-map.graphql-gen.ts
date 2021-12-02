@@ -1,4 +1,4 @@
-import * as Types from '../../../../graphql/journey-types';
+import * as Types from '../../../../../graphql/journey-types';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';

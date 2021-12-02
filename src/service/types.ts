@@ -13,6 +13,7 @@ import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 import { CursoredQuery } from './cursored';
 import { TransportSubmode } from '../graphql/journey-types';
+import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
 
 export interface Coordinates {
   latitude: number;
@@ -142,6 +143,10 @@ export interface TripQuery {
   from: string;
   to: string;
   when?: Date;
+}
+
+export interface TripsData {
+  tripPatterns: TripsQuery;
 }
 
 export interface TripPatternsQuery {

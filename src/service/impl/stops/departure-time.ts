@@ -1,4 +1,6 @@
 import { Result } from '@badrap/result';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import {
   APIError,
@@ -11,7 +13,7 @@ import {
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
   GetDepartureRealtimeQueryVariables
-} from './journey-gql/departure-time.graphql-gen';
+} from './journey-gql/jp2/departure-time.graphql-gen';
 
 const createVariables = (
   query: DepartureRealtimeQuery
@@ -29,7 +31,10 @@ export async function populateCacheIfNotThere(
   // if the cache is empty
   try {
     const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(variables);
+    const previousResult = getPreviousExpectedFromCache(
+      variables,
+      journeyPlannerClient
+    );
 
     if (previousResult) return;
 
@@ -45,12 +50,13 @@ export async function populateCacheIfNotThere(
 }
 
 export async function getRealtimeDepartureTime(
-  inputQuery: DepartureRealtimeQuery
+  inputQuery: DepartureRealtimeQuery,
+  client: ApolloClient<NormalizedCacheObject> = journeyPlannerClient
 ): Promise<Result<DeparturesRealtimeData, APIError>> {
   try {
     const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(variables);
-    const result = await journeyPlannerClient.query<
+    const previousResult = getPreviousExpectedFromCache(variables, client);
+    const result = await client.query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
@@ -129,10 +135,11 @@ function mapDeparture(
 }
 
 function getPreviousExpectedFromCache(
-  variables: GetDepartureRealtimeQueryVariables
+  variables: GetDepartureRealtimeQueryVariables,
+  client: ApolloClient<NormalizedCacheObject>
 ) {
   try {
-    const result = journeyPlannerClient.readQuery<
+    const result = client.readQuery<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({

@@ -8,7 +8,7 @@ import {
   MapInfoByServiceJourneyIdDocument,
   MapInfoByServiceJourneyIdQuery,
   MapInfoByServiceJourneyIdQueryVariables
-} from './journey-gql/service-journey-map.graphql-gen';
+} from './journey-gql/jp2/service-journey-map.graphql-gen';
 import { mapToMapLegs } from './utils';
 
 export default function serviceJourneyService(
