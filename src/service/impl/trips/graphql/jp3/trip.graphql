@@ -42,11 +42,36 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           }
         }
         fromPlace {
+          name
+          longitude
+          latitude
           quay {
             publicCode
             name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
           }
+        }
+        toPlace {
           name
+          longitude
+          latitude
+          quay {
+            publicCode
+            name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
+          }
         }
         serviceJourney {
           id
@@ -66,6 +91,10 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
             id
           }
         }
+        authority {
+          id
+        }
+        transportSubmode
       }
     }
   }

@@ -1,7 +1,12 @@
-import Hapi from '@hapi/hapi';
-import { ITrips_v3 } from '../../service/interface';
-import { TripsQueryVariables } from '../../types/trips';
-import { postTripsRequest } from './schema';
+import Hapi from "@hapi/hapi";
+import {ITrips_v3} from "../../service/interface";
+import {CompressedSingleTripQuery, TripsQueryVariables, TripsQueryWithJourneyIds} from "../../types/trips";
+import {
+  postEncodedSingleTripRequest,
+  postSingleTripRequest,
+  postTripsRequest
+} from './schema';
+import {parseTripQueryString} from "../../utils/journey-utils";
 
 export default (server: Hapi.Server) => (service: ITrips_v3) => {
   server.route({
@@ -21,4 +26,24 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
       return unwrapped;
     }
   });
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/singleTrip',
+    options: {
+      tags: ['api', 'singTrip'],
+      description: 'Get a single trip',
+      validate: postEncodedSingleTripRequest
+    },
+    handler: async (request, h) => {
+      const queryString = request.payload as CompressedSingleTripQuery;
+      console.log(queryString);
+      const query: TripsQueryWithJourneyIds = parseTripQueryString(queryString.compressedQuery, postSingleTripRequest.payload)
+      console.log(query);
+      const result = await service.getSingleTrip(query);
+      const unwrapped = result.unwrap();
+      console.log(unwrapped);
+      return unwrapped;
+    }
+  })
 };
+

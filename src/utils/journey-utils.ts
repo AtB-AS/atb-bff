@@ -99,6 +99,8 @@ export function parseTripQueryString(
     throw new Error();
   }
   const queryFields = JSON.parse(queryString);
+  queryValidator.validate(queryFields.query)
+
   return {
     query: queryFields.query,
     journeyIds: queryFields.journeyIds

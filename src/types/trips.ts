@@ -15,6 +15,10 @@ export type TripsQueryWithJourneyIds = {
   journeyIds: string[];
 };
 
+export type CompressedSingleTripQuery = {
+  compressedQuery: string,
+}
+
 function test(trip: TripPattern) {
   console.log(trip.expectedStartTime);
   console.log(trip.id);
