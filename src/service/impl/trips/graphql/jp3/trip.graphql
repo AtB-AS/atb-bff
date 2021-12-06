@@ -15,14 +15,15 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
         distance
         duration
         aimedStartTime
+        aimedEndTime
         expectedEndTime
         expectedStartTime
         realtime
         line {
           id
-          publicCode
           name
           transportSubmode
+          publicCode
         }
         fromEstimatedCall {
           aimedDepartureTime
@@ -33,6 +34,10 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           quay {
             publicCode
             name
+          }
+          notices {
+            text
+            id
           }
         }
         situations {
@@ -46,6 +51,7 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           longitude
           latitude
           quay {
+            id
             publicCode
             name
             longitude
@@ -62,6 +68,7 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           longitude
           latitude
           quay {
+            id
             publicCode
             name
             longitude
@@ -80,6 +87,7 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           ToServiceJourney {
             id
           }
+          guaranteed
         }
         pointsOnLink {
           points
