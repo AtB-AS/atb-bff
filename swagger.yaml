@@ -539,6 +539,57 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/departures/stop-departures:
+    get:
+      summary: Get stop with departures for every quay
+      operationId: getBffV2StopDepartures
+      parameters:
+        - type: string
+          name: id
+          in: query
+          required: true
+        - type: number
+          name: numberOfDepartures
+          default: 10
+        - type: string
+          format: date
+          default: '2021-01-27T09:48:19.354Z'
+          name: startTime
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v2/departures/realtime:
+    get:
+      summary: Get updated realtime information for the given quays
+      operationId: getBffV2Departuresrealtime
+      parameters:
+        - type: array
+          default: []
+          items:
+            type: string
+          collectionFormat: multi
+          name: quayIds
+          in: query
+        - type: string
+          format: date
+          name: startTime
+          in: query
+        - type: number
+          default: 5
+          name: limit
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
 definitions:
   coordinates:
     type: object
