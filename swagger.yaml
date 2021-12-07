@@ -551,6 +551,7 @@ paths:
         - type: number
           name: numberOfDepartures
           default: 10
+          in: query
         - type: string
           format: date
           default: '2021-01-27T09:48:19.354Z'
