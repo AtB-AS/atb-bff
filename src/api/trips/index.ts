@@ -9,7 +9,7 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
     path: '/bff/v2/trips',
     options: {
       tags: ['api', 'trips'],
-      description: 'Get trips from and to',
+      description: 'Get trips between stops',
       validate: postTripsRequest
     },
 

@@ -591,6 +591,22 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/trips:
+    post:
+      summary: Get trips between stops
+      operationId: postBffV2_0Trips
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/TripsModel'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
 definitions:
   coordinates:
     type: object
@@ -696,6 +712,16 @@ definitions:
     required:
       - from
       - to
+  TripsModel:
+    type: object
+    properties:
+      from:
+        $ref: '#/definitions/from'
+      to:
+        $ref: '#/definitions/from'
+      when:
+        type: string
+        format: date
 x-alt-definitions:
   location:
     type: object
