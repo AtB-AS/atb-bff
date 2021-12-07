@@ -1,6 +1,8 @@
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { DefaultOptions } from 'apollo-client';
+import * as ApolloLink from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
+import { onError } from 'apollo-link-error';
 import fetch from 'node-fetch';
 import { ENTUR_BASEURL, ET_CLIENT_NAME } from '../config/env';
 
@@ -25,7 +27,7 @@ const urlJourneyPlanner_v3 = ENTUR_BASEURL
 
 function createClient(url: string) {
   const cache = new InMemoryCache();
-  const link = new HttpLink({
+  const httpLink = new HttpLink({
     uri: url,
 
     // node-fetch uses a different signature than the browser implemented fetch
@@ -37,6 +39,8 @@ function createClient(url: string) {
       'ET-Client-Name': ET_CLIENT_NAME
     }
   });
+  const errorLink = onError(({ networkError }) => console.log(networkError));
+  const link = ApolloLink.from([errorLink, httpLink]);
 
   return new ApolloClient({
     link,
