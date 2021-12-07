@@ -8,7 +8,7 @@ import {
 } from '../../service/types';
 import {
   getDeparturesForServiceJourneyRequest,
-  getServiceJoruneyMapDataRequest
+  getServiceJoruneyMapDataRequest, getServiceJourneyPolylinesRequest
 } from './schema';
 import qs from 'querystring';
 
@@ -47,6 +47,22 @@ export default function serviceJourneyRoutes(server: Hapi.Server) {
         return server.methods.getServiceJourneyMapInfo(id, query);
       }
     });
+
+    server.route({
+      method: 'GET',
+      path: '/bff/v2/servicejourney/polyline',
+      options: {
+        tags: ['api', 'service-joruney'],
+        validate: getServiceJourneyPolylinesRequest,
+        description: 'Get polylines for a service journey'
+      },
+      handler: async (request, h) => {
+        const { id } = request.params;
+        const query = (request.query as unknown) as ServiceJourneyMapInfoQuery;
+        return server.methods.getServiceJourneyMapInfo(id, query);
+      }
+    });
+
 
     server.route({
       method: 'GET',

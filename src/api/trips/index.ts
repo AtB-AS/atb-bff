@@ -36,12 +36,9 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
     },
     handler: async (request, h) => {
       const queryString = request.payload as CompressedSingleTripQuery;
-      console.log(queryString);
       const query: TripsQueryWithJourneyIds = parseTripQueryString(queryString.compressedQuery, postSingleTripRequest.payload)
-      console.log(query);
       const result = await service.getSingleTrip(query);
       const unwrapped = result.unwrap();
-      console.log(unwrapped);
       return unwrapped;
     }
   })
