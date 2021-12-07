@@ -39,7 +39,9 @@ function createClient(url: string) {
       'ET-Client-Name': ET_CLIENT_NAME
     }
   });
-  const errorLink = onError(({ networkError }) => console.log(networkError));
+  const errorLink = onError(error =>
+    console.log('Apollo Error:', JSON.stringify(error))
+  );
   const link = ApolloLink.from([errorLink, httpLink]);
 
   return new ApolloClient({
