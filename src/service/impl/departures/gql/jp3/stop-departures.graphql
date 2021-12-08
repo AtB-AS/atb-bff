@@ -18,7 +18,6 @@ query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime
         serviceJourney {
           id
           privateCode
-          transportSubmode
           line {
             name
             id
