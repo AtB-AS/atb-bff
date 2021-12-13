@@ -11,6 +11,11 @@ import {
   StopPlaceQuayDeparturesQueryVariables
 } from './gql/jp3/stop-departures.graphql-gen';
 import { getRealtimeDepartureTime } from '../stops/departure-time';
+import {
+  QuayDeparturesDocument,
+  QuayDeparturesQuery,
+  QuayDeparturesQueryVariables
+} from './gql/jp3/quay-departures.graphql-gen';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -50,6 +55,29 @@ export default (
           StopPlaceQuayDeparturesQueryVariables
         >({
           query: StopPlaceQuayDeparturesDocument,
+          variables: {
+            id,
+            numberOfDepartures,
+            startTime
+          }
+        });
+
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+
+        return Result.ok(result.data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async getQuayDepartures({ id, numberOfDepartures = 10, startTime }) {
+      try {
+        const result = await journeyPlannerClient_v3.query<
+          QuayDeparturesQuery,
+          QuayDeparturesQueryVariables
+        >({
+          query: QuayDeparturesDocument,
           variables: {
             id,
             numberOfDepartures,

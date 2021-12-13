@@ -43,6 +43,10 @@ import {
   StopPlaceQuayDeparturesQueryVariables
 } from './impl/departures/gql/jp3/stop-departures.graphql-gen';
 import * as Trips from '../types/trips';
+import {
+  QuayDeparturesQuery,
+  QuayDeparturesQueryVariables
+} from './impl/departures/gql/jp3/quay-departures.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -136,6 +140,9 @@ export interface IDeparturesService {
   getStopPlaceQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
+  getQuayDepartures(
+    query: QuayDeparturesQueryVariables
+  ): Promise<Result<QuayDeparturesQuery, APIError>>;
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
