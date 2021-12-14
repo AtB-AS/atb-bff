@@ -137,7 +137,7 @@ export interface IStopsService {
 }
 
 export interface IDeparturesService {
-  getStopPlaceQuayDepartures(
+  getStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
   getQuayDepartures(

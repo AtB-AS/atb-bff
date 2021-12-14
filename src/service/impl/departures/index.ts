@@ -44,11 +44,7 @@ export default (
   );
 
   const api: IDeparturesService = {
-    async getStopPlaceQuayDepartures({
-      id,
-      numberOfDepartures = 10,
-      startTime
-    }) {
+    async getStopQuayDepartures({ id, numberOfDepartures = 10, startTime }) {
       try {
         const result = await journeyPlannerClient_v3.query<
           StopPlaceQuayDeparturesQuery,

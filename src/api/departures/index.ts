@@ -20,7 +20,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
-      return (await service.getStopPlaceQuayDepartures(query)).unwrap();
+      return (await service.getStopQuayDepartures(query)).unwrap();
     }
   });
   server.route({
