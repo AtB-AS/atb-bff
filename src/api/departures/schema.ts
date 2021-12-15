@@ -12,7 +12,8 @@ export const getQuayDeparturesRequest = {
   query: Joi.object({
     id: Joi.string().required(),
     numberOfDepartures: Joi.number(),
-    startTime: Joi.string()
+    startTime: Joi.string(),
+    timeRange: Joi.number()
   })
 };
 

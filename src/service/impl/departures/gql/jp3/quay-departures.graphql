@@ -1,10 +1,14 @@
-query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime) {
+query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int) {
   quay(id: $id) {
     id
     description
     publicCode
     name
-    estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime) {
+    estimatedCalls(
+      numberOfDepartures: $numberOfDepartures
+      startTime: $startTime
+      timeRange: $timeRange
+    ) {
       expectedDepartureTime
       realtime
       quay {

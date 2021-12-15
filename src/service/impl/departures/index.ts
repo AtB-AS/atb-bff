@@ -67,7 +67,12 @@ export default (
         return Result.err(new APIError(error));
       }
     },
-    async getQuayDepartures({ id, numberOfDepartures = 10, startTime }) {
+    async getQuayDepartures({
+      id,
+      numberOfDepartures = 10,
+      startTime,
+      timeRange = 86400
+    }) {
       try {
         const result = await journeyPlannerClient_v3.query<
           QuayDeparturesQuery,
@@ -77,7 +82,8 @@ export default (
           variables: {
             id,
             numberOfDepartures,
-            startTime
+            startTime,
+            timeRange
           }
         });
 
