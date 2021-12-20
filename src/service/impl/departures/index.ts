@@ -16,6 +16,11 @@ import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
 } from './gql/jp3/quay-departures.graphql-gen';
+import {
+  NearestStopPlacesDocument,
+  NearestStopPlacesQuery,
+  NearestStopPlacesQueryVariables
+} from './gql/jp3/stops-nearest.graphql-gen';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -44,6 +49,39 @@ export default (
   );
 
   const api: IDeparturesService = {
+    async getStopPlacesByPosition({
+      latitude,
+      longitude,
+      distance = 1000,
+      count = 10,
+      after
+    }) {
+      try {
+        console.log('getstopplace');
+        const result = await journeyPlannerClient_v3.query<
+          NearestStopPlacesQuery,
+          NearestStopPlacesQueryVariables
+        >({
+          query: NearestStopPlacesDocument,
+          variables: {
+            latitude,
+            longitude,
+            distance,
+            after,
+            count
+          }
+        });
+
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+
+        return Result.ok(result.data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+
     async getStopQuayDepartures({ id, numberOfDepartures = 10, startTime }) {
       try {
         const result = await journeyPlannerClient_v3.query<

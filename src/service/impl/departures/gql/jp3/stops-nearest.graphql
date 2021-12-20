@@ -1,0 +1,39 @@
+query nearestStopPlaces($count: Int = 10, $distance: Float!, $longitude: Float!, $latitude: Float!, $after: String) {
+  nearest(
+    latitude: $latitude
+    longitude: $longitude
+    maximumDistance: $distance
+    first: $count
+    after: $after
+    filterByInUse: true
+    filterByPlaceTypes: stopPlace
+    multiModalMode: parent
+  ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        distance
+        place {
+          ... on StopPlace {
+            name
+            quays(filterByInUse: true) {
+              id
+              description
+              name
+              publicCode
+              stopPlace {
+                id
+              }
+            }
+            transportMode
+            description
+            id
+          }
+        }
+      }
+    }
+  }
+}

@@ -47,6 +47,10 @@ import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
 } from './impl/departures/gql/jp3/quay-departures.graphql-gen';
+import {
+  NearestStopPlacesQuery,
+  NearestStopPlacesQueryVariables
+} from './impl/departures/gql/jp3/stops-nearest.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -137,6 +141,9 @@ export interface IStopsService {
 }
 
 export interface IDeparturesService {
+  getStopPlacesByPosition(
+    query: NearestStopPlacesQueryVariables
+  ): Promise<Result<NearestStopPlacesQuery, APIError>>;
   getStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
