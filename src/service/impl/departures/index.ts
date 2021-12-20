@@ -57,7 +57,6 @@ export default (
       after
     }) {
       try {
-        console.log('getstopplace');
         const result = await journeyPlannerClient_v3.query<
           NearestStopPlacesQuery,
           NearestStopPlacesQueryVariables
