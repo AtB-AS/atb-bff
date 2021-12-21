@@ -108,7 +108,7 @@ export default (
       id,
       numberOfDepartures = 10,
       startTime,
-      timeRange = 86400
+      timeRange = 86400 // 24 hours
     }) {
       try {
         const result = await journeyPlannerClient_v3.query<
