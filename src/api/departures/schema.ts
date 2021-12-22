@@ -1,10 +1,29 @@
 import Joi from 'joi';
 
+export const getStopsNearestRequest = {
+  query: Joi.object({
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
+    distance: Joi.number().default(1000),
+    count: Joi.number().default(10),
+    after: Joi.string()
+  })
+};
+
 export const getStopDeparturesRequest = {
   query: Joi.object({
     id: Joi.string().required(),
-    numberOfDepartures: Joi.number(),
+    numberOfDepartures: Joi.number().default(5),
     startTime: Joi.string()
+  })
+};
+
+export const getQuayDeparturesRequest = {
+  query: Joi.object({
+    id: Joi.string().required(),
+    numberOfDepartures: Joi.number().default(10),
+    startTime: Joi.string(),
+    timeRange: Joi.number().default(86400)
   })
 };
 
