@@ -8,18 +8,13 @@ query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime
         realtime
         quay {
           id
-          stopPlace {
-            id
-          }
         }
         destinationDisplay {
           frontText
         }
         serviceJourney {
           id
-          privateCode
           line {
-            name
             id
             description
             publicCode
