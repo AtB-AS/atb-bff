@@ -8,7 +8,7 @@ import { APIError } from '../../types';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 
 import * as Boom from '@hapi/boom';
-import { extractServiceJourneyIds } from '../../../utils/journey-utils';
+import {extractServiceJourneyIds, generateTripQueryString} from '../../../utils/journey-utils';
 import * as Trips from '../../../types/trips';
 
 export async function getTrips(
@@ -23,9 +23,8 @@ export async function getTrips(
     if (result.errors) {
       return Result.err(new APIError(result.errors));
     }
-    return Result.ok(mapTripsData(result.data));
+    return Result.ok(mapTripsData(result.data, query));
   } catch (error) {
-    console.log('error: ', error);
     return Result.err(new APIError(error));
   }
 }
@@ -33,6 +32,7 @@ export async function getTrips(
 export async function getSingleTrip(
   query: Trips.TripsQueryWithJourneyIds
 ): Promise<Result<Trips.TripPattern, APIError>> {
+
   const results = await journeyPlannerClient_v3.query<
     TripsQuery,
     TripsQueryVariables
@@ -50,7 +50,7 @@ export async function getSingleTrip(
     const journeyIds = extractServiceJourneyIds(trip);
     if (journeyIds.length != query.journeyIds.length) return false; // Fast comparison
     return (
-      JSON.stringify(journeyIds) === JSON.stringify(query.journeyIds.length)
+      JSON.stringify(journeyIds) === JSON.stringify(query.journeyIds)
     ); // Slow comparison
   });
 
@@ -61,11 +61,10 @@ export async function getSingleTrip(
   }
 }
 
-function mapTripsData(input: TripsQuery): TripsQuery {
-  console.log(input);
-  input.trip?.tripPatterns.forEach(pattern => {
-    (pattern as any).id = Math.floor(Math.random() * 1000000).toString(24);
+function mapTripsData(results: TripsQuery, queryVariables: TripsQueryVariables): TripsQuery {
+  results.trip?.tripPatterns.forEach(pattern => {
+    (pattern as any).id = generateTripQueryString(pattern, queryVariables);
   });
 
-  return input;
+  return results;
 }

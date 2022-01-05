@@ -1,11 +1,7 @@
 import Hapi from "@hapi/hapi";
 import {ITrips_v3} from "../../service/interface";
 import {CompressedSingleTripQuery, TripsQueryVariables, TripsQueryWithJourneyIds} from "../../types/trips";
-import {
-  postEncodedSingleTripRequest,
-  postSingleTripRequest,
-  postTripsRequest
-} from './schema';
+import {postEncodedSingleTripRequest, postSingleTripRequest, postTripsRequest} from './schema';
 import {parseTripQueryString} from "../../utils/journey-utils";
 
 export default (server: Hapi.Server) => (service: ITrips_v3) => {
@@ -38,8 +34,7 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
       const queryString = request.payload as CompressedSingleTripQuery;
       const query: TripsQueryWithJourneyIds = parseTripQueryString(queryString.compressedQuery, postSingleTripRequest.payload)
       const result = await service.getSingleTrip(query);
-      const unwrapped = result.unwrap();
-      return unwrapped;
+      return result.unwrap();
     }
   })
 };
