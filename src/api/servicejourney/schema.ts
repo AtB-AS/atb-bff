@@ -19,12 +19,10 @@ export const getDeparturesForServiceJourneyRequest = {
   })
 };
 
-export const getServiceJourneyPolylinesRequest = {
-  params: Joi.object({
-    query: Joi.object({
-      id: Joi.string().required(),
-      fromQuayId: Joi.string(),
-      toQuayId: Joi.string()
-    })
+export const getMapLegsRequest = {
+  query: Joi.object({
+    serviceJourneyId: Joi.string().required(),
+    fromQuayId: Joi.string(),
+    toQuayId: Joi.string()
   })
 };

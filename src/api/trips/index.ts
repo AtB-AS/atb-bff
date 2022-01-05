@@ -3,6 +3,8 @@ import {ITrips_v3} from "../../service/interface";
 import {CompressedSingleTripQuery, TripsQueryVariables, TripsQueryWithJourneyIds} from "../../types/trips";
 import {postEncodedSingleTripRequest, postSingleTripRequest, postTripsRequest} from './schema';
 import {parseTripQueryString} from "../../utils/journey-utils";
+import {getMapLegsRequest} from "../servicejourney/schema";
+import {MapLegsQuery} from "../../service/types";
 
 export default (server: Hapi.Server) => (service: ITrips_v3) => {
   server.route({
@@ -36,6 +38,19 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
       const result = await service.getSingleTrip(query);
       return result.unwrap();
     }
-  })
+  });
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/mapLegs',
+    options: {
+      tags: ['api', 'maplegs'],
+      validate: getMapLegsRequest,
+      description: 'Get mapLegs for a service journey'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as MapLegsQuery;
+      return server.methods.getServiceJourneyMapInfo(query);
+    }
+  });
 };
 

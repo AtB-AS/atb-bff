@@ -194,6 +194,12 @@ export interface ServiceJourneyMapInfoQuery {
   toQuayId?: string;
 }
 
+export interface MapLegsQuery {
+  serviceJourneyId: string,
+  fromQuayId?: string;
+  toQuayId?: string;
+}
+
 export interface DeparturesBetweenStopPlacesParams {
   limit?: number;
   start?: Date;

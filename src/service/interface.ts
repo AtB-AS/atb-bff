@@ -36,13 +36,14 @@ import {
   DepartureGroupsQuery,
   DepartureGroupsPayload,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneyMapInfoData
+  ServiceJourneyMapInfoData, MapLegsQuery
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
 } from './impl/departures/gql/jp3/stop-departures.graphql-gen';
 import * as Trips from '../types/trips';
+import * as ServiceJourney from '../types/serviceJourney';
 import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
@@ -61,9 +62,6 @@ export interface IGeocoderService {
 }
 
 export interface IServiceJourneyService {
-
-  getServiceJourneyPolylines
-
   getServiceJourneyMapInfo(
     serviceJouerneyId: string,
     query: ServiceJourneyMapInfoQuery
@@ -75,6 +73,11 @@ export interface IServiceJourneyService {
   ): Promise<Result<EstimatedCall[] | null, APIError>>;
 }
 
+export interface IServiceJourney_v3 {
+  getMapData (
+    query: MapLegsQuery
+  ): Promise<Result<ServiceJourney.MapDataQuery, APIError>>
+}
 export interface ITrips_v3 {
   getTrips(
     query: Trips.TripsQueryVariables
