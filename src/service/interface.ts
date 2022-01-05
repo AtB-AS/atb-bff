@@ -61,9 +61,6 @@ export interface IGeocoderService {
 }
 
 export interface IServiceJourneyService {
-
-  getServiceJourneyPolylines
-
   getServiceJourneyMapInfo(
     serviceJouerneyId: string,
     query: ServiceJourneyMapInfoQuery
