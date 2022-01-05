@@ -725,6 +725,7 @@ export type QueryType = {
 export type QueryTypeTripArgs = {
   dateTime?: Maybe<Scalars['DateTime']>;
   searchWindow?: Maybe<Scalars['Int']>;
+  pageCursor?: Maybe<Scalars['String']>;
   timetableView?: Maybe<Scalars['Boolean']>;
   from: Location;
   to: Location;
@@ -1229,8 +1230,6 @@ export enum StreetMode {
   CarPark = 'car_park',
   /** Walk to a pickup point along the road, drive to a drop-off point along the road, and walk the rest of the way. This can include various taxi-services or kiss & ride. */
   CarPickup = 'car_pickup',
-  /** Walk to a car rental point, drive to a car rental drop-off point and walk the rest of the way. This can include car rental at fixed locations or free-floating services. */
-  CarRental = 'car_rental',
   /** Walk to an eligible pickup area for flexible transportation, ride to an eligible drop-off area and then walk the rest of the way. */
   Flexible = 'flexible'
 }
@@ -1327,7 +1326,10 @@ export type TriangleFactors = {
 export type Trip = {
   /** The time and date of travel */
   dateTime?: Maybe<Scalars['DateTime']>;
-  /** The trip request metadata. */
+  /**
+   * The trip request metadata.
+   * @deprecated Use pageCursor instead
+   */
   metadata?: Maybe<TripSearchData>;
   /** The origin */
   fromPlace: Place;
@@ -1349,6 +1351,16 @@ export type Trip = {
   routingErrors: Array<Maybe<RoutingError>>;
   /** Information about the timings for the trip generation */
   debugOutput: DebugOutput;
+  /**
+   * Use the cursor to get the previous page of results. Use this cursor for the pageCursor parameter in the trip query in order to get the previous page.
+   * The previous page is a set of itineraries departing BEFORE the first itinerary in this result.
+   */
+  previousPageCursor?: Maybe<Scalars['String']>;
+  /**
+   * Use the cursor to get the next page of results. Use this cursor for the pageCursor parameter in the trip query in order to get the next page.
+   * The next page is a set of itineraries departing AFTER the last itinerary in this result.
+   */
+  pageCursor?: Maybe<Scalars['String']>;
 };
 
 /** List of legs constituting a suggested sequence of rides and links for a specific trip. */
@@ -1397,11 +1409,20 @@ export type TripPattern = {
 
 /** Trips search metadata. */
 export type TripSearchData = {
-  /** The search-window used in the current trip request. Use the value in the next request and set the request 'dateTime' to 'nextDateTime' or 'prevDateTime' to get the previous/next "window" of results. No duplicate trips should be returned, unless a trip is delayed and new realtime-data is available.Unit: minutes. */
+  /**
+   * The search-window used in the current trip request. Use the value in the next request and set the request 'dateTime' to 'nextDateTime' or 'prevDateTime' to get the previous/next "window" of results. No duplicate trips should be returned, unless a trip is delayed and new realtime-data is available.Unit: minutes.
+   * @deprecated Use pageCursor instead
+   */
   searchWindowUsed: Scalars['Int'];
-  /** This is the suggested search time for the "next page" or time window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips following in the time-window AFTER the current search. */
+  /**
+   * This is the suggested search time for the "next page" or time window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips following in the time-window AFTER the current search.
+   * @deprecated Use pageCursor instead
+   */
   nextDateTime?: Maybe<Scalars['DateTime']>;
-  /** This is the suggested search time for the "previous page" or time-window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips preceding in the time-window BEFORE the current search. */
+  /**
+   * This is the suggested search time for the "previous page" or time-window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips preceding in the time-window BEFORE the current search.
+   * @deprecated Use pageCursor instead
+   */
   prevDateTime?: Maybe<Scalars['DateTime']>;
 };
 
