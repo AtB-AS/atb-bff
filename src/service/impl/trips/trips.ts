@@ -48,10 +48,15 @@ export async function getSingleTrip(
 
   const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
     const journeyIds = extractServiceJourneyIds(trip);
+    console.log('--- Searched IDs');
+    console.log(journeyIds);
+    console.log('--- wanted IDs');
+    console.log(query.journeyIds);
+
     if (journeyIds.length != query.journeyIds.length) return false; // Fast comparison
     return (
-      JSON.stringify(journeyIds) === JSON.stringify(query.journeyIds)
-    ); // Slow comparison
+      JSON.stringify(journeyIds) === JSON.stringify(query.journeyIds) // Slow comparison
+    );
   });
 
   if (singleTripPattern) {
