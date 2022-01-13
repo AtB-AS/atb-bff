@@ -25,7 +25,7 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     method: 'POST',
     path: '/bff/v2/singleTrip',
     options: {
-      tags: ['api', 'singTrip'],
+      tags: ['api', 'singleTrip'],
       description: 'Get a single trip',
       validate: postEncodedSingleTripRequest
     },
