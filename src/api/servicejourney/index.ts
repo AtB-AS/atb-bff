@@ -8,7 +8,7 @@ import {
 } from '../../service/types';
 import {
   getDeparturesForServiceJourneyRequest,
-  getServiceJoruneyMapDataRequest, getServiceJourneyPolylinesRequest
+  getServiceJoruneyMapDataRequest
 } from './schema';
 import qs from 'querystring';
 

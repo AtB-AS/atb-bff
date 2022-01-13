@@ -18,13 +18,3 @@ export const getDeparturesForServiceJourneyRequest = {
     date: Joi.date()
   })
 };
-
-export const getServiceJourneyPolylinesRequest = {
-  params: Joi.object({
-    query: Joi.object({
-      id: Joi.string().required(),
-      fromQuayId: Joi.string(),
-      toQuayId: Joi.string()
-    })
-  })
-};
