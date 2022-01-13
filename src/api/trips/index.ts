@@ -1,10 +1,10 @@
 import Hapi from "@hapi/hapi";
-import {ITrips_v3} from "../../service/interface";
+import {ITrips_v2} from "../../service/interface";
 import {CompressedSingleTripQuery, TripsQueryVariables, TripsQueryWithJourneyIds} from "../../types/trips";
 import {postEncodedSingleTripRequest, postSingleTripRequest, postTripsRequest} from './schema';
 import {parseTripQueryString} from "../../utils/journey-utils";
 
-export default (server: Hapi.Server) => (service: ITrips_v3) => {
+export default (server: Hapi.Server) => (service: ITrips_v2) => {
   server.route({
     method: 'POST',
     path: '/bff/v2/trips',
@@ -18,7 +18,6 @@ export default (server: Hapi.Server) => (service: ITrips_v3) => {
       const query = (request.payload as unknown) as TripsQueryVariables;
       const result = await service.getTrips(query);
       const unwrapped = result.unwrap();
-      console.log(unwrapped);
       return unwrapped;
     }
   });

@@ -2,14 +2,14 @@ import { createServer, initializePlugins } from '../../server';
 import { randomPort } from './common';
 import routes from '../trips';
 import Hapi from '@hapi/hapi';
-import { IStopsService, ITrips_v3 } from '../../service/interface';
+import { IStopsService, ITrips_v2 } from '../../service/interface';
 import { Result } from '@badrap/result';
 import {TripsQueryWithJourneyIds} from "../../types/trips";
 import {compressToEncodedURIComponent} from "lz-string";
 
 let server: Hapi.Server;
 
-const svc: jest.Mocked<ITrips_v3> = {
+const svc: jest.Mocked<ITrips_v2> = {
   getTrips: jest.fn((...args: any): any => Result.ok(Promise.resolve([]))),
   getSingleTrip: jest.fn((...args: any): any => Result.ok(Promise.resolve([])))
 };
