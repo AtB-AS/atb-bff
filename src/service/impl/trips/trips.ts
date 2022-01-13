@@ -63,7 +63,7 @@ export async function getSingleTrip(
 
 function mapTripsData(results: TripsQuery, queryVariables: TripsQueryVariables): TripsQuery {
   results.trip?.tripPatterns.forEach(pattern => {
-    (pattern as any).id = generateTripQueryString(pattern, queryVariables);
+    (pattern as any).compressedQuery = generateTripQueryString(pattern, queryVariables);
   });
 
   return results;
