@@ -54,10 +54,3 @@ export const postSingleTripRequest = {
     journeyIds: Joi.array().items(Joi.string()).default([]).single()
   })
 };
-
-/*
-export type TripsQueryWithJourneyIds = {
-  query: TripsQueryVariables,
-  journeyIds: string[],
-}
- */
