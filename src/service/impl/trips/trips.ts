@@ -55,6 +55,7 @@ export async function getSingleTrip(
   });
 
   if (singleTripPattern) {
+    (singleTripPattern as any).compressedQuery = generateTripQueryString(singleTripPattern, query.query);
     return Result.ok(singleTripPattern);
   } else {
     return Result.err(new Error('Trip not found or is no longer available.'));
