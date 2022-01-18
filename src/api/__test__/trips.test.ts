@@ -85,7 +85,6 @@ describe('GET /bff/v2/singleTrip', () => {
       url: `/bff/v2/singleTrip`,
       payload: {compressedQuery}
     });
-    console.log(res);
     expect(res.statusCode).toBe(200);
   });
 });
