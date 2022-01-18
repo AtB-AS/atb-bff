@@ -6,15 +6,18 @@ export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
   when?: Types.Maybe<Types.Scalars['DateTime']>;
+  cursor?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type TripsQuery = { trip?: Types.Maybe<{ metadata?: Types.Maybe<{ nextDateTime?: Types.Maybe<any>, prevDateTime?: Types.Maybe<any>, searchWindowUsed: number }>, tripPatterns: Array<Types.Maybe<{ expectedStartTime?: Types.Maybe<any>, expectedEndTime?: Types.Maybe<any>, duration?: Types.Maybe<any>, walkDistance?: Types.Maybe<number>, legs: Array<Types.Maybe<{ mode?: Types.Maybe<Types.Mode>, distance?: Types.Maybe<number>, duration?: Types.Maybe<any>, aimedStartTime?: Types.Maybe<any>, expectedEndTime?: Types.Maybe<any>, expectedStartTime?: Types.Maybe<any>, realtime?: Types.Maybe<boolean>, line?: Types.Maybe<{ id: string, publicCode?: Types.Maybe<string>, name?: Types.Maybe<string>, transportSubmode?: Types.Maybe<Types.TransportSubmode> }>, fromEstimatedCall?: Types.Maybe<{ aimedDepartureTime?: Types.Maybe<any>, expectedDepartureTime?: Types.Maybe<any>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, quay?: Types.Maybe<{ publicCode?: Types.Maybe<string>, name: string }> }>, situations: Array<Types.Maybe<{ situationNumber?: Types.Maybe<string>, description: Array<{ value?: Types.Maybe<string> }> }>>, fromPlace: { name?: Types.Maybe<string>, quay?: Types.Maybe<{ publicCode?: Types.Maybe<string>, name: string }> }, serviceJourney?: Types.Maybe<{ id: string }>, interchangeTo?: Types.Maybe<{ ToServiceJourney?: Types.Maybe<{ id: string }> }>, pointsOnLink?: Types.Maybe<{ points?: Types.Maybe<string>, length?: Types.Maybe<number> }>, intermediateEstimatedCalls: Array<Types.Maybe<{ quay?: Types.Maybe<{ name: string, id: string }> }>> }>> }>> }> };
+export type TripsQuery = { trip: { nextPageCursor?: Types.Maybe<string>, previousPageCursor?: Types.Maybe<string>, metadata?: Types.Maybe<{ nextDateTime?: Types.Maybe<any>, prevDateTime?: Types.Maybe<any>, searchWindowUsed: number }>, tripPatterns: Array<{ expectedStartTime?: Types.Maybe<any>, expectedEndTime?: Types.Maybe<any>, duration?: Types.Maybe<any>, walkDistance?: Types.Maybe<number>, legs: Array<Types.Maybe<{ mode?: Types.Maybe<Types.Mode>, distance?: Types.Maybe<number>, duration?: Types.Maybe<any>, aimedStartTime?: Types.Maybe<any>, aimedEndTime?: Types.Maybe<any>, expectedEndTime?: Types.Maybe<any>, expectedStartTime?: Types.Maybe<any>, realtime?: Types.Maybe<boolean>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, line?: Types.Maybe<{ id: string, name?: Types.Maybe<string>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, publicCode?: Types.Maybe<string> }>, fromEstimatedCall?: Types.Maybe<{ aimedDepartureTime?: Types.Maybe<any>, expectedDepartureTime?: Types.Maybe<any>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, quay?: Types.Maybe<{ publicCode?: Types.Maybe<string>, name: string }>, notices: Array<Types.Maybe<{ text?: Types.Maybe<string>, id: string }>> }>, situations: Array<Types.Maybe<{ situationNumber?: Types.Maybe<string>, description: Array<{ value?: Types.Maybe<string> }> }>>, fromPlace: { name?: Types.Maybe<string>, longitude: number, latitude: number, quay?: Types.Maybe<{ id: string, publicCode?: Types.Maybe<string>, name: string, longitude?: Types.Maybe<number>, latitude?: Types.Maybe<number>, stopPlace?: Types.Maybe<{ longitude?: Types.Maybe<number>, latitude?: Types.Maybe<number>, name: string }> }> }, toPlace: { name?: Types.Maybe<string>, longitude: number, latitude: number, quay?: Types.Maybe<{ id: string, publicCode?: Types.Maybe<string>, name: string, longitude?: Types.Maybe<number>, latitude?: Types.Maybe<number>, stopPlace?: Types.Maybe<{ longitude?: Types.Maybe<number>, latitude?: Types.Maybe<number>, name: string }> }> }, serviceJourney?: Types.Maybe<{ id: string }>, interchangeTo?: Types.Maybe<{ guaranteed?: Types.Maybe<boolean>, ToServiceJourney?: Types.Maybe<{ id: string }> }>, pointsOnLink?: Types.Maybe<{ points?: Types.Maybe<string>, length?: Types.Maybe<number> }>, intermediateEstimatedCalls: Array<Types.Maybe<{ quay?: Types.Maybe<{ name: string, id: string }> }>>, authority?: Types.Maybe<{ id: string }> }>> }> } };
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $when: DateTime) {
-  trip(from: $from, to: $to, dateTime: $when) {
+    query Trips($from: Location!, $to: Location!, $when: DateTime, $cursor: String) {
+  trip(from: $from, to: $to, dateTime: $when, pageCursor: $cursor) {
+    nextPageCursor
+    previousPageCursor
     metadata {
       nextDateTime
       prevDateTime
@@ -30,14 +33,15 @@ export const TripsDocument = gql`
         distance
         duration
         aimedStartTime
+        aimedEndTime
         expectedEndTime
         expectedStartTime
         realtime
         line {
           id
-          publicCode
           name
           transportSubmode
+          publicCode
         }
         fromEstimatedCall {
           aimedDepartureTime
@@ -49,6 +53,10 @@ export const TripsDocument = gql`
             publicCode
             name
           }
+          notices {
+            text
+            id
+          }
         }
         situations {
           situationNumber
@@ -57,11 +65,38 @@ export const TripsDocument = gql`
           }
         }
         fromPlace {
+          name
+          longitude
+          latitude
           quay {
+            id
             publicCode
             name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
           }
+        }
+        toPlace {
           name
+          longitude
+          latitude
+          quay {
+            id
+            publicCode
+            name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
+          }
         }
         serviceJourney {
           id
@@ -70,6 +105,7 @@ export const TripsDocument = gql`
           ToServiceJourney {
             id
           }
+          guaranteed
         }
         pointsOnLink {
           points
@@ -81,6 +117,10 @@ export const TripsDocument = gql`
             id
           }
         }
+        authority {
+          id
+        }
+        transportSubmode
       }
     }
   }

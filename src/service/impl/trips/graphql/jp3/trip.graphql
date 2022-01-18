@@ -1,5 +1,7 @@
-query Trips($from: Location!, $to: Location!, $when: DateTime) {
-  trip(from: $from, to: $to, dateTime: $when) {
+query Trips($from: Location!, $to: Location!, $when: DateTime, $cursor: String) {
+  trip(from: $from, to: $to, dateTime: $when, pageCursor: $cursor) {
+    nextPageCursor
+    previousPageCursor
     metadata {
       nextDateTime
       prevDateTime
@@ -15,14 +17,15 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
         distance
         duration
         aimedStartTime
+        aimedEndTime
         expectedEndTime
         expectedStartTime
         realtime
         line {
           id
-          publicCode
           name
           transportSubmode
+          publicCode
         }
         fromEstimatedCall {
           aimedDepartureTime
@@ -34,6 +37,10 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
             publicCode
             name
           }
+          notices {
+            text
+            id
+          }
         }
         situations {
           situationNumber
@@ -42,11 +49,38 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           }
         }
         fromPlace {
+          name
+          longitude
+          latitude
           quay {
+            id
             publicCode
             name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
           }
+        }
+        toPlace {
           name
+          longitude
+          latitude
+          quay {
+            id
+            publicCode
+            name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
+          }
         }
         serviceJourney {
           id
@@ -55,6 +89,7 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
           ToServiceJourney {
             id
           }
+          guaranteed
         }
         pointsOnLink {
           points
@@ -66,6 +101,10 @@ query Trips($from: Location!, $to: Location!, $when: DateTime) {
             id
           }
         }
+        authority {
+          id
+        }
+        transportSubmode
       }
     }
   }

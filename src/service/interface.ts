@@ -72,7 +72,7 @@ export interface IServiceJourneyService {
   ): Promise<Result<EstimatedCall[] | null, APIError>>;
 }
 
-export interface ITrips_v3 {
+export interface ITrips_v2 {
   getTrips(
     query: Trips.TripsQueryVariables
   ): Promise<Result<Trips.TripsQuery, APIError>>;
