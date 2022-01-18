@@ -43,7 +43,7 @@ export async function getSingleTrip(
   }
 
   if (!results.data.trip?.tripPatterns) {
-    Boom.resourceGone('Trip not found or is no longer available.');
+    Boom.resourceGone('Trip not found or is no longer available. (No trip patterns returned)');
   }
 
   const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
@@ -58,7 +58,7 @@ export async function getSingleTrip(
     (singleTripPattern as any).compressedQuery = generateTripQueryString(singleTripPattern, query.query);
     return Result.ok(singleTripPattern);
   } else {
-    return Result.err(new Error('Trip not found or is no longer available.'));
+    return Result.err(new Error('Trip not found or is no longer available. (No matching trips)'));
   }
 }
 
