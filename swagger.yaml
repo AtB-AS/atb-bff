@@ -782,6 +782,8 @@ definitions:
       when:
         type: string
         format: date
+      cursor:
+        type: string
 x-alt-definitions:
   location:
     type: object
