@@ -1,5 +1,5 @@
-query Trips($from: Location!, $to: Location!, $when: DateTime, $cursor: String) {
-  trip(from: $from, to: $to, dateTime: $when, pageCursor: $cursor) {
+query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String) {
+  trip(from: $from, to: $to, dateTime: $when, arriveBy: $arriveBy, pageCursor: $cursor) {
     nextPageCursor
     previousPageCursor
     metadata {
