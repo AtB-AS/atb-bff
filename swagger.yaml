@@ -786,6 +786,10 @@ definitions:
         type: boolean
       cursor:
         type: string
+    required:
+      - from
+      - to
+      - arriveBy
 x-alt-definitions:
   location:
     type: object

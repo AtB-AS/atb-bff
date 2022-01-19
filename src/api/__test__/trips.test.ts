@@ -29,7 +29,8 @@ const singleTripquery: TripsQueryWithJourneyIds = {
         latitude: 59.9139,
         longitude: 10.7522
       }
-    }
+    },
+    arriveBy: false
   },
   journeyIds: ['abc', 'def']
 }
@@ -68,7 +69,8 @@ describe('GET /bff/v2/trips', () => {
             latitude: 59.9139,
             longitude: 10.7522
           }
-        }
+        },
+        arriveBy: false
       }
     });
     expect(res.statusCode).toBe(200);
