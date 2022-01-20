@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
+  arriveBy: Types.Scalars['Boolean'];
   when?: Types.Maybe<Types.Scalars['DateTime']>;
   cursor?: Types.Maybe<Types.Scalars['String']>;
 }>;
@@ -14,8 +15,14 @@ export type TripsQuery = { trip: { nextPageCursor?: Types.Maybe<string>, previou
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $when: DateTime, $cursor: String) {
-  trip(from: $from, to: $to, dateTime: $when, pageCursor: $cursor) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String) {
+  trip(
+    from: $from
+    to: $to
+    dateTime: $when
+    arriveBy: $arriveBy
+    pageCursor: $cursor
+  ) {
     nextPageCursor
     previousPageCursor
     metadata {

@@ -18,8 +18,9 @@ export const postTripsRequest = {
         longitude: Joi.number()
       })
     }).required(),
+    arriveBy: Joi.bool().required(),
     when: Joi.date(),
-    cursor: Joi.string()
+    cursor: Joi.string(),
   })
 };
 

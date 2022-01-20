@@ -782,8 +782,14 @@ definitions:
       when:
         type: string
         format: date
+      arriveBy:
+        type: boolean
       cursor:
         type: string
+    required:
+      - from
+      - to
+      - arriveBy
 x-alt-definitions:
   location:
     type: object
