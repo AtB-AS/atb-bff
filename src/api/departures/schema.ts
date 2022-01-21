@@ -14,7 +14,8 @@ export const getStopDeparturesRequest = {
   query: Joi.object({
     id: Joi.string().required(),
     numberOfDepartures: Joi.number().default(5),
-    startTime: Joi.string()
+    startTime: Joi.string(),
+    timeRange: Joi.number()
   })
 };
 
