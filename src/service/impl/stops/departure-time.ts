@@ -1,7 +1,8 @@
 import { Result } from '@badrap/result';
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
+import {
+  GraphQLClient,
+  journeyPlannerClient
+} from '../../../graphql/graphql-client';
 import {
   APIError,
   DepartureRealtimeData,
@@ -51,7 +52,7 @@ export async function populateCacheIfNotThere(
 
 export async function getRealtimeDepartureTime(
   inputQuery: DepartureRealtimeQuery,
-  client: ApolloClient<NormalizedCacheObject> = journeyPlannerClient
+  client: GraphQLClient = journeyPlannerClient
 ): Promise<Result<DeparturesRealtimeData, APIError>> {
   try {
     const variables = createVariables(inputQuery);
@@ -136,7 +137,7 @@ function mapDeparture(
 
 function getPreviousExpectedFromCache(
   variables: GetDepartureRealtimeQueryVariables,
-  client: ApolloClient<NormalizedCacheObject>
+  client: GraphQLClient
 ) {
   try {
     const result = client.readQuery<

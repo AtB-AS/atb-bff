@@ -4,13 +4,13 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type QuayDeparturesQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
-  numberOfDepartures?: Types.Maybe<Types.Scalars['Int']>;
-  startTime?: Types.Maybe<Types.Scalars['DateTime']>;
-  timeRange?: Types.Maybe<Types.Scalars['Int']>;
+  numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']>;
+  startTime?: Types.InputMaybe<Types.Scalars['DateTime']>;
+  timeRange?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
-export type QuayDeparturesQuery = { quay?: Types.Maybe<{ id: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, name: string, estimatedCalls: Array<{ expectedDepartureTime?: Types.Maybe<any>, realtime?: Types.Maybe<boolean>, quay?: Types.Maybe<{ id: string }>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode> } }> }> }> };
+export type QuayDeparturesQuery = { quay?: { id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ expectedDepartureTime?: any, realtime?: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> } };
 
 
 export const QuayDeparturesDocument = gql`

@@ -3,16 +3,16 @@ import * as Types from '../../../../../graphql/journey-types';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type GetDepartureRealtimeQueryVariables = Types.Exact<{
-  quayIds: Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>;
+  quayIds: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limit: Types.Scalars['Int'];
 }>;
 
 
-export type GetDepartureRealtimeQuery = { quays: Array<Types.Maybe<{ id: string, estimatedCalls: Array<Types.Maybe<EstimatedCallFragment>> }>> };
+export type GetDepartureRealtimeQuery = { quays: Array<{ id: string, estimatedCalls: Array<{ realtime?: boolean, expectedArrivalTime?: any, expectedDepartureTime?: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime?: any, aimedDepartureTime?: any, serviceJourney?: { id: string } }> }> };
 
-export type EstimatedCallFragment = { realtime?: Types.Maybe<boolean>, expectedArrivalTime?: Types.Maybe<any>, expectedDepartureTime?: Types.Maybe<any>, actualArrivalTime?: Types.Maybe<any>, actualDepartureTime?: Types.Maybe<any>, aimedArrivalTime?: Types.Maybe<any>, aimedDepartureTime?: Types.Maybe<any>, serviceJourney?: Types.Maybe<{ id: string }> };
+export type EstimatedCallFragment = { realtime?: boolean, expectedArrivalTime?: any, expectedDepartureTime?: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime?: any, aimedDepartureTime?: any, serviceJourney?: { id: string } };
 
 export const EstimatedCallFragmentDoc = gql`
     fragment estimatedCall on EstimatedCall {

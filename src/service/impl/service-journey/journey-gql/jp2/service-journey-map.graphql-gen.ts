@@ -9,7 +9,7 @@ export type MapInfoByServiceJourneyIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type MapInfoByServiceJourneyIdQuery = { serviceJourney?: Types.Maybe<{ pointsOnLink?: Types.Maybe<{ length?: Types.Maybe<number>, points?: Types.Maybe<string> }>, line: { transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode> } }>, fromQuay?: Types.Maybe<{ latitude?: Types.Maybe<number>, longitude?: Types.Maybe<number> }>, toQuay?: Types.Maybe<{ latitude?: Types.Maybe<number>, longitude?: Types.Maybe<number> }> };
+export type MapInfoByServiceJourneyIdQuery = { serviceJourney?: { pointsOnLink?: { length?: number, points?: string }, line: { transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } }, fromQuay?: { latitude?: number, longitude?: number }, toQuay?: { latitude?: number, longitude?: number } };
 
 
 export const MapInfoByServiceJourneyIdDocument = gql`
