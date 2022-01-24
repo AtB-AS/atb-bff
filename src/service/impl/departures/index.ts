@@ -81,7 +81,12 @@ export default (
       }
     },
 
-    async getStopQuayDepartures({ id, numberOfDepartures = 10, startTime }) {
+    async getStopQuayDepartures({
+      id,
+      numberOfDepartures = 10,
+      startTime,
+      timeRange
+    }) {
       try {
         const result = await journeyPlannerClient_v3.query<
           StopPlaceQuayDeparturesQuery,
@@ -91,7 +96,8 @@ export default (
           variables: {
             id,
             numberOfDepartures,
-            startTime
+            startTime,
+            timeRange
           }
         });
 

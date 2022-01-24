@@ -6,6 +6,7 @@ export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
   numberOfDepartures?: Types.Maybe<Types.Scalars['Int']>;
   startTime?: Types.Maybe<Types.Scalars['DateTime']>;
+  timeRange?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -13,12 +14,16 @@ export type StopPlaceQuayDeparturesQuery = { stopPlace?: Types.Maybe<{ id: strin
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
-    query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime) {
+    query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int) {
   stopPlace(id: $id) {
     id
     quays(filterByInUse: true) {
       id
-      estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime) {
+      estimatedCalls(
+        numberOfDepartures: $numberOfDepartures
+        startTime: $startTime
+        timeRange: $timeRange
+      ) {
         expectedDepartureTime
         realtime
         quay {
