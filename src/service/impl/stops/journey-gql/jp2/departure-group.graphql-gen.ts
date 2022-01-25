@@ -3,68 +3,56 @@ import * as Types from '../../../../../graphql/journey-types';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type GroupsByIdQueryVariables = Types.Exact<{
-  ids?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>>;
+  ids?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
-  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
 }>;
 
 
-export type GroupsByIdQuery = { stopPlaces: Array<Types.Maybe<(
-    { quays?: Types.Maybe<Array<Types.Maybe<(
-      { times: Array<Types.Maybe<Group_Times_EstimatedCallFieldsFragment>>, estimatedCalls: Array<Types.Maybe<Group_EstimatedCallFieldsFragment>> }
-      & Group_QuayFieldsFragment
-    )>>> }
-    & Group_StopPlaceFieldsFragment
-  )>> };
+export type GroupsByIdQuery = { stopPlaces: Array<{ id: string, description?: string, name: string, latitude?: number, longitude?: number, quays?: Array<{ id: string, name: string, description?: string, publicCode?: string, latitude?: number, longitude?: number, times: Array<{ expectedDepartureTime?: any, aimedDepartureTime?: any, predictionInaccurate?: boolean, realtime?: boolean, destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }>, serviceJourney?: { id: string, line: { id: string } } }>, estimatedCalls: Array<{ destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, serviceJourney?: { id: string, directionType?: Types.DirectionType, privateCode?: string, transportSubmode?: Types.TransportSubmode, line: { description?: string, flexibleLineType?: Types.FlexibleLineType, id: string, name?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> }, journeyPattern?: { notices: Array<{ text?: string }> }, notices: Array<{ text?: string }> } }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> }> }> };
 
 export type QuayIdInStopsQueryVariables = Types.Exact<{
-  stopIds: Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>;
+  stopIds: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type QuayIdInStopsQuery = { stopPlaces: Array<Types.Maybe<{ id: string, quays?: Types.Maybe<Array<Types.Maybe<{ id: string }>>> }>> };
+export type QuayIdInStopsQuery = { stopPlaces: Array<{ id: string, quays?: Array<{ id: string }> }> };
 
 export type GroupsByNearestQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lng: Types.Scalars['Float'];
   distance: Types.Scalars['Int'];
   startTime: Types.Scalars['DateTime'];
-  fromCursor?: Types.Maybe<Types.Scalars['String']>;
-  pageSize?: Types.Maybe<Types.Scalars['Int']>;
+  fromCursor?: Types.InputMaybe<Types.Scalars['String']>;
+  pageSize?: Types.InputMaybe<Types.Scalars['Int']>;
   timeRange: Types.Scalars['Int'];
   limitPerLine: Types.Scalars['Int'];
   totalLimit: Types.Scalars['Int'];
-  filterInput?: Types.Maybe<Types.InputFilters>;
-  filterByLineIds?: Types.Maybe<Array<Types.Maybe<Types.Scalars['String']>> | Types.Maybe<Types.Scalars['String']>>;
+  filterInput?: Types.InputMaybe<Types.InputFilters>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
 }>;
 
 
-export type GroupsByNearestQuery = { nearest?: Types.Maybe<{ pageInfo: { hasNextPage: boolean, endCursor?: Types.Maybe<string> }, edges?: Types.Maybe<Array<Types.Maybe<{ cursor: string, node?: Types.Maybe<{ distance?: Types.Maybe<number>, place?: Types.Maybe<(
-          { quays?: Types.Maybe<Array<Types.Maybe<(
-            { times: Array<Types.Maybe<Group_Times_EstimatedCallFieldsFragment>>, estimatedCalls: Array<Types.Maybe<Group_EstimatedCallFieldsFragment>> }
-            & Group_QuayFieldsFragment
-          )>>> }
-          & Group_StopPlaceFieldsFragment
-        )> }> }>>> }> };
+export type GroupsByNearestQuery = { nearest?: { pageInfo: { hasNextPage: boolean, endCursor?: string }, edges?: Array<{ cursor: string, node?: { distance?: number, place?: { id: string, description?: string, name: string, latitude?: number, longitude?: number, quays?: Array<{ id: string, name: string, description?: string, publicCode?: string, latitude?: number, longitude?: number, times: Array<{ expectedDepartureTime?: any, aimedDepartureTime?: any, predictionInaccurate?: boolean, realtime?: boolean, destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }>, serviceJourney?: { id: string, line: { id: string } } }>, estimatedCalls: Array<{ destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, serviceJourney?: { id: string, directionType?: Types.DirectionType, privateCode?: string, transportSubmode?: Types.TransportSubmode, line: { description?: string, flexibleLineType?: Types.FlexibleLineType, id: string, name?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> }, journeyPattern?: { notices: Array<{ text?: string }> }, notices: Array<{ text?: string }> } }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> }> } | {} } }> } };
 
-export type Group_EstimatedCallFieldsFragment = { destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, serviceJourney?: Types.Maybe<Group_ServiceJourneyFieldsFragment> };
+export type Group_EstimatedCallFieldsFragment = { destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, serviceJourney?: { id: string, directionType?: Types.DirectionType, privateCode?: string, transportSubmode?: Types.TransportSubmode, line: { description?: string, flexibleLineType?: Types.FlexibleLineType, id: string, name?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> }, journeyPattern?: { notices: Array<{ text?: string }> }, notices: Array<{ text?: string }> } };
 
-export type Group_Times_EstimatedCallFieldsFragment = { expectedDepartureTime?: Types.Maybe<any>, aimedDepartureTime?: Types.Maybe<any>, predictionInaccurate?: Types.Maybe<boolean>, realtime?: Types.Maybe<boolean>, destinationDisplay?: Types.Maybe<{ frontText?: Types.Maybe<string> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>>, serviceJourney?: Types.Maybe<{ id: string, line: { id: string } }> };
+export type Group_Times_EstimatedCallFieldsFragment = { expectedDepartureTime?: any, aimedDepartureTime?: any, predictionInaccurate?: boolean, realtime?: boolean, destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }>, serviceJourney?: { id: string, line: { id: string } } };
 
-export type Group_NoticeFieldsFragment = { text?: Types.Maybe<string> };
+export type Group_NoticeFieldsFragment = { text?: string };
 
-export type Group_QuayFieldsFragment = { id: string, name: string, description?: Types.Maybe<string>, publicCode?: Types.Maybe<string>, latitude?: Types.Maybe<number>, longitude?: Types.Maybe<number>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>> };
+export type Group_QuayFieldsFragment = { id: string, name: string, description?: string, publicCode?: string, latitude?: number, longitude?: number, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> };
 
-export type Group_SituationFieldsFragment = { situationNumber?: Types.Maybe<string>, reportType?: Types.Maybe<Types.ReportType>, summary: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, description: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, advice: Array<{ language?: Types.Maybe<string>, value?: Types.Maybe<string> }>, validityPeriod?: Types.Maybe<{ startTime?: Types.Maybe<any>, endTime?: Types.Maybe<any> }>, infoLinks?: Types.Maybe<Array<Types.Maybe<{ uri?: Types.Maybe<string>, label?: Types.Maybe<string> }>>> };
+export type Group_SituationFieldsFragment = { situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> };
 
-export type Group_LineFieldsFragment = { description?: Types.Maybe<string>, flexibleLineType?: Types.Maybe<Types.FlexibleLineType>, id: string, name?: Types.Maybe<string>, transportMode?: Types.Maybe<Types.TransportMode>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, publicCode?: Types.Maybe<string>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>>, situations: Array<Types.Maybe<Group_SituationFieldsFragment>> };
+export type Group_LineFieldsFragment = { description?: string, flexibleLineType?: Types.FlexibleLineType, id: string, name?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> };
 
-export type Group_StopPlaceFieldsFragment = { id: string, description?: Types.Maybe<string>, name: string, latitude?: Types.Maybe<number>, longitude?: Types.Maybe<number> };
+export type Group_StopPlaceFieldsFragment = { id: string, description?: string, name: string, latitude?: number, longitude?: number };
 
-export type Group_ServiceJourneyFieldsFragment = { id: string, directionType?: Types.Maybe<Types.DirectionType>, privateCode?: Types.Maybe<string>, transportSubmode?: Types.Maybe<Types.TransportSubmode>, line: Group_LineFieldsFragment, journeyPattern?: Types.Maybe<{ notices: Array<Types.Maybe<Group_NoticeFieldsFragment>> }>, notices: Array<Types.Maybe<Group_NoticeFieldsFragment>> };
+export type Group_ServiceJourneyFieldsFragment = { id: string, directionType?: Types.DirectionType, privateCode?: string, transportSubmode?: Types.TransportSubmode, line: { description?: string, flexibleLineType?: Types.FlexibleLineType, id: string, name?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, notices: Array<{ text?: string }>, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value?: string }>, description: Array<{ language?: string, value?: string }>, advice: Array<{ language?: string, value?: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri?: string, label?: string }> }> }, journeyPattern?: { notices: Array<{ text?: string }> }, notices: Array<{ text?: string }> };
 
 export const Group_NoticeFieldsFragmentDoc = gql`
     fragment group_noticeFields on Notice {

@@ -1,8 +1,12 @@
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import ApolloClient, { DefaultOptions } from 'apollo-client';
-import * as ApolloLink from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
-import { onError } from 'apollo-link-error';
+import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache';
+import {
+  ApolloClient,
+  DefaultOptions,
+  HttpLink,
+  ApolloLink
+} from '@apollo/client/core';
+
+import { onError } from '@apollo/client/link/error';
 import fetch from 'node-fetch';
 import { ENTUR_BASEURL, ET_CLIENT_NAME } from '../config/env';
 

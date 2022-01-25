@@ -3,15 +3,15 @@ import * as Types from '../../../../../graphql/journeyplanner-types_v3';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type NearestStopPlacesQueryVariables = Types.Exact<{
-  count?: Types.Maybe<Types.Scalars['Int']>;
+  count?: Types.InputMaybe<Types.Scalars['Int']>;
   distance: Types.Scalars['Float'];
   longitude: Types.Scalars['Float'];
   latitude: Types.Scalars['Float'];
-  after?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type NearestStopPlacesQuery = { nearest?: Types.Maybe<{ pageInfo: { endCursor?: Types.Maybe<string>, hasNextPage: boolean }, edges?: Types.Maybe<Array<Types.Maybe<{ node?: Types.Maybe<{ distance?: Types.Maybe<number>, place?: Types.Maybe<{ name: string, transportMode?: Types.Maybe<Array<Types.Maybe<Types.TransportMode>>>, description?: Types.Maybe<string>, id: string, quays?: Types.Maybe<Array<Types.Maybe<{ id: string, description?: Types.Maybe<string>, name: string, publicCode?: Types.Maybe<string>, stopPlace?: Types.Maybe<{ id: string }> }>>> }> }> }>>> }> };
+export type NearestStopPlacesQuery = { nearest?: { pageInfo: { endCursor?: string, hasNextPage: boolean }, edges?: Array<{ node?: { distance?: number, place?: { name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string } }> } | {} } }> } };
 
 
 export const NearestStopPlacesDocument = gql`
