@@ -55,17 +55,27 @@ export async function getSingleTrip(
   });
 
   if (singleTripPattern) {
-    (singleTripPattern as any).compressedQuery = generateTripQueryString(singleTripPattern, query.query);
-    return Result.ok(singleTripPattern);
+    return Result.ok({
+      ...singleTripPattern,
+      compressedQuery: generateTripQueryString(singleTripPattern, query.query)
+    });
   } else {
     return Result.err(new Error('Trip not found or is no longer available. (No matching trips)'));
   }
 }
 
-function mapTripsData(results: TripsQuery, queryVariables: TripsQueryVariables): TripsQuery {
-  results.trip?.tripPatterns.forEach(pattern => {
-    (pattern as any).compressedQuery = generateTripQueryString(pattern, queryVariables);
-  });
-
-  return results;
+function mapTripsData(
+  results: TripsQuery,
+  queryVariables: TripsQueryVariables
+): TripsQuery {
+  return {
+    ...results,
+    trip: {
+      ...results.trip,
+      tripPatterns: results.trip.tripPatterns.map(pattern => ({
+        ...pattern,
+        compressedQuery: generateTripQueryString(pattern, queryVariables)
+      }))
+    }
+  };
 }
