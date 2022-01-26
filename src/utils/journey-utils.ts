@@ -5,6 +5,7 @@ import {
   TripsQuery
 } from '../service/impl/trips/graphql/jp3/trip.graphql-gen';
 import {
+  Leg,
   TripPattern as TripPattern_v3,
   TripsQueryWithJourneyIds
 } from '../types/trips';
@@ -14,6 +15,7 @@ import {
   decompressFromEncodedURIComponent
 } from 'lz-string';
 
+const START_TIME_PADDING = 60   // time in seconds
 export function generateId(trip: TripPattern, query: TripPatternsQuery) {
   const fields: TripPatternsQuery = {
     searchDate: new Date(trip.startTime),
@@ -72,16 +74,22 @@ export function generateTripQueryString(
   // extract journeyIds for all legs
   const journeyIds = extractServiceJourneyIds(trip);
 
-  // modify query to contain the aimed departure time of first leg
+  // modify query to contain the padded aimed departure time of first leg
   const tripQuery: TripsQueryVariables = {
     ...queryVariables,
-    when: trip.legs[0].aimedStartTime
+    when: getPaddedStartTime(trip.legs[0])
   };
 
   // encode to string
   return compressToEncodedURIComponent(
     JSON.stringify({ query: tripQuery, journeyIds })
   );
+}
+
+function getPaddedStartTime (leg: Leg): string {
+  const startTimeInMillis = new Date(leg.aimedStartTime).getTime();
+  const newStartTimeInMillis = startTimeInMillis - (1000 * START_TIME_PADDING);
+  return new Date(newStartTimeInMillis).toISOString();
 }
 
 /**
