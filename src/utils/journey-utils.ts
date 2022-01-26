@@ -14,6 +14,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent
 } from 'lz-string';
+import {addSeconds, parseISO} from "date-fns";
 
 const START_TIME_PADDING = 60   // time in seconds
 export function generateId(trip: TripPattern, query: TripPatternsQuery) {
@@ -77,7 +78,7 @@ export function generateTripQueryString(
   // modify query to contain the padded aimed departure time of first leg
   const tripQuery: TripsQueryVariables = {
     ...queryVariables,
-    when: getPaddedStartTime(trip.legs[0])
+    when: getPaddedStartTimeFromLeg(trip.legs[0])
   };
 
   // encode to string
@@ -86,10 +87,9 @@ export function generateTripQueryString(
   );
 }
 
-function getPaddedStartTime (leg: Leg): string {
-  const startTimeInMillis = new Date(leg.aimedStartTime).getTime();
-  const newStartTimeInMillis = startTimeInMillis - (1000 * START_TIME_PADDING);
-  return new Date(newStartTimeInMillis).toISOString();
+function getPaddedStartTimeFromLeg (leg: Leg): string {
+  const startTime = parseISO(leg.aimedStartTime);
+  return addSeconds(startTime, -START_TIME_PADDING).toISOString();
 }
 
 /**
