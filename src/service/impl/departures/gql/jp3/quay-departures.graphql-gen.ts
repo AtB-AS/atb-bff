@@ -10,7 +10,7 @@ export type QuayDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type QuayDeparturesQuery = { quay?: { id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ expectedDepartureTime?: any, realtime?: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> } };
+export type QuayDeparturesQuery = { quay?: { id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ expectedDepartureTime?: any, aimedDepartureTime?: any, realtime?: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> } };
 
 
 export const QuayDeparturesDocument = gql`
@@ -26,6 +26,7 @@ export const QuayDeparturesDocument = gql`
       timeRange: $timeRange
     ) {
       expectedDepartureTime
+      aimedDepartureTime
       realtime
       quay {
         id
