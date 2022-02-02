@@ -1,0 +1,32 @@
+query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int) {
+  quay(id: $id) {
+    id
+    description
+    publicCode
+    name
+    estimatedCalls(
+      numberOfDepartures: $numberOfDepartures
+      startTime: $startTime
+      timeRange: $timeRange
+    ) {
+      expectedDepartureTime
+      realtime
+      quay {
+        id
+      }
+      destinationDisplay {
+        frontText
+      }
+      serviceJourney {
+        id
+        line {
+          id
+          description
+          publicCode
+          transportMode
+          transportSubmode
+        }
+      }
+    }
+  }
+}

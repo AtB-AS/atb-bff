@@ -1,0 +1,111 @@
+query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String) {
+  trip(from: $from, to: $to, dateTime: $when, arriveBy: $arriveBy, pageCursor: $cursor) {
+    nextPageCursor
+    previousPageCursor
+    metadata {
+      nextDateTime
+      prevDateTime
+      searchWindowUsed
+    }
+    tripPatterns {
+      expectedStartTime
+      expectedEndTime
+      duration
+      walkDistance
+      legs {
+        mode
+        distance
+        duration
+        aimedStartTime
+        aimedEndTime
+        expectedEndTime
+        expectedStartTime
+        realtime
+        line {
+          id
+          name
+          transportSubmode
+          publicCode
+        }
+        fromEstimatedCall {
+          aimedDepartureTime
+          expectedDepartureTime
+          destinationDisplay {
+            frontText
+          }
+          quay {
+            publicCode
+            name
+          }
+          notices {
+            text
+            id
+          }
+        }
+        situations {
+          situationNumber
+          description {
+            value
+          }
+        }
+        fromPlace {
+          name
+          longitude
+          latitude
+          quay {
+            id
+            publicCode
+            name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
+          }
+        }
+        toPlace {
+          name
+          longitude
+          latitude
+          quay {
+            id
+            publicCode
+            name
+            longitude
+            latitude
+            stopPlace {
+              longitude
+              latitude
+              name
+            }
+          }
+        }
+        serviceJourney {
+          id
+        }
+        interchangeTo {
+          ToServiceJourney {
+            id
+          }
+          guaranteed
+        }
+        pointsOnLink {
+          points
+          length
+        }
+        intermediateEstimatedCalls {
+          quay {
+            name
+            id
+          }
+        }
+        authority {
+          id
+        }
+        transportSubmode
+      }
+    }
+  }
+}

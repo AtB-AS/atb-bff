@@ -10,11 +10,29 @@ API documentation is generated at runtime and lives in `/documentation`
 
 Clone this project:
 
-`git clone https://github.com/atb-as/bff-oneclick-planner.git`
+`git clone https://github.com/atb-as/atb-bff.git`
 
-Build and run the docker image:
+### Docker
 
-`docker run --rm --env PORT=8080 -p 8080:8080 -it $(docker build -q .)`
+Build and run the docker image, for local development:
+
+```
+docker build --target=dev -t atb-bff:dev .
+docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
+```
+
+### Starting locally
+
+#### Requirements
+- Node.js 14.x ([Hapi doesn't support newer versions](https://stackoverflow.com/a/65489848/5976426))
+
+Install node packages
+
+`npm install`
+
+Start the development server
+
+`npm run start:dev`
 
 ## Architecture
 
@@ -41,13 +59,24 @@ abstraction on top of Entur's GraphQL endpoints.
 ## GraphQL Code Generation
 
 For endpoints that uses GraphQL directly we generate types and code using
-`graphql-code-gen`. If the queries, scheme, operations or fragments change,
-generate the code using scripts:
+`graphql-code-gen`.
+
+JP2 and JP3 queries must be put in folders named jp2 and jp3 respectively for
+the scripts to know which API version to use.
+
+If the queries, scheme, operations or fragments change, generate the code using
+scripts:
 
 ```
 npm run gql-gen
 ```
+for Journeyplanner v2 API or
+```
+npm run gql-gen-v3
+```
+for Journeyplanner v3 API.
 
 This will make a TypeScript representation of the `.graphql` file in the same
 location but with `.graphql-gen.ts` extension. You can use these directly as
 queries.
+

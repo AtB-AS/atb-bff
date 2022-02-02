@@ -13,6 +13,7 @@ import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 import { CursoredQuery } from './cursored';
 import { TransportSubmode } from '../graphql/journey-types';
+import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
 
 export interface Coordinates {
   latitude: number;
@@ -75,6 +76,7 @@ export interface StopPlaceQuery {
   lat: number;
   lon: number;
   distance?: number;
+  includeUnusedQuays?: boolean;
 }
 
 export interface StopPlaceByNameQuery {
@@ -143,12 +145,19 @@ export interface TripQuery {
   when?: Date;
 }
 
+export interface TripsData {
+  tripPatterns: TripsQuery;
+}
+
 export interface TripPatternsQuery {
   from: Location;
   to: Location;
   searchDate?: Date;
   arriveBy: boolean;
   limit: number;
+  maxTransferWalkDistance: number; // Meters. Defaults to 2000 in Entur
+  maxPreTransitWalkDistance: number; // Meters. Defaults to alot in Entur
+  walkReluctance: number; // Factor. Defaults to 4 in Entur
   modes: QueryMode[];
   wheelchairAccessible: boolean;
 }

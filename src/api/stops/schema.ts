@@ -13,7 +13,8 @@ export const getStopPlaceByPositionRequest = {
   query: Joi.object({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
-    distance: Joi.number()
+    distance: Joi.number(),
+    includeUnusedQuays: Joi.boolean()
   })
 };
 export const getStopPlaceDeparturesRequest = {

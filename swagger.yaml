@@ -539,6 +539,137 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/departures/stops-nearest:
+    get:
+      summary: Get stops geographically nearest to a set of coordinates
+      operationId: getBffV2StopsNearest
+      parameters:
+        - type: number
+          name: latitude
+          in: query
+          required: true
+        - type: number
+          name: longitude
+          in: query
+          required: true
+        - type: number
+          name: distance
+          default: 1000
+          in: query
+        - type: number
+          name: count
+          default: 10
+          in: query
+        - type: string
+          name: after
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v2/departures/stop-departures:
+    get:
+      summary: Get stop with departures for every quay
+      operationId: getBffV2StopDepartures
+      parameters:
+        - type: string
+          name: id
+          in: query
+          required: true
+        - type: number
+          name: numberOfDepartures
+          default: 10
+          in: query
+        - type: string
+          format: date
+          default: '2021-01-27T09:48:19.354Z'
+          name: startTime
+          in: query
+        - type: number
+          name: timeRange
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v2/departures/quay-departures:
+    get:
+      summary: Get departures from a quay
+      operationId: getBffV2QuayDepartures
+      parameters:
+        - type: string
+          name: id
+          in: query
+          required: true
+        - type: number
+          name: numberOfDepartures
+          default: 5
+          in: query
+        - type: string
+          format: date
+          default: '2021-01-27T09:48:19.330Z'
+          name: startTime
+          in: query
+        - type: number
+          name: timeRange
+          default: 86400
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v2/departures/realtime:
+    get:
+      summary: Get updated realtime information for the given quays
+      operationId: getBffV2Departuresrealtime
+      parameters:
+        - type: array
+          default: []
+          items:
+            type: string
+          collectionFormat: multi
+          name: quayIds
+          in: query
+        - type: string
+          format: date
+          name: startTime
+          in: query
+        - type: number
+          default: 5
+          name: limit
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v2/trips:
+    post:
+      summary: Get trips between stops
+      operationId: postBffV2_0Trips
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/TripsModel'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
 definitions:
   coordinates:
     type: object
@@ -644,6 +775,24 @@ definitions:
     required:
       - from
       - to
+  TripsModel:
+    type: object
+    properties:
+      from:
+        $ref: '#/definitions/from'
+      to:
+        $ref: '#/definitions/from'
+      when:
+        type: string
+        format: date
+      arriveBy:
+        type: boolean
+      cursor:
+        type: string
+    required:
+      - from
+      - to
+      - arriveBy
 x-alt-definitions:
   location:
     type: object
