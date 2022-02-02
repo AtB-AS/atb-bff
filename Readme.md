@@ -24,7 +24,8 @@ docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
 ### Starting locally
 
 #### Requirements
-- Node.js 14.x ([Hapi doesn't support newer versions](https://stackoverflow.com/a/65489848/5976426))
+
+- Node.js
 
 Install node packages
 
@@ -70,13 +71,15 @@ scripts:
 ```
 npm run gql-gen
 ```
+
 for Journeyplanner v2 API or
+
 ```
 npm run gql-gen-v3
 ```
+
 for Journeyplanner v3 API.
 
 This will make a TypeScript representation of the `.graphql` file in the same
 location but with `.graphql-gen.ts` extension. You can use these directly as
 queries.
-
