@@ -1,5 +1,11 @@
 query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String) {
-  trip(from: $from, to: $to, dateTime: $when, arriveBy: $arriveBy, pageCursor: $cursor) {
+  trip(
+    from: $from
+    to: $to
+    dateTime: $when
+    arriveBy: $arriveBy
+    pageCursor: $cursor
+  ) {
     nextPageCursor
     previousPageCursor
     metadata {
@@ -86,7 +92,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
           id
         }
         interchangeTo {
-          ToServiceJourney {
+          toServiceJourney {
             id
           }
           guaranteed
@@ -100,6 +106,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             name
             id
           }
+          date
         }
         authority {
           id
