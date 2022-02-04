@@ -44,16 +44,27 @@ export default function serviceJourneyService(
       }
     },
     async getDeparturesForServiceJourney(id, { date }) {
+      console.log('--- Departures START -------------------------------');
       try {
+        let formattedDate = date ? formatISO(date, { representation: 'date' }) : undefined;
+        formattedDate = '2022-02-04';
+        console.log('id', id);
+        console.log('date', formattedDate);
         const departures = await service.getDeparturesForServiceJourney(
           id,
-          date ? formatISO(date, { representation: 'date' }) : undefined
+          formattedDate
         );
 
+        //console.log('results', JSON.stringify(departures));
+        console.log('--- Departures END ---------------------------------');
         return Result.ok(departures);
       } catch (error) {
         const re = /Entur SDK: No data available/;
+
+        console.log('--- Departures ERROR -------------------------------');
+        console.log(error.message);
         if (error.message.match(re)) return Result.ok(null);
+
 
         return Result.err(new APIError(error));
       }

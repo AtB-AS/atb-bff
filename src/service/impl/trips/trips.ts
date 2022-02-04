@@ -55,6 +55,7 @@ export async function getSingleTrip(
   });
 
   if (singleTripPattern) {
+    console.log(JSON.stringify(singleTripPattern));
     return Result.ok({
       ...singleTripPattern,
       compressedQuery: generateTripQueryString(singleTripPattern, query.query)
