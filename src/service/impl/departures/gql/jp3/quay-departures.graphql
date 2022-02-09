@@ -11,6 +11,7 @@ query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTim
     ) {
       date
       expectedDepartureTime
+      aimedDepartureTime
       realtime
       quay {
         id
