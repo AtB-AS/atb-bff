@@ -26,6 +26,7 @@
             "aimedArrivalTime": "2020-12-09T10:09:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -47,6 +48,7 @@
             "aimedArrivalTime": "2020-12-09T10:31:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -68,6 +70,7 @@
             "aimedArrivalTime": "2020-12-09T10:49:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -89,6 +92,7 @@
             "aimedArrivalTime": "2020-12-09T11:11:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -110,6 +114,7 @@
             "aimedArrivalTime": "2020-12-09T11:29:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -177,6 +182,7 @@
             "aimedArrivalTime": "2020-12-09T10:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -198,6 +204,7 @@
             "aimedArrivalTime": "2020-12-09T10:34:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -219,6 +226,7 @@
             "aimedArrivalTime": "2020-12-09T10:54:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -240,6 +248,7 @@
             "aimedArrivalTime": "2020-12-09T11:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -261,6 +270,7 @@
             "aimedArrivalTime": "2020-12-09T11:34:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -282,6 +292,7 @@
             "aimedArrivalTime": "2020-12-09T11:54:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -303,6 +314,7 @@
             "aimedArrivalTime": "2020-12-09T12:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -324,6 +336,7 @@
             "aimedArrivalTime": "2020-12-09T12:34:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -345,6 +358,7 @@
             "aimedArrivalTime": "2020-12-09T12:54:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -366,6 +380,7 @@
             "aimedArrivalTime": "2020-12-09T13:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -665,6 +680,7 @@
             "aimedArrivalTime": "2020-12-09T10:15:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -686,6 +702,7 @@
             "aimedArrivalTime": "2020-12-09T10:35:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -707,6 +724,7 @@
             "aimedArrivalTime": "2020-12-09T10:55:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -728,6 +746,7 @@
             "aimedArrivalTime": "2020-12-09T11:15:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -749,6 +768,7 @@
             "aimedArrivalTime": "2020-12-09T11:35:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -770,6 +790,7 @@
             "aimedArrivalTime": "2020-12-09T11:55:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -791,6 +812,7 @@
             "aimedArrivalTime": "2020-12-09T12:15:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -812,6 +834,7 @@
             "aimedArrivalTime": "2020-12-09T12:35:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -833,6 +856,7 @@
             "aimedArrivalTime": "2020-12-09T12:55:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -854,6 +878,7 @@
             "aimedArrivalTime": "2020-12-09T13:15:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1143,6 +1168,7 @@
             "aimedArrivalTime": "2020-12-09T10:30:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1164,6 +1190,7 @@
             "aimedArrivalTime": "2020-12-09T10:48:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1185,6 +1212,7 @@
             "aimedArrivalTime": "2020-12-09T11:10:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1206,6 +1234,7 @@
             "aimedArrivalTime": "2020-12-09T11:28:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1227,6 +1256,7 @@
             "aimedArrivalTime": "2020-12-09T11:50:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1304,6 +1334,7 @@
             "aimedArrivalTime": "2020-12-09T10:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1325,6 +1356,7 @@
             "aimedArrivalTime": "2020-12-09T10:11:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1346,6 +1378,7 @@
             "aimedArrivalTime": "2020-12-09T10:31:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1367,6 +1400,7 @@
             "aimedArrivalTime": "2020-12-09T10:51:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1388,6 +1422,7 @@
             "aimedArrivalTime": "2020-12-09T10:55:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1409,6 +1444,7 @@
             "aimedArrivalTime": "2020-12-09T11:11:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1430,6 +1466,7 @@
             "aimedArrivalTime": "2020-12-09T11:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1451,6 +1488,7 @@
             "aimedArrivalTime": "2020-12-09T11:31:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1472,6 +1510,7 @@
             "aimedArrivalTime": "2020-12-09T11:51:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1493,6 +1532,7 @@
             "aimedArrivalTime": "2020-12-09T12:11:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1514,6 +1554,7 @@
             "aimedArrivalTime": "2020-12-09T12:14:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1535,6 +1576,7 @@
             "aimedArrivalTime": "2020-12-09T12:31:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1556,6 +1598,7 @@
             "aimedArrivalTime": "2020-12-09T12:35:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -1598,6 +1641,7 @@
             "aimedArrivalTime": "2020-12-09T13:31:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2399,6 +2443,7 @@
             "aimedArrivalTime": "2020-12-09T10:21:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2420,6 +2465,7 @@
             "aimedArrivalTime": "2020-12-09T10:41:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2441,6 +2487,7 @@
             "aimedArrivalTime": "2020-12-09T10:41:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2462,6 +2509,7 @@
             "aimedArrivalTime": "2020-12-09T10:54:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2483,6 +2531,7 @@
             "aimedArrivalTime": "2020-12-09T11:00:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2504,6 +2553,7 @@
             "aimedArrivalTime": "2020-12-09T11:21:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2525,6 +2575,7 @@
             "aimedArrivalTime": "2020-12-09T11:41:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2546,6 +2597,7 @@
             "aimedArrivalTime": "2020-12-09T11:54:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2567,6 +2619,7 @@
             "aimedArrivalTime": "2020-12-09T12:21:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2609,6 +2662,7 @@
             "aimedArrivalTime": "2020-12-09T13:13:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -2630,6 +2684,7 @@
             "aimedArrivalTime": "2020-12-09T13:21:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
