@@ -129,6 +129,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   destinationDisplay {
     frontText
   }
+  date
   expectedDepartureTime
   aimedDepartureTime
   predictionInaccurate

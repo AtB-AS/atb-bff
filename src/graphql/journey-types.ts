@@ -1346,6 +1346,7 @@ export type ServiceJourney = {
   serviceAlteration?: Maybe<ServiceAlteration>;
   /** Get all situations active for the service journey */
   situations: Array<Maybe<PtSituationElement>>;
+  transportMode?: Maybe<TransportMode>;
   /** The transport submode of the journey, if different from lines transport submode. */
   transportSubmode?: Maybe<TransportSubmode>;
   /** Whether service journey is accessible with wheelchair. */
