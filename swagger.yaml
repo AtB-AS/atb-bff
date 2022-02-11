@@ -789,6 +789,14 @@ definitions:
         type: boolean
       cursor:
         type: string
+      transferPenalty:
+        type: number
+      waitReluctance:
+        type: number
+      walkReluctance:
+        type: number
+      walkSpeed:
+        type: number
     required:
       - from
       - to
