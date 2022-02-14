@@ -8,6 +8,10 @@ export type TripsQueryVariables = Types.Exact<{
   arriveBy: Types.Scalars['Boolean'];
   when?: Types.InputMaybe<Types.Scalars['DateTime']>;
   cursor?: Types.InputMaybe<Types.Scalars['String']>;
+  transferPenalty?: Types.InputMaybe<Types.Scalars['Int']>;
+  waitReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
+  walkReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
+  walkSpeed?: Types.InputMaybe<Types.Scalars['Float']>;
 }>;
 
 
@@ -15,13 +19,17 @@ export type TripsQuery = { trip: { nextPageCursor?: string, previousPageCursor?:
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float) {
   trip(
     from: $from
     to: $to
     dateTime: $when
     arriveBy: $arriveBy
     pageCursor: $cursor
+    transferPenalty: $transferPenalty
+    waitReluctance: $waitReluctance
+    walkReluctance: $walkReluctance
+    walkSpeed: $walkSpeed
   ) {
     nextPageCursor
     previousPageCursor

@@ -1,10 +1,14 @@
-query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String) {
+query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float) {
   trip(
     from: $from
     to: $to
     dateTime: $when
     arriveBy: $arriveBy
     pageCursor: $cursor
+    transferPenalty: $transferPenalty
+    waitReluctance: $waitReluctance
+    walkReluctance: $walkReluctance
+    walkSpeed: $walkSpeed
   ) {
     nextPageCursor
     previousPageCursor
