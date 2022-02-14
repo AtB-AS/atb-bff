@@ -15,7 +15,7 @@ export type TripsQueryVariables = Types.Exact<{
 }>;
 
 
-export type TripsQuery = { trip: { nextPageCursor?: string, previousPageCursor?: string, metadata?: { nextDateTime?: any, prevDateTime?: any, searchWindowUsed: number }, tripPatterns: Array<{ expectedStartTime?: any, expectedEndTime?: any, duration?: any, walkDistance?: number, legs: Array<{ mode?: Types.Mode, distance?: number, duration?: any, aimedStartTime?: any, aimedEndTime?: any, expectedEndTime?: any, expectedStartTime?: any, realtime?: boolean, transportSubmode?: Types.TransportSubmode, line?: { id: string, name?: string, transportSubmode?: Types.TransportSubmode, publicCode?: string }, fromEstimatedCall?: { aimedDepartureTime?: any, expectedDepartureTime?: any, destinationDisplay?: { frontText?: string }, quay?: { publicCode?: string, name: string }, notices: Array<{ text?: string, id: string }> }, situations: Array<{ situationNumber?: string, description: Array<{ value?: string }> }>, fromPlace: { name?: string, longitude: number, latitude: number, quay?: { id: string, publicCode?: string, name: string, longitude?: number, latitude?: number, stopPlace?: { longitude?: number, latitude?: number, name: string } } }, toPlace: { name?: string, longitude: number, latitude: number, quay?: { id: string, publicCode?: string, name: string, longitude?: number, latitude?: number, stopPlace?: { longitude?: number, latitude?: number, name: string } } }, serviceJourney?: { id: string }, interchangeTo?: { guaranteed?: boolean, ToServiceJourney?: { id: string } }, pointsOnLink?: { points?: string, length?: number }, intermediateEstimatedCalls: Array<{ quay?: { name: string, id: string } }>, authority?: { id: string } }> }> } };
+export type TripsQuery = { trip: { nextPageCursor?: string, previousPageCursor?: string, metadata?: { nextDateTime?: any, prevDateTime?: any, searchWindowUsed: number }, tripPatterns: Array<{ expectedStartTime?: any, expectedEndTime?: any, duration?: any, walkDistance?: number, legs: Array<{ mode?: Types.Mode, distance?: number, duration?: any, aimedStartTime?: any, aimedEndTime?: any, expectedEndTime?: any, expectedStartTime?: any, realtime?: boolean, transportSubmode?: Types.TransportSubmode, line?: { id: string, name?: string, transportSubmode?: Types.TransportSubmode, publicCode?: string }, fromEstimatedCall?: { aimedDepartureTime?: any, expectedDepartureTime?: any, destinationDisplay?: { frontText?: string }, quay?: { publicCode?: string, name: string }, notices: Array<{ text?: string, id: string }> }, situations: Array<{ situationNumber?: string, description: Array<{ value?: string }> }>, fromPlace: { name?: string, longitude: number, latitude: number, quay?: { id: string, publicCode?: string, name: string, longitude?: number, latitude?: number, stopPlace?: { longitude?: number, latitude?: number, name: string } } }, toPlace: { name?: string, longitude: number, latitude: number, quay?: { id: string, publicCode?: string, name: string, longitude?: number, latitude?: number, stopPlace?: { longitude?: number, latitude?: number, name: string } } }, serviceJourney?: { id: string }, interchangeTo?: { guaranteed?: boolean, toServiceJourney?: { id: string } }, pointsOnLink?: { points?: string, length?: number }, intermediateEstimatedCalls: Array<{ date?: any, quay?: { name: string, id: string } }>, authority?: { id: string } }> }> } };
 
 
 export const TripsDocument = gql`
@@ -117,7 +117,7 @@ export const TripsDocument = gql`
           id
         }
         interchangeTo {
-          ToServiceJourney {
+          toServiceJourney {
             id
           }
           guaranteed
@@ -131,6 +131,7 @@ export const TripsDocument = gql`
             name
             id
           }
+          date
         }
         authority {
           id

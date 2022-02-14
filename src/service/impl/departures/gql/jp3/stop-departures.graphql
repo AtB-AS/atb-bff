@@ -4,6 +4,7 @@ query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime
     quays(filterByInUse: true) {
       id
       estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime, timeRange: $timeRange) {
+        date
         expectedDepartureTime
         aimedDepartureTime
         realtime

@@ -26,6 +26,7 @@
             "aimedArrivalTime": "2020-12-08T15:15:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -47,6 +48,7 @@
             "aimedArrivalTime": "2020-12-08T15:25:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -68,6 +70,7 @@
             "aimedArrivalTime": "2020-12-08T15:35:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -89,6 +92,7 @@
             "aimedArrivalTime": "2020-12-08T15:45:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -110,6 +114,7 @@
             "aimedArrivalTime": "2020-12-08T15:55:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -131,6 +136,7 @@
             "aimedArrivalTime": "2020-12-08T16:05:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -152,6 +158,7 @@
             "aimedArrivalTime": "2020-12-08T16:15:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -173,6 +180,7 @@
             "aimedArrivalTime": "2020-12-08T16:25:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -194,6 +202,7 @@
             "aimedArrivalTime": "2020-12-08T16:35:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -215,6 +224,7 @@
             "aimedArrivalTime": "2020-12-08T16:45:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -504,6 +514,7 @@
             "aimedArrivalTime": "2020-12-08T15:23:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -525,6 +536,7 @@
             "aimedArrivalTime": "2020-12-08T15:31:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -546,6 +558,7 @@
             "aimedArrivalTime": "2020-12-08T15:43:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -567,6 +580,7 @@
             "aimedArrivalTime": "2020-12-08T15:51:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
@@ -588,6 +602,7 @@
             "aimedArrivalTime": "2020-12-08T16:03:00+0100",
             "predictionInaccurate": false,
             "realtime": true,
+            "serviceDate": "2020-12-09",
             "notices": [],
             "situations": [],
             "serviceJourney": {
