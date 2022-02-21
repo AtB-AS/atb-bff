@@ -45,16 +45,15 @@ export default function serviceJourneyService(
     },
     async getDeparturesForServiceJourney(id, { date }) {
       try {
+        let serviceDate = date ? formatISO(date, { representation: 'date' }) : undefined;
         const departures = await service.getDeparturesForServiceJourney(
           id,
-          date ? formatISO(date, { representation: 'date' }) : undefined
+          serviceDate
         );
-
         return Result.ok(departures);
       } catch (error) {
         const re = /Entur SDK: No data available/;
         if (error.message.match(re)) return Result.ok(null);
-
         return Result.err(new APIError(error));
       }
     }

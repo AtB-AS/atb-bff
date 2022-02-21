@@ -48,6 +48,7 @@ type DepartureTime = {
   predictionInaccurate?: boolean;
   situations: Situation[];
   serviceJourneyId?: string;
+  serviceDate: string;
 };
 
 type DepartureGroup = {
@@ -109,7 +110,7 @@ export default function mapQueryToGroups(
     const { quays, ...stopPlaceInfo } = stopPlace;
     const quayGroups =
       quays?.map(function (quay) {
-        const { times, estimatedCalls, ...quayInfo } = quay;
+        const { times, estimatedCalls, ...quayInfo  } = quay;
         const groups = groupBy(times, item =>
           toKey(
             item.serviceJourney?.line.id,
@@ -153,7 +154,8 @@ export default function mapQueryToGroups(
               predictionInaccurate: time.predictionInaccurate,
               realtime: time.realtime,
               situations: time.situations,
-              serviceJourneyId: time.serviceJourney?.id
+              serviceJourneyId: time.serviceJourney?.id,
+              serviceDate: time.date
             };
           });
 
