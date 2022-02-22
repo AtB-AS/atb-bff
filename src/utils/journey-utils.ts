@@ -64,6 +64,7 @@ function isTripPatternsQuery(
 
 /**
  * Creates a unique query to fetch updates to a single Trip
+ * The query should always be a departure search with start time just before the aimed start time from the first leg.
  * JourneyPlanner v3
  * @param trip
  * @param queryVariables
@@ -76,8 +77,11 @@ export function generateTripQueryString(
   const journeyIds = extractServiceJourneyIds(trip);
 
   // modify query to contain the padded aimed departure time of first leg
+  // always do departure search with no cursor.
   const tripQuery: TripsQueryVariables = {
     ...queryVariables,
+    arriveBy: false,
+    cursor: undefined,
     when: getPaddedStartTimeFromLeg(trip.legs[0])
   };
 
