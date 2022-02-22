@@ -128,6 +128,20 @@ export enum BookingMethod {
   Text = 'text'
 }
 
+export type Branding = {
+  /** Description of branding. */
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  /** URL to an image be used for branding */
+  image?: Maybe<Scalars['String']>;
+  /** Full name to be used for branding. */
+  name?: Maybe<Scalars['String']>;
+  /** Short name to be used for branding. */
+  shortName?: Maybe<Scalars['String']>;
+  /** URL to be used for branding */
+  url?: Maybe<Scalars['String']>;
+};
+
 export type Contact = {
   /** Name of person to contact */
   contactPerson?: Maybe<Scalars['String']>;
@@ -401,6 +415,7 @@ export type Line = {
    * @deprecated BookingArrangements are defined per stop, and can be found under `passingTimes` or `estimatedCalls`
    */
   bookingArrangements?: Maybe<BookingArrangement>;
+  branding?: Maybe<Branding>;
   description?: Maybe<Scalars['String']>;
   /** Type of flexible line, or null if line is not flexible. */
   flexibleLineType?: Maybe<Scalars['String']>;
@@ -1446,10 +1461,7 @@ export type Trip = {
    * @deprecated Use routingErrors instead
    */
   messageStrings: Array<Maybe<Scalars['String']>>;
-  /**
-   * The trip request metadata.
-   * @deprecated Use pageCursor instead
-   */
+  /** The trip request metadata. */
   metadata?: Maybe<TripSearchData>;
   /**
    * Use the cursor to get the next page of results. Use this cursor for the pageCursor parameter in the trip query in order to get the next page.

@@ -24,7 +24,8 @@ docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
 ### Starting locally
 
 #### Requirements
-- Node.js 14.x ([Hapi doesn't support newer versions](https://stackoverflow.com/a/65489848/5976426))
+
+- Node.js
 
 Install node packages
 
@@ -70,13 +71,21 @@ scripts:
 ```
 npm run gql-gen
 ```
+
 for Journeyplanner v2 API or
+
 ```
 npm run gql-gen-v3
 ```
+
 for Journeyplanner v3 API.
 
 This will make a TypeScript representation of the `.graphql` file in the same
 location but with `.graphql-gen.ts` extension. You can use these directly as
 queries.
 
+## Deploy to staging
+GCP will pick up and deploy new versions of BFF automatically, but the API Gateway will not.
+The API gateway needs the swagger configuration for any new or changed endpoints from the BFF build.
+go to GCP and make sure you are in the atb-mobility-platform-staging project.
+find Cloud build / Triggers, and hit RUN on the trigger called "amp-api-gateway"
