@@ -670,6 +670,23 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/singleTrip:
+    post:
+      summary: get details for a single trip
+      operationId: postBffV2_0SingleTrip
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/SingleTripModel'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+
 definitions:
   coordinates:
     type: object
@@ -801,6 +818,13 @@ definitions:
       - from
       - to
       - arriveBy
+  SingleTripModel:
+    type: object
+    properties:
+      compressedQuery:
+        type: string
+    required:
+      - compressedQuery
 x-alt-definitions:
   location:
     type: object
