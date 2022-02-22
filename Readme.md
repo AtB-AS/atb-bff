@@ -89,3 +89,11 @@ GCP will pick up and deploy new versions of BFF automatically, but the API Gatew
 The API gateway needs the swagger configuration for any new or changed endpoints from the BFF build.
 go to GCP and make sure you are in the atb-mobility-platform-staging project.
 find Cloud build / Triggers, and hit RUN on the trigger called "amp-api-gateway"
+
+## Deploy to prod
+GCP will automatically build the `prod` branch on push.
+When `prod` build is success, `api-gateway` will automatically trigger and make changes available to the world.
+Take special note of the `host` field in the `swagger.yaml` file, this field is different for master (local/staging) and prod branches.
+marges to `prod` must have the correct `host` field, so make sure this field is <u>not</u> merged from `master`, but is kept as is.
+
+
