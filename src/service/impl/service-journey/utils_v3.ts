@@ -1,17 +1,16 @@
-import { Coordinates, PointsOnLink } from '@entur/sdk';
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
-import { MapLeg, ServiceJourneyMapInfoData } from '../../types';
-import { MapInfoByServiceJourneyIdQuery } from './journey-gql/jp2/service-journey-map.graphql-gen';
+import {Coordinates, MapLeg_v3, ServiceJourneyMapInfoData_v3} from '../../types';
 import {MapInfoByServiceJourneyIdV2Query} from "./journey-gql/jp3/service-journey-map.graphql-gen";
+import {PointsOnLink} from "../../../graphql/journeyplanner-types_v3";
 
 type PolylinePair = [lat: number, lng: number];
 
 const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 3;
 
-export function mapToMapLegs(
-  data: MapInfoByServiceJourneyIdQuery
-): ServiceJourneyMapInfoData {
+export function mapToMapLegs_v3(
+  data: MapInfoByServiceJourneyIdV2Query
+): ServiceJourneyMapInfoData_v3 {
   const baseItem = {
     mode: data.serviceJourney?.line.transportMode,
     transportSubmode: data.serviceJourney?.line.transportSubmode
@@ -35,7 +34,7 @@ export function mapToMapLegs(
         ...baseItem,
         faded: false,
         pointsOnLink: data.serviceJourney?.pointsOnLink as PointsOnLink
-      } as MapLeg
+      } as MapLeg_v3
     ]
   };
 
@@ -70,7 +69,7 @@ export function mapToMapLegs(
   const itemIfDefined = (
     item: PolylinePair[],
     faded: boolean
-  ): MapLeg | undefined =>
+  ): MapLeg_v3 | undefined =>
     item.length
       ? ({
           ...baseItem,
@@ -79,13 +78,13 @@ export function mapToMapLegs(
             length: item.length,
             points: polyline.encode(item)
           }
-        } as MapLeg)
+        } as MapLeg_v3)
       : undefined;
-  const mapLegs: MapLeg[] = [
+  const mapLegs: MapLeg_v3[] = [
     itemIfDefined(before, true),
     itemIfDefined(mainLeg, false),
     itemIfDefined(after, true)
-  ].filter(Boolean) as MapLeg[];
+  ].filter(Boolean) as MapLeg_v3[];
 
   return {
     ...defaultValue,
