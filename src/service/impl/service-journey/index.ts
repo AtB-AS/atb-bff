@@ -2,7 +2,7 @@ import { Result } from '@badrap/result';
 import { formatISO } from 'date-fns';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
-import {IServiceJourneyService, IServiceJourneyService_v2} from '../../interface';
+import { IServiceJourneyService, IServiceJourneyService_v2 } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
@@ -98,5 +98,5 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
       }
     },
   };
-
 }
+
