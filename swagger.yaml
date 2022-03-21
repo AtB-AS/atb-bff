@@ -342,7 +342,7 @@ paths:
           description: Successful
   '/bff/v1/servicejourney/{id}/polyline':
     get:
-      summary: Get departures for Service Journey
+      summary: Get Map info for Service Journey
       operationId: getBffV1ServicejourneyIdPolyline
       parameters:
         - type: string
@@ -362,6 +362,29 @@ paths:
           schema:
             type: string
           description: Successful
+  '/bff/v2/servicejourney/{id}/polyline':
+    get:
+      summary: Get Map info for a serviceJourney
+      operationId: getBffV2ServicejourneyIdPolyline
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          name: fromQuayId
+          in: query
+        - type: string
+          name: toQuayId
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+
   '/bff/v1/stop/{id}/departures':
     get:
       summary: >-

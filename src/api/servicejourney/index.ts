@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
 import { DEFAULT_CACHE_TTL } from '../../config/cache';
 import { EXTERNAL_API_TIMEOUT } from '../../config/external';
-import { IServiceJourneyService } from '../../service/interface';
+import {IServiceJourneyService, IServiceJourneyService_v2} from '../../service/interface';
 import {
   DeparturesForServiceJourneyQuery,
   ServiceJourneyMapInfoQuery
@@ -65,4 +65,44 @@ export default function serviceJourneyRoutes(server: Hapi.Server) {
       }
     });
   };
+}
+
+export function serviceJourneyRoutes_v2(server: Hapi.Server) {
+  return (service: IServiceJourneyService_v2) => {
+
+    const getServiceJourneyMapInfo_v2 = async (
+        serviceJouerneyId: string,
+        query: ServiceJourneyMapInfoQuery
+    ) =>
+        (
+            await service.getServiceJourneyMapInfo(serviceJouerneyId, query)
+        ).unwrap();
+
+    server.method('getServiceJourneyMapInfo_v2', getServiceJourneyMapInfo_v2, {
+      generateKey: (
+          serviceJouerneyId: string,
+          { fromQuayId, toQuayId }: ServiceJourneyMapInfoQuery
+      ) => qs.stringify({ serviceJouerneyId, fromQuayId, toQuayId }),
+      cache: {
+        expiresIn: DEFAULT_CACHE_TTL,
+        generateTimeout: EXTERNAL_API_TIMEOUT
+      }
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/bff/v2/servicejourney/{id}/polyline',
+      options: {
+        tags: ['api', 'service-journey', 'map'],
+        validate: getServiceJoruneyMapDataRequest,
+        description: 'Get departures for Service Journey'
+      },
+      handler: async (request, h) => {
+        const { id } = request.params;
+        const query = (request.query as unknown) as ServiceJourneyMapInfoQuery;
+        return server.methods.getServiceJourneyMapInfo_v2(id, query);
+      }
+    });
+
+  }
 }
