@@ -191,7 +191,7 @@ export interface DeparturesForServiceJourneyQuery {
 }
 
 export interface ServiceJourneyMapInfoQuery {
-  fromQuayId?: string;
+  fromQuayId: string;
   toQuayId?: string;
 }
 
