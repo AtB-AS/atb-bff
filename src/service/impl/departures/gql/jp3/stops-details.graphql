@@ -1,0 +1,21 @@
+query stopsDetails($ids: [String]!) {
+  stopPlaces(
+    ids: $ids
+  ) {
+    name
+    quays(
+      filterByInUse: true
+    ) {
+      id
+      description
+      name
+      publicCode
+      stopPlace {
+        id
+      }
+    }
+    transportMode
+    description
+    id
+  }
+}
