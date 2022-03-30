@@ -28,8 +28,8 @@ import registerMetricsExporter from './utils/metrics';
 
 import { GaxiosError } from 'gaxios';
 import { PubSub } from '@google-cloud/pubsub';
-import serviceJourneyRoutes from './api/servicejourney';
-import serviceJourneyService from './service/impl/service-journey';
+import serviceJourneyRoutes, {serviceJourneyRoutes_v2} from './api/servicejourney';
+import serviceJourneyService, {serviceJourneyService_v2} from './service/impl/service-journey';
 
 process.on('unhandledRejection', err => {
   console.error(err);
@@ -70,8 +70,11 @@ process.on('unhandledRejection', err => {
     journeyRoutes(server)(js);
     serviceJourneyRoutes(server)(serviceJourneyService(enturService));
     enrollmentRoutes(server)();
+
+    // JP3
     tripsRoutes(server)(tripsService(enturService_v3, pubSubClient));
     departureRoutes(server)(departuresService(enturService_v3, pubSubClient));
+    serviceJourneyRoutes_v2(server)(serviceJourneyService_v2())
 
     registerMetricsExporter(projectId);
     await server.initialize();

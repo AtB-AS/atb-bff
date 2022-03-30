@@ -1,7 +1,7 @@
 import { Result } from '@badrap/result';
 import { formatISO } from 'date-fns';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { IServiceJourneyService } from '../../interface';
+import { IServiceJourneyService, IServiceJourneyService_v2 } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
 import { EnturServiceAPI } from '../entur';
 import {
@@ -10,6 +10,8 @@ import {
   MapInfoByServiceJourneyIdQueryVariables
 } from './journey-gql/jp2/service-journey-map.graphql-gen';
 import { mapToMapLegs } from './utils';
+import { mapToMapLegs_v3 } from './utils_v3';
+import {getMapInfoWithFromAndToQuay, getMapInfoWithFromQuay} from "./serviceJourney";
 
 export default function serviceJourneyService(
   service: EnturServiceAPI
@@ -59,3 +61,26 @@ export default function serviceJourneyService(
     }
   };
 }
+
+export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
+  return {
+    async getServiceJourneyMapInfo(
+        serviceJourneyId: string,
+        query: ServiceJourneyMapInfoQuery
+    ) {
+      try {
+        const result = query.toQuayId ?
+            await getMapInfoWithFromAndToQuay(serviceJourneyId, query.fromQuayId, query.toQuayId) :
+            await getMapInfoWithFromQuay(serviceJourneyId, query.fromQuayId);
+
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+        return Result.ok(mapToMapLegs_v3(result.data));
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+  };
+}
+
