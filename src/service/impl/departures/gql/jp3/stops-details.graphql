@@ -17,5 +17,7 @@ query stopsDetails($ids: [String]!) {
     transportMode
     description
     id
+    latitude
+    longitude
   }
 }

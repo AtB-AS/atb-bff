@@ -7,7 +7,7 @@ export type StopsDetailsQueryVariables = Types.Exact<{
 }>;
 
 
-export type StopsDetailsQuery = { stopPlaces: Array<{ name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string } }> }> };
+export type StopsDetailsQuery = { stopPlaces: Array<{ name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, latitude?: number, longitude?: number, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string } }> }> };
 
 
 export const StopsDetailsDocument = gql`
@@ -26,6 +26,8 @@ export const StopsDetailsDocument = gql`
     transportMode
     description
     id
+    latitude
+    longitude
   }
 }
     `;
