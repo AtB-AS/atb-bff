@@ -10,6 +10,12 @@ export const getStopsNearestRequest = {
   })
 };
 
+export const getStopsDetailsRequest = {
+  query: Joi.object({
+    ids: Joi.array().items(Joi.string()).required().single()
+  })
+};
+
 export const getStopDeparturesRequest = {
   query: Joi.object({
     id: Joi.string().required(),
