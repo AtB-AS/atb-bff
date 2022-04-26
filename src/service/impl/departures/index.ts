@@ -21,6 +21,11 @@ import {
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables
 } from './gql/jp3/stops-nearest.graphql-gen';
+import {
+  StopsDetailsDocument,
+  StopsDetailsQuery,
+  StopsDetailsQueryVariables
+} from './gql/jp3/stops-details.graphql-gen';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -68,6 +73,28 @@ export default (
             distance,
             after,
             count
+          }
+        });
+
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+
+        return Result.ok(result.data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+
+    async getStopsDetails({ ids }) {
+      try {
+        const result = await journeyPlannerClient_v3.query<
+          StopsDetailsQuery,
+          StopsDetailsQueryVariables
+        >({
+          query: StopsDetailsDocument,
+          variables: {
+            ids
           }
         });
 

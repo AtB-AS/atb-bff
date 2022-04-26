@@ -593,6 +593,25 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/departures/stops-details:
+    get:
+      summary: Get details for stop places
+      operationId: getBffV2StopsDetails
+      parameters:
+        - type: array
+          default: []
+          items:
+            type: string
+          collectionFormat: multi
+          name: ids
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v2/departures/stop-departures:
     get:
       summary: Get stop with departures for every quay
