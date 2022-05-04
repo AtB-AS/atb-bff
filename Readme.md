@@ -36,7 +36,7 @@ Start the development server
 `npm run start:dev`
 
 #### Potential errors
-##### Unable to detect project-id
+##### Unable to detect a Project Id
 When attempting `npm run start:dev` you might encounter the error: 
 `failed to initialize server: Unable to detect a Project Id in the current environment.`
 
