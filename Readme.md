@@ -35,6 +35,13 @@ Start the development server
 
 `npm run start:dev`
 
+#### Potential errors
+##### Unable to set project-id
+When attempting `npm run start:dev` you might encounter the error: 
+`failed to initialize server: Unable to detect a Project Id in the current environment.`
+
+If this happens, running `gcloud auth login` have previously set project id after successful authentication. 
+
 ## Architecture
 
 The runtime is written in TypeScript and runs on Node.js
