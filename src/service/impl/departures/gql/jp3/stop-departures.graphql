@@ -3,7 +3,12 @@ query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime
     id
     quays(filterByInUse: true) {
       id
-      estimatedCalls(numberOfDepartures: $numberOfDepartures, startTime: $startTime, timeRange: $timeRange) {
+      estimatedCalls(
+        numberOfDepartures: $numberOfDepartures
+        startTime: $startTime
+        timeRange: $timeRange
+        includeCancelledTrips: true
+      ) {
         date
         expectedDepartureTime
         aimedDepartureTime
@@ -24,6 +29,7 @@ query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime
             transportSubmode
           }
         }
+        cancellation
       }
     }
   }
