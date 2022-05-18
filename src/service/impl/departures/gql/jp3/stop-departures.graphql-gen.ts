@@ -10,7 +10,7 @@ export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> }> } };
+export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> }> } };
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
@@ -23,6 +23,7 @@ export const StopPlaceQuayDeparturesDocument = gql`
         numberOfDepartures: $numberOfDepartures
         startTime: $startTime
         timeRange: $timeRange
+        includeCancelledTrips: true
       ) {
         date
         expectedDepartureTime
@@ -44,6 +45,7 @@ export const StopPlaceQuayDeparturesDocument = gql`
             transportSubmode
           }
         }
+        cancellation
       }
     }
   }
