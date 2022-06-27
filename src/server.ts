@@ -7,7 +7,6 @@ import hapiInert from '@hapi/inert';
 import hapiVision from '@hapi/vision';
 import hapiApiVersion from 'hapi-api-version';
 
-import stackdriverLabel from './plugins/stackdriver-label';
 import logFmtPlugin from './plugins/logfmt';
 import atbHeaders from './plugins/atb-headers';
 import url from 'url';
@@ -49,13 +48,6 @@ export const initializePlugins = async (server: hapi.Server) => {
         requestId: request.requestId,
         installId: request.installId
       })
-    }
-  });
-
-  await server.register({
-    plugin: stackdriverLabel,
-    options: {
-      headers: ['Atb-Install-Id']
     }
   });
 
