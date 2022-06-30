@@ -1,7 +1,6 @@
 import { Boom } from '@hapi/boom';
 import { createServer, initializePlugins } from './server';
 import enturClient from './service/impl/entur';
-import { enturClient_v3 } from './service/impl/entur';
 
 import geocoderService from './service/impl/geocoder';
 import stopsService from './service/impl/stops';
