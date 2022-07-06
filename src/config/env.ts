@@ -2,7 +2,7 @@ export const TICKET_INVITE_KEY: string | undefined =
   process.env.TICKET_INVITE_KEY;
 export const PERIOD_TICKET_INVITE_KEY: string | undefined =
   process.env.PERIOD_TICKET_INVITE_KEY;
-  export const FLEX_TICKET_INVITE_KEY: string | undefined =
+export const FLEX_TICKET_INVITE_KEY: string | undefined =
   process.env.FLEX_TICKET_INVITE_KEY;
 export const ENTUR_BASEURL: string | undefined = process.env.ENTUR_BASEURL;
 
