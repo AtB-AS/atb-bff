@@ -2,19 +2,10 @@ import { EstimatedCall } from '../../../../graphql/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
 import { StopPlaceQuayDeparturesQuery } from '../gql/jp3/stop-departures.graphql-gen';
 
-/**
- * Takes one or more StopPlaces containing departures within one or more Quays
- * and favorites (stopId, lineName, lineId, quayId) and returns the StopPlaces
- * with just favorite departures, or with all departures if no favorites where
- * provided.
- *
- * @param stopPlaces
- * @param favorites
- * @returns
- */
 export default function filterFavorites(
   result?: StopPlaceQuayDeparturesQuery,
-  favorites?: FavoriteDeparture[]
+  favorites?: FavoriteDeparture[],
+  limit?: number
 ): StopPlaceQuayDeparturesQuery {
   const stopPlace = result?.stopPlace;
   if (!stopPlace) return {};
@@ -37,9 +28,9 @@ export default function filterFavorites(
   const filteredQuays = stopPlace.quays?.map(quay => {
     return {
       ...quay,
-      estimatedCalls: quay.estimatedCalls.filter(estimatedCall =>
-        isFavorite(estimatedCall as EstimatedCall)
-      )
+      estimatedCalls: quay.estimatedCalls
+        .filter(estimatedCall => isFavorite(estimatedCall as EstimatedCall))
+        .slice(0, limit)
     };
   });
 

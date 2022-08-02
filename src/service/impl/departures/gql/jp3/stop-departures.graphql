@@ -1,6 +1,7 @@
 query stopPlaceQuayDepartures(
   $id: String!,
   $numberOfDepartures: Int,
+  $limitPerLine: Int,
   $startTime: DateTime,
   $timeRange: Int,
   $filterByLineIds: [ID]
@@ -15,11 +16,13 @@ query stopPlaceQuayDepartures(
         timeRange: $timeRange
         includeCancelledTrips: true
         whiteListed: {lines: $filterByLineIds}
+        numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
       ) {
         date
         expectedDepartureTime
         aimedDepartureTime
         realtime
+        cancellation
         quay {
           id
         }
@@ -36,7 +39,6 @@ query stopPlaceQuayDepartures(
             transportSubmode
           }
         }
-        cancellation
       }
     }
   }

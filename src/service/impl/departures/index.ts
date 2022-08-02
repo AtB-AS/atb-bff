@@ -143,6 +143,18 @@ export default (
       { favorites }
     ) {
       try {
+        /**
+         * If favorites are provided, get more departures per quay from journey
+         * planner and set limitPerLine instead, since some departures may be
+         * filtered out.
+         */
+        const limit = favorites
+          ? {
+              limitPerLine: numberOfDepartures,
+              numberOfDepartures: numberOfDepartures * 10
+            }
+          : { numberOfDepartures: numberOfDepartures };
+
         const result = await journeyPlannerClient_v3.query<
           StopPlaceQuayDeparturesQuery,
           StopPlaceQuayDeparturesQueryVariables
@@ -150,10 +162,10 @@ export default (
           query: StopPlaceQuayDeparturesDocument,
           variables: {
             id,
-            numberOfDepartures,
             startTime,
             timeRange,
-            filterByLineIds: favorites?.map(f => f.lineId)
+            filterByLineIds: favorites?.map(f => f.lineId),
+            ...limit
           }
         });
 
@@ -161,7 +173,11 @@ export default (
           return Result.err(new APIError(result.errors));
         }
 
-        const data = filterFavorites(result.data, favorites);
+        const data = filterFavorites(
+          result.data,
+          favorites,
+          numberOfDepartures
+        );
 
         return Result.ok(data);
       } catch (error) {
