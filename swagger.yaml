@@ -640,6 +640,37 @@ paths:
           schema:
             type: string
           description: Successful
+    post:
+      summary: Get stop with departures for every quay
+      operationId: postBffV2StopDepartures
+      parameters:
+        - type: string
+          name: id
+          in: query
+          required: true
+        - type: number
+          name: numberOfDepartures
+          default: 10
+          in: query
+        - type: string
+          format: date
+          default: '2021-01-27T09:48:19.354Z'
+          name: startTime
+          in: query
+        - type: number
+          name: timeRange
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/favorites'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v2/departures/quay-departures:
     get:
       summary: Get departures from a quay

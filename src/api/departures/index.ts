@@ -6,9 +6,10 @@ import {
   getDepartureRealtime,
   getQuayDeparturesRequest,
   getStopsNearestRequest,
-  getStopsDetailsRequest
+  getStopsDetailsRequest,
+  postStopDeparturesRequest
 } from './schema';
-import { DepartureRealtimeQuery } from '../../service/types';
+import { DepartureRealtimeQuery, DeparturesPayload } from '../../service/types';
 import { QuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/quay-departures.graphql-gen';
 import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
 import { StopsDetailsQueryVariables } from '../../service/impl/departures/gql/jp3/stops-details.graphql-gen';
@@ -51,6 +52,20 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
       return (await service.getStopQuayDepartures(query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/departures/stop-departures',
+    options: {
+      tags: ['api', 'departures', 'stopPlace', 'estimatedCalls'],
+      validate: postStopDeparturesRequest,
+      description: 'Get stop with departures for every quay'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
+      const payload = (request.payload as unknown) as DeparturesPayload;
+      return (await service.postStopQuayDepartures(query, payload)).unwrap();
     }
   });
   server.route({

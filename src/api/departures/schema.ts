@@ -25,6 +25,37 @@ export const getStopDeparturesRequest = {
   })
 };
 
+export const postStopDeparturesRequest = {
+  payload: Joi.object({
+    favorites: Joi.array()
+      .single()
+      .items(
+        Joi.object({
+          stopId: Joi.string().required(),
+          lineName: Joi.string(),
+          lineId: Joi.string().required(),
+          quayId: Joi.string()
+        }).options({ stripUnknown: true })
+      )
+  }),
+  query: Joi.object({
+    id: Joi.string().required(),
+    numberOfDepartures: Joi.number().default(5),
+    startTime: Joi.string(),
+    timeRange: Joi.number(),
+    favorites: Joi.array()
+      .single()
+      .items(
+        Joi.object({
+          stopId: Joi.string().required(),
+          lineName: Joi.string(),
+          lineId: Joi.string().required(),
+          quayId: Joi.string()
+        }).options({ stripUnknown: true })
+      )
+  })
+};
+
 export const getQuayDeparturesRequest = {
   query: Joi.object({
     id: Joi.string().required(),

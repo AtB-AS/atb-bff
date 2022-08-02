@@ -1,4 +1,10 @@
-query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int) {
+query stopPlaceQuayDepartures(
+  $id: String!,
+  $numberOfDepartures: Int,
+  $startTime: DateTime,
+  $timeRange: Int,
+  $filterByLineIds: [ID]
+) {
   stopPlace(id: $id) {
     id
     quays(filterByInUse: true) {
@@ -8,6 +14,7 @@ query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime
         startTime: $startTime
         timeRange: $timeRange
         includeCancelledTrips: true
+        whiteListed: {lines: $filterByLineIds}
       ) {
         date
         expectedDepartureTime

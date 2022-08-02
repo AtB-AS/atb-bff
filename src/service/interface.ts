@@ -36,7 +36,9 @@ import {
   DepartureGroupsQuery,
   DepartureGroupsPayload,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneyMapInfoData, ServiceJourneyMapInfoData_v3
+  ServiceJourneyMapInfoData,
+  ServiceJourneyMapInfoData_v3,
+  DeparturesPayload
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -78,12 +80,10 @@ export interface IServiceJourneyService {
 
 export interface IServiceJourneyService_v2 {
   getServiceJourneyMapInfo(
-      serviceJouerneyId: string,
-      query: ServiceJourneyMapInfoQuery
+    serviceJouerneyId: string,
+    query: ServiceJourneyMapInfoQuery
   ): Promise<Result<ServiceJourneyMapInfoData_v3, APIError>>;
 }
-
-
 
 export interface ITrips_v2 {
   getTrips(
@@ -162,6 +162,10 @@ export interface IDeparturesService {
   ): Promise<Result<StopsDetailsQuery, APIError>>;
   getStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables
+  ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
+  postStopQuayDepartures(
+    query: StopPlaceQuayDeparturesQueryVariables,
+    payload: DeparturesPayload
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
   getQuayDepartures(
     query: QuayDeparturesQueryVariables
