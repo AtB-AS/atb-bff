@@ -11,9 +11,8 @@ export default function filterFavorites(
   if (!stopPlace) return {};
 
   /**
-   * Check if a line is a favorite (same lineName, lineId, stopId and quayId as
-   * a favorite) OR, if favorites are not provided (user has not filtered on
-   * favorites).
+   * Returns whether a departure is a favorite, but if no favorites are
+   * provided, returns true.
    */
   const isFavorite = (item: EstimatedCall) =>
     !favorites ||
