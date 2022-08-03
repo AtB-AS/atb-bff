@@ -136,7 +136,7 @@ export interface DeparturesFromQuayQuery {
   includeCancelledTrips: boolean;
 }
 
-export type DeparturesPayload = {
+export type StopQuayDeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
 
