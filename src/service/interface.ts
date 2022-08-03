@@ -38,7 +38,8 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoData_v3,
-  StopQuayDeparturesPayload
+  QuayDeparturesPayload,
+  StopPlaceDeparturesPayload
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -165,10 +166,14 @@ export interface IDeparturesService {
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
   postStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables,
-    payload: StopQuayDeparturesPayload
+    payload: StopPlaceDeparturesPayload
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
   getQuayDepartures(
     query: QuayDeparturesQueryVariables
+  ): Promise<Result<QuayDeparturesQuery, APIError>>;
+  postQuayDepartures(
+    query: QuayDeparturesQueryVariables,
+    payload: QuayDeparturesPayload
   ): Promise<Result<QuayDeparturesQuery, APIError>>;
   getDepartureRealtime(
     query: DepartureRealtimeQuery

@@ -7,11 +7,13 @@ import {
   getQuayDeparturesRequest,
   getStopsNearestRequest,
   getStopsDetailsRequest,
-  postStopDeparturesRequest
+  postStopDeparturesRequest,
+  postQuayDeparturesRequest
 } from './schema';
 import {
   DepartureRealtimeQuery,
-  StopQuayDeparturesPayload
+  QuayDeparturesPayload,
+  StopPlaceDeparturesPayload
 } from '../../service/types';
 import { QuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/quay-departures.graphql-gen';
 import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
@@ -67,7 +69,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
-      const payload = (request.payload as unknown) as StopQuayDeparturesPayload;
+      const payload = (request.payload as unknown) as StopPlaceDeparturesPayload;
       return (await service.postStopQuayDepartures(query, payload)).unwrap();
     }
   });
@@ -82,6 +84,20 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query = (request.query as unknown) as QuayDeparturesQueryVariables;
       return (await service.getQuayDepartures(query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/departures/quay-departures',
+    options: {
+      tags: ['api', 'departures', 'quay', 'estimatedCalls'],
+      validate: postQuayDeparturesRequest,
+      description: 'Get departures from a quay'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as QuayDeparturesQueryVariables;
+      const payload = (request.payload as unknown) as QuayDeparturesPayload;
+      return (await service.postQuayDepartures(query, payload)).unwrap();
     }
   });
   server.route({

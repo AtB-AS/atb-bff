@@ -26,7 +26,10 @@ import {
   StopsDetailsQuery,
   StopsDetailsQueryVariables
 } from './gql/jp3/stops-details.graphql-gen';
-import filterFavorites from './utils/favorites';
+import {
+  filterStopPlaceFavorites,
+  filterQuayFavorites
+} from './utils/favorites';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -173,7 +176,7 @@ export default (
           return Result.err(new APIError(result.errors));
         }
 
-        const data = filterFavorites(
+        const data = filterStopPlaceFavorites(
           result.data,
           favorites,
           numberOfDepartures
@@ -209,6 +212,41 @@ export default (
         }
 
         return Result.ok(result.data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async postQuayDepartures(
+      {
+        id,
+        numberOfDepartures = 1000,
+        startTime,
+        timeRange = 86400 // 24 hours
+      },
+      { favorites }
+    ) {
+      try {
+        const result = await journeyPlannerClient_v3.query<
+          QuayDeparturesQuery,
+          QuayDeparturesQueryVariables
+        >({
+          query: QuayDeparturesDocument,
+          variables: {
+            id,
+            numberOfDepartures,
+            startTime,
+            timeRange,
+            filterByLineIds: favorites?.map(f => f.lineId)
+          }
+        });
+
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+
+        const data = filterQuayFavorites(result.data, favorites);
+
+        return Result.ok(data);
       } catch (error) {
         return Result.err(new APIError(error));
       }

@@ -33,6 +33,7 @@ export const StopPlaceQuayDeparturesDocument = gql`
         expectedDepartureTime
         aimedDepartureTime
         realtime
+        cancellation
         quay {
           id
         }
@@ -49,7 +50,6 @@ export const StopPlaceQuayDeparturesDocument = gql`
             transportSubmode
           }
         }
-        cancellation
       }
     }
   }
