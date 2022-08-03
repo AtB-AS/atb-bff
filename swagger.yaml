@@ -654,7 +654,6 @@ paths:
           in: query
         - type: string
           format: date
-          default: '2021-01-27T09:48:19.354Z'
           name: startTime
           in: query
         - type: number
