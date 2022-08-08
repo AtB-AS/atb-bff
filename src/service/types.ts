@@ -14,7 +14,7 @@ import { boomify } from '@hapi/boom';
 import { CursoredQuery } from './cursored';
 import { TransportSubmode } from '../graphql/journey-types';
 import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
-import * as Types_v3 from "../graphql/journeyplanner-types_v3";
+import * as Types_v3 from '../graphql/journeyplanner-types_v3';
 
 export interface Coordinates {
   latitude: number;
@@ -135,6 +135,14 @@ export interface DeparturesFromQuayQuery {
   omitNonBoarding: boolean;
   includeCancelledTrips: boolean;
 }
+
+export type StopPlaceDeparturesPayload = {
+  favorites?: FavoriteDeparture[];
+};
+
+export type QuayDeparturesPayload = {
+  favorites?: FavoriteDeparture[];
+};
 
 export interface EnrollmentQuery {
   inviteKey: string;
@@ -268,11 +276,11 @@ export type MapLeg = {
 };
 
 export type MapLeg_v3 = {
-  mode?: Types_v3.Mode,
+  mode?: Types_v3.Mode;
   faded: boolean;
   transportSubmode?: Types_v3.TransportSubmode;
   pointsOnLink: Types_v3.PointsOnLink;
-}
+};
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];
@@ -285,7 +293,6 @@ export type ServiceJourneyMapInfoData_v3 = {
   start?: Coordinates;
   stop?: Coordinates;
 };
-
 
 export class APIError extends Error {
   public statusCode?: number = 500;
