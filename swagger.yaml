@@ -640,6 +640,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
     post:
       summary: Get stop with departures for every quay
       operationId: postBffV2StopDepartures
@@ -699,6 +700,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
     post:
       summary: Get departures from a quay
       operationId: postBffV2QuayDepartures
