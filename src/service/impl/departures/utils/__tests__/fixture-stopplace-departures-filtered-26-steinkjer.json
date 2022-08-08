@@ -1,0 +1,81 @@
+{
+  "stopPlace": {
+    "id": "NSR:StopPlace:388",
+    "quays": [
+      {
+        "id": "NSR:Quay:644",
+        "estimatedCalls": [
+          {
+            "date": "2022-08-08",
+            "expectedDepartureTime": "2022-08-08T15:21:00+02:00",
+            "aimedDepartureTime": "2022-08-08T15:21:00+02:00",
+            "realtime": true,
+            "cancellation": false,
+            "quay": {
+              "id": "NSR:Quay:644"
+            },
+            "destinationDisplay": {
+              "frontText": "Steinkjer"
+            },
+            "serviceJourney": {
+              "id": "SJN:ServiceJourney:SJN_441_2022_08_08_NORD",
+              "line": {
+                "id": "SJN:Line:26",
+                "description": null,
+                "publicCode": "26",
+                "transportMode": "rail",
+                "transportSubmode": "longDistance"
+              }
+            }
+          },
+          {
+            "date": "2022-08-08",
+            "expectedDepartureTime": "2022-08-08T15:46:00+02:00",
+            "aimedDepartureTime": "2022-08-08T15:46:00+02:00",
+            "realtime": true,
+            "cancellation": false,
+            "quay": {
+              "id": "NSR:Quay:644"
+            },
+            "destinationDisplay": {
+              "frontText": "Steinkjer"
+            },
+            "serviceJourney": {
+              "id": "SJN:ServiceJourney:SJN_1763_2022_08_08_NORD",
+              "line": {
+                "id": "SJN:Line:26",
+                "description": null,
+                "publicCode": "26",
+                "transportMode": "rail",
+                "transportSubmode": "longDistance"
+              }
+            }
+          },
+          {
+            "date": "2022-08-08",
+            "expectedDepartureTime": "2022-08-08T16:21:00+02:00",
+            "aimedDepartureTime": "2022-08-08T16:21:00+02:00",
+            "realtime": true,
+            "cancellation": false,
+            "quay": {
+              "id": "NSR:Quay:644"
+            },
+            "destinationDisplay": {
+              "frontText": "Steinkjer"
+            },
+            "serviceJourney": {
+              "id": "SJN:ServiceJourney:SJN_443_2022_08_08_NORD",
+              "line": {
+                "id": "SJN:Line:26",
+                "description": null,
+                "publicCode": "26",
+                "transportMode": "rail",
+                "transportSubmode": "longDistance"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
