@@ -162,18 +162,12 @@ export interface IDeparturesService {
     query: StopsDetailsQueryVariables
   ): Promise<Result<StopsDetailsQuery, APIError>>;
   getStopQuayDepartures(
-    query: StopPlaceQuayDeparturesQueryVariables
-  ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
-  postStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables,
-    payload: StopPlaceDeparturesPayload
+    payload?: StopPlaceDeparturesPayload
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
   getQuayDepartures(
-    query: QuayDeparturesQueryVariables
-  ): Promise<Result<QuayDeparturesQuery, APIError>>;
-  postQuayDepartures(
     query: QuayDeparturesQueryVariables,
-    payload: QuayDeparturesPayload
+    payload?: QuayDeparturesPayload
   ): Promise<Result<QuayDeparturesQuery, APIError>>;
   getDepartureRealtime(
     query: DepartureRealtimeQuery

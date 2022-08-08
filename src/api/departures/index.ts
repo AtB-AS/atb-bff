@@ -70,12 +70,13 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     options: {
       tags: ['api', 'departures', 'stopPlace', 'estimatedCalls'],
       validate: postStopDeparturesRequest,
-      description: 'Get stop with departures for every quay'
+      description:
+        'Get stop with departures for every quay, and optionally filter on favorites'
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
       const payload = (request.payload as unknown) as StopPlaceDeparturesPayload;
-      return (await service.postStopQuayDepartures(query, payload)).unwrap();
+      return (await service.getStopQuayDepartures(query, payload)).unwrap();
     }
   });
   server.route({
@@ -102,12 +103,13 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     options: {
       tags: ['api', 'departures', 'quay', 'estimatedCalls'],
       validate: postQuayDeparturesRequest,
-      description: 'Get departures from a quay'
+      description:
+        'Get departures from a quay, and optionally filter on favorites'
     },
     handler: async (request, h) => {
       const query = (request.query as unknown) as QuayDeparturesQueryVariables;
       const payload = (request.payload as unknown) as QuayDeparturesPayload;
-      return (await service.postQuayDepartures(query, payload)).unwrap();
+      return (await service.getQuayDepartures(query, payload)).unwrap();
     }
   });
   server.route({

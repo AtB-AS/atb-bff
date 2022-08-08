@@ -111,40 +111,11 @@ export default (
         return Result.err(new APIError(error));
       }
     },
-
-    async getStopQuayDepartures({
-      id,
-      numberOfDepartures = 10,
-      startTime,
-      timeRange
-    }) {
-      try {
-        const result = await journeyPlannerClient_v3.query<
-          StopPlaceQuayDeparturesQuery,
-          StopPlaceQuayDeparturesQueryVariables
-        >({
-          query: StopPlaceQuayDeparturesDocument,
-          variables: {
-            id,
-            numberOfDepartures,
-            startTime,
-            timeRange
-          }
-        });
-
-        if (result.errors) {
-          return Result.err(new APIError(result.errors));
-        }
-
-        return Result.ok(result.data);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
-    async postStopQuayDepartures(
+    async getStopQuayDepartures(
       { id, numberOfDepartures = 10, startTime, timeRange },
-      { favorites }
+      payload
     ) {
+      const favorites = payload?.favorites;
       try {
         /**
          * If favorites are provided, get more departures per quay from journey
@@ -187,44 +158,16 @@ export default (
         return Result.err(new APIError(error));
       }
     },
-    async getQuayDepartures({
-      id,
-      numberOfDepartures = 10,
-      startTime,
-      timeRange = 86400 // 24 hours
-    }) {
-      try {
-        const result = await journeyPlannerClient_v3.query<
-          QuayDeparturesQuery,
-          QuayDeparturesQueryVariables
-        >({
-          query: QuayDeparturesDocument,
-          variables: {
-            id,
-            numberOfDepartures,
-            startTime,
-            timeRange
-          }
-        });
-
-        if (result.errors) {
-          return Result.err(new APIError(result.errors));
-        }
-
-        return Result.ok(result.data);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
-    async postQuayDepartures(
+    async getQuayDepartures(
       {
         id,
         numberOfDepartures = 1000,
         startTime,
         timeRange = 86400 // 24 hours
       },
-      { favorites }
+      payload
     ) {
+      const favorites = payload?.favorites;
       try {
         const result = await journeyPlannerClient_v3.query<
           QuayDeparturesQuery,
