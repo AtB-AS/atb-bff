@@ -30,6 +30,7 @@ import { GaxiosError } from 'gaxios';
 import { PubSub } from '@google-cloud/pubsub';
 import serviceJourneyRoutes, {serviceJourneyRoutes_v2} from './api/servicejourney';
 import serviceJourneyService, {serviceJourneyService_v2} from './service/impl/service-journey';
+import vippsLoginRoutes from "./api/vipps-login";
 
 process.on('unhandledRejection', err => {
   console.error(err);
@@ -75,6 +76,7 @@ process.on('unhandledRejection', err => {
     tripsRoutes(server)(tripsService(enturService_v3, pubSubClient));
     departureRoutes(server)(departuresService(enturService_v3, pubSubClient));
     serviceJourneyRoutes_v2(server)(serviceJourneyService_v2())
+    vippsLoginRoutes(server)()
 
     registerMetricsExporter(projectId);
     await server.initialize();
