@@ -30,7 +30,7 @@ export default (server: Hapi.Server) => () => {
         options: {
             description: 'Get Vipps authorisation url',
         },
-        handler:  async () => {
+        handler: async () => {
             const client = await getClient();
             return client.authorizationUrl({
                 scope: 'openid phoneNumber',
@@ -45,19 +45,19 @@ export default (server: Hapi.Server) => () => {
             description: 'Get Vipps user custom token',
             validate: postVippsLoginRequest
         },
-        handler:  async (request, ) => {
+        handler: async (request,) => {
             const client = await getClient();
             const {authorizationCode, state, nonce} = (request.payload as unknown) as VippsCustomTokenRequest;
             const params = await client.callback(VIPPS_CALLBACK_URL,
-                { code: authorizationCode, state: state},
-                { nonce: nonce, state: state}
+                {code: authorizationCode, state: state},
+                {nonce: nonce, state: state}
             )
-            if(params.access_token) {
+            if (params.access_token) {
                 const userInfo = await client.userinfo(params)
                 const phoneNumber = userInfo.phone_number;
-                if(phoneNumber){
+                if (phoneNumber) {
                     const auth = app.auth();
-                    try{
+                    try {
                         const user = await auth.getUserByPhoneNumber(`+${phoneNumber}`)
                         return await auth.createCustomToken(user.uid);
                     } catch (error: any) {
