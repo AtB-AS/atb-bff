@@ -294,6 +294,12 @@ export type ServiceJourneyMapInfoData_v3 = {
   stop?: Coordinates;
 };
 
+export type VippsCustomTokenRequest = {
+  authorizationCode: string,
+  state: string,
+  nonce: string
+}
+
 export class APIError extends Error {
   public statusCode?: number = 500;
 
