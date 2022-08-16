@@ -792,6 +792,33 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/login/vipps/authorization-url:
+    get:
+      summary: Get Vipps authorisation url
+      operationId: getVippsAuthUrl
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/login/vipps/user-custom-token:
+    post:
+      summary: Get Vipps user custom token
+      operationId: getUserCustomToken
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/VippsLoginRequest'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
 
 definitions:
   coordinates:
@@ -961,6 +988,19 @@ definitions:
         type: string
     required:
       - compressedQuery
+  VippsLoginRequest:
+    type: object
+    properties:
+      authorizationCode:
+        type: string
+      state:
+        type: string
+      nonce:
+        type: string
+    required:
+      - authorizationCode
+      - state
+      - nonce
 x-alt-definitions:
   location:
     type: object
