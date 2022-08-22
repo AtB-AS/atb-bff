@@ -26,6 +26,10 @@ import {
   StopsDetailsQuery,
   StopsDetailsQueryVariables
 } from './gql/jp3/stops-details.graphql-gen';
+import {
+  filterStopPlaceFavorites,
+  filterQuayFavorites
+} from './utils/favorites';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -107,14 +111,24 @@ export default (
         return Result.err(new APIError(error));
       }
     },
-
-    async getStopQuayDepartures({
-      id,
-      numberOfDepartures = 10,
-      startTime,
-      timeRange
-    }) {
+    async getStopQuayDepartures(
+      { id, numberOfDepartures = 10, startTime, timeRange },
+      payload
+    ) {
+      const favorites = payload?.favorites;
       try {
+        /**
+         * If favorites are provided, get more departures per quay from journey
+         * planner and set limitPerLine instead, since some departures may be
+         * filtered out.
+         */
+        const limit = favorites
+          ? {
+              limitPerLine: numberOfDepartures,
+              numberOfDepartures: numberOfDepartures * 10
+            }
+          : { numberOfDepartures: numberOfDepartures };
+
         const result = await journeyPlannerClient_v3.query<
           StopPlaceQuayDeparturesQuery,
           StopPlaceQuayDeparturesQueryVariables
@@ -122,9 +136,10 @@ export default (
           query: StopPlaceQuayDeparturesDocument,
           variables: {
             id,
-            numberOfDepartures,
             startTime,
-            timeRange
+            timeRange,
+            filterByLineIds: favorites?.map(f => f.lineId),
+            ...limit
           }
         });
 
@@ -132,17 +147,27 @@ export default (
           return Result.err(new APIError(result.errors));
         }
 
-        return Result.ok(result.data);
+        const data = filterStopPlaceFavorites(
+          result.data,
+          favorites,
+          numberOfDepartures
+        );
+
+        return Result.ok(data);
       } catch (error) {
         return Result.err(new APIError(error));
       }
     },
-    async getQuayDepartures({
-      id,
-      numberOfDepartures = 10,
-      startTime,
-      timeRange = 86400 // 24 hours
-    }) {
+    async getQuayDepartures(
+      {
+        id,
+        numberOfDepartures = 1000,
+        startTime,
+        timeRange = 86400 // 24 hours
+      },
+      payload
+    ) {
+      const favorites = payload?.favorites;
       try {
         const result = await journeyPlannerClient_v3.query<
           QuayDeparturesQuery,
@@ -153,7 +178,8 @@ export default (
             id,
             numberOfDepartures,
             startTime,
-            timeRange
+            timeRange,
+            filterByLineIds: favorites?.map(f => f.lineId)
           }
         });
 
@@ -161,7 +187,9 @@ export default (
           return Result.err(new APIError(result.errors));
         }
 
-        return Result.ok(result.data);
+        const data = filterQuayFavorites(result.data, favorites);
+
+        return Result.ok(data);
       } catch (error) {
         return Result.err(new APIError(error));
       }

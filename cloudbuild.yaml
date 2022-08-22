@@ -15,12 +15,16 @@ steps:
       - gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA
       - --region
       - europe-west1
-      - '--set-env-vars=ENTUR_BASEURL=$_ENTUR_BASEURL,PERIOD_TICKET_INVITE_KEY=$_PERIOD_TICKET_INVITE_KEY,TICKET_INVITE_KEY=$_TICKET_INVITE_KEY'
+      - '--set-env-vars=ENTUR_BASEURL=$_ENTUR_BASEURL,PERIOD_TICKET_INVITE_KEY=$_PERIOD_TICKET_INVITE_KEY,TICKET_INVITE_KEY=$_TICKET_INVITE_KEY,FLEX_TICKET_INVITE_KEY=$_FLEX_TICKET_INVITE_KEY,VIPPS_BASE_URL=$_VIPPS_BASE_URL,VIPPS_CALLBACK_URL=$_VIPPS_CALLBACK_URL'
+      - --set-secrets=VIPPS_CLIENT_ID=bff-vipps-client-id:latest,VIPPS_CLIENT_SECRET=bff-vipps-client-secret:latest
       - --platform
       - managed
       - --allow-unauthenticated
 substitutions:
+  _VIPPS_CALLBACK_URL: 'atb://auth/vipps'
+  _VIPPS_BASE_URL: 'https://apitest.vipps.no'
   _ENTUR_BASEURL: 'https://api.staging.entur.io'
   _PERIOD_TICKET_INVITE_KEY: 'period-ticket-staging'
   _TICKET_INVITE_KEY: 'ticket-invite-staging'
+  _FLEX_TICKET_INVITE_KEY: 'flex-ticket-invite-staging'
 timeout: 1500s

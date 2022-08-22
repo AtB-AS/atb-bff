@@ -5,8 +5,10 @@ import gql from 'graphql-tag';
 export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
   numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']>;
+  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
   startTime?: Types.InputMaybe<Types.Scalars['DateTime']>;
   timeRange?: Types.InputMaybe<Types.Scalars['Int']>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
 }>;
 
 
@@ -14,7 +16,7 @@ export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: A
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
-    query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int) {
+    query stopPlaceQuayDepartures($id: String!, $numberOfDepartures: Int, $limitPerLine: Int, $startTime: DateTime, $timeRange: Int, $filterByLineIds: [ID]) {
   stopPlace(id: $id) {
     id
     quays(filterByInUse: true) {
@@ -24,11 +26,14 @@ export const StopPlaceQuayDeparturesDocument = gql`
         startTime: $startTime
         timeRange: $timeRange
         includeCancelledTrips: true
+        whiteListed: {lines: $filterByLineIds}
+        numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
       ) {
         date
         expectedDepartureTime
         aimedDepartureTime
         realtime
+        cancellation
         quay {
           id
         }
@@ -45,7 +50,6 @@ export const StopPlaceQuayDeparturesDocument = gql`
             transportSubmode
           }
         }
-        cancellation
       }
     }
   }
