@@ -8,7 +8,8 @@ import {
   getStopsNearestRequest,
   getStopsDetailsRequest,
   postStopDeparturesRequest,
-  postQuayDeparturesRequest
+  postQuayDeparturesRequest,
+  getFavouriteDepartures
 } from './schema';
 import {
   DepartureRealtimeQuery,
@@ -18,6 +19,7 @@ import {
 import { QuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/quay-departures.graphql-gen';
 import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
 import { StopsDetailsQueryVariables } from '../../service/impl/departures/gql/jp3/stops-details.graphql-gen';
+import { FavouriteDepartureQueryVariables } from '../../service/impl/departures/gql/jp3/favourite-departure.graphql-gen';
 
 export default (server: Hapi.Server) => (service: IDeparturesService) => {
   server.route({
@@ -123,6 +125,19 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query = (request.query as unknown) as DepartureRealtimeQuery;
       return (await service.getDepartureRealtime(query)).unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/departures/favourites',
+    options: {
+      tags: ['api', 'favourites', 'departures'],
+      validate: getFavouriteDepartures,
+      description: 'Get favourite departures'
+    },
+    handler: async (request, h) => {
+      const query = (request.query as unknown) as FavouriteDepartureQueryVariables;
+      return (await service.getFavouriteDepartures(query)).unwrap();
     }
   });
 };

@@ -30,6 +30,13 @@ import {
   filterStopPlaceFavorites,
   filterQuayFavorites
 } from './utils/favorites';
+import { getFavouriteDepartures } from '../../../api/departures/schema';
+import {
+  FavouriteDepartureDocument,
+  FavouriteDepartureQuery,
+  FavouriteDepartureQueryVariables
+} from './gql/jp3/favourite-departure.graphql-gen';
+import { resourceLimits } from 'worker_threads';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -58,6 +65,27 @@ export default (
   );
 
   const api: IDeparturesService = {
+    async getFavouriteDepartures({ quayIds, lines }) {
+      try {
+        const result = await journeyPlannerClient_v3.query<
+          FavouriteDepartureQuery,
+          FavouriteDepartureQueryVariables
+        >({
+          query: FavouriteDepartureDocument,
+          variables: {
+            quayIds,
+            lines
+          }
+        });
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+        return Result.ok(result.data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+
     async getStopPlacesByPosition({
       latitude,
       longitude,

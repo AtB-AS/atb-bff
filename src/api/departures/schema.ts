@@ -83,3 +83,10 @@ export const getDepartureRealtime = {
     limit: Joi.number().default(5)
   })
 };
+
+export const getFavouriteDepartures = {
+  query: Joi.object({
+    quayIds: Joi.array().items(Joi.string()).default([]).single(),
+    lines: Joi.array().items(Joi.string()).default([]).single(),
+  })
+}
