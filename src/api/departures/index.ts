@@ -136,8 +136,13 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       description: 'Get favourite departures'
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as FavouriteDepartureQueryVariables;
-      return (await service.getFavouriteDepartures(query)).unwrap();
+      console.log('## raw query', request.query);
+      console.log('## raw payload', request.payload);
+
+      const query = (request.payload as unknown) as FavouriteDepartureQueryVariables;
+      const result = (await service.getFavouriteDepartures(query)).unwrap();
+      console.log('## Unwrapped response:', JSON.stringify(result));
+      return result;
     }
   });
 };

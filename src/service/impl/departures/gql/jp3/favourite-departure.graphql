@@ -2,15 +2,32 @@ query favouriteDeparture($quayIds: [String], $lines: [ID]) {
   quays(ids: $quayIds) {
     id
     name
+    stopPlace {
+      id
+      description
+      name
+      longitude
+      latitude
+    }
     estimatedCalls(whiteListed: { lines: $lines }, numberOfDepartures: 14) {
-      serviceJourney {
-        line {
-          id
-        }
-      }
+      date
+      expectedDepartureTime
       aimedDepartureTime
+      quay {
+        id
+      }
       destinationDisplay {
         frontText
+      }
+      serviceJourney {
+        id
+        line {
+          id
+          publicCode
+          transportMode
+          transportSubmode
+          name
+        }
       }
     }
   }

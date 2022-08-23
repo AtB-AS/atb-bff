@@ -66,6 +66,7 @@ export default (
 
   const api: IDeparturesService = {
     async getFavouriteDepartures({ quayIds, lines }) {
+      console.log('## Favourites function', quayIds, lines);
       try {
         const result = await journeyPlannerClient_v3.query<
           FavouriteDepartureQuery,
@@ -77,6 +78,8 @@ export default (
             lines
           }
         });
+        console.log('## Results from entur', result);
+
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }

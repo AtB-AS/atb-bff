@@ -48,7 +48,7 @@ afterAll(async () => {
 describe('GET /bff/v2/departures/favourites', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
-      method: 'get',
+      method: 'post',
       url: '/bff/v2/departures/favourites',
       payload: {
         lines: ['ATB:Line:2_25'],
