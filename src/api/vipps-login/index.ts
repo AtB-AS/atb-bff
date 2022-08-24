@@ -1,10 +1,10 @@
 import Hapi from "@hapi/hapi";
-import {Issuer} from "openid-client";
 import {credential, initializeApp} from "firebase-admin";
 import applicationDefault = credential.applicationDefault;
-import {PROJECT_ID, VIPPS_BASE_URL, VIPPS_CLIENT_ID, VIPPS_CLIENT_SECRET} from "../../config/env";
+import {PROJECT_ID, VIPPS_CLIENT_ID, VIPPS_CLIENT_SECRET} from "../../config/env";
 import {VippsCustomTokenRequest} from "../../service/types";
 import {postVippsLoginRequest} from "./schema";
+import {getOpenIdClientIssuer} from "./openid-client-issuer";
 
 export default (server: Hapi.Server) => () => {
 
@@ -14,7 +14,7 @@ export default (server: Hapi.Server) => () => {
     })
 
     const getClient = async (callbackUrl: string) => {
-        const iss = await Issuer.discover(VIPPS_BASE_URL + '/access-management-1.0/access/');
+        const iss = await getOpenIdClientIssuer()
         return new iss.Client({
             client_id: VIPPS_CLIENT_ID || '',
             client_secret: VIPPS_CLIENT_SECRET || '',
