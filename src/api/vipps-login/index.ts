@@ -21,6 +21,7 @@ export default (server: Hapi.Server) => () => {
             redirect_uris: [callbackUrl],
             requested_flow: 'app_to_app',
             app_callback_uri: callbackUrl,
+            final_redirect_is_app: true
         });
     }
 
