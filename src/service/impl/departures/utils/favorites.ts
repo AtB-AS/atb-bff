@@ -1,6 +1,15 @@
 import { EstimatedCall } from '../../../../graphql/journeyplanner-types_v3';
+import {
+  DepartureLineInfo,
+  QuayInfo,
+  StopPlaceInfo
+} from '../../../../types/departures';
 import { FavoriteDeparture } from '../../../types';
-import { QuayDeparturesQuery } from '../gql/jp3/quay-departures.graphql-gen';
+import { FavouriteDepartureQuery } from '../gql/jp3/favourite-departure.graphql-gen';
+import {
+  QuayDeparturesDocument,
+  QuayDeparturesQuery
+} from '../gql/jp3/quay-departures.graphql-gen';
 import { StopPlaceQuayDeparturesQuery } from '../gql/jp3/stop-departures.graphql-gen';
 
 export function filterStopPlaceFavorites(
@@ -74,3 +83,74 @@ export function filterQuayFavorites(
     }
   };
 }
+
+export function extractStopPlaces(queryResults: FavouriteDepartureQuery[]) {
+  const stopPlaceMap: { [key: string]: StopPlaceInfo } = {};
+  queryResults
+    .map(result => {
+      return result.quays.find(quay => quay.stopPlace)
+        ?.stopPlace as StopPlaceInfo;
+    })
+    .filter(stopPlace => {
+      return stopPlace !== undefined;
+    })
+    .forEach(stopPlace => {
+      stopPlaceMap[stopPlace.id] = stopPlace;
+    });
+
+  return Object.values(stopPlaceMap);
+}
+
+export function extractQuays(queryResults: FavouriteDepartureQuery[]) {
+  const quayMap: { [key: string]: QuayInfo } = {};
+  queryResults
+    .map(result => {
+      return result.quays.find(quay => quay.id !== undefined);
+    })
+    .filter(quay => {
+      return quay !== undefined;
+    })
+    .map(quay => {
+      return {
+        id: quay!.id, // !bang because stoopid TSC
+        name: quay!.name,
+        stopPlaceId: quay!.stopPlace?.id
+      } as QuayInfo;
+    })
+    .forEach(quayInfo => {
+      quayMap[quayInfo.id] = quayInfo;
+    });
+  return Object.values(quayMap);
+}
+export function extractLineInfos(queryResults: FavouriteDepartureQuery[]) {
+  const lineInfoMap: { [key: string]: DepartureLineInfo } = {};
+
+  queryResults.forEach(result =>
+    result.quays.forEach(quay => {
+      quay.estimatedCalls.forEach(call => {
+        const line = call.serviceJourney?.line;
+        if (line && call.quay?.id && line.name && line.publicCode) {
+          lineInfoMap[getDepartureLineIdentifierfromCall(call)] = {
+            lineId: line.id,
+            lineName: call.destinationDisplay?.frontText ?? '',
+            lineNumber: line.publicCode,
+            quayId: call.quay.id,
+            notices: []
+          };
+        }
+      });
+    })
+  );
+
+  return Object.values(lineInfoMap);
+}
+
+export function getDepartureLineIdentifierfromCall(call: {
+  serviceJourney?: { line?: { id: string | undefined } };
+  destinationDisplay?: { frontText?: string | undefined };
+}) {
+  return `${call.serviceJourney?.line?.id ?? ''}-${
+    call.destinationDisplay?.frontText ?? ''
+  }`;
+}
+

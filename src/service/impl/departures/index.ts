@@ -28,7 +28,10 @@ import {
 } from './gql/jp3/stops-details.graphql-gen';
 import {
   filterStopPlaceFavorites,
-  filterQuayFavorites
+  filterQuayFavorites,
+  extractStopPlaces,
+  extractLineInfos,
+  extractQuays
 } from './utils/favorites';
 import { getFavouriteDepartures } from '../../../api/departures/schema';
 import {
@@ -37,6 +40,13 @@ import {
   FavouriteDepartureQueryVariables
 } from './gql/jp3/favourite-departure.graphql-gen';
 import { resourceLimits } from 'worker_threads';
+import { Settings } from 'http2';
+import {
+  DepartureGroup,
+  QuayGroup,
+  StopPlaceGroup
+} from '../../../types/departures';
+import { flatMap } from 'lodash';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -64,29 +74,113 @@ export default (
     pubOpts
   );
 
-  const api: IDeparturesService = {
-    async getFavouriteDepartures({ quayIds, lines }) {
-      console.log('## Favourites function', quayIds, lines);
-      try {
-        const result = await journeyPlannerClient_v3.query<
-          FavouriteDepartureQuery,
-          FavouriteDepartureQueryVariables
-        >({
-          query: FavouriteDepartureDocument,
-          variables: {
-            quayIds,
-            lines
-          }
-        });
-        console.log('## Results from entur', result);
-
-        if (result.errors) {
-          return Result.err(new APIError(result.errors));
+  const fetchDeparturesForLine = async (
+    quayId: string,
+    lineId: string,
+    lineName: string | undefined
+  ) => {
+    try {
+      const result = await journeyPlannerClient_v3.query<
+        FavouriteDepartureQuery,
+        FavouriteDepartureQueryVariables
+      >({
+        query: FavouriteDepartureDocument,
+        variables: {
+          quayIds: quayId,
+          lines: lineId
         }
-        return Result.ok(result.data);
-      } catch (error) {
-        return Result.err(new APIError(error));
+      });
+      console.log('## Results from entur', result);
+
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
       }
+
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  };
+
+  const api: IDeparturesService = {
+    async getFavouriteDepartures(query) {
+      return Promise.all(
+        query.map(async fav => {
+          return await fetchDeparturesForLine(
+            fav.quayId,
+            fav.lineId,
+            fav.lineName
+          );
+        })
+      )
+        .then(results => {
+          console.log('## Promised response: ', results);
+          const validResults = results
+            .filter(res => res.isOk)
+            .map(res => res.unwrap());
+
+          // Create Departure Groups
+          const lineInfos = extractLineInfos(validResults);
+          const departureGroups: DepartureGroup[] = lineInfos.map(lineInfo => {
+            return {
+              lineInfo: lineInfo,
+              departures: []
+            };
+          });
+
+          // Add calls to DepartureGroups
+          validResults
+            .map(result => result.quays)
+            .flatMap(quay => quay)
+            .map(quay => {
+              return quay.estimatedCalls;
+            })
+            .flatMap(call => call)
+            .forEach(call => {
+              departureGroups
+                .find(group => {
+                  return (
+                    group.lineInfo?.lineId === call.serviceJourney?.line.id &&
+                    group.lineInfo?.lineName ===
+                      call.destinationDisplay?.frontText
+                  );
+                })
+                ?.departures.push({
+                  aimedTime: call.aimedDepartureTime,
+                  serviceDate: call.date,
+                  time: call.expectedDepartureTime
+                });
+            });
+
+          // Create QuayGroups
+          const quayGroups: QuayGroup[] = extractQuays(validResults).map(
+            quayInfo => {
+              return {
+                quay: quayInfo,
+                group: departureGroups.filter(group => {
+                  return group.lineInfo?.quayId === quayInfo.id;
+                })
+              };
+            }
+          );
+
+          // Create StopPlaceGroups
+          const stopPlaceGroups: StopPlaceGroup[] = extractStopPlaces(
+            validResults
+          ).map(stopPlaceInfo => {
+            return {
+              stopPlace: stopPlaceInfo,
+              quays: quayGroups.filter(quayGroup => {
+                return quayGroup.quay.stopPlaceId === stopPlaceInfo.id;
+              })
+            };
+          });
+
+          return Result.ok(stopPlaceGroups);
+        })
+        .catch(err => {
+          return Result.err(err);
+        });
     },
 
     async getStopPlacesByPosition({

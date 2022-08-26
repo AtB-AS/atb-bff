@@ -23,7 +23,11 @@ export const FavouriteDepartureDocument = gql`
       longitude
       latitude
     }
-    estimatedCalls(whiteListed: {lines: $lines}, numberOfDepartures: 14) {
+    estimatedCalls(
+      whiteListed: {lines: $lines}
+      numberOfDepartures: 30
+      numberOfDeparturesPerLineAndDestinationDisplay: 7
+    ) {
       date
       expectedDepartureTime
       aimedDepartureTime

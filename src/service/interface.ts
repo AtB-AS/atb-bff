@@ -62,6 +62,10 @@ import {
   FavouriteDepartureQuery,
   FavouriteDepartureQueryVariables
 } from './impl/departures/gql/jp3/favourite-departure.graphql-gen';
+import {
+  FavouriteDepartureAPIParam,
+  StopPlaceGroup
+} from '../types/departures';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -177,8 +181,8 @@ export interface IDeparturesService {
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
   getFavouriteDepartures(
-    query: FavouriteDepartureQueryVariables
-  ): Promise<Result<FavouriteDepartureQuery, APIError>>;
+    query: FavouriteDepartureAPIParam[]
+  ): Promise<Result<StopPlaceGroup[], APIError>>;
 }
 
 export interface IJourneyService {
