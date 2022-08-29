@@ -5,6 +5,10 @@ import {
   TransportSubmode
 } from '../graphql/journeyplanner-types_v3';
 
+import { FavouriteDepartureQuery } from '../service/impl/departures/gql/jp3/favourite-departure.graphql-gen';
+
+export type FavouriteCall = FavouriteDepartureQuery['quays'][0]['estimatedCalls'][0];
+
 export type FavouriteDepartureAPIParam = {
   quayId: string;
   lineId: string;
@@ -29,7 +33,7 @@ export type DepartureTime = {
   aimedTime: string;
   realtime?: boolean;
   predictionInaccurate?: boolean;
-  situations?: PtSituationElement[];
+  situations: PtSituationElement[];
   serviceJourneyId?: string;
   serviceDate: string;
 };

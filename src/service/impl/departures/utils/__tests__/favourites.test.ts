@@ -1,5 +1,13 @@
+import {
+  FavouriteCall,
+  FavouriteDepartureAPIParam
+} from '../../../../../types/departures';
 import { FavouriteDepartureQuery } from '../../gql/jp3/favourite-departure.graphql-gen';
-import { extractLineInfos, extractStopPlaces } from '../favorites';
+import {
+  extractLineInfos,
+  extractStopPlaces,
+  isFavourite2
+} from '../favorites';
 
 const data = [
   {
@@ -16,9 +24,9 @@ const data = [
         },
         estimatedCalls: [
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T10:28:54+02:00',
-            aimedDepartureTime: '2022-08-26T10:24:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:00:12+02:00',
+            aimedDepartureTime: '2022-08-29T16:55:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -26,7 +34,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301491_50',
+              id: 'ATB:ServiceJourney:12_220330132301513_128',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -37,30 +45,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T10:37:03+02:00',
-            aimedDepartureTime: '2022-08-26T10:34:00+02:00',
-            quay: {
-              id: 'NSR:Quay:73975'
-            },
-            destinationDisplay: {
-              frontText: 'Trondheim Spektrum via sentrum'
-            },
-            serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301567_52',
-              line: {
-                id: 'ATB:Line:2_12',
-                publicCode: '12',
-                transportMode: 'bus',
-                transportSubmode: 'localBus',
-                name: 'Dragvoll-Øya/Marienborg'
-              }
-            }
-          },
-          {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T10:45:39+02:00',
-            aimedDepartureTime: '2022-08-26T10:44:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:05:09+02:00',
+            aimedDepartureTime: '2022-08-29T17:05:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -68,7 +55,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301492_54',
+              id: 'ATB:ServiceJourney:12_220330132301514_130',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -79,9 +66,30 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T10:55:39+02:00',
-            aimedDepartureTime: '2022-08-26T10:54:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:20:26+02:00',
+            aimedDepartureTime: '2022-08-29T17:14:00+02:00',
+            quay: {
+              id: 'NSR:Quay:73975'
+            },
+            destinationDisplay: {
+              frontText: 'Trondheim Spektrum via sentrum'
+            },
+            serviceJourney: {
+              id: 'ATB:ServiceJourney:12_220330132301574_132',
+              line: {
+                id: 'ATB:Line:2_12',
+                publicCode: '12',
+                transportMode: 'bus',
+                transportSubmode: 'localBus',
+                name: 'Dragvoll-Øya/Marienborg'
+              }
+            }
+          },
+          {
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:26:09+02:00',
+            aimedDepartureTime: '2022-08-29T17:24:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -89,7 +97,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301493_56',
+              id: 'ATB:ServiceJourney:12_220330132301515_134',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -100,9 +108,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T11:05:39+02:00',
-            aimedDepartureTime: '2022-08-26T11:04:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:36:08+02:00',
+            aimedDepartureTime: '2022-08-29T17:34:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -110,7 +118,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301494_58',
+              id: 'ATB:ServiceJourney:12_220330132301516_136',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -121,30 +129,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T11:15:41+02:00',
-            aimedDepartureTime: '2022-08-26T11:14:00+02:00',
-            quay: {
-              id: 'NSR:Quay:73975'
-            },
-            destinationDisplay: {
-              frontText: 'Trondheim Spektrum via sentrum'
-            },
-            serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301568_60',
-              line: {
-                id: 'ATB:Line:2_12',
-                publicCode: '12',
-                transportMode: 'bus',
-                transportSubmode: 'localBus',
-                name: 'Dragvoll-Øya/Marienborg'
-              }
-            }
-          },
-          {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T11:25:42+02:00',
-            aimedDepartureTime: '2022-08-26T11:24:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:44:00+02:00',
+            aimedDepartureTime: '2022-08-29T17:44:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -152,7 +139,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301495_62',
+              id: 'ATB:ServiceJourney:12_220330132301517_138',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -163,9 +150,30 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T11:34:00+02:00',
-            aimedDepartureTime: '2022-08-26T11:34:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T17:56:06+02:00',
+            aimedDepartureTime: '2022-08-29T17:54:00+02:00',
+            quay: {
+              id: 'NSR:Quay:73975'
+            },
+            destinationDisplay: {
+              frontText: 'Trondheim Spektrum via sentrum'
+            },
+            serviceJourney: {
+              id: 'ATB:ServiceJourney:12_220330132301575_140',
+              line: {
+                id: 'ATB:Line:2_12',
+                publicCode: '12',
+                transportMode: 'bus',
+                transportSubmode: 'localBus',
+                name: 'Dragvoll-Øya/Marienborg'
+              }
+            }
+          },
+          {
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T18:04:00+02:00',
+            aimedDepartureTime: '2022-08-29T18:04:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -173,7 +181,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301496_64',
+              id: 'ATB:ServiceJourney:12_220330132301518_142',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -184,9 +192,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T11:45:40+02:00',
-            aimedDepartureTime: '2022-08-26T11:44:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T18:16:06+02:00',
+            aimedDepartureTime: '2022-08-29T18:14:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -194,7 +202,7 @@ const data = [
               frontText: 'Marienborg via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301497_66',
+              id: 'ATB:ServiceJourney:12_220330132301519_144',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -205,9 +213,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T11:55:43+02:00',
-            aimedDepartureTime: '2022-08-26T11:54:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T18:36:04+02:00',
+            aimedDepartureTime: '2022-08-29T18:34:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -215,7 +223,7 @@ const data = [
               frontText: 'Trondheim Spektrum via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301569_68',
+              id: 'ATB:ServiceJourney:12_220330132301576_148',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -226,9 +234,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T12:35:44+02:00',
-            aimedDepartureTime: '2022-08-26T12:34:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T19:14:00+02:00',
+            aimedDepartureTime: '2022-08-29T19:14:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -236,7 +244,7 @@ const data = [
               frontText: 'Trondheim Spektrum via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301570_76',
+              id: 'ATB:ServiceJourney:12_220330132301577_156',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -247,9 +255,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T13:14:00+02:00',
-            aimedDepartureTime: '2022-08-26T13:14:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T19:56:01+02:00',
+            aimedDepartureTime: '2022-08-29T19:54:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -257,7 +265,7 @@ const data = [
               frontText: 'Trondheim Spektrum via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301571_84',
+              id: 'ATB:ServiceJourney:12_220330132301578_164',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -268,9 +276,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T13:54:00+02:00',
-            aimedDepartureTime: '2022-08-26T13:54:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T20:23:00+02:00',
+            aimedDepartureTime: '2022-08-29T20:23:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -278,7 +286,7 @@ const data = [
               frontText: 'Trondheim Spektrum via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301572_92',
+              id: 'ATB:ServiceJourney:12_220330132301579_170',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -289,9 +297,9 @@ const data = [
             }
           },
           {
-            date: '2022-08-26',
-            expectedDepartureTime: '2022-08-26T14:34:00+02:00',
-            aimedDepartureTime: '2022-08-26T14:34:00+02:00',
+            date: '2022-08-29',
+            expectedDepartureTime: '2022-08-29T21:03:00+02:00',
+            aimedDepartureTime: '2022-08-29T21:03:00+02:00',
             quay: {
               id: 'NSR:Quay:73975'
             },
@@ -299,7 +307,7 @@ const data = [
               frontText: 'Trondheim Spektrum via sentrum'
             },
             serviceJourney: {
-              id: 'ATB:ServiceJourney:12_220330132301573_100',
+              id: 'ATB:ServiceJourney:12_220330132301413_174',
               line: {
                 id: 'ATB:Line:2_12',
                 publicCode: '12',
@@ -333,5 +341,64 @@ describe('favourite tools', () => {
     const lineInfos = extractLineInfos(data);
     console.log('lineInfos', lineInfos);
     expect(lineInfos.length).toBe(2);
+  });
+
+  it('identifies a favourite call', () => {
+    const call1 = data[0].quays[0].estimatedCalls[0];
+    const call2 = data[0].quays[0].estimatedCalls[2];
+
+    const favouriteQuery1: FavouriteDepartureAPIParam[] = [
+      {
+        lineId: 'ATB:Line:2_12',
+        lineName: 'Marienborg via sentrum',
+        quayId: 'NSR:Quay:73975'
+      }
+    ];
+
+    let call1isFavourite = isFavourite2(call1, favouriteQuery1);
+    let call2isFavourite = isFavourite2(call2, favouriteQuery1);
+
+    expect(call1isFavourite).toBe(true);
+    expect(call2isFavourite).toBe(false);
+
+    const favouriteQuery2: FavouriteDepartureAPIParam[] = [
+      {
+        lineId: 'ATB:Line:2_12',
+        lineName: '',
+        quayId: 'NSR:Quay:73975'
+      }
+    ];
+
+    call1isFavourite = isFavourite2(call1, favouriteQuery2);
+    call2isFavourite = isFavourite2(call2, favouriteQuery2);
+
+    expect(call1isFavourite).toBe(true);
+    expect(call2isFavourite).toBe(true);
+
+    const call3 = {
+      date: '2022-08-29',
+      expectedDepartureTime: '2022-08-29T21:03:00+02:00',
+      aimedDepartureTime: '2022-08-29T21:03:00+02:00',
+      quay: {
+        id: 'NSR:Quay:73975'
+      },
+      destinationDisplay: {
+        frontText: 'Trondheim Spektrum via sentrum'
+      },
+      serviceJourney: {
+        id: 'ATB:ServiceJourney:12_220330132301413_174',
+        line: {
+          id: 'WRONG LINE',
+          publicCode: '12',
+          transportMode: 'bus',
+          transportSubmode: 'localBus',
+          name: 'Dragvoll-Øya/Marienborg'
+        }
+      }
+    } as FavouriteCall;
+
+    const call3isFavourite = isFavourite2(call3, favouriteQuery1);
+
+    expect(isFavourite2(call3, favouriteQuery1)).toBe(false);
   });
 });

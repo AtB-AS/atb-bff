@@ -1,11 +1,16 @@
 import { EstimatedCall } from '../../../../graphql/journeyplanner-types_v3';
 import {
   DepartureLineInfo,
+  FavouriteCall,
+  FavouriteDepartureAPIParam,
   QuayInfo,
   StopPlaceInfo
 } from '../../../../types/departures';
 import { FavoriteDeparture } from '../../../types';
-import { FavouriteDepartureQuery } from '../gql/jp3/favourite-departure.graphql-gen';
+import {
+  FavouriteDepartureDocument,
+  FavouriteDepartureQuery
+} from '../gql/jp3/favourite-departure.graphql-gen';
 import {
   QuayDeparturesDocument,
   QuayDeparturesQuery
@@ -84,6 +89,20 @@ export function filterQuayFavorites(
   };
 }
 
+export function isFavourite2(
+  call: FavouriteCall,
+  query: FavouriteDepartureAPIParam[]
+) {
+  return query
+    .filter(favourite => favourite.lineId == call.serviceJourney?.line.id)
+    .some(
+      favourite =>
+        favourite.lineName === undefined ||
+        favourite.lineName === '' ||
+        favourite.lineName === call.destinationDisplay?.frontText
+    );
+}
+
 export function extractStopPlaces(queryResults: FavouriteDepartureQuery[]) {
   const stopPlaceMap: { [key: string]: StopPlaceInfo } = {};
   queryResults
@@ -114,7 +133,10 @@ export function extractQuays(queryResults: FavouriteDepartureQuery[]) {
       return {
         id: quay!.id, // !bang because stoopid TSC
         name: quay!.name,
-        stopPlaceId: quay!.stopPlace?.id
+        stopPlaceId: quay!.stopPlace?.id,
+        latitude: quay?.stopPlace?.latitude,
+        longitude: quay?.stopPlace?.longitude,
+        situations: []
       } as QuayInfo;
     })
     .forEach(quayInfo => {
@@ -135,7 +157,9 @@ export function extractLineInfos(queryResults: FavouriteDepartureQuery[]) {
             lineName: call.destinationDisplay?.frontText ?? '',
             lineNumber: line.publicCode,
             quayId: call.quay.id,
-            notices: []
+            notices: [],
+            transportMode: line.transportMode,
+            transportSubmode: line.transportSubmode
           };
         }
       });
@@ -153,4 +177,3 @@ export function getDepartureLineIdentifierfromCall(call: {
     call.destinationDisplay?.frontText ?? ''
   }`;
 }
-

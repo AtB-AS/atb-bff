@@ -33,20 +33,16 @@ import {
   extractLineInfos,
   extractQuays
 } from './utils/favorites';
-import { getFavouriteDepartures } from '../../../api/departures/schema';
 import {
   FavouriteDepartureDocument,
   FavouriteDepartureQuery,
   FavouriteDepartureQueryVariables
 } from './gql/jp3/favourite-departure.graphql-gen';
-import { resourceLimits } from 'worker_threads';
-import { Settings } from 'http2';
 import {
   DepartureGroup,
   QuayGroup,
   StopPlaceGroup
 } from '../../../types/departures';
-import { flatMap } from 'lodash';
 
 const ENV = getEnv();
 const topicName = `analytics_departures_search`;
@@ -96,6 +92,8 @@ export default (
         return Result.err(new APIError(result.errors));
       }
 
+      const queryData = result.data;
+
       return Result.ok(result.data);
     } catch (error) {
       return Result.err(new APIError(error));
@@ -136,6 +134,7 @@ export default (
               return quay.estimatedCalls;
             })
             .flatMap(call => call)
+            .filter(call => isFavourite(call, query))
             .forEach(call => {
               departureGroups
                 .find(group => {
@@ -148,7 +147,9 @@ export default (
                 ?.departures.push({
                   aimedTime: call.aimedDepartureTime,
                   serviceDate: call.date,
-                  time: call.expectedDepartureTime
+                  time: call.expectedDepartureTime,
+                  situations: [],
+                  serviceJourneyId: call.serviceJourney?.id
                 });
             });
 
