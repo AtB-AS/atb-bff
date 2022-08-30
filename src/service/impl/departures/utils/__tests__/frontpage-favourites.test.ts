@@ -4,9 +4,9 @@ import {
 } from '../../../../../types/departures';
 import { FavouriteDepartureQuery } from '../../gql/jp3/favourite-departure.graphql-gen';
 import {
+  callMatchesQueriedLineName,
   extractLineInfos,
-  extractStopPlaces,
-  isFavourite2
+  extractStopPlaces
 } from '../favorites';
 
 const data = [
@@ -355,8 +355,8 @@ describe('favourite tools', () => {
       }
     ];
 
-    let call1isFavourite = isFavourite2(call1, favouriteQuery1);
-    let call2isFavourite = isFavourite2(call2, favouriteQuery1);
+    let call1isFavourite = callMatchesQueriedLineName(call1, favouriteQuery1);
+    let call2isFavourite = callMatchesQueriedLineName(call2, favouriteQuery1);
 
     expect(call1isFavourite).toBe(true);
     expect(call2isFavourite).toBe(false);
@@ -369,8 +369,8 @@ describe('favourite tools', () => {
       }
     ];
 
-    call1isFavourite = isFavourite2(call1, favouriteQuery2);
-    call2isFavourite = isFavourite2(call2, favouriteQuery2);
+    call1isFavourite = callMatchesQueriedLineName(call1, favouriteQuery2);
+    call2isFavourite = callMatchesQueriedLineName(call2, favouriteQuery2);
 
     expect(call1isFavourite).toBe(true);
     expect(call2isFavourite).toBe(true);
@@ -397,8 +397,8 @@ describe('favourite tools', () => {
       }
     } as FavouriteCall;
 
-    const call3isFavourite = isFavourite2(call3, favouriteQuery1);
+    const call3isFavourite = callMatchesQueriedLineName(call3, favouriteQuery1);
 
-    expect(isFavourite2(call3, favouriteQuery1)).toBe(false);
+    expect(call3isFavourite).toBe(false);
   });
 });

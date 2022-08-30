@@ -89,7 +89,11 @@ export function filterQuayFavorites(
   };
 }
 
-export function isFavourite2(
+/**
+ * A call is a valid favourite if it either matches the queried linename,
+ * or the query has an empty linename
+ */
+export function callMatchesQueriedLineName(
   call: FavouriteCall,
   query: FavouriteDepartureAPIParam[]
 ) {

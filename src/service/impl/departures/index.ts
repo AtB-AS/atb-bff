@@ -31,7 +31,8 @@ import {
   filterQuayFavorites,
   extractStopPlaces,
   extractLineInfos,
-  extractQuays
+  extractQuays,
+  callMatchesQueriedLineName
 } from './utils/favorites';
 import {
   FavouriteDepartureDocument,
@@ -134,7 +135,7 @@ export default (
               return quay.estimatedCalls;
             })
             .flatMap(call => call)
-            .filter(call => isFavourite(call, query))
+            .filter(call => callMatchesQueriedLineName(call, query))
             .forEach(call => {
               departureGroups
                 .find(group => {
