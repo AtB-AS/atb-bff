@@ -93,4 +93,3 @@ describe('filter favorites from departure queries', () => {
     );
   });
 });
-;

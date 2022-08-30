@@ -87,14 +87,10 @@ export default (
           lines: lineId
         }
       });
-      console.log('## Results from entur', result);
 
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-
-      const queryData = result.data;
-
       return Result.ok(result.data);
     } catch (error) {
       return Result.err(new APIError(error));
@@ -113,7 +109,6 @@ export default (
         })
       )
         .then(results => {
-          console.log('## Promised response: ', results);
           const validResults = results
             .filter(res => res.isOk)
             .map(res => res.unwrap());

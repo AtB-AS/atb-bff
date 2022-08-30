@@ -9,8 +9,7 @@ import {
   getStopsDetailsRequest,
   postStopDeparturesRequest,
   postQuayDeparturesRequest,
-  getFavoriteDeparturesParams,
-  getFavoriteDeparturesParams2
+  getFavoriteDeparturesParams
 } from './schema';
 import {
   DepartureRealtimeQuery,
@@ -134,15 +133,12 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     path: '/bff/v2/departures/favourites',
     options: {
       tags: ['api', 'favourites', 'departures'],
-      validate: getFavoriteDeparturesParams2,
+      validate: getFavoriteDeparturesParams,
       description: 'Get favourite departures'
     },
     handler: async (request, h) => {
-      console.log('## raw payload', request.payload);
-
       const query = (request.payload as unknown) as FavouriteDepartureAPIParam[];
       const result = (await service.getFavouriteDepartures(query)).unwrap();
-      console.log('## Unwrapped response:', JSON.stringify(result));
       return result;
     }
   });

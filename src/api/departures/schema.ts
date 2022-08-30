@@ -84,24 +84,7 @@ export const getDepartureRealtime = {
   })
 };
 
-export const getFavouriteDepartures = {
-  query: Joi.object({
-    quayIds: Joi.array().items(Joi.string()).default([]).single(),
-    lines: Joi.array().items(Joi.string()).default([]).single(),
-  })
-}
-
 export const getFavoriteDeparturesParams = {
-  query: Joi.array().items(
-    Joi.object({
-      quayId: Joi.string(),
-      lineId: Joi.string(),
-      lineName: Joi.string()
-    })
-  )
-};
-
-export const getFavoriteDeparturesParams2 = {
   query: Joi.object({
     favourites: Joi.array().items(
       Joi.object({
@@ -111,6 +94,4 @@ export const getFavoriteDeparturesParams2 = {
       })
     )
   })
-};  
-  
-   
+};
