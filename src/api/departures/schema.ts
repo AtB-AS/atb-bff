@@ -84,7 +84,7 @@ export const getDepartureRealtime = {
   })
 };
 
-export const getFavoriteDeparturesParams = {
+export const postFavoriteDeparturesParams = {
   query: Joi.object({
     favourites: Joi.array().items(
       Joi.object({
