@@ -7,6 +7,7 @@ import { Result } from '@badrap/result';
 import { TripsQueryWithJourneyIds } from '../../types/trips';
 import { compressToEncodedURIComponent } from 'lz-string';
 import { FavouriteDepartureQueryVariables } from '../../service/impl/departures/gql/jp3/favourite-departure.graphql-gen';
+import { FavouriteDepartureAPIParam } from '../../types/departures';
 
 let server: Hapi.Server;
 
@@ -45,15 +46,18 @@ afterAll(async () => {
   await server.stop();
 });
 
-describe('GET /bff/v2/departures/favourites', () => {
+describe('POST /bff/v2/departures/favourites', () => {
   it('responds with 200', async () => {
     const res = await server.inject({
       method: 'post',
       url: '/bff/v2/departures/favourites',
-      payload: {
-        lines: ['ATB:Line:2_25'],
-        quayIds: ['NSR:Quay:72405']
-      } as FavouriteDepartureQueryVariables
+      payload: [
+        {
+          quayId: 'NSR:Quay:72405',
+          lineId: 'ATB:Line:2_25',
+          lineName: ''
+        }
+      ] as FavouriteDepartureAPIParam[]
     });
     expect(res.statusCode).toBe(200);
   });

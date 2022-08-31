@@ -9,7 +9,7 @@ import {
   getStopsDetailsRequest,
   postStopDeparturesRequest,
   postQuayDeparturesRequest,
-  getFavoriteDeparturesParams
+  postFavoriteDeparturesParams
 } from './schema';
 import {
   DepartureRealtimeQuery,
@@ -133,7 +133,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     path: '/bff/v2/departures/favourites',
     options: {
       tags: ['api', 'favourites', 'departures'],
-      validate: getFavoriteDeparturesParams,
+      validate: postFavoriteDeparturesParams,
       description: 'Get favourite departures'
     },
     handler: async (request, h) => {
