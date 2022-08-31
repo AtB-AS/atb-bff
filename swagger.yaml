@@ -906,16 +906,19 @@ definitions:
     items:
       $ref: '#/definitions/favoriteV2'
   frontPageFavourites:
-    type: array
-    items: 
-      type: object
-      properties:
-        quayId:
-          type: string
-        lineId:
-          type: string
-        lineName:
-          type: string
+    type: object
+    properties:
+      favourites: 
+        type: array
+        items: 
+          type: object
+          properties:
+            quayId:
+              type: string
+            lineId:
+              type: string
+            lineName:
+              type: string
   favoriteV2:
     type: object
     properties:
