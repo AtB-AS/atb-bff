@@ -765,7 +765,7 @@ paths:
     post:
       summary: Get favourite departures
       operationId: postBffv2_0DeparturesFavourites
-      paramters:
+      parameters:
         - in: body
           name: body
           schema:
@@ -909,13 +909,13 @@ definitions:
     type: array
     items: 
       type: object
-        properties:
-          quayId:
-            type: string
-          lineId:
-            type: string
-          lineName:
-            type: string
+      properties:
+        quayId:
+          type: string
+        lineId:
+          type: string
+        lineName:
+          type: string
   favoriteV2:
     type: object
     properties:
