@@ -71,11 +71,7 @@ export default (
     pubOpts
   );
 
-  const fetchDeparturesForLine = async (
-    quayId: string,
-    lineId: string,
-    lineName: string | undefined
-  ) => {
+  const fetchDeparturesForLine = async (quayId: string, lineId: string) => {
     try {
       const result = await journeyPlannerClient_v3.query<
         FavouriteDepartureQuery,
@@ -101,11 +97,7 @@ export default (
     async getFavouriteDepartures(query) {
       return Promise.all(
         query.map(async fav => {
-          return await fetchDeparturesForLine(
-            fav.quayId,
-            fav.lineId,
-            fav.lineName
-          );
+          return await fetchDeparturesForLine(fav.quayId, fav.lineId);
         })
       )
         .then(results => {
@@ -126,9 +118,7 @@ export default (
           validResults
             .map(result => result.quays)
             .flatMap(quay => quay)
-            .map(quay => {
-              return quay.estimatedCalls;
-            })
+            .map(quay => quay.estimatedCalls)
             .flatMap(call => call)
             .filter(call => callMatchesQueriedLineName(call, query))
             .forEach(call => {
