@@ -138,6 +138,7 @@ export function extractQuays(queryResults: FavouriteDepartureQuery[]) {
         id: quay!.id, // !bang because stoopid TSC
         name: quay!.name,
         stopPlaceId: quay!.stopPlace?.id,
+        publicCode: quay?.publicCode,
         latitude: quay?.stopPlace?.latitude,
         longitude: quay?.stopPlace?.longitude,
         situations: []
