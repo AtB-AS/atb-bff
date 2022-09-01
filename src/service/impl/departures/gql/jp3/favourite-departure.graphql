@@ -2,6 +2,7 @@ query favouriteDeparture($quayIds: [String], $lines: [ID]) {
   quays(ids: $quayIds) {
     id
     name
+    publicCode
     stopPlace {
       id
       description
@@ -36,4 +37,3 @@ query favouriteDeparture($quayIds: [String], $lines: [ID]) {
     }
   }
 }
-
