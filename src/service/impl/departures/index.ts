@@ -135,6 +135,7 @@ export default (
                   serviceDate: call.date,
                   time: call.expectedDepartureTime,
                   situations: [],
+                  realtime: call.realtime,
                   serviceJourneyId: call.serviceJourney?.id
                 });
             });
