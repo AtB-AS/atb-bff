@@ -8,7 +8,7 @@ export type FavouriteDepartureQueryVariables = Types.Exact<{
 }>;
 
 
-export type FavouriteDepartureQuery = { quays: Array<{ id: string, name: string, publicCode?: string, stopPlace?: { id: string, description?: string, name: string, longitude?: number, latitude?: number }, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, name?: string } } }> }> };
+export type FavouriteDepartureQuery = { quays: Array<{ id: string, name: string, publicCode?: string, stopPlace?: { id: string, description?: string, name: string, longitude?: number, latitude?: number }, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, name?: string } } }> }> };
 
 
 export const FavouriteDepartureDocument = gql`
@@ -32,6 +32,7 @@ export const FavouriteDepartureDocument = gql`
       date
       expectedDepartureTime
       aimedDepartureTime
+      realtime
       quay {
         id
       }

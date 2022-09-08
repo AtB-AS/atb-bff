@@ -18,6 +18,7 @@ query favouriteDeparture($quayIds: [String], $lines: [ID]) {
       date
       expectedDepartureTime
       aimedDepartureTime
+      realtime
       quay {
         id
       }
