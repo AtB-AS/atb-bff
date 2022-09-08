@@ -1,0 +1,656 @@
+[
+  {
+    "id": "NSR:StopPlace:43153",
+    "description": "",
+    "name": "Sorgenfri",
+    "latitude": 63.407925,
+    "longitude": 10.403864,
+    "__typename": "StopPlace",
+    "quays": [
+      {
+        "id": "NSR:Quay:74013",
+        "name": "Sorgenfri",
+        "description": null,
+        "publicCode": "",
+        "latitude": 63.40819,
+        "longitude": 10.403856,
+        "situations": [],
+        "__typename": "Quay",
+        "times": [
+          {
+            "destinationDisplay": {
+              "frontText": "Trondheim S",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T10:33:53+0100",
+            "aimedArrivalTime": "2020-12-09T10:31:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599816_46_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Trondheim S",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T10:50:50+0100",
+            "aimedArrivalTime": "2020-12-09T10:49:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599817_48_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Trondheim S",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T11:13:24+0100",
+            "aimedArrivalTime": "2020-12-09T11:11:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599818_50_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Trondheim S",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T11:30:46+0100",
+            "aimedArrivalTime": "2020-12-09T11:29:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599819_52_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Trondheim S",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T11:53:23+0100",
+            "aimedArrivalTime": "2020-12-09T11:51:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599820_54_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          }
+        ],
+        "estimatedCalls": [
+          {
+            "destinationDisplay": {
+              "frontText": "Trondheim S",
+              "__typename": "DestinationDisplay"
+            },
+            "notices": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599816_46_200109141539610",
+              "directionType": "inbound",
+              "line": {
+                "description": null,
+                "flexibleLineType": null,
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "name": "City Syd- Kroppanmarka- Lerkendal",
+                "notices": [],
+                "situations": [],
+                "publicCode": "24",
+                "transportMode": "bus",
+                "transportSubmode": "localBus",
+                "__typename": "Line"
+              },
+              "journeyPattern": {
+                "notices": [],
+                "__typename": "JourneyPattern"
+              },
+              "notices": [],
+              "privateCode": "",
+              "transportSubmode": "localBus",
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          }
+        ]
+      },
+      {
+        "id": "NSR:Quay:74012",
+        "name": "Sorgenfri",
+        "description": null,
+        "publicCode": "",
+        "latitude": 63.40766,
+        "longitude": 10.403871,
+        "situations": [],
+        "__typename": "Quay",
+        "times": [
+          {
+            "destinationDisplay": {
+              "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T10:16:37+0100",
+            "aimedArrivalTime": "2020-12-09T10:14:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599984_35_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T10:35:29+0100",
+            "aimedArrivalTime": "2020-12-09T10:34:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599985_37_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T10:55:29+0100",
+            "aimedArrivalTime": "2020-12-09T10:54:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599986_39_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T11:15:29+0100",
+            "aimedArrivalTime": "2020-12-09T11:14:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599987_41_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T11:35:29+0100",
+            "aimedArrivalTime": "2020-12-09T11:34:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599988_43_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T11:55:29+0100",
+            "aimedArrivalTime": "2020-12-09T11:54:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599989_45_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T12:15:29+0100",
+            "aimedArrivalTime": "2020-12-09T12:14:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599990_47_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T12:35:29+0100",
+            "aimedArrivalTime": "2020-12-09T12:34:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599991_49_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T12:55:30+0100",
+            "aimedArrivalTime": "2020-12-09T12:54:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599992_51_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T13:15:30+0100",
+            "aimedArrivalTime": "2020-12-09T13:14:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599993_53_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Okstad via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T20:54:00+0100",
+            "aimedArrivalTime": "2020-12-09T20:54:00+0100",
+            "predictionInaccurate": false,
+            "realtime": false,
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600025_117_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Okstad via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T21:34:00+0100",
+            "aimedArrivalTime": "2020-12-09T21:34:00+0100",
+            "predictionInaccurate": false,
+            "realtime": false,
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600027_121_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Okstad via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T22:14:00+0100",
+            "aimedArrivalTime": "2020-12-09T22:14:00+0100",
+            "predictionInaccurate": false,
+            "realtime": false,
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600029_125_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Okstad via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T22:54:00+0100",
+            "aimedArrivalTime": "2020-12-09T22:54:00+0100",
+            "predictionInaccurate": false,
+            "realtime": false,
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600031_129_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Okstad via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-09T23:34:00+0100",
+            "aimedArrivalTime": "2020-12-09T23:34:00+0100",
+            "predictionInaccurate": false,
+            "realtime": false,
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600033_133_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-10T07:15:00+0100",
+            "aimedArrivalTime": "2020-12-10T07:15:00+0100",
+            "predictionInaccurate": false,
+            "realtime": false,
+            "notices": [],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599969_5_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          }
+        ],
+        "estimatedCalls": [
+          {
+            "destinationDisplay": {
+              "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "notices": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599984_35_200109141539610",
+              "directionType": "outbound",
+              "line": {
+                "description": null,
+                "flexibleLineType": null,
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "name": "City Syd- Kroppanmarka- Lerkendal",
+                "notices": [],
+                "situations": [],
+                "publicCode": "24",
+                "transportMode": "bus",
+                "transportSubmode": "localBus",
+                "__typename": "Line"
+              },
+              "journeyPattern": {
+                "notices": [],
+                "__typename": "JourneyPattern"
+              },
+              "notices": [],
+              "privateCode": "",
+              "transportSubmode": "localBus",
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "notices": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599985_37_200109141539610",
+              "directionType": "outbound",
+              "line": {
+                "description": null,
+                "flexibleLineType": null,
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "name": "City Syd- Kroppanmarka- Lerkendal",
+                "notices": [],
+                "situations": [],
+                "publicCode": "24",
+                "transportMode": "bus",
+                "transportSubmode": "localBus",
+                "__typename": "Line"
+              },
+              "journeyPattern": {
+                "notices": [],
+                "__typename": "JourneyPattern"
+              },
+              "notices": [],
+              "privateCode": "",
+              "transportSubmode": "localBus",
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "Okstad via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "notices": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600025_117_200109141539610",
+              "directionType": "outbound",
+              "line": {
+                "description": null,
+                "flexibleLineType": null,
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "name": "City Syd- Kroppanmarka- Lerkendal",
+                "notices": [],
+                "situations": [],
+                "publicCode": "24",
+                "transportMode": "bus",
+                "transportSubmode": "localBus",
+                "__typename": "Line"
+              },
+              "journeyPattern": {
+                "notices": [],
+                "__typename": "JourneyPattern"
+              },
+              "notices": [],
+              "privateCode": "",
+              "transportSubmode": "localBus",
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          },
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanm.-Okstad",
+              "__typename": "DestinationDisplay"
+            },
+            "notices": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141599969_5_200109141539610",
+              "directionType": "outbound",
+              "line": {
+                "description": null,
+                "flexibleLineType": null,
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "name": "City Syd- Kroppanmarka- Lerkendal",
+                "notices": [],
+                "situations": [],
+                "publicCode": "24",
+                "transportMode": "bus",
+                "transportSubmode": "localBus",
+                "__typename": "Line"
+              },
+              "journeyPattern": {
+                "notices": [],
+                "__typename": "JourneyPattern"
+              },
+              "notices": [],
+              "privateCode": "",
+              "transportSubmode": "localBus",
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          }
+        ]
+      }
+    ]
+  }
+]
