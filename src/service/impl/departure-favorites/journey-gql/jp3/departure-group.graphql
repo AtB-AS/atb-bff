@@ -4,7 +4,7 @@ query GroupsById(
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
-  $filterByLineIds: [String]
+  $filterByLineIds: [ID]
 ) {
   stopPlaces(ids: $ids) {
     ...group_stopPlaceFields
@@ -41,74 +41,6 @@ query QuayIdInStops($stopIds: [String]!) {
     id
     quays(filterByInUse: true) {
       id
-    }
-  }
-}
-
-query GroupsByNearest(
-  $lat: Float!
-  $lng: Float!
-  $distance: Int!
-  $startTime: DateTime!
-  $fromCursor: String
-  $pageSize: Int
-  $timeRange: Int!
-  $limitPerLine: Int!
-  $totalLimit: Int!
-  $filterInput: InputFilters
-  $filterByLineIds: [String]
-) {
-  nearest(
-    latitude: $lat
-    longitude: $lng
-    after: $fromCursor
-    first: $pageSize
-    maximumDistance: $distance
-    filterByPlaceTypes: stopPlace
-    filterByInUse: true
-    filterByIds: $filterInput
-    multiModalMode: child
-  ) {
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-    edges {
-      cursor
-      node {
-        distance
-        place {
-          ... on StopPlace {
-            ...group_stopPlaceFields
-
-            quays {
-              ...group_quayFields
-              times: estimatedCalls(
-                startTime: $startTime
-                timeRange: $timeRange
-                numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
-                numberOfDepartures: $totalLimit
-                omitNonBoarding: false
-                includeCancelledTrips: false
-                whiteListed: { lines: $filterByLineIds }
-              ) {
-                ...group_times_estimatedCallFields
-              }
-              estimatedCalls(
-                startTime: $startTime
-                timeRange: $timeRange
-                numberOfDepartures: $totalLimit
-                numberOfDeparturesPerLineAndDestinationDisplay: 1
-                omitNonBoarding: false
-                includeCancelledTrips: false
-                whiteListed: { lines: $filterByLineIds }
-              ) {
-                ...group_estimatedCallFields
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

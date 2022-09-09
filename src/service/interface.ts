@@ -39,7 +39,9 @@ import {
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoData_v3,
   QuayDeparturesPayload,
-  StopPlaceDeparturesPayload
+  StopPlaceDeparturesPayload,
+  DepartureFavoritesPayload,
+  DepartureFavoritesQuery
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -66,6 +68,7 @@ import {
   FavouriteDepartureAPIParam,
   StopPlaceGroup
 } from '../types/departures';
+import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -183,6 +186,13 @@ export interface IDeparturesService {
   getFavouriteDepartures(
     query: FavouriteDepartureAPIParam[]
   ): Promise<Result<StopPlaceGroup[], APIError>>;
+}
+
+export interface IDepartureFavoritesService {
+  getDeparturesFavorites(
+    location: DepartureFavoritesPayload,
+    query: DepartureFavoritesQuery
+  ): Promise<Result<DepartureFavoritesMetadata, APIError>>;
 }
 
 export interface IJourneyService {

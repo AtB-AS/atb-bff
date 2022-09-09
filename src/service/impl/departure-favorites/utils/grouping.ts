@@ -4,9 +4,9 @@ import {
   ReportType,
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/journey-types';
+} from '../../../../graphql/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
-import { GroupsByIdQuery } from '../journey-gql/jp2/departure-group.graphql-gen';
+import { GroupsByIdQuery } from '../journey-gql/jp3/departure-group.graphql-gen';
 
 type Notice = { text?: string };
 type Situation = {
@@ -110,7 +110,7 @@ export default function mapQueryToGroups(
     const { quays, ...stopPlaceInfo } = stopPlace;
     const quayGroups =
       quays?.map(function (quay) {
-        const { times, estimatedCalls, ...quayInfo  } = quay;
+        const { times, estimatedCalls, ...quayInfo } = quay;
         const groups = groupBy(times, item =>
           toKey(
             item.serviceJourney?.line.id,

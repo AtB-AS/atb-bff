@@ -1,4 +1,4 @@
-import * as Types from '../../../../../graphql/journey-types';
+import * as Types from '../../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
@@ -10,9 +10,9 @@ export type GetDepartureRealtimeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDepartureRealtimeQuery = { quays: Array<{ id: string, estimatedCalls: Array<{ realtime?: boolean, expectedArrivalTime?: any, expectedDepartureTime?: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime?: any, aimedDepartureTime?: any, serviceJourney?: { id: string } }> }> };
+export type GetDepartureRealtimeQuery = { quays: Array<{ id: string, estimatedCalls: Array<{ realtime: boolean, expectedArrivalTime: any, expectedDepartureTime: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, serviceJourney?: { id: string } }> }> };
 
-export type EstimatedCallFragment = { realtime?: boolean, expectedArrivalTime?: any, expectedDepartureTime?: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime?: any, aimedDepartureTime?: any, serviceJourney?: { id: string } };
+export type EstimatedCallFragment = { realtime: boolean, expectedArrivalTime: any, expectedDepartureTime: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, serviceJourney?: { id: string } };
 
 export const EstimatedCallFragmentDoc = gql`
     fragment estimatedCall on EstimatedCall {

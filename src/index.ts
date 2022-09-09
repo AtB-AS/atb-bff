@@ -15,6 +15,7 @@ import stopsService from './service/impl/stops';
 import journeyService from './service/impl/journey';
 import departuresService from './service/impl/departures';
 import tripsService from './service/impl/trips';
+import departureFavoritesService from './service/impl/departure-favorites';
 
 import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
@@ -23,14 +24,19 @@ import healthRoutes from './api/health';
 import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
 import departureRoutes from './api/departures';
+import departureFavoritesRoutes from './api/departure-favorites';
 
 import registerMetricsExporter from './utils/metrics';
 
 import { GaxiosError } from 'gaxios';
 import { PubSub } from '@google-cloud/pubsub';
-import serviceJourneyRoutes, {serviceJourneyRoutes_v2} from './api/servicejourney';
-import serviceJourneyService, {serviceJourneyService_v2} from './service/impl/service-journey';
-import vippsLoginRoutes from "./api/vipps-login";
+import serviceJourneyRoutes, {
+  serviceJourneyRoutes_v2
+} from './api/servicejourney';
+import serviceJourneyService, {
+  serviceJourneyService_v2
+} from './service/impl/service-journey';
+import vippsLoginRoutes from './api/vipps-login';
 
 process.on('unhandledRejection', err => {
   console.error(err);
@@ -75,8 +81,11 @@ process.on('unhandledRejection', err => {
     // JP3
     tripsRoutes(server)(tripsService(enturService_v3, pubSubClient));
     departureRoutes(server)(departuresService(enturService_v3, pubSubClient));
-    serviceJourneyRoutes_v2(server)(serviceJourneyService_v2())
-    vippsLoginRoutes(server)()
+    serviceJourneyRoutes_v2(server)(serviceJourneyService_v2());
+    departureFavoritesRoutes(server)(
+      departureFavoritesService(enturService_v3, pubSubClient)
+    );
+    vippsLoginRoutes(server)();
 
     registerMetricsExporter(projectId);
     await server.initialize();

@@ -122,6 +122,15 @@ export type DepartureGroupsQuery = CursoredQuery<{
   limitPerLine: number;
 }>;
 
+export type DepartureFavoritesPayload = {
+  favorites?: FavoriteDeparture[];
+};
+
+export type DepartureFavoritesQuery = CursoredQuery<{
+  startTime: Date;
+  limitPerLine: number;
+}>;
+
 export type DepartureRealtimeQuery = {
   quayIds: string[];
   startTime: Date;
@@ -295,10 +304,10 @@ export type ServiceJourneyMapInfoData_v3 = {
 };
 
 export type VippsCustomTokenRequest = {
-  authorizationCode: string,
-  state: string,
-  nonce: string
-}
+  authorizationCode: string;
+  state: string;
+  nonce: string;
+};
 
 export class APIError extends Error {
   public statusCode?: number = 500;
