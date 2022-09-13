@@ -20,8 +20,6 @@ export default (server: Hapi.Server) => (
       const location = (request.payload as unknown) as DepartureFavoritesPayload;
       const query = (request.query as unknown) as DepartureFavoritesQuery;
 
-      console.log('location, query');
-      console.log(location, query);
       return (await service.getDeparturesFavorites(location, query)).unwrap();
     }
   });
