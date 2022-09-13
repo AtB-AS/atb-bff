@@ -571,7 +571,7 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/favoritesV2'
+            $ref: '#/definitions/departureFavoritesPayload'
       tags:
         - bff
       responses:
@@ -933,6 +933,11 @@ definitions:
         $ref: '#/definitions/favoritesV2'
     required:
       - location
+  departureFavoritesPayload:
+    type: object
+    properties:
+      favorites:
+        $ref: '#/definitions/favoritesV2'
   favoritesV2:
     type: array
     items:
