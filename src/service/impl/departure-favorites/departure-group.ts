@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import _ from 'lodash';
+import { union } from 'lodash';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import { APIError, DepartureGroupsQuery, FavoriteDeparture } from '../../types';
@@ -16,7 +16,7 @@ export async function getDepartureFavorites(
   options: DepartureGroupsQuery,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {
-  const ids = _.union(favorites?.map(f => f.stopId));
+  const ids = union(favorites?.map(f => f.stopId));
 
   const variables: GroupsByIdQueryVariables = {
     ids,
