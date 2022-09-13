@@ -547,6 +547,38 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/departure-favorites:
+    post:
+      summary: Get departures favorites grouped on lines
+      operationId: postBffV2DeparturesFavorites
+      parameters:
+        - type: number
+          default: 5
+          name: limitPerLine
+          in: query
+        - type: string
+          format: date
+          default: '2021-01-27T09:48:19.354Z'
+          name: startTime
+          in: query
+        - type: number
+          default: 3
+          name: pageSize
+          in: query
+        - type: string
+          name: cursor
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/favoritesV2'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v1/enrollment/group:
     post:
       summary: Enroll in beta groups with invite key
@@ -908,9 +940,9 @@ definitions:
   frontPageFavourites:
     type: object
     properties:
-      favourites: 
+      favourites:
         type: array
-        items: 
+        items:
           type: object
           properties:
             quayId:
