@@ -16,8 +16,8 @@ export type TripsQueryWithJourneyIds = {
 };
 
 export type CompressedSingleTripQuery = {
-  compressedQuery: string,
-}
+  compressedQuery: string;
+};
 
 function test(trip: TripPattern) {
   console.log(trip.expectedStartTime);

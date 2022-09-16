@@ -1,10 +1,10 @@
 import Hapi from "@hapi/hapi";
-import {Issuer} from "openid-client";
 import {credential, initializeApp} from "firebase-admin";
 import applicationDefault = credential.applicationDefault;
-import {PROJECT_ID, VIPPS_BASE_URL, VIPPS_CALLBACK_URL, VIPPS_CLIENT_ID, VIPPS_CLIENT_SECRET} from "../../config/env";
+import {PROJECT_ID, VIPPS_CLIENT_ID, VIPPS_CLIENT_SECRET} from "../../config/env";
 import {VippsCustomTokenRequest} from "../../service/types";
 import {postVippsLoginRequest} from "./schema";
+import {getOpenIdClientIssuer} from "./openid-client-issuer";
 
 export default (server: Hapi.Server) => () => {
 
@@ -13,14 +13,15 @@ export default (server: Hapi.Server) => () => {
         projectId: PROJECT_ID
     })
 
-    const getClient = async () => {
-        const iss = await Issuer.discover(VIPPS_BASE_URL + '/access-management-1.0/access/');
+    const getClient = async (callbackUrl: string) => {
+        const iss = await getOpenIdClientIssuer()
         return new iss.Client({
             client_id: VIPPS_CLIENT_ID || '',
             client_secret: VIPPS_CLIENT_SECRET || '',
-            redirect_uris: [VIPPS_CALLBACK_URL || ''],
+            redirect_uris: [callbackUrl],
             requested_flow: 'app_to_app',
-            app_callback_uri: VIPPS_CALLBACK_URL,
+            app_callback_uri: callbackUrl,
+            final_redirect_is_app: true
         });
     }
 
@@ -30,8 +31,9 @@ export default (server: Hapi.Server) => () => {
         options: {
             description: 'Get Vipps authorisation url',
         },
-        handler: async () => {
-            const client = await getClient();
+        handler: async (request) => {
+            const callbackUrl = request.query.callbackUrl;
+            const client = await getClient(callbackUrl);
             return client.authorizationUrl({
                 scope: 'openid phoneNumber',
             })
@@ -46,9 +48,10 @@ export default (server: Hapi.Server) => () => {
             validate: postVippsLoginRequest
         },
         handler: async (request,) => {
-            const client = await getClient();
+            const callbackUrl = request.query.callbackUrl;
+            const client = await getClient(callbackUrl);
             const {authorizationCode, state, nonce} = (request.payload as unknown) as VippsCustomTokenRequest;
-            const params = await client.callback(VIPPS_CALLBACK_URL,
+            const params = await client.callback(callbackUrl,
                 {code: authorizationCode, state: state},
                 {nonce: nonce, state: state}
             )
@@ -62,7 +65,7 @@ export default (server: Hapi.Server) => () => {
                         return await auth.createCustomToken(user.uid);
                     } catch (error: any) {
                         if (error && error.code && error.code === 'auth/user-not-found') {
-                            const user = await auth.createUser({phoneNumber});
+                            const user = await auth.createUser({phoneNumber: `+${phoneNumber}`});
                             return await auth.createCustomToken(user.uid);
                         }
                         throw error;
