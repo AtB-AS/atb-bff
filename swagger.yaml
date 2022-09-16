@@ -793,23 +793,6 @@ paths:
           schema:
             type: string
           description: Successful
-  /bff/v2/departures/favourites:
-    post:
-      summary: Get favourite departures
-      operationId: postBffv2_0DeparturesFavourites
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/frontPageFavourites'
-      tags:
-        - bff
-      responses:
-        default:
-          schema:
-            type: string
-          description: Successful
-
   /bff/v2/trips:
     post:
       summary: Get trips between stops
@@ -942,20 +925,6 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/favoriteV2'
-  frontPageFavourites:
-    type: object
-    properties:
-      favourites:
-        type: array
-        items:
-          type: object
-          properties:
-            quayId:
-              type: string
-            lineId:
-              type: string
-            lineName:
-              type: string
   favoriteV2:
     type: object
     properties:
