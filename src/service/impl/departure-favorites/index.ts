@@ -6,8 +6,6 @@ export default (): IDepartureFavoritesService => {
     async getDeparturesFavorites(payload, query) {
       return getDepartureFavorites(query, payload.favorites);
     }
-    //   return getRealtimeDepartureTime(query);
-    // }
   };
 
   return api;
