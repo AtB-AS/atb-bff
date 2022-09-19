@@ -1,10 +1,7 @@
 import { Result } from '@badrap/result';
-import { PubSub, Topic } from '@google-cloud/pubsub';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
-import { getEnv } from '../../../utils/getenv';
 import { IDeparturesService } from '../../interface';
 import { APIError, DepartureRealtimeQuery } from '../../types';
-import { EnturServiceAPI } from '../entur';
 import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
@@ -31,32 +28,7 @@ import {
   filterQuayFavorites
 } from './utils/favorites';
 
-const ENV = getEnv();
-const topicName = `analytics_departures_search`;
-const topicNameGroups = `analytics_departure_groups_search`;
-const topicNameRealtime = `analytics_departure_realtime`;
-
-export default (
-  service: EnturServiceAPI,
-  pubSubClient: PubSub
-): IDeparturesService => {
-  // createTopic might fail if the topic already exists; ignore.
-  createAllTopics(pubSubClient);
-
-  const pubOpts = {
-    batching: {
-      maxMessages: 100,
-      maxMilliseconds: 5 * 1000
-    }
-  };
-
-  const batchedPublisher = pubSubClient.topic(topicName, pubOpts);
-  const batchedPublisherGroups = pubSubClient.topic(topicNameGroups, pubOpts);
-  const batchedPublisherRealtime = pubSubClient.topic(
-    topicNameRealtime,
-    pubOpts
-  );
-
+export default (): IDeparturesService => {
   const api: IDeparturesService = {
     async getStopPlacesByPosition({
       latitude,
@@ -195,24 +167,9 @@ export default (
       }
     },
     async getDepartureRealtime(query: DepartureRealtimeQuery) {
-      pub(batchedPublisherRealtime, { query });
       return getRealtimeDepartureTime(query, journeyPlannerClient_v3);
     }
   };
 
   return api;
 };
-
-function pub(topic: Topic, data: object) {
-  try {
-    topic.publish(Buffer.from(JSON.stringify(data)), {
-      environment: ENV
-    });
-  } catch (e) {}
-}
-
-function createAllTopics(pubSubClient: PubSub) {
-  [topicName, topicNameGroups, topicNameRealtime].forEach(topic =>
-    pubSubClient.createTopic(topic).catch(() => {})
-  );
-}
