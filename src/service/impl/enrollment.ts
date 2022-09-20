@@ -63,7 +63,9 @@ const service = (): IEnrollmentService => {
       }
 
       return await request('POST', `${baseUrl}/enrollments/${enrollmentId}/customers`, {
-        customerAccountId, enrollmentId, code
+        customer_account_id: customerAccountId,
+        enrollment_id: enrollmentId,
+        code
       });
     }
   };
