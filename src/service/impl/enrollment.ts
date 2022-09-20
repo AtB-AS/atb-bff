@@ -1,5 +1,5 @@
 import fetch, {RequestInfo, RequestInit} from 'node-fetch';
-import {HttpsAgent as Agent} from 'agentkeepalive';
+import Agent from 'agentkeepalive';
 import pThrottle from 'p-throttle';
 import {ENROLLMENT_BASEURL, ENTUR_BASEURL} from '../../config/env';
 import {Result} from "@badrap/result";
