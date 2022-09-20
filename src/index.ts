@@ -8,6 +8,7 @@ import journeyService from './service/impl/journey';
 import departuresService from './service/impl/departures';
 import tripsService from './service/impl/trips';
 import departureFavoritesService from './service/impl/departure-favorites';
+import enrollmentService from './service/impl/enrollment';
 
 import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
@@ -54,7 +55,7 @@ process.on('unhandledRejection', err => {
     geocoderRoutes(server)(geocoderService(enturService));
     journeyRoutes(server)(js);
     serviceJourneyRoutes(server)(serviceJourneyService(enturService));
-    enrollmentRoutes(server)();
+    enrollmentRoutes(server)(enrollmentService());
 
     // JP3
     tripsRoutes(server)(tripsService());

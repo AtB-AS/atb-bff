@@ -12,3 +12,6 @@ export const PROJECT_ID = process.env.PROJECT_ID;
 export const VIPPS_BASE_URL = process.env.VIPPS_BASE_URL;
 export const VIPPS_CLIENT_ID = process.env.VIPPS_CLIENT_ID;
 export const VIPPS_CLIENT_SECRET = process.env.VIPPS_CLIENT_SECRET;
+
+// TODO: Should error out if this isn't set or a valid URL.
+export const ENROLLMENT_BASEURL: string = process.env.ENROLLMENT_BASEURL || '';
