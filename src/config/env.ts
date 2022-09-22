@@ -13,5 +13,25 @@ export const VIPPS_BASE_URL = process.env.VIPPS_BASE_URL;
 export const VIPPS_CLIENT_ID = process.env.VIPPS_CLIENT_ID;
 export const VIPPS_CLIENT_SECRET = process.env.VIPPS_CLIENT_SECRET;
 
-// TODO: Should error out if this isn't set or a valid URL.
-export const ENROLLMENT_BASEURL: string = process.env.ENROLLMENT_BASEURL || '';
+/**
+ * Return a URL to the given service. `serviceKey` should be uppercased.
+ */
+const getServiceUrl = (prefix: string, serviceKey: string, required: boolean = false): string => {
+  const host = process.env[`${serviceKey}_SERVICE_HOST`] || '';
+  const port = process.env[`${serviceKey}_SERVICE_PORT`] || '';
+
+  if (host === '' || port === '') {
+    if (required) {
+      console.error(
+        `failed to read environment variables for required service: ${serviceKey}`
+      );
+      process.exit(-1);
+    } else {
+      return '';
+    }
+  }
+
+  return `${prefix}${host}:${port}`;
+}
+
+export const ENROLLMENT_BASEURL: string = getServiceUrl('http://', 'ENROLLMENT', true);
