@@ -1,3 +1,5 @@
+name: Docker Build, Push & Deploy
+
 on:
   release:
     types: [published]
