@@ -1199,21 +1199,27 @@ export type RoutingParameters = {
   includedPlannedCancellations?: Maybe<Scalars['Boolean']>;
   kissAndRide?: Maybe<Scalars['Boolean']>;
   /** This is the maximum duration in seconds for a direct street search. This is a performance limit and should therefore be set high. Use filters to limit what is presented to the client. */
-  maxDirectStreetDuration?: Maybe<Scalars['Float']>;
+  maxDirectStreetDuration?: Maybe<Scalars['Int']>;
   /** The maximum slope of streets for wheelchair trips. */
   maxSlope?: Maybe<Scalars['Float']>;
   /** Maximum number of transfers returned in a trip plan. */
   maxTransfers?: Maybe<Scalars['Int']>;
   /** The maximum number of itineraries to return. */
   numItineraries?: Maybe<Scalars['Int']>;
-  /** Accept only paths that use transit (no street-only paths). */
+  /**
+   * Accept only paths that use transit (no street-only paths).
+   * @deprecated This is replaced by modes input object
+   */
   onlyTransitTrips?: Maybe<Scalars['Boolean']>;
   /** Penalty added for using every route that is not preferred if user set any route as preferred. We return number of seconds that we are willing to wait for preferred route. */
   otherThanPreferredRoutesPenalty?: Maybe<Scalars['Int']>;
   parkAndRide?: Maybe<Scalars['Boolean']>;
   /** @deprecated NOT IN USE IN OTP2. */
   reverseOptimizeOnTheFly?: Maybe<Scalars['Boolean']>;
-  /** Whether the planner should return intermediate stops lists for transit legs. */
+  /**
+   * Whether the planner should return intermediate stops lists for transit legs.
+   * @deprecated This parameter is always enabled
+   */
   showIntermediateStops?: Maybe<Scalars['Boolean']>;
   /** Used instead of walkReluctance for stairs. */
   stairsReluctance?: Maybe<Scalars['Float']>;

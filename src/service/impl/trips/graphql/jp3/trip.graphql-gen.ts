@@ -12,7 +12,7 @@ export type TripsQueryVariables = Types.Exact<{
   waitReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
   walkReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
   walkSpeed?: Types.InputMaybe<Types.Scalars['Float']>;
-  modes?: Types.Modes;
+  modes?: Types.InputMaybe<Types.Modes>;
 }>;
 
 
