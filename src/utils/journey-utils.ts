@@ -79,10 +79,10 @@ export function generateSingleTripQueryString(
 
   // sanitize query, and set search time.
   const when = getPaddedStartTimeFromLeg(trip.legs[0]);
-  const {from, to, transferPenalty, waitReluctance, walkReluctance, walkSpeed} = queryVariables;
+  const {from, to, transferPenalty, waitReluctance, walkReluctance, walkSpeed, modes} = queryVariables;
   const arriveBy = false;
   const singleTripQuery: TripsQueryVariables = {
-    when, from, to, transferPenalty, waitReluctance, walkReluctance, walkSpeed, arriveBy,
+    when, from, to, transferPenalty, waitReluctance, walkReluctance, walkSpeed, arriveBy, modes
   };
 
   // encode to string

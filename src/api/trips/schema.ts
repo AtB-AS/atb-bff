@@ -24,7 +24,10 @@ export const postTripsRequest = {
     transferPenalty: Joi.number(),
     waitReluctance: Joi.number(),
     walkReluctance: Joi.number(),
-    walkSpeed: Joi.number()
+    walkSpeed: Joi.number(),
+    modes: Joi.object({
+      directMode: Joi.string()
+    })
   })
 };
 

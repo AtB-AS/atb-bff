@@ -12,6 +12,7 @@ export type TripsQueryVariables = Types.Exact<{
   waitReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
   walkReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
   walkSpeed?: Types.InputMaybe<Types.Scalars['Float']>;
+  modes?: Types.Modes;
 }>;
 
 
@@ -19,7 +20,7 @@ export type TripsQuery = { trip: { nextPageCursor?: string, previousPageCursor?:
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes) {
   trip(
     from: $from
     to: $to
@@ -30,6 +31,7 @@ export const TripsDocument = gql`
     waitReluctance: $waitReluctance
     walkReluctance: $walkReluctance
     walkSpeed: $walkSpeed
+    modes: $modes
   ) {
     nextPageCursor
     previousPageCursor
