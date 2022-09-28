@@ -10,6 +10,9 @@ import hapiApiVersion from 'hapi-api-version';
 import logFmtPlugin from './plugins/logfmt';
 import atbHeaders from './plugins/atb-headers';
 import url from 'url';
+import Redis from '@hapi/catbox-redis';
+import Memory from '@hapi/catbox-memory';
+import { REDIS_HOST, REDIS_PORT } from './config/env';
 
 interface ServerOptions {
   port: string;
@@ -22,6 +25,27 @@ export const createServer = (opts: ServerOptions) => {
     listener: opts.listener,
     port: opts.port,
     address: '0.0.0.0',
+    cache: [
+      REDIS_HOST !== '' && REDIS_PORT !== ''
+        ? {
+            name: 'redis',
+            provider: {
+              constructor: Redis,
+              options: {
+                host: REDIS_HOST,
+                port: REDIS_PORT,
+                partition: 'bff'
+              }
+            }
+          }
+        : {
+            name: 'memory',
+            provider: {
+              constructor: Memory,
+              options: {}
+            }
+          }
+    ],
     routes: {
       cors: true,
       validate: {
@@ -32,7 +56,6 @@ export const createServer = (opts: ServerOptions) => {
 };
 
 export const initializePlugins = async (server: hapi.Server) => {
-
   await server.register({
     plugin: atbHeaders
   });

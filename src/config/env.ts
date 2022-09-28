@@ -16,9 +16,13 @@ export const VIPPS_CLIENT_SECRET = process.env.VIPPS_CLIENT_SECRET;
 /**
  * Return a URL to the given service. `serviceKey` should be uppercased.
  */
-const getServiceUrl = (prefix: string, serviceKey: string, required: boolean = false): string => {
-  const host = process.env[`${serviceKey}_SERVICE_HOST`] || '';
-  const port = process.env[`${serviceKey}_SERVICE_PORT`] || '';
+const getServiceUrl = (
+  prefix: string,
+  serviceKey: string,
+  required: boolean = false
+): string => {
+  const host = getServiceHost(serviceKey);
+  const port = getServicePort(serviceKey);
 
   if (host === '' || port === '') {
     if (required) {
@@ -32,6 +36,20 @@ const getServiceUrl = (prefix: string, serviceKey: string, required: boolean = f
   }
 
   return `${prefix}${host}:${port}`;
-}
+};
 
-export const ENROLLMENT_BASEURL: string = getServiceUrl('http://', 'ENROLLMENT', true);
+const getServiceHost = (serviceKey: string): string => {
+  return process.env[`${serviceKey}_SERVICE_HOST`] || '';
+};
+
+const getServicePort = (serviceKey: string): string => {
+  return process.env[`${serviceKey}_SERVICE_PORT`] || '';
+};
+
+export const ENROLLMENT_BASEURL: string = getServiceUrl(
+  'http://',
+  'ENROLLMENT',
+  true
+);
+export const REDIS_HOST: string = getServiceHost('REDIS');
+export const REDIS_PORT: string = getServicePort('REDIS');
