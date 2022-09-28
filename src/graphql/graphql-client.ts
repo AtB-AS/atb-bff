@@ -12,11 +12,11 @@ import { ENTUR_BASEURL, ET_CLIENT_NAME } from '../config/env';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
     errorPolicy: 'ignore'
   },
   query: {
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
     errorPolicy: 'all'
   }
 };
