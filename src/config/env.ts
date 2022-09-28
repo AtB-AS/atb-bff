@@ -1,3 +1,5 @@
+import { getEnv } from '../utils/getenv';
+
 export const TICKET_INVITE_KEY: string | undefined =
   process.env.TICKET_INVITE_KEY;
 export const PERIOD_TICKET_INVITE_KEY: string | undefined =
@@ -49,7 +51,7 @@ const getServicePort = (serviceKey: string): string => {
 export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'http://',
   'ENROLLMENT',
-  true
+  getEnv() === 'prod'
 );
 export const REDIS_HOST: string = getServiceHost('REDIS');
 export const REDIS_PORT: string = getServicePort('REDIS');
