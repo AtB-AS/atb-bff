@@ -5,12 +5,12 @@ on:
     types: [published]
   push:
     branches: ['main']
-    tags: ['*']
 
 jobs:
   build:
     uses: atb-as/workflows/.github/workflows/cluster-docker-build-tag-push.yaml@main
     with:
+      application: amp
       image: gcr.io/atb-mobility-platform/atb-bff
       instance_id: bff
     secrets:
