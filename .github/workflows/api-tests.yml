@@ -25,6 +25,12 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Test 1
+        run: k6-v0.40.0-linux-amd64/k6 --help
+
+      - name: Test 2
+        run: k6 --help
+
       - name: Run API tests
         working-directory: test
         run: k6 run k6.js --config=config/functional.json --env environment=staging --log-output=stdout --logformat=raw | tee results/junitLog.txt
@@ -33,7 +39,7 @@ jobs:
         run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder results
         working-directory: test
 
-      - name: Create JUnit from checks
+      - name: Create combined JUnit
         run: python python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results
         working-directory: test
 
