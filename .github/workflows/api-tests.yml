@@ -1,9 +1,9 @@
 name: API-tests
 
 on:
-  #push:
-  #  branches:
-  #    - tor/api-tests
+  push:
+    branches:
+      - tor/api-tests
   workflow_dispatch:
 
 jobs:
