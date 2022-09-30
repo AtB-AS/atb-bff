@@ -1,0 +1,47 @@
+name: API-tests
+
+on:
+  #push:
+  #  branches:
+  #    - tor/api-tests
+  workflow_dispatch:
+
+jobs:
+  api-test:
+    name: API-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: tor/api-tests
+
+      - name: Install k6
+        run: |
+          curl https://github.com/grafana/k6/releases/download/v0.40.0/k6-v0.40.0-linux-amd64.tar.gz -L | tar xvz --strip-components 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+          cache: 'pip'
+
+      - name: Run API tests
+        working-directory: test
+        run: |
+          ./k6 run k6.js --config=config/functional.json --env environment=staging --log-output=stdout --logformat=raw | tee results/junitLog.txt
+
+      - name: Create JUnit from checks
+        run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder results
+        working-directory: test
+
+      - name: Create JUnit from checks
+        run: python python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results
+        working-directory: test
+
+      - name: Upload test report json
+        uses: actions/upload-artifact@v3
+        with:
+          name: junit-results
+          path: ./test/results/*.xml
+          retention-days: 5
