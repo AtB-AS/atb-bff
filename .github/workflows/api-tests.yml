@@ -26,7 +26,7 @@ jobs:
           python-version: 3.9
 
       - name: Run API tests
-        run: cd test && ./k6 run k6.js --config=config/functional.json --env environment=staging --log-output=stdout --logformat=raw | tee results/junitLog.txt
+        run: ./k6 run test/k6.js --config=test/config/functional.json --env environment=staging --env runFrom=root --log-output=stdout --logformat=raw | tee test/results/junitLog.txt
 
       - name: Create JUnit from checks
         run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder results

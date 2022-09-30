@@ -65,11 +65,20 @@ export default function () {
 export function handleSummary(data) {
     console.log('Preparing the end-of-test summary...');
 
-    return {
-        'stdout': textSummary(data, { indent: ' ', enableColors: true}),
-        'results/junit_bff.xml': jUnit(data),
-        'results/summary_bff.json': JSON.stringify(data),
+    //github actions
+    if (conf.runFrom() === "root") {
+        return {
+            stdout: textSummary(data, { indent: " ", enableColors: true }),
+            "test/results/junit_bff.xml": jUnit(data),
+            "test/results/summary_bff.json": JSON.stringify(data),
+        };
     }
+    //default: 'test'
+    return {
+        stdout: textSummary(data, { indent: " ", enableColors: true }),
+        "results/junit_bff.xml": jUnit(data),
+        "results/summary_bff.json": JSON.stringify(data),
+    };
 }
 
 //After the simulation ends

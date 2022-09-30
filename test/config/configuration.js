@@ -48,6 +48,7 @@ export const conf = {
     usecase: () => __ENV.usecase || options.usecase,
     isPerformanceTest: () => performanceTest,
     includeJunit: () => __ENV.junitCheckOutput || options.junitCheckOutput,
+    runFrom: () => __ENV.runFrom || "test",
 }
 
 //Make metrics available

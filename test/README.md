@@ -16,32 +16,32 @@ The configuration of the tests are located in `config/functional.json`, and envi
 ### Commands
 Run functional tests - default: 1 user, 1 iteration, "bff" usecase
 ```bash
-$  k6 run k6.js --config=config/functional.json --env environment=[staging, prod]
+test$  k6 run k6.js --config=config/functional.json --env environment=[staging, prod]
 ```
 
 Run performance test (NOT FULLY SUPPORTED) - default: 5 user, 300s duration + ramp-up/-down, "bffPerformanceTest" usecase
 ```bash
-$  k6 run k6.js --config=config/performance.json --env environment=[staging, prod] --env performanceTest=true
+test$  k6 run k6.js --config=config/performance.json --env environment=[staging, prod] --env performanceTest=true
 ```
 
 Github Actions run with a console log print to file for JUnit creation of the assertion results. Resulting JUnit file
 will be stored in `results/combinedJUnit.xml` (see also `.github/workflows/api-tests.yml`).
 ```bash
-$  k6 run k6.js --config=config/functional.json --env environment=[staging, prod]
-$  python3 python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder results
-$  python3 python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results
+test$  k6 run k6.js --config=config/functional.json --env environment=[staging, prod]
+test$  python3 python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder results
+test$  python3 python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results
 ```
 
 ### Detailed output
 For detailed output, use (also see _k6.json#handleSummary()_)
 ```bash
-$  k6 run k6.js --config=config/functional.json  --env environment=[staging, prod] --out csv=results/output.csv
+test$  k6 run k6.js --config=config/functional.json  --env environment=[staging, prod] --out csv=results/output.csv
 or
-$  k6 run k6.js --config=config/functional.json  --env environment=[staging, prod] --out json=results/output.json
+test$  k6 run k6.js --config=config/functional.json  --env environment=[staging, prod] --out json=results/output.json
 ```
 For debugging
 ```bash
-$  k6 run k6.js --config=config/functional.json --env environment=[staging, prod] [--http-debug || --http-debug="full"]
+test$  k6 run k6.js --config=config/functional.json --env environment=[staging, prod] [--http-debug || --http-debug="full"]
 ```
 
 ### Performance test metrics
