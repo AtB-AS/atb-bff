@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: junit-results
-          path: ./test/results/*.xml
+          path: ./test/results/combinedJUnit.xml
           retention-days: 5

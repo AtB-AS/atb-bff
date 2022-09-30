@@ -102,12 +102,12 @@ def main(argv):
                         reqNameDict[check] = checkDict
                     apiChecks[reqName] = reqNameDict
 
-
+    '''
     for reqName in apiChecks.keys():
         for check in apiChecks[reqName].keys():
             for url in apiChecks[reqName][check].keys():
                 print("[req] {} [check] {} [url] {} [pass] {} [delay] {}".format(reqName, check, url, apiChecks[reqName][check][url][0], apiChecks[reqName][check][url][1]))
-
+    '''
 
     # testsuites = createJunitManyTestsuites(apiChecks)
     testsuites = createJunit(apiChecks)
@@ -115,6 +115,11 @@ def main(argv):
     # Write JUnit XML
     tree = ET.ElementTree(testsuites)
     tree.write(junitFile, encoding="UTF-8", xml_declaration=True)
+
+    if os.path.isfile(junitFile):
+        print('Junit file is created at "{}"'.format(junitFile))
+    else:
+        print('Junit file is NOT created. Something went wrong.')
 
 
 # Based on format: https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/test/publish-test-results?view=azure-devops&tabs=junit%2Cyaml#result-formats-mapping

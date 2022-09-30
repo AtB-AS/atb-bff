@@ -53,6 +53,7 @@ def main(argv):
 
     # XML output
     testsuitesOut = ET.Element('testsuites')
+    outFile = "{}/combinedJUnit.xml".format(folder)
     failures = 0
     tests = 0
 
@@ -69,7 +70,12 @@ def main(argv):
 
     # Write combined XML
     treeOut = ET.ElementTree(testsuitesOut)
-    treeOut.write("{}/combinedJUnit.xml".format(folder), encoding="UTF-8", xml_declaration=True)
+    treeOut.write(outFile, encoding="UTF-8", xml_declaration=True)
+
+    if os.path.isfile(outFile):
+        print('Combined Junit file is created at "{}"'.format(outFile))
+    else:
+        print('Combined Junit file is NOT created. Something went wrong.')
 
 
 if __name__ == '__main__':
