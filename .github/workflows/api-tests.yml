@@ -33,7 +33,7 @@ jobs:
         working-directory: test
 
       - name: Create combined JUnit
-        run: python python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results
+        run: python python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results --addTime true
         working-directory: test
 
       - name: Upload test report json

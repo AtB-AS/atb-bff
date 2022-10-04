@@ -3,6 +3,7 @@ import sys
 import os
 import re
 import xml.etree.ElementTree as ET
+import datetime
 
 '''
 # Create a JUnit file based on console output of a specific format from a k6 test
@@ -154,14 +155,20 @@ def createJunit(apiChecks):
     testsuite.set('name', "k6 checks")
     noTests = 0
     noFailures = 0
+    totDelay = 0.0
 
     for reqName in apiChecks.keys():
+        # TODO Test the delay with more requests and more checks (both failing and not)
+        delayIsAdded = False
         for check in apiChecks[reqName].keys():
             for url in apiChecks[reqName][check].keys():
                 testcase = ET.SubElement(testsuite, 'testcase')
                 testcase.set('name', "{}: {}".format(reqName, check))
                 testcase.set('classname', "{}".format(reqName))
                 testcase.set('time', "{}".format(apiChecks[reqName][check][url][1]))
+                if not delayIsAdded:
+                    totDelay += float(apiChecks[reqName][check][url][1])
+                    delayIsAdded = True
                 noTests += 1
                 if apiChecks[reqName][check][url][0] == "false":
                     noFailures += 1
@@ -171,11 +178,20 @@ def createJunit(apiChecks):
 
         testsuite.set('tests', str(noTests))
         testsuite.set('failures', str(noFailures))
+        testsuite.set('timestamp', str(getTimestampNow()))
+        testsuite.set('time', str(totDelay))
 
     testsuites.set('tests', str(noTests))
     testsuites.set('failures', str(noFailures))
+    testsuites.set('time', str(totDelay))
 
     return testsuites
+
+
+# Get timestamp for now
+def getTimestampNow():
+    myFormat = "%Y-%m-%dT%H:%M:%S"
+    return datetime.datetime.now().strftime(myFormat)
 
 
 # Not used
