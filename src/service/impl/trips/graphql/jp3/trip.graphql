@@ -70,6 +70,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             longitude
             latitude
             stopPlace {
+              id
               longitude
               latitude
               name
@@ -87,6 +88,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             longitude
             latitude
             stopPlace {
+              id
               longitude
               latitude
               name
