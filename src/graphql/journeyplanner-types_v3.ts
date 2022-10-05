@@ -287,6 +287,8 @@ export type InputBanned = {
   quays?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** NOT IMPLEMENTED. Set of ids of quays that should not be allowed for boarding, alighting or traveling thorugh. */
   quaysHard?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Set of ids of rental networks that should not be allowed for renting vehicles. */
+  rentalNetworks?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Set of ids of service journeys that should not be used. */
   serviceJourneys?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
@@ -324,6 +326,8 @@ export type InputWhiteListed = {
   authorities?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Set of ids for lines that should be used */
   lines?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Set of ids of rental networks that should be used for renting vehicles. */
+  rentalNetworks?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export type Interchange = {
@@ -371,7 +375,7 @@ export type ItineraryFilters = {
   groupSimilarityKeepThree?: InputMaybe<Scalars['Float']>;
   /** Of the itineraries grouped to maximum of three itineraries, how much worse can the non-grouped legs be compared to the lowest cost. 2.0 means that they can be double the cost, and any itineraries having a higher cost will be filtered. Default value is 2.0, use a value lower than 1.0 to turn off */
   groupedOtherThanSameLegsMaxCostMultiplier?: InputMaybe<Scalars['Float']>;
-  /** Set a relative limit for all transit itineraries. The limit is calculated based on the transit itinerary generalized-cost and the time between itineraries Itineraries without transit legs are excluded from this filter. Example: costLimitFunction(x) = 3600 + 2.0 x and intervalRelaxFactor = 0.5. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600 plus half of the time between either departure or arrival times of the itinerary. Default: {"costLimitFunction": 3600.0 + 2.5 x, "intervalRelaxFactor": 0.0} */
+  /** Set a relative limit for all transit itineraries. The limit is calculated based on the transit itinerary generalized-cost and the time between itineraries Itineraries without transit legs are excluded from this filter. Example: costLimitFunction(x) = 3600 + 2.0 x and intervalRelaxFactor = 0.5. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600 plus half of the time between either departure or arrival times of the itinerary. Default: {"costLimitFunction": 900.0 + 1.5 x, "intervalRelaxFactor": 0.4} */
   transitGeneralizedCostLimit?: InputMaybe<TransitGeneralizedCostFilterParams>;
 };
 
@@ -533,7 +537,6 @@ export type Location = {
   place?: InputMaybe<Scalars['String']>;
 };
 
-/** NOT IMPLEMENTED */
 export enum Mode {
   Air = 'air',
   Bicycle = 'bicycle',
@@ -545,11 +548,11 @@ export enum Mode {
   Funicular = 'funicular',
   Lift = 'lift',
   Metro = 'metro',
+  Monorail = 'monorail',
   Rail = 'rail',
   Scooter = 'scooter',
   Tram = 'tram',
-  /** Any for of public transportation */
-  Transit = 'transit',
+  Trolleybus = 'trolleybus',
   Water = 'water'
 }
 
@@ -741,6 +744,10 @@ export type Quay = PlaceInterface & {
   description?: Maybe<Scalars['String']>;
   /** List of visits to this quay as part of vehicle journeys. */
   estimatedCalls: Array<EstimatedCall>;
+  /** Geometry for flexible area. */
+  flexibleArea?: Maybe<Scalars['Coordinates']>;
+  /** the Quays part of an flexible group. */
+  flexibleGroup?: Maybe<Array<Maybe<Quay>>>;
   id: Scalars['ID'];
   /** List of journey patterns servicing this quay */
   journeyPatterns: Array<Maybe<JourneyPattern>>;
@@ -755,7 +762,9 @@ export type Quay = PlaceInterface & {
   situations: Array<PtSituationElement>;
   /** The stop place to which this quay belongs to. */
   stopPlace?: Maybe<StopPlace>;
+  stopType?: Maybe<Scalars['String']>;
   tariffZones: Array<Maybe<TariffZone>>;
+  timeZone?: Maybe<Scalars['String']>;
   /** Whether this quay is suitable for wheelchair boarding. */
   wheelchairAccessible?: Maybe<WheelchairBoarding>;
 };
@@ -1353,6 +1362,7 @@ export type StopPlace = PlaceInterface & {
   /** Returns all quays that are children of this stop place */
   quays?: Maybe<Array<Maybe<Quay>>>;
   tariffZones: Array<Maybe<TariffZone>>;
+  timeZone?: Maybe<Scalars['String']>;
   /** The transport modes of quays under this stop place. */
   transportMode?: Maybe<Array<Maybe<TransportMode>>>;
   /** The transport submode serviced by this stop place. */
