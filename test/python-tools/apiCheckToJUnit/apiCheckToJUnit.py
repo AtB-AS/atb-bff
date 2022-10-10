@@ -158,7 +158,6 @@ def createJunit(apiChecks):
     totDelay = 0.0
 
     for reqName in apiChecks.keys():
-        # TODO Test the delay with more requests and more checks (both failing and not)
         delayIsAdded = False
         for check in apiChecks[reqName].keys():
             for url in apiChecks[reqName][check].keys():
@@ -179,13 +178,18 @@ def createJunit(apiChecks):
         testsuite.set('tests', str(noTests))
         testsuite.set('failures', str(noFailures))
         testsuite.set('timestamp', str(getTimestampNow()))
-        testsuite.set('time', str(totDelay))
+        testsuite.set('time', str(roundMillis(totDelay)))
 
     testsuites.set('tests', str(noTests))
     testsuites.set('failures', str(noFailures))
-    testsuites.set('time', str(totDelay))
+    testsuites.set('time', str(roundMillis(totDelay)))
 
     return testsuites
+
+
+# Round to seconds with 3 decimal places
+def roundMillis(value: float):
+    return float(round(value*1000)/1000)
 
 
 # Get timestamp for now

@@ -20,11 +20,14 @@ Metrics (only performance tests):
  */
 
 import { sleep } from 'k6';
-import {conf} from './config/configuration.js'
-import {scn} from "./scenario.js";
-import {createJUnitCheckOutput} from "./utils/log.js";
+import { conf } from './config/configuration.js';
+import { scn } from './scenario.js';
+import { createJUnitCheckOutput } from './utils/log.js';
 //WIP
-import { jUnit, textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
+import {
+  jUnit,
+  textSummary
+} from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 
 //Performance: Setup a Trend metric per request name from conf/configuration.reqNameList
 //setupReqNameTrends()
@@ -33,55 +36,54 @@ import { jUnit, textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.j
 
 //Settings for the simulation
 export let options = {
-    //vus / duration / iterations set in config file depending on performance test or not (can be overrun by cli options)
-    //All custom metrics are defined in 'conf/configuration.js'
-
-    //thresholds are set in config file (config/functional.json and config/performance.json)
+  //vus / duration / iterations set in config file depending on performance test or not (can be overrun by cli options)
+  //All custom metrics are defined in 'conf/configuration.js'
+  //thresholds are set in config file (config/functional.json and config/performance.json)
 };
 
 //Before the simulation starts
 export function setup() {
-    console.log("Setup")
-    console.log("  -- Usecase: " + conf.usecase());
-    console.log("  -- Environment: " + conf.host());
+  console.log('Setup');
+  console.log('  -- Usecase: ' + conf.usecase());
+  console.log('  -- Environment: ' + conf.host());
 }
 
 //Run simulations
 export default function () {
-    //Set up the tests for each VU in the first iteration
-    if (__ITER === 0){
-        //Any initialization
-    }
-    //Run usecase as defined from config - or cli
-    scn[conf.usecase()]()
+  //Set up the tests for each VU in the first iteration
+  if (__ITER === 0) {
+    //Any initialization
+  }
+  //Run usecase as defined from config - or cli
+  scn[conf.usecase()]();
 
-    //Create JUnit log lines for a post-k6 to pick up
-    if (!conf.isPerformanceTest() && conf.includeJunit()) {
-        createJUnitCheckOutput();
-    }
+  //Create JUnit log lines for a post-k6 to pick up
+  if (!conf.isPerformanceTest() && conf.includeJunit()) {
+    createJUnitCheckOutput();
+  }
 }
 
 //Handle reporting
 export function handleSummary(data) {
-    console.log('Preparing the end-of-test summary...');
+  console.log('Preparing the end-of-test summary...');
 
-    //github actions
-    if (conf.runFrom() === "root") {
-        return {
-            stdout: textSummary(data, { indent: " ", enableColors: true }),
-            "test/results/junit_bff.xml": jUnit(data),
-            "test/results/summary_bff.json": JSON.stringify(data),
-        };
-    }
-    //default: 'test'
+  //github actions
+  if (conf.runFrom() === 'root') {
     return {
-        stdout: textSummary(data, { indent: " ", enableColors: true }),
-        "results/junit_bff.xml": jUnit(data),
-        "results/summary_bff.json": JSON.stringify(data),
+      stdout: textSummary(data, { indent: ' ', enableColors: true }),
+      'test/results/junit_bff.xml': jUnit(data),
+      'test/results/summary_bff.json': JSON.stringify(data)
     };
+  }
+  //default: 'test'
+  return {
+    stdout: textSummary(data, { indent: ' ', enableColors: true }),
+    'results/junit_bff.xml': jUnit(data),
+    'results/summary_bff.json': JSON.stringify(data)
+  };
 }
 
 //After the simulation ends
 export function teardown() {
-    console.log("Teardown")
+  console.log('Teardown');
 }

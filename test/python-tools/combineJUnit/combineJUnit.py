@@ -83,7 +83,7 @@ def main(argv):
     testsuitesOut.set('tests', str(tests))
     testsuitesOut.set('failures', str(failures))
     if addMissingTimeAttributes:
-        testsuitesOut.set('time', str(delay))
+        testsuitesOut.set('time', str(roundMillis(delay)))
 
     # Write combined XML
     if addMissingTimeAttributes:
@@ -102,15 +102,20 @@ def addTimeAttribute(testsuites:ET.Element, delay: float, timestamp: str):
     tsWithTime = ET.Element('testsuites')
     for ts in testsuites:
         if not ts.get('time'):
-            ts.set('time', str(delay))
+            ts.set('time', str(roundMillis(delay)))
         if not ts.get('timestamp'):
             ts.set('timestamp', timestamp)
         for tc in ts:
             if not tc.get('time'):
-                tc.set('time', str(delay))
+                tc.set('time', str(roundMillis(delay)))
         tsWithTime.append(ts)
 
     return tsWithTime
+
+
+# Round to seconds with 3 decimal places
+def roundMillis(value: float):
+    return float(round(value*1000)/1000)
 
 
 if __name__ == '__main__':

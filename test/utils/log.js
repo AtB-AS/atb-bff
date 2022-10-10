@@ -7,19 +7,19 @@ let junitChecks = [];
 
 //Creates log lines for a post-k6 script to pick up
 export function createJUnitCheckOutput() {
-  console.log("---- JUnit information ----");
+  console.log('---- JUnit information ----');
   for (let msg of junitChecks) {
-    console.log("[junit]" + msg);
+    console.log('[junit]' + msg);
   }
 }
 
 //Prints any errors to console (see 'config/configuration.js:metrics')
 function logErrors(reqName, url, failureArray) {
-  let outputString = "[FAIL] " + reqName + " [URL] " + url + " [FAILED_CHECKS]";
+  let outputString = '[FAIL] ' + reqName + ' [URL] ' + url + ' [FAILED_CHECKS]';
   let failureCount = 1;
   if (failureArray.length !== 0) {
     for (let i = 0; i < failureArray.length; i++) {
-      outputString += " " + failureCount + ") " + failureArray[i];
+      outputString += ' ' + failureCount + ') ' + failureArray[i];
       failureCount += 1;
     }
     console.warn(outputString);
@@ -34,13 +34,13 @@ export function logResults(reqName, url, delay, failureArray, passArray) {
   // Errors
   for (let i = 0; i < failureArray.length; i++) {
     const junitMsg =
-      "[pass] false [req] " +
+      '[pass] false [req] ' +
       reqName +
-      " [url] " +
+      ' [url] ' +
       url +
-      " [check] " +
+      ' [check] ' +
       failureArray[i] +
-      " [delay] " +
+      ' [delay] ' +
       delay;
     junitChecks.push(junitMsg);
   }
@@ -48,13 +48,13 @@ export function logResults(reqName, url, delay, failureArray, passArray) {
   // Passes
   for (let i = 0; i < passArray.length; i++) {
     const junitMsg =
-      "[pass] true [req] " +
+      '[pass] true [req] ' +
       reqName +
-      " [url] " +
+      ' [url] ' +
       url +
-      " [check] " +
+      ' [check] ' +
       passArray[i] +
-      " [delay] " +
+      ' [delay] ' +
       delay;
     junitChecks.push(junitMsg);
   }
