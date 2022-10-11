@@ -168,6 +168,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   /bff/v1/geocoder/reverse:
     get:
       summary: 'Find addresses, POIs and stop places near the given coordinates'
