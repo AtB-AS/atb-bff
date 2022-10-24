@@ -11,6 +11,7 @@ import {
   postTripsRequest
 } from './schema';
 import { parseTripQueryString } from '../../utils/journey-utils';
+import * as Boom from '@hapi/boom';
 
 export default (server: Hapi.Server) => (service: ITrips_v2) => {
   server.route({
@@ -44,6 +45,9 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
         postSingleTripRequest.payload
       );
       const result = await service.getSingleTrip(query);
+      if (result.isErr) {
+        return Boom.notFound(result.error.message);
+      }
       return result.unwrap();
     }
   });
