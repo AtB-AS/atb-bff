@@ -8,7 +8,10 @@ import { APIError } from '../../types';
 import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 
 import * as Boom from '@hapi/boom';
-import {extractServiceJourneyIds, generateSingleTripQueryString} from '../../../utils/journey-utils';
+import {
+  extractServiceJourneyIds,
+  generateSingleTripQueryString
+} from '../../../utils/journey-utils';
 import * as Trips from '../../../types/trips';
 
 export async function getTrips(
@@ -32,7 +35,6 @@ export async function getTrips(
 export async function getSingleTrip(
   query: Trips.TripsQueryWithJourneyIds
 ): Promise<Result<Trips.TripPattern, APIError>> {
-
   const results = await journeyPlannerClient_v3.query<
     TripsQuery,
     TripsQueryVariables
@@ -43,7 +45,9 @@ export async function getSingleTrip(
   }
 
   if (!results.data.trip?.tripPatterns) {
-    Boom.resourceGone('Trip not found or is no longer available. (No trip patterns returned)');
+    Boom.resourceGone(
+      'Trip not found or is no longer available. (No trip patterns returned)'
+    );
   }
 
   const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
@@ -57,10 +61,15 @@ export async function getSingleTrip(
   if (singleTripPattern) {
     return Result.ok({
       ...singleTripPattern,
-      compressedQuery: generateSingleTripQueryString(singleTripPattern, query.query)
+      compressedQuery: generateSingleTripQueryString(
+        singleTripPattern,
+        query.query
+      )
     });
   } else {
-    return Result.err(new Error('Trip not found or is no longer available. (No matching trips)'));
+    return Result.err(
+      new Error('Trip not found or is no longer available. (No matching trips)')
+    );
   }
 }
 
