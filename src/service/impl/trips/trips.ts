@@ -44,12 +44,6 @@ export async function getSingleTrip(
     return Result.err(new APIError(results.errors));
   }
 
-  if (!results.data.trip?.tripPatterns) {
-    Boom.resourceGone(
-      'Trip not found or is no longer available. (No trip patterns returned)'
-    );
-  }
-
   const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
     const journeyIds = extractServiceJourneyIds(trip);
     if (journeyIds.length != query.journeyIds.length) return false; // Fast comparison
