@@ -21,7 +21,8 @@ export const getStopDeparturesRequest = {
     id: Joi.string().required(),
     numberOfDepartures: Joi.number().default(5),
     startTime: Joi.string(),
-    timeRange: Joi.number()
+    timeRange: Joi.number(),
+    limitPerLine: Joi.number()
   })
 };
 
@@ -42,7 +43,8 @@ export const postStopDeparturesRequest = {
     id: Joi.string().required(),
     numberOfDepartures: Joi.number().default(5),
     startTime: Joi.string(),
-    timeRange: Joi.number()
+    timeRange: Joi.number(),
+    limitPerLine: Joi.number()
   })
 };
 
@@ -51,7 +53,9 @@ export const getQuayDeparturesRequest = {
     id: Joi.string().required(),
     numberOfDepartures: Joi.number().default(10),
     startTime: Joi.string(),
-    timeRange: Joi.number().default(86400)
+    timeRange: Joi.number().default(86400),
+    numberOfDeparturesPerLineAndDestinationDisplay: Joi.number()
+
   })
 };
 
@@ -72,7 +76,8 @@ export const postQuayDeparturesRequest = {
     id: Joi.string().required(),
     numberOfDepartures: Joi.number().default(1000),
     startTime: Joi.string(),
-    timeRange: Joi.number().default(86400)
+    timeRange: Joi.number().default(86400),
+    limitPerLine: Joi.number()
   })
 };
 

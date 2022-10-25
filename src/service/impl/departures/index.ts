@@ -84,7 +84,7 @@ export default (): IDeparturesService => {
       }
     },
     async getStopQuayDepartures(
-      { id, numberOfDepartures = 10, startTime, timeRange },
+      { id, numberOfDepartures = 10, startTime, timeRange, limitPerLine },
       payload
     ) {
       const favorites = payload?.favorites;
@@ -111,7 +111,8 @@ export default (): IDeparturesService => {
             startTime,
             timeRange,
             filterByLineIds: favorites?.map(f => f.lineId),
-            ...limit
+            limitPerLine,
+            ...limit,
           }
         });
 
@@ -135,7 +136,8 @@ export default (): IDeparturesService => {
         id,
         numberOfDepartures = 1000,
         startTime,
-        timeRange = 86400 // 24 hours
+        timeRange = 86400, // 24 hours
+        limitPerLine
       },
       payload
     ) {
@@ -151,7 +153,8 @@ export default (): IDeparturesService => {
             numberOfDepartures,
             startTime,
             timeRange,
-            filterByLineIds: favorites?.map(f => f.lineId)
+            filterByLineIds: favorites?.map(f => f.lineId),
+            limitPerLine
           }
         });
 

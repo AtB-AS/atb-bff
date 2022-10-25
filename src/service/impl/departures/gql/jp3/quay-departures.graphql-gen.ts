@@ -8,6 +8,7 @@ export type QuayDeparturesQueryVariables = Types.Exact<{
   startTime?: Types.InputMaybe<Types.Scalars['DateTime']>;
   timeRange?: Types.InputMaybe<Types.Scalars['Int']>;
   filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
+  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -15,7 +16,7 @@ export type QuayDeparturesQuery = { quay?: { id: string, description?: string, p
 
 
 export const QuayDeparturesDocument = gql`
-    query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int, $filterByLineIds: [ID]) {
+    query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int, $filterByLineIds: [ID], $limitPerLine: Int) {
   quay(id: $id) {
     id
     description
@@ -27,6 +28,7 @@ export const QuayDeparturesDocument = gql`
       timeRange: $timeRange
       includeCancelledTrips: true
       whiteListed: {lines: $filterByLineIds}
+      numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine,
     ) {
       date
       expectedDepartureTime
