@@ -34,14 +34,14 @@ export async function getTrips(
 
 export async function getSingleTrip(
   query: Trips.TripsQueryWithJourneyIds
-): Promise<Result<Trips.TripPattern, APIError>> {
+): Promise<Result<Trips.TripPattern, Boom.Boom>> {
   const results = await journeyPlannerClient_v3.query<
     TripsQuery,
     TripsQueryVariables
   >({ query: TripsDocument, variables: query.query });
 
   if (results.errors) {
-    return Result.err(new APIError(results.errors));
+    return Result.err(Boom.internal('Error fetching data', results.errors));
   }
 
   const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
@@ -62,7 +62,9 @@ export async function getSingleTrip(
     });
   } else {
     return Result.err(
-      new Error('Trip not found or is no longer available. (No matching trips)')
+      Boom.notFound(
+        'Trip not found or is no longer available. (No matching trips)'
+      )
     );
   }
 }

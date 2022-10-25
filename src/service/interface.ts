@@ -61,7 +61,8 @@ import {
   StopsDetailsQueryVariables
 } from './impl/departures/gql/jp3/stops-details.graphql-gen';
 import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
-import {EnrollResponse} from "./impl/enrollment";
+import { EnrollResponse } from './impl/enrollment';
+import { Boom } from '@hapi/boom';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -96,7 +97,7 @@ export interface ITrips_v2 {
   ): Promise<Result<Trips.TripsQuery, APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds
-  ): Promise<Result<Trips.TripPattern, APIError>>;
+  ): Promise<Result<Trips.TripPattern, Boom>>;
 }
 
 export interface IStopsService {
@@ -197,5 +198,9 @@ export interface IJourneyService {
 }
 
 export interface IEnrollmentService {
-    enroll(customerAccountId: string, enrollmentId: string, code: string): Promise<Result<EnrollResponse, APIError>>;
+  enroll(
+    customerAccountId: string,
+    enrollmentId: string,
+    code: string
+  ): Promise<Result<EnrollResponse, APIError>>;
 }
