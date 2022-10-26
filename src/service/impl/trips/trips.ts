@@ -62,7 +62,7 @@ export async function getSingleTrip(
     });
   } else {
     return Result.err(
-      Boom.notFound(
+      Boom.resourceGone(
         'Trip not found or is no longer available. (No matching trips)'
       )
     );
