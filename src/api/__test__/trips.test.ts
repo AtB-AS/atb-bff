@@ -77,7 +77,7 @@ describe('GET /bff/v2/trips', () => {
   });
 });
 
-describe('GET /bff/v2/singleTrip', () => {
+describe('POST /bff/v2/singleTrip', () => {
   it('responds with 200', async () => {
 
     const compressedQuery = compressToEncodedURIComponent(JSON.stringify(singleTripquery));
