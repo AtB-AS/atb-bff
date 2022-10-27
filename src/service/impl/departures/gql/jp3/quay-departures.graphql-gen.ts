@@ -7,59 +7,104 @@ export type QuayDeparturesQueryVariables = Types.Exact<{
   numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']>;
   startTime?: Types.InputMaybe<Types.Scalars['DateTime']>;
   timeRange?: Types.InputMaybe<Types.Scalars['Int']>;
-  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
+  filterByLineIds?: Types.InputMaybe<
+    | Array<Types.InputMaybe<Types.Scalars['ID']>>
+    | Types.InputMaybe<Types.Scalars['ID']>
+  >;
   limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
-
-export type QuayDeparturesQuery = { quay?: { id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> } };
-
+export type QuayDeparturesQuery = {
+  quay?: {
+    id: string;
+    description?: string;
+    publicCode?: string;
+    name: string;
+    estimatedCalls: Array<{
+      date?: any;
+      expectedDepartureTime: any;
+      aimedDepartureTime: any;
+      realtime: boolean;
+      cancellation: boolean;
+      quay?: { id: string };
+      destinationDisplay?: { frontText?: string };
+      serviceJourney?: {
+        id: string;
+        line: {
+          id: string;
+          description?: string;
+          publicCode?: string;
+          transportMode?: Types.TransportMode;
+          transportSubmode?: Types.TransportSubmode;
+        };
+      };
+    }>;
+  };
+};
 
 export const QuayDeparturesDocument = gql`
-    query quayDepartures($id: String!, $numberOfDepartures: Int, $startTime: DateTime, $timeRange: Int, $filterByLineIds: [ID], $limitPerLine: Int) {
-  quay(id: $id) {
-    id
-    description
-    publicCode
-    name
-    estimatedCalls(
-      numberOfDepartures: $numberOfDepartures
-      startTime: $startTime
-      timeRange: $timeRange
-      includeCancelledTrips: true
-      whiteListed: {lines: $filterByLineIds}
-      numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine,
-    ) {
-      date
-      expectedDepartureTime
-      aimedDepartureTime
-      realtime
-      cancellation
-      quay {
-        id
-      }
-      destinationDisplay {
-        frontText
-      }
-      serviceJourney {
-        id
-        line {
+  query quayDepartures(
+    $id: String!
+    $numberOfDepartures: Int
+    $startTime: DateTime
+    $timeRange: Int
+    $filterByLineIds: [ID]
+    $limitPerLine: Int
+  ) {
+    quay(id: $id) {
+      id
+      description
+      publicCode
+      name
+      estimatedCalls(
+        numberOfDepartures: $numberOfDepartures
+        startTime: $startTime
+        timeRange: $timeRange
+        includeCancelledTrips: true
+        whiteListed: { lines: $filterByLineIds }
+        numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
+      ) {
+        date
+        expectedDepartureTime
+        aimedDepartureTime
+        realtime
+        cancellation
+        quay {
           id
-          description
-          publicCode
-          transportMode
-          transportSubmode
+        }
+        destinationDisplay {
+          frontText
+        }
+        serviceJourney {
+          id
+          line {
+            id
+            description
+            publicCode
+            transportMode
+            transportSubmode
+          }
         }
       }
     }
   }
-}
-    `;
-export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+`;
+export type Requester<C = {}> = <R, V>(
+  doc: DocumentNode,
+  vars?: V,
+  options?: C
+) => Promise<R>;
 export function getSdk<C>(requester: Requester<C>) {
   return {
-    quayDepartures(variables: QuayDeparturesQueryVariables, options?: C): Promise<QuayDeparturesQuery> {
-      return requester<QuayDeparturesQuery, QuayDeparturesQueryVariables>(QuayDeparturesDocument, variables, options);
+    quayDepartures(
+      variables: QuayDeparturesQueryVariables,
+      options?: C
+    ): Promise<QuayDeparturesQuery> {
+      return requester<QuayDeparturesQuery, QuayDeparturesQueryVariables>(
+        QuayDeparturesDocument,
+        variables,
+        options
+      );
     }
   };
 }

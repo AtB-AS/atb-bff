@@ -55,7 +55,6 @@ export const getQuayDeparturesRequest = {
     startTime: Joi.string(),
     timeRange: Joi.number().default(86400),
     numberOfDeparturesPerLineAndDestinationDisplay: Joi.number()
-
   })
 };
 
