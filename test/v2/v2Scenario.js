@@ -22,23 +22,41 @@ import {
   stopsDetailsTestData,
   departureFavoritesTestData
 } from './departures/testData.js';
+import { singleTrip, trips, tripsWithCursor } from './trips/trips.js';
+import { tripsTestData } from './trips/testData.js';
+import { polyline } from './servicejourney/servicejourney.js';
+import { serviceJourneyTestData } from './servicejourney/testData.js';
 
 //Scenario with std pattern
-export function departuresScenario() {
+export function departuresScenario(searchDate) {
   // Requests
   stopsNearest(stopsNearestTestData);
   stopsDetails(stopsDetailsTestData);
-  stopDepartures('NSR:StopPlace:42912', '2022-09-27');
-  stopDeparturesPOSTandGET('NSR:StopPlace:42912', '2022-09-27');
-  quayDepartures('NSR:Quay:73576', '2022-09-27');
-  quayDeparturesPOSTandGET('NSR:Quay:73576', '2022-09-27');
-  departureFavorites(departureFavoritesTestData, '2022-10-10');
-  realtime('NSR:Quay:73576', '2022-09-27T11:33:32.003Z');
+  stopDepartures('NSR:StopPlace:42912', searchDate);
+  stopDeparturesPOSTandGET('NSR:StopPlace:42912', searchDate);
+  quayDepartures('NSR:Quay:73576', searchDate);
+  quayDeparturesPOSTandGET('NSR:Quay:73576', searchDate);
+  departureFavorites(departureFavoritesTestData, searchDate);
+  realtime('NSR:Quay:73576', searchDate);
 
   // Combinations
-  quayDeparturesVsStopDepartures('NSR:StopPlace:42912', '2022-09-27');
-  realtimeForQuayDepartures('NSR:Quay:73576', '2022-09-27');
-  departureFavoritesVsQuayDepartures(departureFavoritesTestData, '2022-10-10');
+  quayDeparturesVsStopDepartures('NSR:StopPlace:42912', searchDate);
+  realtimeForQuayDepartures('NSR:Quay:73576', searchDate);
+  departureFavoritesVsQuayDepartures(departureFavoritesTestData, searchDate);
+}
+
+export function tripsScenario(searchDate) {
+  // Requests
+  trips(tripsTestData, searchDate, false);
+  trips(tripsTestData, searchDate, true);
+  tripsWithCursor(tripsTestData, searchDate, false);
+  tripsWithCursor(tripsTestData, searchDate, true);
+  singleTrip(tripsTestData.scenarios[1], searchDate);
+}
+
+export function serviceJourneyScenario(searchDate) {
+  // Requests
+  polyline(serviceJourneyTestData, searchDate);
 }
 
 //Performance scenario with different patterns

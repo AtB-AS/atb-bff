@@ -3,9 +3,9 @@ import { conf, metrics } from '../../config/configuration.js';
 import { bffHeadersGet, bffHeadersPost } from '../../utils/headers.js';
 import { timeArrayIsSorted } from '../../utils/utils.js';
 
-export function realtime(quayIds, startTime, limit = 10) {
+export function realtime(quayIds, startDate, limit = 10) {
   const requestName = 'realtime';
-  let url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayIds}&startTime=${startTime}&limit=${limit}`;
+  let url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayIds}&startTime=${startDate}T11:00:00.000Z&limit=${limit}`;
 
   let res = http.get(url, {
     tags: { name: requestName },

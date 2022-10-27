@@ -1,9 +1,11 @@
 import { sleep } from 'k6';
 import {
   departuresScenario,
-  departuresScenarioPerformance
+  departuresScenarioPerformance, serviceJourneyScenario, tripsScenario
 } from './v2/v2Scenario.js';
-import { realtime } from './v2/departures/departures.js';
+import {getNextThursday} from "./utils/utils.js";
+import {trips, tripsWithCursor} from "./v2/trips/trips.js";
+import {tripsTestData} from "./v2/trips/testData.js";
 
 //Scenarios
 export const scn = {
@@ -14,12 +16,19 @@ export const scn = {
 
 //Functional test
 function bff() {
-  departuresScenario();
+  let searchDate = getNextThursday()
+
+  departuresScenario(searchDate);
+  tripsScenario(searchDate);
+  serviceJourneyScenario(searchDate)
 }
 
 //Test
 function test() {
-  realtime('NSR:Quay:73576', '2022-09-27T11:33:32.003Z');
+  let searchDate = getNextThursday()
+
+  trips(tripsTestData, searchDate, true)
+  tripsWithCursor(tripsTestData, searchDate, true)
 }
 
 //Performance test
