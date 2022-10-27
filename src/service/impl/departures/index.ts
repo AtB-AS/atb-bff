@@ -96,10 +96,13 @@ export default (): IDeparturesService => {
          */
         const limit = favorites
           ? {
-              limitPerLine: numberOfDepartures,
+              limitPerLine: limitPerLine ?? numberOfDepartures,
               numberOfDepartures: numberOfDepartures * 10
             }
-          : { numberOfDepartures: numberOfDepartures };
+          : {
+              limitPerLine,
+              numberOfDepartures
+            };
 
         const result = await journeyPlannerClient_v3.query<
           StopPlaceQuayDeparturesQuery,
@@ -111,8 +114,7 @@ export default (): IDeparturesService => {
             startTime,
             timeRange,
             filterByLineIds: favorites?.map(f => f.lineId),
-            limitPerLine,
-            ...limit,
+            ...limit
           }
         });
 
