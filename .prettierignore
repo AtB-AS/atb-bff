@@ -1,0 +1,7 @@
+# Ignore generated/imported GraphQL files
+*.graphql
+*.graphql-gen.ts
+
+# Ignore generated journey planner types
+src/graphql/journey-types.ts
+src/graphql/journeyplanner-types_v3.ts

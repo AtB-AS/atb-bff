@@ -110,7 +110,7 @@ export default function mapQueryToGroups(
     const { quays, ...stopPlaceInfo } = stopPlace;
     const quayGroups =
       quays?.map(function (quay) {
-        const { times, estimatedCalls, ...quayInfo  } = quay;
+        const { times, estimatedCalls, ...quayInfo } = quay;
         const groups = groupBy(times, item =>
           toKey(
             item.serviceJourney?.line.id,

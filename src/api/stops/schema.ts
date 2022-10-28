@@ -90,7 +90,7 @@ export const getDeparturesCursoredRequest = {
           stopId: Joi.string().required(),
           lineName: Joi.string(),
           lineId: Joi.string().required(),
-          quayId: Joi.string(),
+          quayId: Joi.string()
         }).options({ stripUnknown: true })
       )
   }),
