@@ -1,5 +1,3 @@
 *-gen.ts
-#*.graphql
-
 src/graphql/journey-types.ts
 src/graphql/journeyplanner-types_v3.ts
