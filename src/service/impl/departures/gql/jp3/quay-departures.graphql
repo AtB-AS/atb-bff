@@ -1,8 +1,8 @@
 query quayDepartures(
-  $id: String!,
-  $numberOfDepartures: Int,
-  $startTime: DateTime,
-  $timeRange: Int,
+  $id: String!
+  $numberOfDepartures: Int
+  $startTime: DateTime
+  $timeRange: Int
   $filterByLineIds: [ID]
 ) {
   quay(id: $id) {
@@ -15,7 +15,7 @@ query quayDepartures(
       startTime: $startTime
       timeRange: $timeRange
       includeCancelledTrips: true
-      whiteListed: {lines: $filterByLineIds}
+      whiteListed: { lines: $filterByLineIds }
     ) {
       date
       expectedDepartureTime

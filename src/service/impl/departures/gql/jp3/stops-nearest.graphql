@@ -1,4 +1,10 @@
-query nearestStopPlaces($count: Int = 10, $distance: Float!, $longitude: Float!, $latitude: Float!, $after: String) {
+query nearestStopPlaces(
+  $count: Int = 10
+  $distance: Float!
+  $longitude: Float!
+  $latitude: Float!
+  $after: String
+) {
   nearest(
     latitude: $latitude
     longitude: $longitude

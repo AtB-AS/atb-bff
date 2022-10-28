@@ -1,11 +1,15 @@
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
-import {Coordinates, MapLeg_v3, ServiceJourneyMapInfoData_v3} from '../../types';
+import {
+  Coordinates,
+  MapLeg_v3,
+  ServiceJourneyMapInfoData_v3
+} from '../../types';
 import {
   MapInfoWithFromAndToQuayV2Query,
   MapInfoWithFromQuayV2Query
-} from "./journey-gql/jp3/service-journey-map.graphql-gen";
-import {PointsOnLink} from "../../../graphql/journeyplanner-types_v3";
+} from './journey-gql/jp3/service-journey-map.graphql-gen';
+import { PointsOnLink } from '../../../graphql/journeyplanner-types_v3';
 
 type PolylinePair = [lat: number, lng: number];
 

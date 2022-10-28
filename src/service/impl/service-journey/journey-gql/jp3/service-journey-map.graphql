@@ -23,10 +23,7 @@ query MapInfoWithFromAndToQuayV2(
   }
 }
 
-query MapInfoWithFromQuayV2(
-  $serviceJourneyId: String!
-  $fromQuayId: String!
-) {
+query MapInfoWithFromQuayV2($serviceJourneyId: String!, $fromQuayId: String!) {
   serviceJourney(id: $serviceJourneyId) {
     pointsOnLink {
       length
@@ -42,4 +39,3 @@ query MapInfoWithFromQuayV2(
     longitude
   }
 }
-

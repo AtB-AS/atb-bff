@@ -1,11 +1,7 @@
 query stopsDetails($ids: [String]!) {
-  stopPlaces(
-    ids: $ids
-  ) {
+  stopPlaces(ids: $ids) {
     name
-    quays(
-      filterByInUse: true
-    ) {
+    quays(filterByInUse: true) {
       id
       description
       name

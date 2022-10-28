@@ -1,7 +1,6 @@
 import Hapi from '@hapi/hapi';
 
-interface Options {
-}
+interface Options {}
 
 const plugin: Hapi.Plugin<Options> = {
   name: 'atb-headers',

@@ -1,4 +1,15 @@
-query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes) {
+query Trips(
+  $from: Location!
+  $to: Location!
+  $arriveBy: Boolean!
+  $when: DateTime
+  $cursor: String
+  $transferPenalty: Int
+  $waitReluctance: Float
+  $walkReluctance: Float
+  $walkSpeed: Float
+  $modes: Modes
+) {
   trip(
     from: $from
     to: $to

@@ -14,9 +14,9 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent
 } from 'lz-string';
-import {addSeconds, parseISO} from "date-fns";
+import { addSeconds, parseISO } from 'date-fns';
 
-const START_TIME_PADDING = 60   // time in seconds
+const START_TIME_PADDING = 60; // time in seconds
 export function generateId(trip: TripPattern, query: TripPatternsQuery) {
   const fields: TripPatternsQuery = {
     searchDate: new Date(trip.startTime),
@@ -79,10 +79,26 @@ export function generateSingleTripQueryString(
 
   // sanitize query, and set search time.
   const when = getPaddedStartTimeFromLeg(trip.legs[0]);
-  const {from, to, transferPenalty, waitReluctance, walkReluctance, walkSpeed, modes} = queryVariables;
+  const {
+    from,
+    to,
+    transferPenalty,
+    waitReluctance,
+    walkReluctance,
+    walkSpeed,
+    modes
+  } = queryVariables;
   const arriveBy = false;
   const singleTripQuery: TripsQueryVariables = {
-    when, from, to, transferPenalty, waitReluctance, walkReluctance, walkSpeed, arriveBy, modes
+    when,
+    from,
+    to,
+    transferPenalty,
+    waitReluctance,
+    walkReluctance,
+    walkSpeed,
+    arriveBy,
+    modes
   };
 
   // encode to string
@@ -91,7 +107,7 @@ export function generateSingleTripQueryString(
   );
 }
 
-function getPaddedStartTimeFromLeg (leg: Leg): string {
+function getPaddedStartTimeFromLeg(leg: Leg): string {
   const startTime = parseISO(leg.aimedStartTime);
   return addSeconds(startTime, -START_TIME_PADDING).toISOString();
 }
@@ -111,7 +127,7 @@ export function parseTripQueryString(
     throw new Error();
   }
   const queryFields = JSON.parse(queryString);
-  queryValidator.validate(queryFields.query)
+  queryValidator.validate(queryFields.query);
 
   return {
     query: queryFields.query,
