@@ -8,4 +8,4 @@ export default (server: Hapi.Server) => {
       return 'OK';
     }
   });
-}
+};

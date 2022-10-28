@@ -1,7 +1,10 @@
 import Hapi from '@hapi/hapi';
 import { DEFAULT_CACHE_TTL } from '../../config/cache';
 import { EXTERNAL_API_TIMEOUT } from '../../config/external';
-import {IServiceJourneyService, IServiceJourneyService_v2} from '../../service/interface';
+import {
+  IServiceJourneyService,
+  IServiceJourneyService_v2
+} from '../../service/interface';
 import {
   DeparturesForServiceJourneyQuery,
   ServiceJourneyMapInfoQuery
@@ -69,19 +72,18 @@ export default function serviceJourneyRoutes(server: Hapi.Server) {
 
 export function serviceJourneyRoutes_v2(server: Hapi.Server) {
   return (service: IServiceJourneyService_v2) => {
-
     const getServiceJourneyMapInfo_v2 = async (
-        serviceJouerneyId: string,
-        query: ServiceJourneyMapInfoQuery
+      serviceJouerneyId: string,
+      query: ServiceJourneyMapInfoQuery
     ) =>
-        (
-            await service.getServiceJourneyMapInfo(serviceJouerneyId, query)
-        ).unwrap();
+      (
+        await service.getServiceJourneyMapInfo(serviceJouerneyId, query)
+      ).unwrap();
 
     server.method('getServiceJourneyMapInfo_v2', getServiceJourneyMapInfo_v2, {
       generateKey: (
-          serviceJouerneyId: string,
-          { fromQuayId, toQuayId }: ServiceJourneyMapInfoQuery
+        serviceJouerneyId: string,
+        { fromQuayId, toQuayId }: ServiceJourneyMapInfoQuery
       ) => qs.stringify({ serviceJouerneyId, fromQuayId, toQuayId }),
       cache: {
         expiresIn: DEFAULT_CACHE_TTL,
@@ -103,6 +105,5 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         return server.methods.getServiceJourneyMapInfo_v2(id, query);
       }
     });
-
-  }
+  };
 }
