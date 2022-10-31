@@ -40,11 +40,6 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
       cache: {
         expiresIn: DEFAULT_CACHE_TTL,
         privacy: 'public'
-      },
-      plugins: {
-        'hapi-swagger': {
-          deprecated: true
-        }
       }
     },
     handler: async (request, h) => {
