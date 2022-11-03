@@ -23,16 +23,13 @@ fragment estimatedCallFields on EstimatedCall {
   expectedDepartureTime
   expectedArrivalTime
   forAlighting
-  forBoarding
   notices {
     ...noticeFields
   }
-  predictionInaccurate
   quay {
     ...quayFields
   }
   realtime
-  requestStop
   serviceJourney {
     ...serviceJourneyFields
   }
@@ -48,7 +45,6 @@ fragment noticeFields on Notice {
 fragment quayFields on Quay {
   id
   name
-  description
   publicCode
   situations {
     ...situationFields
@@ -72,13 +68,6 @@ fragment situationFields on PtSituationElement {
     language
     value
   }
-  lines {
-    ...lineFields
-  }
-  validityPeriod {
-    startTime
-    endTime
-  }
   reportType
   infoLinks {
     uri
@@ -87,13 +76,8 @@ fragment situationFields on PtSituationElement {
 }
 
 fragment lineFields on Line {
-  description
-  flexibleLineType
   id
   name
-  notices {
-    ...noticeFields
-  }
   publicCode
   transportMode
   transportSubmode
@@ -101,13 +85,9 @@ fragment lineFields on Line {
 
 fragment stopPlaceFields on StopPlace {
   id
-  description
   name
   latitude
   longitude
-  tariffZones {
-    id
-  }
 }
 
 fragment serviceJourneyFields on ServiceJourney {
@@ -116,14 +96,5 @@ fragment serviceJourneyFields on ServiceJourney {
     line {
       ...lineFields
     }
-    notices {
-      ...noticeFields
-    }
   }
-  notices {
-    ...noticeFields
-  }
-  publicCode
-  privateCode
-  transportSubmode
 }
