@@ -13,8 +13,8 @@ export function trips(testData, searchDate, arriveBy = false) {
   let searchTime = `${searchDate}T08:00:00.000Z`;
   for (let test of testData.scenarios) {
     const requestName = arriveBy
-      ? `trips_arriveBy_${testData.scenarios.indexOf(test)}`
-      : `trips_departAfter_${testData.scenarios.indexOf(test)}`;
+      ? `v2_trips_arriveBy_${testData.scenarios.indexOf(test)}`
+      : `v2_trips_departAfter_${testData.scenarios.indexOf(test)}`;
     let url = `${conf.host()}/bff/v2/trips`;
     // Update the search time
     test.query.when = searchTime;
@@ -147,8 +147,8 @@ export function tripsWithCursor(testData, searchDate, arriveBy = false) {
   let test = testData.scenarios[0];
   let searchTime = `${searchDate}T08:00:00.000Z`;
   let requestName = arriveBy
-    ? `tripsWithCursor_arriveBy`
-    : `tripsWithCursor_departAfter`;
+    ? `v2_tripsWithCursor_arriveBy`
+    : `v2_tripsWithCursor_departAfter`;
   let url = `${conf.host()}/bff/v2/trips`;
   // Update the search time
   test.query.when = searchTime;
@@ -280,7 +280,7 @@ export function tripsWithCursor(testData, searchDate, arriveBy = false) {
 
 // Single trip request
 export function singleTrip(testData, searchDate, arriveBy = false) {
-  let requestName = 'singleTrip';
+  let requestName = 'v2_singleTrip';
   let searchTime = `${searchDate}T08:00:00.000Z`;
   let noSingleTripsToTest = 2;
   let urlTrips = `${conf.host()}/bff/v2/trips`;

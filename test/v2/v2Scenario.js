@@ -1,5 +1,5 @@
 /*
-Scenario that distributes requests according to usage pattern
+Scenarios for v2 requests
  */
 
 import { sleep } from 'k6';
@@ -16,16 +16,16 @@ import {
   stopDeparturesPOSTandGET,
   stopsDetails,
   stopsNearest
-} from './departures/departures.js';
+} from './departures/index.js';
 import {
   stopsNearestTestData,
   stopsDetailsTestData,
-  departureFavoritesTestData
-} from './departures/testData.js';
-import { singleTrip, trips, tripsWithCursor } from './trips/trips.js';
-import { tripsTestData } from './trips/testData.js';
-import { polyline } from './servicejourney/servicejourney.js';
-import { serviceJourneyTestData } from './servicejourney/testData.js';
+  departureFavoritesTestData,
+  tripsTestData,
+  serviceJourneyTestData
+} from './testData/testData.js';
+import { singleTrip, trips, tripsWithCursor } from './trips/index.js';
+import { polyline } from './servicejourney/index.js';
 
 //Scenario with std pattern
 export function departuresScenario(searchDate) {

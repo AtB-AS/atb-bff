@@ -4,7 +4,7 @@ import { bffHeadersGet, bffHeadersPost } from '../../utils/headers.js';
 import { timeArrayIsSorted } from '../../utils/utils.js';
 
 export function realtime(quayIds, startDate, limit = 10) {
-  const requestName = 'realtime';
+  const requestName = 'v2_realtime';
   let url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayIds}&startTime=${startDate}T11:00:00.000Z&limit=${limit}`;
 
   let res = http.get(url, {
@@ -59,7 +59,7 @@ export function stopDepartures(
   timeRange = 86400,
   limit = 10
 ) {
-  const requestName = 'stopDepartures';
+  const requestName = 'v2_stopDepartures';
   let url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
   let res = http.post(url, '{}', {
@@ -102,7 +102,7 @@ export function stopDeparturesPOSTandGET(
   timeRange = 86400,
   limit = 10
 ) {
-  const requestName = 'stopDeparturesPOSTandGET';
+  const requestName = 'v2_stopDeparturesPOSTandGET';
   let url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
   let resGET = http.get(url, {
@@ -132,7 +132,7 @@ export function stopDeparturesPOSTandGET(
 
 // Check that stop departures corresponds to the individual quay departures
 export function quayDeparturesVsStopDepartures(stopId, startDate) {
-  const requestName = 'quayDeparturesVsStopDepartures';
+  const requestName = 'v2_quayDeparturesVsStopDepartures';
   let urlSD = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
 
   let resSD = http.post(urlSD, '{}', {
@@ -175,7 +175,7 @@ export function quayDepartures(
   timeRange = 86400,
   limit = 1000
 ) {
-  const requestName = 'quayDepartures';
+  const requestName = 'v2_quayDepartures';
   let url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
   let res = http.post(url, '{}', {
@@ -210,7 +210,7 @@ export function quayDeparturesPOSTandGET(
   timeRange = 86400,
   limit = 1000
 ) {
-  const requestName = 'quayDeparturesPOSTandGET';
+  const requestName = 'v2_quayDeparturesPOSTandGET';
   let url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
   let resGET = http.get(url, {
@@ -240,7 +240,7 @@ export function quayDeparturesPOSTandGET(
 
 // Check that realtime updates for a quay corresponds to quay departures
 export function realtimeForQuayDepartures(quayId, startDate) {
-  const requestName = 'realtimeForQuayDepartures';
+  const requestName = 'v2_realtimeForQuayDepartures';
   let urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
   let resQD = http.post(urlQD, '{}', {
     tags: { name: requestName },
@@ -290,7 +290,7 @@ export function realtimeForQuayDepartures(quayId, startDate) {
 
 export function stopsNearest(testData) {
   for (let test of testData.scenarios) {
-    const requestName = `stopsNearest_${testData.scenarios.indexOf(test)}`;
+    const requestName = `v2_stopsNearest_${testData.scenarios.indexOf(test)}`;
     let url = `${conf.host()}/bff/v2/departures/stops-nearest?count=10&distance=${
       test.query.distance
     }&latitude=${test.query.lat}&longitude=${test.query.lon}`;
@@ -326,7 +326,7 @@ export function stopsNearest(testData) {
 
 export function stopsDetails(testData) {
   for (let test of testData.scenarios) {
-    const requestName = `stopsDetails_${testData.scenarios.indexOf(test)}`;
+    const requestName = `v2_stopsDetails_${testData.scenarios.indexOf(test)}`;
     let url = `${conf.host()}/bff/v2/departures/stops-details?ids=${test.query.stopPlaceIds.join(
       '&ids='
     )}`;
@@ -398,149 +398,4 @@ export function stopsDetails(testData) {
       expects
     );
   }
-}
-
-export function departureFavorites(testData, startDate, limitPerLine = 7) {
-  for (let test of testData.scenarios) {
-    const requestName = `departureFavorites_${testData.scenarios.indexOf(
-      test
-    )}`;
-    let url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limitPerLine}`;
-
-    let res = http.post(url, JSON.stringify(test), {
-      tags: { name: requestName },
-      bffHeaders: bffHeadersPost
-    });
-
-    let expStopPlaceIds = test.favorites.map(e => e.stopId).sort();
-    let resStopPlaceIds = res.json(`data.#.stopPlace.id`).sort();
-    let expQuayIds = test.favorites.map(e => e.quayId).sort();
-    let expLineIds = test.favorites.map(e => e.lineId).sort();
-    let resQuayIds = res.json(`data.#.quays.#.quay.id`).toString().split(',');
-
-    let expects = [
-      { check: 'should have status 200', expect: res.status === 200 }
-    ];
-
-    //Correct stop places
-    expects.push({
-      check: `should have correct stop place(s)`,
-      expect: resStopPlaceIds.toString() === expStopPlaceIds.toString()
-    });
-    // Correct quays
-    for (let quayId of expQuayIds) {
-      expects.push({
-        check: `should include quay '${quayId}'`,
-        expect: resQuayIds.includes(quayId)
-      });
-    }
-    // Correct lineId, date on departures and number of departures - only for those requested
-    for (let stopPlace of res.json('data')) {
-      for (let quay of stopPlace.quays) {
-        if (expQuayIds.includes(quay.quay.id)) {
-          expects.push({
-            check: `quay '${quay.quay.id}' should have departures`,
-            expect: quay.group.length > 0
-          });
-          for (let line of quay.group) {
-            expects.push(
-              {
-                check: `should have correct line from quay '${quay.quay.id}'`,
-                expect: expLineIds.includes(line.lineInfo.lineId)
-              },
-              {
-                check: `should have correct date for departures from quay '${quay.quay.id}'`,
-                expect:
-                  line.departures.filter(e => e.serviceDate !== startDate)
-                    .length === 0
-              },
-              {
-                check: `should have correct number of departures from quay '${quay.quay.id}'`,
-                expect: line.departures.length === limitPerLine
-              }
-            );
-          }
-        } else {
-          expects.push({
-            check: `quay '${quay.quay.id}' should not have departures`,
-            expect: quay.group.length === 0
-          });
-        }
-      }
-    }
-
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
-  }
-}
-
-// Same departures are returned for favorite departures and 'ordinary' quay departures
-export function departureFavoritesVsQuayDepartures(
-  testData,
-  startDate,
-  limit = 7
-) {
-  const requestName = 'departureFavoritesVsQuayDepartures';
-  // Use only 1 favorite
-  let testScenario = { favorites: [testData.scenarios[0].favorites[0]] };
-
-  let urlFav = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limit}`;
-  let resFav = http.post(urlFav, JSON.stringify(testScenario), {
-    tags: { name: requestName },
-    bffHeaders: bffHeadersPost
-  });
-
-  // Get departures to assert favorite results
-  let urlDep = `${conf.host()}/bff/v2/departures/quay-departures?id=${
-    testScenario.favorites[0].quayId
-  }&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
-  let resDep = http.post(urlDep, '{}', {
-    tags: { name: requestName },
-    bffHeaders: bffHeadersPost
-  });
-
-  let expects = [
-    {
-      check: 'should have status 200',
-      expect: resFav.status === 200 && resDep.status === 200
-    }
-  ];
-
-  // Assert: same service journeys and  aimed dep time as /quay-departures:
-  let serviceJourneyFavorites = resFav.json(
-    `data.0.quays.#(quay.id="${testScenario.favorites[0].quayId}")#.group.0.departures.#.serviceJourneyId`
-  );
-  let serviceJourneyDepartures = resDep.json(
-    `quay.estimatedCalls.#.serviceJourney.id`
-  );
-  let aimedTimeFavorites = resFav.json(
-    `data.0.quays.#(quay.id="${testScenario.favorites[0].quayId}")#.group.0.departures.#.aimedTime`
-  );
-  let aimedTimeDepartures = resDep.json(
-    `quay.estimatedCalls.#.aimedDepartureTime`
-  );
-
-  expects.push(
-    {
-      check: 'favorite departures should have the same service journeys',
-      expect:
-        serviceJourneyFavorites.toString() ===
-        serviceJourneyDepartures.toString()
-    },
-    {
-      check: 'favorite departures should have the same aimed time',
-      expect: aimedTimeFavorites.toString() === aimedTimeDepartures.toString()
-    }
-  );
-
-  metrics.addFailureIfMultipleChecks(
-    [resFav.request.url, resDep.request.url],
-    resFav.timings.duration + resDep.timings.duration,
-    requestName,
-    expects
-  );
 }

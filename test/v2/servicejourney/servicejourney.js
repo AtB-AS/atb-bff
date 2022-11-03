@@ -8,7 +8,7 @@ import { isEqual, useNoDecimals } from '../../utils/utils.js';
 export function polyline(testData, searchDate) {
   let startTime = `${searchDate}T08:00:00.000Z`;
   for (let test of testData.scenarios) {
-    const requestName = 'polyline';
+    const requestName = 'v2_polyline';
     let urlTrip = `${conf.host()}/bff/v2/trips`;
     // Update the search time
     test.query.when = startTime;
