@@ -1,11 +1,17 @@
 import { sleep } from 'k6';
 import {
   departuresScenario,
-  departuresScenarioPerformance, serviceJourneyScenario, tripsScenario
+  departuresScenarioPerformance,
+  serviceJourneyScenario,
+  tripsScenario
 } from './v2/v2Scenario.js';
-import {getNextThursday} from "./utils/utils.js";
-import {trips, tripsWithCursor} from "./v2/trips/trips.js";
-import {tripsTestData} from "./v2/trips/testData.js";
+import { getNextThursday } from './utils/utils.js';
+import {
+  departuresScenarioV1,
+  geocoderScenarioV1,
+  journeyScenarioV1,
+  serviceJourneyScenarioV1
+} from './v1/v1Scenario.js';
 
 //Scenarios
 export const scn = {
@@ -16,19 +22,23 @@ export const scn = {
 
 //Functional test
 function bff() {
-  let searchDate = getNextThursday()
+  let searchDate = getNextThursday();
+  // V1
+  departuresScenarioV1(searchDate);
+  geocoderScenarioV1();
+  journeyScenarioV1(searchDate);
+  serviceJourneyScenarioV1(searchDate);
 
+  // V2
   departuresScenario(searchDate);
   tripsScenario(searchDate);
-  serviceJourneyScenario(searchDate)
+  serviceJourneyScenario(searchDate);
 }
 
 //Test
 function test() {
-  let searchDate = getNextThursday()
-
-  trips(tripsTestData, searchDate, true)
-  tripsWithCursor(tripsTestData, searchDate, true)
+  let searchDate = getNextThursday();
+  serviceJourneyScenarioV1(searchDate);
 }
 
 //Performance test
