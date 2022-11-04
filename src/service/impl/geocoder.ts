@@ -24,6 +24,8 @@ export default (service: EnturServiceAPI): IGeocoderService => {
 
         return Result.ok(features);
       } catch (error) {
+        console.log(error);
+
         return Result.err(new APIError(error));
       }
     },
