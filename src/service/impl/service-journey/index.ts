@@ -63,6 +63,7 @@ export default function serviceJourneyService(
         return Result.ok(departures);
       } catch (error) {
         const re = /Entur SDK: No data available/;
+        // @ts-ignore
         if (error.message.match(re)) return Result.ok(null);
         return Result.err(new APIError(error));
       }
