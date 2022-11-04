@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
-import { credential, initializeApp } from 'firebase-admin';
-import applicationDefault = credential.applicationDefault;
+import * as admin from 'firebase-admin';
+import applicationDefault = admin.credential.applicationDefault;
 import {
   PROJECT_ID,
   VIPPS_CLIENT_ID,
@@ -11,7 +11,7 @@ import { postVippsLoginRequest } from './schema';
 import { getOpenIdClientIssuer } from './openid-client-issuer';
 
 export default (server: Hapi.Server) => () => {
-  const app = initializeApp({
+  const app = admin.initializeApp({
     credential: applicationDefault(),
     projectId: PROJECT_ID
   });
