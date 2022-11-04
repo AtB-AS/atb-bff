@@ -1,9 +1,9 @@
 FROM node:lts-slim AS proddeps
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --production
+RUN npm install --omit dev
 
-FROM node:latest AS build
+FROM node:lts-slim AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
