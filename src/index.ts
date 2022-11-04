@@ -72,6 +72,7 @@ process.on('unhandledRejection', err => {
     console.error(
       `failed to initialize server: ${error?.message}, terminating process.`
     );
+    console.error(error?.stack);
     process.exit(-1);
   }
 })();
