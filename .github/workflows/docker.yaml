@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: atb-as/workflows/.github/workflows/cluster-docker-build-tag-push.yaml@main
+    uses: atb-as/workflows/.github/workflows/cluster-docker-build-tag-push.yaml@v1
     with:
       application: amp
       image: gcr.io/atb-mobility-platform/atb-bff
