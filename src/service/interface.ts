@@ -63,6 +63,7 @@ import {
 import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
 import { EnrollResponse } from './impl/enrollment';
 import { Boom } from '@hapi/boom';
+import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/jp3/service-journey-departures.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -89,6 +90,10 @@ export interface IServiceJourneyService_v2 {
     serviceJouerneyId: string,
     query: ServiceJourneyMapInfoQuery
   ): Promise<Result<ServiceJourneyMapInfoData_v3, APIError>>;
+  getDeparturesForServiceJourneyV2(
+    id: string,
+    query: DeparturesForServiceJourneyQuery
+  ): Promise<Result<ServiceJourneyEstimatedCallFragment[] | null, APIError>>;
 }
 
 export interface ITrips_v2 {

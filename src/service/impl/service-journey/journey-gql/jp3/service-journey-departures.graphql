@@ -1,0 +1,100 @@
+query serviceJourneyDepartures($id: String!, $date: Date) {
+  serviceJourney(
+    id: $id
+  ) {
+    estimatedCalls(
+      date: $date
+    ) {
+      ...serviceJourneyEstimatedCall
+    }
+  }
+}
+
+fragment serviceJourneyEstimatedCall on EstimatedCall {
+  actualArrivalTime
+  actualDepartureTime
+  aimedArrivalTime
+  aimedDepartureTime
+  cancellation
+  date
+  destinationDisplay {
+    frontText
+  }
+  expectedDepartureTime
+  expectedArrivalTime
+  forAlighting
+  notices {
+    ...notice
+  }
+  quay {
+    ...quay
+  }
+  realtime
+  serviceJourney {
+    ...serviceJourney
+  }
+  situations {
+    ...situation
+  }
+}
+
+fragment notice on Notice {
+  text
+}
+
+fragment quay on Quay {
+  id
+  name
+  publicCode
+  situations {
+    ...situation
+  }
+  stopPlace {
+    ...stopPlace
+  }
+}
+
+fragment situation on PtSituationElement {
+  situationNumber
+  summary {
+    language
+    value
+  }
+  description {
+    language
+    value
+  }
+  advice {
+    language
+    value
+  }
+  reportType
+  infoLinks {
+    uri
+    label
+  }
+}
+
+fragment line on Line {
+  id
+  name
+  publicCode
+  transportMode
+  transportSubmode
+}
+
+fragment stopPlace on StopPlace {
+  id
+  name
+  latitude
+  longitude
+}
+
+fragment serviceJourney on ServiceJourney {
+  id
+  journeyPattern {
+    line {
+      ...line
+    }
+  }
+}

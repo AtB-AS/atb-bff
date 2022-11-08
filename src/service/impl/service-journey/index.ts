@@ -1,6 +1,9 @@
 import { Result } from '@badrap/result';
 import { formatISO } from 'date-fns';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
+import {
+  journeyPlannerClient,
+  journeyPlannerClient_v3
+} from '../../../graphql/graphql-client';
 import {
   IServiceJourneyService,
   IServiceJourneyService_v2
@@ -18,6 +21,12 @@ import {
   getMapInfoWithFromAndToQuay,
   getMapInfoWithFromQuay
 } from './serviceJourney';
+import {
+  ServiceJourneyEstimatedCallFragment,
+  ServiceJourneyDeparturesDocument,
+  ServiceJourneyDeparturesQuery,
+  ServiceJourneyDeparturesQueryVariables
+} from './journey-gql/jp3/service-journey-departures.graphql-gen';
 
 export default function serviceJourneyService(
   service: EnturServiceAPI
@@ -91,6 +100,32 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         }
         return Result.ok(mapToMapLegs_v3(result.data));
       } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async getDeparturesForServiceJourneyV2(id, { date }) {
+      try {
+        const serviceDate = date
+          ? formatISO(date, { representation: 'date' })
+          : undefined;
+
+        const result = await journeyPlannerClient_v3.query<
+          ServiceJourneyDeparturesQuery,
+          ServiceJourneyDeparturesQueryVariables
+        >({
+          query: ServiceJourneyDeparturesDocument,
+          variables: { id, date: serviceDate }
+        });
+
+        if (result.error) {
+          return Result.err(new APIError(result.error));
+        }
+
+        const estimatedCalls = result.data.serviceJourney?.estimatedCalls;
+        return Result.ok(
+          estimatedCalls as ServiceJourneyEstimatedCallFragment[]
+        );
+      } catch (error: any) {
         return Result.err(new APIError(error));
       }
     }

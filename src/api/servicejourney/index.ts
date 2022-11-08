@@ -11,6 +11,7 @@ import {
 } from '../../service/types';
 import {
   getDeparturesForServiceJourneyRequest,
+  getDeparturesForServiceJourneyRequestV2,
   getServiceJoruneyMapDataRequest
 } from './schema';
 import qs from 'querystring';
@@ -103,6 +104,23 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         const { id } = request.params;
         const query = (request.query as unknown) as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo_v2(id, query);
+      }
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/bff/v2/servicejourney/{id}/departures',
+      options: {
+        tags: ['api', 'stops', 'otp2'],
+        validate: getDeparturesForServiceJourneyRequestV2,
+        description: 'Get departures for Service Journey'
+      },
+      handler: async (request, h) => {
+        const { id } = request.params;
+        const {
+          date
+        } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
+        return await service.getDeparturesForServiceJourneyV2(id, { date });
       }
     });
   };
