@@ -22,7 +22,7 @@ import {
   getMapInfoWithFromQuay
 } from './serviceJourney';
 import {
-  EstimatedCallFieldsFragment,
+  ServiceJourneyEstimatedCallFragment,
   ServiceJourneyDeparturesDocument,
   ServiceJourneyDeparturesQuery,
   ServiceJourneyDeparturesQueryVariables
@@ -121,7 +121,9 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         }
 
         const estimatedCalls = result.data.serviceJourney?.estimatedCalls;
-        return Result.ok(estimatedCalls as EstimatedCallFieldsFragment[]);
+        return Result.ok(
+          estimatedCalls as ServiceJourneyEstimatedCallFragment[]
+        );
       } catch (error: any) {
         return Result.err(new APIError(error));
       }

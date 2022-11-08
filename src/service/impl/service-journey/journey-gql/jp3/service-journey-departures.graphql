@@ -5,12 +5,12 @@ query serviceJourneyDepartures($id: String!, $date: Date) {
     estimatedCalls(
       date: $date
     ) {
-      ...estimatedCallFields
+      ...serviceJourneyEstimatedCall
     }
   }
 }
 
-fragment estimatedCallFields on EstimatedCall {
+fragment serviceJourneyEstimatedCall on EstimatedCall {
   actualArrivalTime
   actualDepartureTime
   aimedArrivalTime
@@ -24,37 +24,37 @@ fragment estimatedCallFields on EstimatedCall {
   expectedArrivalTime
   forAlighting
   notices {
-    ...noticeFields
+    ...notice
   }
   quay {
-    ...quayFields
+    ...quay
   }
   realtime
   serviceJourney {
-    ...serviceJourneyFields
+    ...serviceJourney
   }
   situations {
-    ...situationFields
+    ...situation
   }
 }
 
-fragment noticeFields on Notice {
+fragment notice on Notice {
   text
 }
 
-fragment quayFields on Quay {
+fragment quay on Quay {
   id
   name
   publicCode
   situations {
-    ...situationFields
+    ...situation
   }
   stopPlace {
-    ...stopPlaceFields
+    ...stopPlace
   }
 }
 
-fragment situationFields on PtSituationElement {
+fragment situation on PtSituationElement {
   situationNumber
   summary {
     language
@@ -75,7 +75,7 @@ fragment situationFields on PtSituationElement {
   }
 }
 
-fragment lineFields on Line {
+fragment line on Line {
   id
   name
   publicCode
@@ -83,18 +83,18 @@ fragment lineFields on Line {
   transportSubmode
 }
 
-fragment stopPlaceFields on StopPlace {
+fragment stopPlace on StopPlace {
   id
   name
   latitude
   longitude
 }
 
-fragment serviceJourneyFields on ServiceJourney {
+fragment serviceJourney on ServiceJourney {
   id
   journeyPattern {
     line {
-      ...lineFields
+      ...line
     }
   }
 }

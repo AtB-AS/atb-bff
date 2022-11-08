@@ -10,27 +10,27 @@ export type ServiceJourneyDeparturesQueryVariables = Types.Exact<{
 
 export type ServiceJourneyDeparturesQuery = { serviceJourney?: { estimatedCalls?: Array<{ actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date?: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, realtime: boolean, destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, quay?: { id: string, name: string, publicCode?: string, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }>, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } }, serviceJourney?: { id: string, journeyPattern?: { line: { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }> }> } };
 
-export type EstimatedCallFieldsFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date?: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, realtime: boolean, destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, quay?: { id: string, name: string, publicCode?: string, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }>, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } }, serviceJourney?: { id: string, journeyPattern?: { line: { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }> };
+export type ServiceJourneyEstimatedCallFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date?: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, realtime: boolean, destinationDisplay?: { frontText?: string }, notices: Array<{ text?: string }>, quay?: { id: string, name: string, publicCode?: string, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }>, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } }, serviceJourney?: { id: string, journeyPattern?: { line: { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }> };
 
-export type NoticeFieldsFragment = { text?: string };
+export type NoticeFragment = { text?: string };
 
-export type QuayFieldsFragment = { id: string, name: string, publicCode?: string, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }>, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } };
+export type QuayFragment = { id: string, name: string, publicCode?: string, situations: Array<{ situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> }>, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } };
 
-export type SituationFieldsFragment = { situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> };
+export type SituationFragment = { situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }> };
 
-export type LineFieldsFragment = { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode };
+export type LineFragment = { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode };
 
-export type StopPlaceFieldsFragment = { id: string, name: string, latitude?: number, longitude?: number };
+export type StopPlaceFragment = { id: string, name: string, latitude?: number, longitude?: number };
 
-export type ServiceJourneyFieldsFragment = { id: string, journeyPattern?: { line: { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } };
+export type ServiceJourneyFragment = { id: string, journeyPattern?: { line: { id: string, name?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } };
 
-export const NoticeFieldsFragmentDoc = gql`
-    fragment noticeFields on Notice {
+export const NoticeFragmentDoc = gql`
+    fragment notice on Notice {
   text
 }
     `;
-export const SituationFieldsFragmentDoc = gql`
-    fragment situationFields on PtSituationElement {
+export const SituationFragmentDoc = gql`
+    fragment situation on PtSituationElement {
   situationNumber
   summary {
     language
@@ -51,30 +51,30 @@ export const SituationFieldsFragmentDoc = gql`
   }
 }
     `;
-export const StopPlaceFieldsFragmentDoc = gql`
-    fragment stopPlaceFields on StopPlace {
+export const StopPlaceFragmentDoc = gql`
+    fragment stopPlace on StopPlace {
   id
   name
   latitude
   longitude
 }
     `;
-export const QuayFieldsFragmentDoc = gql`
-    fragment quayFields on Quay {
+export const QuayFragmentDoc = gql`
+    fragment quay on Quay {
   id
   name
   publicCode
   situations {
-    ...situationFields
+    ...situation
   }
   stopPlace {
-    ...stopPlaceFields
+    ...stopPlace
   }
 }
-    ${SituationFieldsFragmentDoc}
-${StopPlaceFieldsFragmentDoc}`;
-export const LineFieldsFragmentDoc = gql`
-    fragment lineFields on Line {
+    ${SituationFragmentDoc}
+${StopPlaceFragmentDoc}`;
+export const LineFragmentDoc = gql`
+    fragment line on Line {
   id
   name
   publicCode
@@ -82,18 +82,18 @@ export const LineFieldsFragmentDoc = gql`
   transportSubmode
 }
     `;
-export const ServiceJourneyFieldsFragmentDoc = gql`
-    fragment serviceJourneyFields on ServiceJourney {
+export const ServiceJourneyFragmentDoc = gql`
+    fragment serviceJourney on ServiceJourney {
   id
   journeyPattern {
     line {
-      ...lineFields
+      ...line
     }
   }
 }
-    ${LineFieldsFragmentDoc}`;
-export const EstimatedCallFieldsFragmentDoc = gql`
-    fragment estimatedCallFields on EstimatedCall {
+    ${LineFragmentDoc}`;
+export const ServiceJourneyEstimatedCallFragmentDoc = gql`
+    fragment serviceJourneyEstimatedCall on EstimatedCall {
   actualArrivalTime
   actualDepartureTime
   aimedArrivalTime
@@ -107,32 +107,32 @@ export const EstimatedCallFieldsFragmentDoc = gql`
   expectedArrivalTime
   forAlighting
   notices {
-    ...noticeFields
+    ...notice
   }
   quay {
-    ...quayFields
+    ...quay
   }
   realtime
   serviceJourney {
-    ...serviceJourneyFields
+    ...serviceJourney
   }
   situations {
-    ...situationFields
+    ...situation
   }
 }
-    ${NoticeFieldsFragmentDoc}
-${QuayFieldsFragmentDoc}
-${ServiceJourneyFieldsFragmentDoc}
-${SituationFieldsFragmentDoc}`;
+    ${NoticeFragmentDoc}
+${QuayFragmentDoc}
+${ServiceJourneyFragmentDoc}
+${SituationFragmentDoc}`;
 export const ServiceJourneyDeparturesDocument = gql`
     query serviceJourneyDepartures($id: String!, $date: Date) {
   serviceJourney(id: $id) {
     estimatedCalls(date: $date) {
-      ...estimatedCallFields
+      ...serviceJourneyEstimatedCall
     }
   }
 }
-    ${EstimatedCallFieldsFragmentDoc}`;
+    ${ServiceJourneyEstimatedCallFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
