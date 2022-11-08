@@ -123,8 +123,6 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         const estimatedCalls = result.data.serviceJourney?.estimatedCalls;
         return Result.ok(estimatedCalls as EstimatedCallFieldsFragment[]);
       } catch (error: any) {
-        const re = /Entur SDK: No data available/;
-        if (error.message.match(re)) return Result.ok(null);
         return Result.err(new APIError(error));
       }
     }
