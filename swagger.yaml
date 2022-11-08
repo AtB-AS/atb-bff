@@ -363,6 +363,26 @@ paths:
           schema:
             type: string
           description: Successful
+  '/bff/v2/servicejourney/{id}/departures':
+    get:
+      summary: Get departures for Service Journey
+      operationId: getBffV2ServicejourneyIdDepartures
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          format: date
+          name: date
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   '/bff/v2/servicejourney/{id}/polyline':
     get:
       summary: Get Map info for a serviceJourney
