@@ -25,7 +25,7 @@ import {
   serviceJourneyTestData
 } from './testData/testData.js';
 import { singleTrip, trips, tripsWithCursor } from './trips/index.js';
-import { polyline } from './servicejourney/index.js';
+import { polyline, serviceJourneyDepartures } from './servicejourney/index.js';
 
 //Scenario with std pattern
 export function departuresScenario(searchDate) {
@@ -56,6 +56,7 @@ export function tripsScenario(searchDate) {
 
 export function serviceJourneyScenario(searchDate) {
   // Requests
+  serviceJourneyDepartures(serviceJourneyTestData, searchDate);
   polyline(serviceJourneyTestData, searchDate);
 }
 

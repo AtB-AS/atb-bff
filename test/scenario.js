@@ -39,6 +39,7 @@ function bff() {
 function test() {
   let searchDate = getNextThursday();
   serviceJourneyScenarioV1(searchDate);
+  serviceJourneyScenario(searchDate)
 }
 
 //Performance test

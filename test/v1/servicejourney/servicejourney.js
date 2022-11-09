@@ -1,6 +1,6 @@
 import http from 'k6/http';
 import { conf, metrics } from '../../config/configuration.js';
-import { bffHeadersGet } from '../../utils/headers.js';
+import { bffHeadersGet, bffHeadersPost } from '../../utils/headers.js';
 
 export function serviceJourneyDepartures(testData, searchDate) {
   let searchTime = `${searchDate}T10:00:00.000Z`;
@@ -14,7 +14,7 @@ export function serviceJourneyDepartures(testData, searchDate) {
     test.query.searchDate = searchTime;
     let resTrip = http.post(urlTrip, JSON.stringify(test.query), {
       tags: { name: requestName },
-      bffHeaders: bffHeadersGet
+      bffHeaders: bffHeadersPost
     });
     let serviceJourneyId = resTrip.json('@this.0.legs.0.serviceJourney.id');
 
@@ -74,8 +74,15 @@ export function serviceJourneyPolyline(testData, searchDate) {
     let fromQuayId = resTrip.json('@this.0.legs.0.fromPlace.quay.id');
     let toQuayId = resTrip.json('@this.0.legs.0.toPlace.quay.id');
 
+    // Both to and from
     let urlPoly = `${conf.host()}/bff/v1/servicejourney/${serviceJourneyId}/polyline?fromQuayId=${fromQuayId}&toQuayId=${toQuayId}`;
     let resPoly = http.get(urlPoly, {
+      tags: { name: requestName },
+      bffHeaders: bffHeadersGet
+    });
+    // Only from
+    let urlPoly2 = `${conf.host()}/bff/v1/servicejourney/${serviceJourneyId}/polyline?fromQuayId=${fromQuayId}`;
+    let resPoly2 = http.get(urlPoly2, {
       tags: { name: requestName },
       bffHeaders: bffHeadersGet
     });
@@ -87,17 +94,19 @@ export function serviceJourneyPolyline(testData, searchDate) {
       },
       {
         check: 'should have status 200 on /polyline',
-        expect: resPoly.status === 200
+        expect: resPoly.status === 200 && resPoly2.status === 200
       },
       {
         check: 'should have map legs from /polyline',
-        expect: resPoly.json('mapLegs.#') > 0
+        expect: resPoly.json('mapLegs.#') > 0 && resPoly2.json('mapLegs.#') > 0
       }
     ];
 
     metrics.addFailureIfMultipleChecks(
-      [resTrip.request.url, resPoly.request.url],
-      resTrip.timings.duration + resPoly.timings.duration,
+      [resTrip.request.url, resPoly.request.url, resPoly2.request.url],
+      resTrip.timings.duration +
+        resPoly.timings.duration +
+        resPoly2.timings.duration,
       requestName,
       expects
     );
