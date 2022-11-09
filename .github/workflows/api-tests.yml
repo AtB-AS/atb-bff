@@ -3,7 +3,9 @@ name: API-tests
 on:
   push:
     branches:
-      - tor/api-tests
+      - main
+  schedule:
+    - cron: '0 5,7,11,14 * * *'
   workflow_dispatch:
 
 jobs:
