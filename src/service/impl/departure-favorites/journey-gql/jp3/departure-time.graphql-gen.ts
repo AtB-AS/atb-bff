@@ -36,7 +36,7 @@ export const GetDepartureRealtimeDocument = gql`
       startTime: $startTime
       numberOfDepartures: $limit
       timeRange: $timeRange
-      omitNonBoarding: false
+      arrivalDeparture: both
       includeCancelledTrips: false
     ) {
       ...estimatedCall

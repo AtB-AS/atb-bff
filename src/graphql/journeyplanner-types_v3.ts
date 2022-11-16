@@ -776,7 +776,6 @@ export type QuayEstimatedCallsArgs = {
   includeCancelledTrips?: InputMaybe<Scalars['Boolean']>;
   numberOfDepartures?: InputMaybe<Scalars['Int']>;
   numberOfDeparturesPerLineAndDestinationDisplay?: InputMaybe<Scalars['Int']>;
-  omitNonBoarding?: InputMaybe<Scalars['Boolean']>;
   startTime?: InputMaybe<Scalars['DateTime']>;
   timeRange?: InputMaybe<Scalars['Int']>;
   whiteListed?: InputMaybe<InputWhiteListed>;
@@ -1188,7 +1187,10 @@ export type RoutingParameters = {
   /** @deprecated NOT IN USE IN OTP2. */
   compactLegsByReversedSearch?: Maybe<Scalars['Boolean']>;
   debugItineraryFilter?: Maybe<Scalars['Boolean']>;
-  /** Option to disable the default filtering of GTFS-RT alerts by time. */
+  /**
+   * Option to disable the default filtering of GTFS-RT alerts by time.
+   * @deprecated This is not supported!
+   */
   disableAlertFiltering?: Maybe<Scalars['Boolean']>;
   /** If true, the remaining weight heuristic is disabled. */
   disableRemainingWeightHeuristic?: Maybe<Scalars['Boolean']>;
@@ -1240,8 +1242,6 @@ export type RoutingParameters = {
   transferSlack?: Maybe<Scalars['Int']>;
   /** Multiplicative factor on expected turning time. */
   turnReluctance?: Maybe<Scalars['Float']>;
-  /** How much less bad is waiting at the beginning of the trip (replaces waitReluctance on the first boarding). */
-  waitAtBeginningFactor?: Maybe<Scalars['Float']>;
   /** How much worse is waiting for a transit vehicle than being on a transit vehicle, as a multiplier. */
   waitReluctance?: Maybe<Scalars['Float']>;
   /** This prevents unnecessary transfers by adding a cost for boarding a vehicle. */
