@@ -1,0 +1,15 @@
+name: Docker Build, Push & Deploy
+
+on:
+  release:
+    types: [published]
+  push:
+    branches: ['main']
+
+jobs:
+  build:
+    uses: atb-as/workflows/.github/workflows/cluster-docker-build-tag-push.yaml@v2
+    with:
+      image: gcr.io/atb-mobility-platform/atb-bff
+    secrets:
+      github_pat: ${{ secrets.GH_PAT }}
