@@ -97,6 +97,7 @@ fragment group_quayFields on Quay {
 }
 
 fragment group_situationFields on PtSituationElement {
+  id
   situationNumber
   summary {
     language

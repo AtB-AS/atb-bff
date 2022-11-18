@@ -24,6 +24,8 @@ export type Scalars = {
   DateTime: any;
   /** A linear function to calculate a value(y) based on a parameter (x): `y = f(x) = a + bx`. It allows setting both a constant(a) and a coefficient(b) and the use those in the computation. Format: `a + b x`. Example: `1800 + 2.0 x` */
   DoubleFunction: any;
+  /** Duration in a lenient ISO-8601 duration format. Example P2DT2H12M40S, 2d2h12m40s or 1h */
+  Duration: any;
   /** Time using the format: HH:mm:SS. Example: 18:25:SS */
   LocalTime: any;
   /** A 64-bit signed integer */
@@ -858,6 +860,11 @@ export type QueryType = {
   stopPlacesByBbox: Array<Maybe<StopPlace>>;
   /** Input type for executing a travel search for a trip between two locations. Returns trip patterns describing suggested alternatives for the trip. */
   trip: Trip;
+  /**
+   * Input type for executing a travel search for a trip between three or more locations. Returns trip patterns describing suggested alternatives for the trip.
+   * @deprecated This API is under development, expect the contract to change
+   */
+  viaTrip: ViaTrip;
 };
 
 
@@ -1064,6 +1071,20 @@ export type QueryTypeTripArgs = {
   walkSpeed?: InputMaybe<Scalars['Float']>;
   wheelchairAccessible?: InputMaybe<Scalars['Boolean']>;
   whiteListed?: InputMaybe<InputWhiteListed>;
+};
+
+
+export type QueryTypeViaTripArgs = {
+  dateTime?: InputMaybe<Scalars['DateTime']>;
+  from: Location;
+  locale?: InputMaybe<Locale>;
+  numTripPatterns?: InputMaybe<Scalars['Int']>;
+  pageCursor?: InputMaybe<Scalars['String']>;
+  searchWindow: Scalars['Duration'];
+  to: Location;
+  viaLocations: Array<ViaLocation>;
+  viaRequests?: InputMaybe<Array<ViaRequest>>;
+  wheelchairAccessible?: InputMaybe<Scalars['Boolean']>;
 };
 
 export enum RealtimeState {
@@ -1753,6 +1774,35 @@ export enum VertexType {
   Normal = 'normal',
   Transit = 'transit'
 }
+
+/** Input format for specifying a location through either a place reference (id), coordinates or both. If both place and coordinates are provided the place ref will be used if found, coordinates will only be used if place is not known. */
+export type ViaLocation = {
+  /** Coordinates for the location. This can be used alone or as fallback if the place id is not found. */
+  coordinates?: InputMaybe<InputCoordinates>;
+  /** The maximum time the user wants to stay in the via location before continuing his journey */
+  maxSlack?: InputMaybe<Scalars['Duration']>;
+  /** The minimum time the user wants to stay in the via location before continuing his journey */
+  minSlack?: InputMaybe<Scalars['Duration']>;
+  /** The name of the location. This is pass-through informationand is not used in routing. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The id of an element in the OTP model. Currently supports Quay, StopPlace, multimodal StopPlace, and GroupOfStopPlaces. */
+  place?: InputMaybe<Scalars['String']>;
+};
+
+export type ViaRequest = {
+  /** The set of access/egress/direct/transit modes to be used for this search. Note that this only works at the Line level. If individual ServiceJourneys have modes that differ from the Line mode, this will NOT be accounted for. */
+  modes?: InputMaybe<Modes>;
+};
+
+/** Description of a travel between three or more places. */
+export type ViaTrip = {
+  /** A list of routing errors, and fields which caused them */
+  routingErrors: Array<RoutingError>;
+  /** A list of lists of which indices of the next segment the trip pattern can be combined with */
+  tripPatternCombinations: Array<Array<Array<Scalars['Int']>>>;
+  /** A list of lists of the trip patterns for each segment of the journey */
+  tripPatterns: Array<Array<TripPattern>>;
+};
 
 export enum WheelchairBoarding {
   /** There is no accessibility information for the stopPlace/quay. */

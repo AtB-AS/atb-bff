@@ -40,6 +40,9 @@ query stopPlaceQuayDepartures(
           }
         }
       }
+      situations {
+        ...group_situationFields
+      }
     }
   }
 }

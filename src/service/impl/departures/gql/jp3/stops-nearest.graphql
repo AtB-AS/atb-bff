@@ -27,6 +27,9 @@ query nearestStopPlaces($count: Int = 10, $distance: Float!, $longitude: Float!,
               stopPlace {
                 id
               }
+              situations {
+                ...group_situationFields
+              }
             }
             transportMode
             description
