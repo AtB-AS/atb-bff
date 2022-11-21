@@ -2,13 +2,13 @@ import * as Types from '../../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { Group_SituationFieldsFragmentDoc } from '../../../departure-favorites/journey-gql/jp3/departure-group.graphql-gen';
+import { SituationFragmentDoc } from '../../../fragments/jp3/situations.graphql-gen';
 export type StopsDetailsQueryVariables = Types.Exact<{
   ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type StopsDetailsQuery = { stopPlaces: Array<{ name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, latitude?: number, longitude?: number, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri: string, label?: string }> }> }> }> };
+export type StopsDetailsQuery = { stopPlaces: Array<{ name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, latitude?: number, longitude?: number, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }> }> }> }> };
 
 
 export const StopsDetailsDocument = gql`
@@ -24,7 +24,7 @@ export const StopsDetailsDocument = gql`
         id
       }
       situations {
-        ...group_situationFields
+        ...situation
       }
     }
     transportMode
@@ -34,7 +34,7 @@ export const StopsDetailsDocument = gql`
     longitude
   }
 }
-    ${Group_SituationFieldsFragmentDoc}`;
+    ${SituationFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {

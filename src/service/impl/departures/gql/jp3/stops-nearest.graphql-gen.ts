@@ -2,7 +2,7 @@ import * as Types from '../../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { Group_SituationFieldsFragmentDoc } from '../../../departure-favorites/journey-gql/jp3/departure-group.graphql-gen';
+import { SituationFragmentDoc } from '../../../fragments/jp3/situations.graphql-gen';
 export type NearestStopPlacesQueryVariables = Types.Exact<{
   count?: Types.InputMaybe<Types.Scalars['Int']>;
   distance: Types.Scalars['Float'];
@@ -12,7 +12,7 @@ export type NearestStopPlacesQueryVariables = Types.Exact<{
 }>;
 
 
-export type NearestStopPlacesQuery = { nearest?: { pageInfo: { endCursor?: string, hasNextPage: boolean }, edges?: Array<{ node?: { distance?: number, place?: { name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, validityPeriod?: { startTime?: any, endTime?: any }, infoLinks?: Array<{ uri: string, label?: string }> }> }> } | {} } }> } };
+export type NearestStopPlacesQuery = { nearest?: { pageInfo: { endCursor?: string, hasNextPage: boolean }, edges?: Array<{ node?: { distance?: number, place?: { name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }> }> }> } | {} } }> } };
 
 
 export const NearestStopPlacesDocument = gql`
@@ -46,7 +46,7 @@ export const NearestStopPlacesDocument = gql`
                 id
               }
               situations {
-                ...group_situationFields
+                ...situation
               }
             }
             transportMode
@@ -58,7 +58,7 @@ export const NearestStopPlacesDocument = gql`
     }
   }
 }
-    ${Group_SituationFieldsFragmentDoc}`;
+    ${SituationFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {

@@ -42,7 +42,7 @@ query quayDepartures(
       }
     }
     situations {
-      ...group_situationFields
+      ...situation
     }
   }
 }

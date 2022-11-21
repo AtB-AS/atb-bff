@@ -54,27 +54,6 @@ fragment quay on Quay {
   }
 }
 
-fragment situation on PtSituationElement {
-  situationNumber
-  summary {
-    language
-    value
-  }
-  description {
-    language
-    value
-  }
-  advice {
-    language
-    value
-  }
-  reportType
-  infoLinks {
-    uri
-    label
-  }
-}
-
 fragment line on Line {
   id
   name

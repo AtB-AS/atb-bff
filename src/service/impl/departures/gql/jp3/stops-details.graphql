@@ -14,7 +14,7 @@ query stopsDetails($ids: [String]!) {
         id
       }
       situations {
-        ...group_situationFields
+        ...situation
       }
     }
     transportMode

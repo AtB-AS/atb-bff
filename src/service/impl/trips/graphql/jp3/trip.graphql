@@ -75,6 +75,9 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
               latitude
               name
             }
+            situations {
+              ...situation
+            }
           }
         }
         toPlace {
@@ -92,6 +95,9 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
               longitude
               latitude
               name
+            }
+            situations {
+              ...situation
             }
           }
         }
