@@ -2,6 +2,7 @@ import * as Types from '../../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
+import { SituationFragmentDoc } from '../../../fragments/jp3/situations.graphql-gen';
 export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
   numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -12,7 +13,7 @@ export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }> }> } };
+export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date?: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay?: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney?: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode } } }>, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }> }> }> } };
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
@@ -51,10 +52,13 @@ export const StopPlaceQuayDeparturesDocument = gql`
           }
         }
       }
+      situations {
+        ...situation
+      }
     }
   }
 }
-    `;
+    ${SituationFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {

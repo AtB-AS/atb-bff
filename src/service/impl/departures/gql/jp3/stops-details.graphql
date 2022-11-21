@@ -13,6 +13,9 @@ query stopsDetails($ids: [String]!) {
       stopPlace {
         id
       }
+      situations {
+        ...situation
+      }
     }
     transportMode
     description

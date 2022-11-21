@@ -70,7 +70,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
     ...group_noticeFields
   }
   situations {
-    ...group_situationFields
+    ...situation
   }
   serviceJourney {
     id
@@ -92,32 +92,7 @@ fragment group_quayFields on Quay {
   latitude
   longitude
   situations {
-    ...group_situationFields
-  }
-}
-
-fragment group_situationFields on PtSituationElement {
-  situationNumber
-  summary {
-    language
-    value
-  }
-  description {
-    language
-    value
-  }
-  advice {
-    language
-    value
-  }
-  validityPeriod {
-    startTime
-    endTime
-  }
-  reportType
-  infoLinks {
-    uri
-    label
+    ...situation
   }
 }
 
@@ -132,7 +107,7 @@ fragment group_lineFields on Line {
     ...group_noticeFields
   }
   situations {
-    ...group_situationFields
+    ...situation
   }
   publicCode
   transportMode

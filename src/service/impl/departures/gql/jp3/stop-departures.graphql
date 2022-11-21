@@ -40,6 +40,9 @@ query stopPlaceQuayDepartures(
           }
         }
       }
+      situations {
+        ...situation
+      }
     }
   }
 }

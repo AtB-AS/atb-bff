@@ -1,0 +1,13 @@
+fragment situation on PtSituationElement {
+  id
+  situationNumber
+  summary {
+    language
+    value
+  }
+  description {
+    language
+    value
+  }
+  reportType
+}
