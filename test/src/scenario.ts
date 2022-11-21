@@ -2,31 +2,31 @@ import {
   departuresScenario,
   departuresScenarioPerformance,
   serviceJourneyScenario,
-  tripsScenario,
-} from "./v2/v2Scenario";
-import { getNextThursday } from "./utils/utils";
+  tripsScenario
+} from './v2/v2Scenario';
+import { getNextThursday } from './utils/utils';
 import {
   departuresScenarioV1,
   geocoderScenarioV1,
   journeyScenarioV1,
-  serviceJourneyScenarioV1,
-} from "./v1/v1Scenario";
+  serviceJourneyScenarioV1
+} from './v1/v1Scenario';
 
 //Scenarios
 export const scn = (usecase: string): void => {
   switch (usecase) {
-    case "test":
+    case 'test':
       return test();
-    case "bff":
+    case 'bff':
       return bff();
-    case "bffPerformanceTest":
+    case 'bffPerformanceTest':
       return bffPerformanceTest();
   }
 };
 
 //Functional test
 const bff = (): void => {
-  let searchDate = getNextThursday();
+  const searchDate = getNextThursday();
   // V1
   departuresScenarioV1(searchDate);
   geocoderScenarioV1();
@@ -41,15 +41,13 @@ const bff = (): void => {
 
 //Test
 const test = (): void => {
-  let searchDate = getNextThursday();
+  const searchDate = getNextThursday();
   departuresScenario(searchDate);
-  tripsScenario(searchDate);
-  serviceJourneyScenario(searchDate);
 };
 
 //Performance test
 const bffPerformanceTest = (): void => {
-  let searchDate = getNextThursday();
+  const searchDate = getNextThursday();
   if (__ITER === 0) {
     // Some initialization
   }

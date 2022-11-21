@@ -1,2 +1,2 @@
-export { serviceJourneyDepartures } from "./servicejourney";
-export { polyline } from "./servicejourney";
+export { serviceJourneyDepartures } from './servicejourney';
+export { polyline } from './servicejourney';

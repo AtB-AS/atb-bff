@@ -1,57 +1,53 @@
-import http from "k6/http";
-import {conf, ExpectsType, metrics} from "../../config/configuration";
-import { bffHeadersGet, bffHeadersPost } from "../../utils/headers";
-import { timeArrayIsSorted } from "../../utils/utils";
-import { JSONArray, JSONObject } from "k6";
+import http from 'k6/http';
+import { conf, ExpectsType, metrics } from '../../config/configuration';
+import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
+import { departsAfterExpectedStartTime, isEqual } from '../../utils/utils';
+import { JSONObject } from 'k6';
+import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/gql/jp3/quay-departures.graphql-gen';
+import { StopPlaceQuayDeparturesQuery } from '../../../../src/service/impl/departures/gql/jp3/stop-departures.graphql-gen';
+import { RealtimeResponseType } from '../types';
 
 export function realtime(
-  quayIds: string,
+  quayId: string,
   startDate: string,
   limit: number = 10
 ) {
-  const requestName = "v2_realtime";
-  let url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayIds}&startTime=${startDate}T11:00:00.000Z&limit=${limit}`;
+  const requestName = 'v2_realtime';
+  const startTime = `${startDate}T11:00:00.000Z`;
+  const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${startTime}&limit=${limit}`;
 
-  let res = http.get(url, {
+  const res = http.get(url, {
     tags: { name: requestName },
-    headers: bffHeadersGet,
+    headers: bffHeadersGet
   });
-
-  //NOTE: Mainly for performance, add a trend metric for the requestName. Have to be defined in 'configuration.js:reqNameList'
-  //Log the request in a Trend metric
-  //metrics.log(requestName, res.timings.duration);
+  const json = res.json() as RealtimeResponseType;
 
   // Get departure times
-  let depTimes = [];
-  let serviceJourneys = <JSONArray>res.json(`${quayIds}.departures|@keys`);
+  const depTimes = [];
+  const serviceJourneys = Object.keys(json[quayId].departures);
   for (let journey of serviceJourneys) {
     depTimes.push(
-      <string>(
-        res.json(
-          `${quayIds}.departures.${journey}.timeData.expectedDepartureTime`
-        )
-      )
+      json[quayId].departures[journey].timeData.expectedDepartureTime
     );
   }
 
-  let expects: ExpectsType = [
+  const expects: ExpectsType = [
     {
-      check: "should have status 200",
-      expect: res.status === 200,
+      check: 'should have status 200',
+      expect: res.status === 200
     },
     {
-      check: "should have correct quayId",
-      expect: res.json(`${quayIds}.quayId`) === quayIds,
+      check: 'should have correct quayId',
+      expect: json[quayId].quayId === quayId
     },
     {
-      check: "should have 10 departures",
-      expect:
-        (<JSONArray>res.json(`${quayIds}.departures|@keys`)).length === 10,
+      check: 'should have 10 departures',
+      expect: Object.keys(json[quayId].departures).length === 10
     },
     {
-      check: "should have sorted departures",
-      expect: timeArrayIsSorted(depTimes),
-    },
+      check: 'should have departure times after start time',
+      expect: departsAfterExpectedStartTime(depTimes, startTime)
+    }
   ];
   metrics.addFailureIfMultipleChecks(
     [res.request.url],
@@ -67,34 +63,35 @@ export function stopDepartures(
   timeRange: number = 86400,
   limit: number = 10
 ) {
-  const requestName = "v2_stopDepartures";
-  let url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const requestName = 'v2_stopDepartures';
+  const url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
-  let res = http.post(url, "{}", {
+  const res = http.post(url, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
+  const json = res.json() as StopPlaceQuayDeparturesQuery;
 
-  let expects: ExpectsType = [
+  const expects: ExpectsType = [
     {
-      check: "should have status 200",
-      expect: res.status === 200,
+      check: 'should have status 200',
+      expect: res.status === 200
     },
     {
-      check: "should have correct stopId",
-      expect: res.json(`stopPlace.id`) === stopId,
+      check: 'should have correct stopId',
+      expect: json.stopPlace!.id === stopId
     },
     {
-      check: "should have correct number of quays",
-      expect: (<JSONArray>res.json(`stopPlace.quays`)).length === 2,
+      check: 'should have correct number of quays',
+      expect: json.stopPlace!.quays!.length === 2
     },
     {
-      check: "should only include start date quay 1",
+      check: 'should only include start date quay 1',
       expect:
-        (<JSONArray>res.json(`stopPlace.quays.#.estimatedCalls.0.date`)).filter(
-          (e) => e !== startDate
-        ).length === 0,
-    },
+        json
+          .stopPlace!.quays!.map(quay => quay.estimatedCalls[0].date)
+          .filter(date => date !== startDate).length === 0
+    }
   ];
   metrics.addFailureIfMultipleChecks(
     [res.request.url],
@@ -110,27 +107,27 @@ export function stopDeparturesPOSTandGET(
   timeRange = 86400,
   limit = 10
 ) {
-  const requestName = "v2_stopDeparturesPOSTandGET";
-  let url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const requestName = 'v2_stopDeparturesPOSTandGET';
+  const url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
-  let resGET = http.get(url, {
+  const resGET = http.get(url, {
     tags: { name: requestName },
-    headers: bffHeadersGet,
+    headers: bffHeadersGet
   });
-  let resPOST = http.post(url, "{}", {
+  const resPOST = http.post(url, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
 
-  let expects: ExpectsType = [
-    { check: "should have status 200", expect: resGET.status === 200 },
-    { check: "should have status 200", expect: resPOST.status === 200 },
+  const expects: ExpectsType = [
+    { check: 'should have status 200', expect: resGET.status === 200 },
+    { check: 'should have status 200', expect: resPOST.status === 200 },
     {
-      check: "should have equal responses",
+      check: 'should have equal responses',
       expect:
-        (<JSONObject>resGET.json()).toString() ===
-        (<JSONObject>resPOST.json()).toString(),
-    },
+        (resGET.json() as JSONObject).toString() ===
+        (resPOST.json() as JSONObject).toString()
+    }
   ];
   metrics.addFailureIfMultipleChecks(
     [resGET.request.url],
@@ -145,34 +142,36 @@ export function quayDeparturesVsStopDepartures(
   stopId: string,
   startDate: string
 ) {
-  const requestName = "v2_quayDeparturesVsStopDepartures";
-  let urlSD = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+  const requestName = 'v2_quayDeparturesVsStopDepartures';
+  const urlSD = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
 
-  let resSD = http.post(urlSD, "{}", {
+  const resSD = http.post(urlSD, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
+  const jsonSD = resSD.json() as StopPlaceQuayDeparturesQuery;
 
   // Check equality on each quay
-  let quays = <JSONArray>resSD.json("stopPlace.quays.#.id");
+  const quays = jsonSD.stopPlace!.quays!.map(el => el.id);
   for (let quay of quays) {
-    let urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quay}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
-    let resQD = http.post(urlQD, "{}", {
+    const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quay}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+    const resQD = http.post(urlQD, '{}', {
       tags: { name: requestName },
-      headers: bffHeadersPost,
+      headers: bffHeadersPost
     });
+    const jsonQD = resQD.json() as QuayDeparturesQuery;
 
-    let expects: ExpectsType = [
-      { check: "should have status 200", expect: resSD.status === 200 },
-      { check: "should have status 200", expect: resQD.status === 200 },
+    const expects: ExpectsType = [
+      { check: 'should have status 200', expect: resSD.status === 200 },
+      { check: 'should have status 200', expect: resQD.status === 200 },
       {
-        check: "should return same quay departures",
-        expect:
-          (<JSONArray>(
-            resSD.json(`stopPlace.quays.#(id="${quay}")#.estimatedCalls`)
-          )).toString() ===
-          (<JSONArray>resQD.json("quay.estimatedCalls")).toString(),
-      },
+        check: 'should return same quay departures',
+        expect: isEqual(
+          jsonSD.stopPlace!.quays!.filter(quayEl => quayEl.id === quay)[0]
+            .estimatedCalls,
+          jsonQD.quay?.estimatedCalls!
+        )
+      }
     ];
     metrics.addFailureIfMultipleChecks(
       [resSD.request.url, resQD.request.url],
@@ -189,27 +188,27 @@ export function quayDepartures(
   timeRange: number = 86400,
   limit: number = 1000
 ) {
-  const requestName = "v2_quayDepartures";
-  let url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const requestName = 'v2_quayDepartures';
+  const url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
-  let res = http.post(url, "{}", {
+  const res = http.post(url, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
+  const json = res.json() as QuayDeparturesQuery;
 
-  let expects: ExpectsType = [
-    { check: "should have status 200", expect: res.status === 200 },
+  const expects: ExpectsType = [
+    { check: 'should have status 200', expect: res.status === 200 },
     {
-      check: "should have correct quayId",
-      expect: res.json(`quay.id`) === quayId,
+      check: 'should have correct quayId',
+      expect: json.quay!.id === quayId
     },
     {
-      check: "should only include start date",
+      check: 'should only include start date',
       expect:
-        (<JSONArray>res.json(`quay.estimatedCalls.#.date`)).filter(
-          (e) => e !== startDate
-        ).length === 0,
-    },
+        json.quay!.estimatedCalls.filter(call => call.date !== startDate)
+          .length === 0
+    }
   ];
   metrics.addFailureIfMultipleChecks(
     [res.request.url],
@@ -225,27 +224,27 @@ export function quayDeparturesPOSTandGET(
   timeRange: number = 86400,
   limit: number = 1000
 ) {
-  const requestName = "v2_quayDeparturesPOSTandGET";
-  let url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const requestName = 'v2_quayDeparturesPOSTandGET';
+  const url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
 
-  let resGET = http.get(url, {
+  const resGET = http.get(url, {
     tags: { name: requestName },
-    headers: bffHeadersGet,
+    headers: bffHeadersGet
   });
-  let resPOST = http.post(url, "{}", {
+  const resPOST = http.post(url, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
 
-  let expects: ExpectsType = [
-    { check: "should have status 200", expect: resGET.status === 200 },
-    { check: "should have status 200", expect: resPOST.status === 200 },
+  const expects: ExpectsType = [
+    { check: 'should have status 200', expect: resGET.status === 200 },
+    { check: 'should have status 200', expect: resPOST.status === 200 },
     {
-      check: "should have equal responses",
+      check: 'should have equal responses',
       expect:
-        (<JSONObject>resGET.json()).toString() ===
-        (<JSONObject>resPOST.json()).toString(),
-    },
+        (resGET.json() as JSONObject).toString() ===
+        (resPOST.json() as JSONObject).toString()
+    }
   ];
   metrics.addFailureIfMultipleChecks(
     [resGET.request.url],
@@ -257,50 +256,49 @@ export function quayDeparturesPOSTandGET(
 
 // Check that realtime updates for a quay corresponds to quay departures
 export function realtimeForQuayDepartures(quayId: string, startDate: string) {
-  const requestName = "v2_realtimeForQuayDepartures";
-  let urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
-  let resQD = http.post(urlQD, "{}", {
+  const requestName = 'v2_realtimeForQuayDepartures';
+  const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+  const resQD = http.post(urlQD, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
+  const jsonQD = resQD.json() as QuayDeparturesQuery;
 
   // Get realtime to compare
-  let urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${startDate}T00:00:00.000Z&limit=10`;
-  let resR = http.get(urlR, {
+  const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${startDate}T00:00:00.000Z&limit=10`;
+  const resR = http.get(urlR, {
     tags: { name: requestName },
-    headers: bffHeadersGet,
+    headers: bffHeadersGet
   });
+  const jsonR = resR.json() as RealtimeResponseType;
   // Get departure times
-  let depTimes = [];
-  let serviceJourneys = <JSONArray>resR.json(`${quayId}.departures|@keys`);
+  const depTimes = [];
+  const serviceJourneys = Object.keys(jsonR[quayId].departures);
   for (let journey of serviceJourneys) {
     depTimes.push(
-      <string>(
-        resR.json(
-          `${quayId}.departures.${journey}.timeData.expectedDepartureTime`
-        )
-      )
+      jsonR[quayId].departures[journey].timeData.expectedDepartureTime
     );
   }
 
-  let expects: ExpectsType = [
-    { check: "should have status 200", expect: resQD.status === 200 },
-    { check: "should have status 200", expect: resR.status === 200 },
+  const expects: ExpectsType = [
+    { check: 'should have status 200', expect: resQD.status === 200 },
+    { check: 'should have status 200', expect: resR.status === 200 },
     {
-      check: "should return correct realtime departure times",
-      expect:
-        (<JSONArray>(
-          resQD.json(`quay.estimatedCalls.#.expectedDepartureTime`)
-        )).toString() === depTimes.toString(),
+      check: 'should return correct realtime departure times',
+      expect: isEqual(
+        jsonQD
+          .quay!.estimatedCalls.map(call => call.expectedDepartureTime)
+          .sort(),
+        depTimes.sort()
+      )
     },
     {
-      check: "should return correct service journeys",
-      expect:
-        (<JSONArray>(
-          resQD.json(`quay.estimatedCalls.#.serviceJourney.id`)
-        )).toString() ===
-        (<JSONArray>resR.json(`${quayId}.departures|@keys`)).toString(),
-    },
+      check: 'should return correct service journeys',
+      expect: isEqual(
+        jsonQD.quay!.estimatedCalls.map(call => call.serviceJourney!.id).sort(),
+        Object.keys(jsonR[quayId].departures).sort()
+      )
+    }
   ];
   metrics.addFailureIfMultipleChecks(
     [resQD.request.url, resR.request.url],

@@ -1,8 +1,9 @@
-import http from "k6/http";
-import {conf, ExpectsType, metrics} from "../../config/configuration";
-import { bffHeadersPost } from "../../utils/headers";
-import { departureFavoritesTestDataType } from "../testData/testDataTypes";
-import { JSONArray, JSONObject } from "k6";
+import http from 'k6/http';
+import { conf, ExpectsType, metrics } from '../../config/configuration';
+import { bffHeadersPost } from '../../utils/headers';
+import { departureFavoritesTestDataType, FavoriteResponseType } from '../types';
+import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/gql/jp3/quay-departures.graphql-gen';
+import { isEqual } from '../../utils/utils';
 
 export function departureFavorites(
   testData: departureFavoritesTestDataType,
@@ -13,68 +14,68 @@ export function departureFavorites(
     const requestName = `v2_departureFavorites_${testData.scenarios.indexOf(
       test
     )}`;
-    let url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limitPerLine}`;
+    const url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limitPerLine}`;
 
-    let res = http.post(url, JSON.stringify(test), {
+    const res = http.post(url, JSON.stringify(test), {
       tags: { name: requestName },
-      headers: bffHeadersPost,
+      headers: bffHeadersPost
     });
+    const json = res.json() as FavoriteResponseType;
 
-    let expStopPlaceIds = test.favorites.map((e) => e.stopId).sort();
-    let resStopPlaceIds = (<JSONArray>res.json(`data.#.stopPlace.id`)).sort();
-    let expQuayIds = test.favorites.map((e) => e.quayId).sort();
-    let expLineIds = test.favorites.map((e) => e.lineId).sort();
-    let resQuayIds = (<JSONArray>res.json(`data.#.quays.#.quay.id`))
-      .toString()
-      .split(",");
+    const expStopPlaceIds = test.favorites.map(e => e.stopId).sort();
+    const resStopPlaceIds = json.data.map(fav => fav.stopPlace.id).sort();
+    const expQuayIds = test.favorites.map(e => e.quayId).sort();
+    const expLineIds = test.favorites.map(e => e.lineId).sort();
+    const resQuayIds = json.data
+      .map(fav => fav.quays.map(quay => quay.quay.id))
+      .flat();
 
-    let expects: ExpectsType = [
-      { check: "should have status 200", expect: res.status === 200 },
+    const expects: ExpectsType = [
+      { check: 'should have status 200', expect: res.status === 200 }
     ];
 
     //Correct stop places
     expects.push({
       check: `should have correct stop place(s)`,
-      expect: resStopPlaceIds.toString() === expStopPlaceIds.toString(),
+      expect: resStopPlaceIds.toString() === expStopPlaceIds.toString()
     });
     // Correct quays
     for (let quayId of expQuayIds) {
       expects.push({
         check: `should include quay '${quayId}'`,
-        expect: resQuayIds.includes(quayId),
+        expect: resQuayIds.includes(quayId)
       });
     }
     // Correct lineId, date on departures and number of departures - only for those requested
-    for (let stopPlace of <any>res.json("data")) {
+    for (let stopPlace of json.data) {
       for (let quay of stopPlace.quays) {
         if (expQuayIds.includes(quay.quay.id)) {
           expects.push({
             check: `quay '${quay.quay.id}' should have departures`,
-            expect: quay.group.length > 0,
+            expect: quay.group.length > 0
           });
           for (let line of quay.group) {
             expects.push(
               {
                 check: `should have correct line from quay '${quay.quay.id}'`,
-                expect: expLineIds.includes(line.lineInfo.lineId),
+                expect: expLineIds.includes(line.lineInfo.lineId)
               },
               {
                 check: `should have correct date for departures from quay '${quay.quay.id}'`,
                 expect:
-                  (<JSONArray>line.departures).filter(
-                    (e) => (<JSONObject>e).serviceDate !== startDate
-                  ).length === 0,
+                  line.departures.filter(dep => dep.serviceDate !== startDate)
+                    .length === 0
               },
               {
                 check: `should have correct number of departures from quay '${quay.quay.id}'`,
-                expect: line.departures.length === limitPerLine,
+                expect: line.departures.length === limitPerLine
               }
             );
           }
         } else {
           expects.push({
             check: `quay '${quay.quay.id}' should not have departures`,
-            expect: quay.group.length === 0,
+            expect: quay.group.length === 0
           });
         }
       }
@@ -95,60 +96,55 @@ export function departureFavoritesVsQuayDepartures(
   startDate: string,
   limit: number = 7
 ) {
-  const requestName = "v2_departureFavoritesVsQuayDepartures";
+  const requestName = 'v2_departureFavoritesVsQuayDepartures';
   // Use only 1 favorite
-  let testScenario = { favorites: [testData.scenarios[0].favorites[0]] };
+  const testScenario = { favorites: [testData.scenarios[0].favorites[0]] };
 
-  let urlFav = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limit}`;
-  let resFav = http.post(urlFav, JSON.stringify(testScenario), {
+  const urlFav = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limit}`;
+  const resFav = http.post(urlFav, JSON.stringify(testScenario), {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
+  const jsonFav = resFav.json() as FavoriteResponseType;
 
   // Get departures to assert favorite results
-  let urlDep = `${conf.host()}/bff/v2/departures/quay-departures?id=${
+  const urlDep = `${conf.host()}/bff/v2/departures/quay-departures?id=${
     testScenario.favorites[0].quayId
   }&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
-  let resDep = http.post(urlDep, "{}", {
+  const resDep = http.post(urlDep, '{}', {
     tags: { name: requestName },
-    headers: bffHeadersPost,
+    headers: bffHeadersPost
   });
+  const jsonDep = resDep.json() as QuayDeparturesQuery;
 
-  let expects: ExpectsType = [
+  const expects: ExpectsType = [
     {
-      check: "should have status 200",
-      expect: resFav.status === 200 && resDep.status === 200,
-    },
+      check: 'should have status 200',
+      expect: resFav.status === 200 && resDep.status === 200
+    }
   ];
 
   // Assert: same service journeys and  aimed dep time as /quay-departures:
-  let serviceJourneyFavorites = <JSONArray>(
-    resFav.json(
-      `data.0.quays.#(quay.id="${testScenario.favorites[0].quayId}")#.group.0.departures.#.serviceJourneyId`
-    )
+  const serviceJourneyFavorites = jsonFav.data[0].quays
+    .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
+    .group[0].departures.map(dep => dep.serviceJourneyId);
+  const serviceJourneyDepartures = jsonDep.quay!.estimatedCalls.map(
+    call => call.serviceJourney!.id
   );
-  let serviceJourneyDepartures = <JSONArray>(
-    resDep.json(`quay.estimatedCalls.#.serviceJourney.id`)
+  const aimedTimeFavorites = jsonFav.data[0].quays
+    .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
+    .group[0].departures.map(dep => dep.aimedTime);
+  const aimedTimeDepartures = jsonDep.quay!.estimatedCalls.map(
+    call => call.aimedDepartureTime
   );
-  let aimedTimeFavorites = <JSONArray>(
-    resFav.json(
-      `data.0.quays.#(quay.id="${testScenario.favorites[0].quayId}")#.group.0.departures.#.aimedTime`
-    )
-  );
-  let aimedTimeDepartures = <JSONArray>(
-    resDep.json(`quay.estimatedCalls.#.aimedDepartureTime`)
-  );
-
   expects.push(
     {
-      check: "favorite departures should have the same service journeys",
-      expect:
-        serviceJourneyFavorites.toString() ===
-        serviceJourneyDepartures.toString(),
+      check: 'favorite departures should have the same service journeys',
+      expect: isEqual(serviceJourneyFavorites, serviceJourneyDepartures)
     },
     {
-      check: "favorite departures should have the same aimed time",
-      expect: aimedTimeFavorites.toString() === aimedTimeDepartures.toString(),
+      check: 'favorite departures should have the same aimed time',
+      expect: isEqual(aimedTimeFavorites, aimedTimeDepartures)
     }
   );
 

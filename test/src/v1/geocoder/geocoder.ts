@@ -1,8 +1,11 @@
-import http from "k6/http";
-import {conf, ExpectsType, metrics} from "../../config/configuration";
-import { bffHeadersGet } from "../../utils/headers";
-import { geocoderTestDataType } from "../testData/testDataTypes";
-import { JSONArray } from "k6";
+import http from 'k6/http';
+import { conf, ExpectsType, metrics } from '../../config/configuration';
+import { bffHeadersGet } from '../../utils/headers';
+import {
+  GeocoderFeatureResponseType,
+  GeocoderReverseResponseType,
+  geocoderTestDataType
+} from '../types';
 
 export function geocoderFeatures(
   testData: geocoderTestDataType,
@@ -12,18 +15,19 @@ export function geocoderFeatures(
     const requestName = `v1_geocoderFeatures_${testData.scenarios.indexOf(
       test
     )}`;
-    let latitude = test.query.latitude;
-    let longitude = test.query.longitude;
-    let searchString = encodeURI(<string>test.query.searchString);
-    let url = `${conf.host()}/bff/v1/geocoder/features?lat=${latitude}&limit=${limit}&lon=${longitude}&query=${searchString}`;
+    const latitude = test.query.latitude;
+    const longitude = test.query.longitude;
+    const searchString = encodeURI(test.query.searchString as string);
+    const url = `${conf.host()}/bff/v1/geocoder/features?lat=${latitude}&limit=${limit}&lon=${longitude}&query=${searchString}`;
 
-    let res = http.get(url, {
+    const res = http.get(url, {
       tags: { name: requestName },
-      headers: bffHeadersGet,
+      headers: bffHeadersGet
     });
+    const json = res.json() as GeocoderFeatureResponseType;
 
-    let expects: ExpectsType = [
-      { check: "should have status 200", expect: res.status === 200 },
+    const expects: ExpectsType = [
+      { check: 'should have status 200', expect: res.status === 200 }
     ];
 
     // Asserts
@@ -31,26 +35,22 @@ export function geocoderFeatures(
       expects.push(
         {
           check: `should include "${expResult.id}"`,
-          expect: (<JSONArray>res.json(`@this.#.properties.id`)).includes(
-            expResult.id
-          ),
+          expect: json
+            .map(feature => feature.properties.id)
+            .includes(expResult.id)
         },
         {
           check: `should have correct name for "${expResult.id}"`,
           expect:
-            (<string>(
-              res.json(
-                `@this.#(properties.id="${expResult.id}")#.properties.name`
-              )
-            )).toString() === expResult.name,
+            json.filter(feature => feature.properties.id === expResult.id)[0]
+              .properties.name === expResult.name
         },
         {
           check: `should include category "${expResult.category}" for "${expResult.id}"`,
-          expect: (<JSONArray>(
-            res.json(
-              `@this.#(properties.id="${expResult.id}")#.properties.category|@flatten`
-            )
-          )).includes(expResult.category),
+          expect: json
+            .filter(feature => feature.properties.id === expResult.id)[0]
+            .properties.category.flat()
+            .includes(expResult.category)
         }
       );
     }
@@ -59,7 +59,7 @@ export function geocoderFeatures(
     if (test.moreResults) {
       expects.push({
         check: `should have more hits than ${test.expectedResults.length}`,
-        expect: <number>res.json(`@this.#`) > test.expectedResults.length,
+        expect: json.length > test.expectedResults.length
       });
     }
 
@@ -80,17 +80,18 @@ export function geocoderReverse(
     const requestName = `v1_geocoderReverse_${testData.scenarios.indexOf(
       test
     )}`;
-    let latitude = test.query.latitude;
-    let longitude = test.query.longitude;
-    let url = `${conf.host()}/bff/v1/geocoder/reverse?lat=${latitude}&lon=${longitude}&radius=${radius}`;
+    const latitude = test.query.latitude;
+    const longitude = test.query.longitude;
+    const url = `${conf.host()}/bff/v1/geocoder/reverse?lat=${latitude}&lon=${longitude}&radius=${radius}`;
 
-    let res = http.get(url, {
+    const res = http.get(url, {
       tags: { name: requestName },
-      headers: bffHeadersGet,
+      headers: bffHeadersGet
     });
+    const json = res.json() as GeocoderReverseResponseType;
 
-    let expects: ExpectsType = [
-      { check: "should have status 200", expect: res.status === 200 },
+    const expects: ExpectsType = [
+      { check: 'should have status 200', expect: res.status === 200 }
     ];
 
     // Asserts
@@ -98,26 +99,22 @@ export function geocoderReverse(
       expects.push(
         {
           check: `should include "${expResult.id}"`,
-          expect: (<JSONArray>res.json(`@this.#.properties.id`)).includes(
-            expResult.id
-          ),
+          expect: json
+            .map(feature => feature.properties.id)
+            .includes(expResult.id)
         },
         {
           check: `should have correct name for "${expResult.id}"`,
           expect:
-            (<string>(
-              res.json(
-                `@this.#(properties.id="${expResult.id}")#.properties.name`
-              )
-            )).toString() === expResult.name,
+            json.filter(feature => feature.properties.id === expResult.id)[0]
+              .properties.name === expResult.name
         },
         {
           check: `should include category "${expResult.category}" for "${expResult.id}"`,
-          expect: (<JSONArray>(
-            res.json(
-              `@this.#(properties.id="${expResult.id}")#.properties.category|@flatten`
-            )
-          )).includes(expResult.category),
+          expect: json
+            .filter(feature => feature.properties.id === expResult.id)[0]
+            .properties.category.flat()
+            .includes(expResult.category)
         }
       );
     }
@@ -126,7 +123,7 @@ export function geocoderReverse(
     if (test.moreResults) {
       expects.push({
         check: `should have more hits than ${test.expectedResults.length}`,
-        expect: <number>res.json(`@this.#`) > test.expectedResults.length,
+        expect: json.length > test.expectedResults.length
       });
     }
 

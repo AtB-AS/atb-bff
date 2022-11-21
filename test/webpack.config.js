@@ -1,28 +1,16 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const GlobEntries = require('webpack-glob-entries');
 const WebpackWatchedGlobEntries = require('webpack-watched-glob-entries-plugin');
 
 module.exports = {
   mode: 'production',
-  //entry: GlobEntries('./src/*test*.ts'), // Generates multiple entry for each test
-  //entry: GlobEntries('./src/**/**'), // Generates multiple entry for each test
   entry: WebpackWatchedGlobEntries.getEntries(
       [
         // Your path(s)
         path.resolve(__dirname, './src/**/*.ts'),
-        path.resolve(__dirname, './src/**/*.js'),
-        path.resolve(__dirname, './src/**/*.json'),
-        //path.resolve(__dirname, './src/results/')
-        //path.resolve(__dirname, 'more/entries/**/*.js')
+        path.resolve(__dirname, './src/**/*.js')
       ],
-      /*
-      {
-        // Optional glob options that are passed to glob.sync()
-        ignore: '** /*.test.js'
-      }
-      */
   ),
   output: {
     path: path.join(__dirname, 'dist'),
@@ -45,7 +33,7 @@ module.exports = {
     ],
   },
   target: 'web',
-  externals: /^(k6|https?\:\/\/)(\/.*)?/,
+  externals: /^(k6|https?:\/\/)(\/.*)?/,
   // Generate map files for compiled scripts
   devtool: "source-map",
   stats: {

@@ -21,6 +21,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": [
+      "es2019"
+    ]
   }
 }

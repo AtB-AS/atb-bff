@@ -7,30 +7,30 @@ import {
   departuresRealtime,
   quayDepartures,
   stopDetails,
-  stopQuays,
-} from "./departures";
+  stopQuays
+} from './departures';
 import {
   departuresGroupedTestData,
   stopDetailsTestData,
   geocoderFeaturesTestData,
   geocoderReverseTestData,
   tripTestData,
-  serviceJourneyTestData,
-} from "./testData/testData";
-import { geocoderFeatures, geocoderReverse } from "./geocoder";
-import { singleTrip, trip, tripPOSTandGET } from "./journey";
+  serviceJourneyTestData
+} from './testData/testData';
+import { geocoderFeatures, geocoderReverse } from './geocoder';
+import { singleTrip, trip, tripPOSTandGET } from './journey';
 import {
   serviceJourneyDepartures,
-  serviceJourneyPolyline,
-} from "./servicejourney";
+  serviceJourneyPolyline
+} from './servicejourney';
 
 //Scenario with std pattern
 //export function departuresScenarioV1(searchDate: string) {
 export const departuresScenarioV1 = (searchDate: string): void => {
   // Requests
   departuresGrouped(departuresGroupedTestData, searchDate);
-  departuresRealtime("NSR:Quay:73575", searchDate);
-  quayDepartures("NSR:Quay:73576");
+  departuresRealtime('NSR:Quay:73575', searchDate);
+  quayDepartures('NSR:Quay:73576');
   stopDetails(stopDetailsTestData);
   stopQuays(stopDetailsTestData);
 };

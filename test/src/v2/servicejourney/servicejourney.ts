@@ -1,74 +1,78 @@
-import http from "k6/http";
-import {conf, ExpectsType, metrics} from "../../config/configuration";
-import { bffHeadersGet, bffHeadersPost } from "../../utils/headers";
-import { isEqual, useNoDecimals } from "../../utils/utils";
-import { serviceJourneyTestDataType } from "../testData/testDataTypes";
-import { JSONArray } from "k6";
+import http from 'k6/http';
+import { conf, ExpectsType, metrics } from '../../config/configuration';
+import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
+import { isEqual, useNoDecimals } from '../../utils/utils';
+import {
+  serviceJourneyTestDataType,
+  PolylineSimplifiedResponseType,
+  ServiceJourneyDeparturesResponseType
+} from '../types';
+import { TripsQuery } from '../../../../src/service/impl/trips/graphql/jp3/trip.graphql-gen';
 
 export function serviceJourneyDepartures(
   testData: serviceJourneyTestDataType,
   searchDate: string
 ) {
-  let searchTime = `${searchDate}T10:00:00.000Z`;
+  const searchTime = `${searchDate}T10:00:00.000Z`;
   for (let test of testData.scenarios) {
     const requestName = `v2_serviceJourneyDepartures_${testData.scenarios.indexOf(
       test
     )}`;
 
     // Get service journey id
-    let urlTrip = `${conf.host()}/bff/v2/trips`;
+    const urlTrip = `${conf.host()}/bff/v2/trips`;
     test.query.when = searchTime;
-    let resTrip = http.post(urlTrip, JSON.stringify(test.query), {
+    const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
       tags: { name: requestName },
-      headers: bffHeadersPost,
+      headers: bffHeadersPost
     });
-    let tripNumber =
-      resTrip.json("trip.tripPatterns.0.legs.0.mode") === "bus" ? 0 : 1;
-    let serviceJourneyId = resTrip.json(
-      `trip.tripPatterns.${tripNumber}.legs.0.serviceJourney.id`
-    );
+    const jsonTrip = resTrip.json() as TripsQuery;
+    const tripNumber =
+      jsonTrip.trip.tripPatterns[0].legs[0].mode === 'bus' ? 0 : 1;
+    const serviceJourneyId = jsonTrip.trip.tripPatterns[tripNumber].legs[0]
+      .serviceJourney!.id;
 
-    let urlSJD = `${conf.host()}/bff/v2/servicejourney/${serviceJourneyId}/departures?date=${searchDate}`;
-    let resSJD = http.get(urlSJD, {
+    const urlSJD = `${conf.host()}/bff/v2/servicejourney/${serviceJourneyId}/departures?date=${searchDate}`;
+    const resSJD = http.get(urlSJD, {
       tags: { name: requestName },
-      headers: bffHeadersGet,
+      headers: bffHeadersGet
     });
+    const jsonSJD = resSJD.json() as ServiceJourneyDeparturesResponseType;
 
-    let expects: ExpectsType = [
+    const expects: ExpectsType = [
       {
-        check: "should have status 200 on /trip",
-        expect: resTrip.status === 200,
+        check: 'should have status 200 on /trip',
+        expect: resTrip.status === 200
       },
       {
-        check: "should have status 200 on /servicejourney",
-        expect: resSJD.status === 200,
-      },
+        check: 'should have status 200 on /servicejourney',
+        expect: resSJD.status === 200
+      }
     ];
 
     if (resSJD.status === 200) {
       // Assert service journey id
       expects.push(
         {
-          check: "should have departures",
-          expect: <number>resSJD.json("value.#") > 0,
+          check: 'should have departures',
+          expect: jsonSJD.value.length > 0
         },
         {
-          check: "should only have departures for the service journey",
+          check: 'should only have departures for the service journey',
           expect:
-            (<JSONArray>resSJD.json("value.#.serviceJourney.id")).filter(
-              (e) => e !== serviceJourneyId
-            ).length === 0,
+            jsonSJD.value
+              .map(dep => dep.serviceJourney!.id)
+              .filter(id => id !== serviceJourneyId).length === 0
         }
       );
       // Assert expected start time from travel search
-      let expStartTime = resTrip.json(
-        `trip.tripPatterns.${tripNumber}.legs.0.expectedStartTime`
-      );
+      const expStartTime =
+        jsonTrip.trip.tripPatterns[tripNumber].legs[0].expectedStartTime;
       expects.push({
-        check: "should have correct expected start time",
-        expect: (<JSONArray>(
-          resSJD.json("value.#.expectedDepartureTime")
-        )).includes(expStartTime),
+        check: 'should have correct expected start time',
+        expect: jsonSJD.value
+          .map(dep => dep.expectedDepartureTime)
+          .includes(expStartTime)
       });
     }
 
@@ -89,95 +93,98 @@ export function polyline(
 ) {
   let startTime = `${searchDate}T08:00:00.000Z`;
   for (let test of testData.scenarios) {
-    const requestName = "v2_polyline";
-    let urlTrip = `${conf.host()}/bff/v2/trips`;
+    const requestName = 'v2_polyline';
+    const urlTrip = `${conf.host()}/bff/v2/trips`;
     // Update the search time
     test.query.when = startTime;
 
-    let resTrip = http.post(urlTrip, JSON.stringify(test.query), {
+    const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
       tags: { name: requestName },
-      headers: bffHeadersPost,
+      headers: bffHeadersPost
     });
+    const jsonTrip = resTrip.json() as TripsQuery;
 
-    let expects: ExpectsType = [
+    const expects: ExpectsType = [
       {
-        check: "should have status 200 on /trip",
-        expect: resTrip.status === 200,
-      },
+        check: 'should have status 200 on /trip',
+        expect: resTrip.status === 200
+      }
     ];
 
-    let urlList = [urlTrip];
+    const urlList = [urlTrip];
     let polylineDuration = 0.0;
     // Walk through the trip patterns
-    for (let trip of <any>resTrip.json("trip.tripPatterns")) {
+    for (let trip of jsonTrip.trip.tripPatterns) {
       // Only consider direct busses
-      if (trip.legs.length === 1 && trip.legs[0].mode === "bus") {
-        let fromCoords = [
+      if (trip.legs.length === 1 && trip.legs[0].mode === 'bus') {
+        const fromCoords = [
           useNoDecimals(trip.legs[0].fromPlace.latitude, 2),
-          useNoDecimals(trip.legs[0].fromPlace.longitude, 2),
+          useNoDecimals(trip.legs[0].fromPlace.longitude, 2)
         ];
-        let toCoords = [
+        const toCoords = [
           useNoDecimals(trip.legs[0].toPlace.latitude, 2),
-          useNoDecimals(trip.legs[0].toPlace.longitude, 2),
+          useNoDecimals(trip.legs[0].toPlace.longitude, 2)
         ];
-        let serviceJourney = trip.legs[0].serviceJourney.id;
-        let fromQuay = trip.legs[0].fromPlace.quay.id;
-        let toQuay = trip.legs[0].toPlace.quay.id;
+        const serviceJourney = trip.legs[0].serviceJourney!.id;
+        const fromQuay = trip.legs[0].fromPlace.quay!.id;
+        const toQuay = trip.legs[0].toPlace.quay!.id;
 
         // Only from
-        let urlPolyline = `${conf.host()}/bff/v2/servicejourney/${serviceJourney}/polyline?fromQuayId=${fromQuay}`;
+        const urlPolyline = `${conf.host()}/bff/v2/servicejourney/${serviceJourney}/polyline?fromQuayId=${fromQuay}`;
         // Both from and to
-        let urlPolyline2 = `${conf.host()}/bff/v2/servicejourney/${serviceJourney}/polyline?fromQuayId=${fromQuay}&toQuayId=${toQuay}`;
+        const urlPolyline2 = `${conf.host()}/bff/v2/servicejourney/${serviceJourney}/polyline?fromQuayId=${fromQuay}&toQuayId=${toQuay}`;
         urlList.push(urlPolyline, urlPolyline2);
 
-        let resPolyline = http.get(urlPolyline, {
+        const resPolyline = http.get(urlPolyline, {
           tags: { name: requestName },
-          headers: bffHeadersGet,
+          headers: bffHeadersGet
         });
         polylineDuration += resPolyline.timings.duration;
-        let resPolyline2 = http.get(urlPolyline2, {
+        const jsonPoly = resPolyline.json() as PolylineSimplifiedResponseType;
+        const resPolyline2 = http.get(urlPolyline2, {
           tags: { name: requestName },
-          headers: bffHeadersGet,
+          headers: bffHeadersGet
         });
         polylineDuration += resPolyline2.timings.duration;
+        const jsonPoly2 = resPolyline2.json() as PolylineSimplifiedResponseType;
 
-        let startCoordsPolyline = [
-          useNoDecimals(<number>resPolyline.json("start.latitude"), 2),
-          useNoDecimals(<number>resPolyline.json("start.longitude"), 2),
+        const startCoordsPolyline = [
+          useNoDecimals(jsonPoly.start.latitude, 2),
+          useNoDecimals(jsonPoly.start.longitude, 2)
         ];
-        let stopCoordsPolyline = [
-          useNoDecimals(<number>resPolyline.json("stop.latitude"), 2),
-          useNoDecimals(<number>resPolyline.json("stop.longitude"), 2),
+        const stopCoordsPolyline = [
+          useNoDecimals(jsonPoly.stop.latitude, 2),
+          useNoDecimals(jsonPoly.stop.longitude, 2)
         ];
-        let startCoordsPolyline2 = [
-          useNoDecimals(<number>resPolyline2.json("start.latitude"), 2),
-          useNoDecimals(<number>resPolyline2.json("start.longitude"), 2),
+        const startCoordsPolyline2 = [
+          useNoDecimals(jsonPoly2.start.latitude, 2),
+          useNoDecimals(jsonPoly2.start.longitude, 2)
         ];
-        let stopCoordsPolyline2 = [
-          useNoDecimals(<number>resPolyline2.json("stop.latitude"), 2),
-          useNoDecimals(<number>resPolyline2.json("stop.longitude"), 2),
+        const stopCoordsPolyline2 = [
+          useNoDecimals(jsonPoly2.stop.latitude, 2),
+          useNoDecimals(jsonPoly2.stop.longitude, 2)
         ];
 
         expects.push(
           {
-            check: "should have status 200 on /polyline",
-            expect: resPolyline.status === 200 && resPolyline2.status === 200,
+            check: 'should have status 200 on /polyline',
+            expect: resPolyline.status === 200 && resPolyline2.status === 200
           },
           {
-            check: "should have correct start coordinates with from",
-            expect: isEqual(fromCoords, startCoordsPolyline),
+            check: 'should have correct start coordinates with from',
+            expect: isEqual(fromCoords, startCoordsPolyline)
           },
           {
-            check: "should have correct start coordinates with from and to",
-            expect: isEqual(fromCoords, startCoordsPolyline2),
+            check: 'should have correct start coordinates with from and to',
+            expect: isEqual(fromCoords, startCoordsPolyline2)
           },
           {
-            check: "should have correct stop coordinates with from",
-            expect: isEqual(toCoords, stopCoordsPolyline),
+            check: 'should have correct stop coordinates with from',
+            expect: isEqual(toCoords, stopCoordsPolyline)
           },
           {
-            check: "should have correct stop coordinates with from and to",
-            expect: isEqual(toCoords, stopCoordsPolyline2),
+            check: 'should have correct stop coordinates with from and to',
+            expect: isEqual(toCoords, stopCoordsPolyline2)
           }
         );
       }

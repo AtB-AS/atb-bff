@@ -72,7 +72,7 @@ export type departuresGroupedTestDataType = {
   scenarios: Array<{
     query: {
       location: {
-        layer: "venue" | "address";
+        layer: 'venue' | 'address';
         id?: string;
         coordinates?: {
           latitude: number;

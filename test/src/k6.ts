@@ -15,13 +15,16 @@ $  yarn webpack
 $  k6 run dist/k6.js --config=dist/config/functional.json --env environment=[staging, prod] [--http-debug || --http-debug="full"]
  */
 
-import { Options } from "k6/options";
-import { conf } from "./config/configuration";
-import { scn } from "./scenario";
-import { createJUnitCheckOutput } from "./utils/log";
+import { Options } from 'k6/options';
+import { conf } from './config/configuration';
+import { scn } from './scenario';
+import { createJUnitCheckOutput } from './utils/log';
 //WIP
 /* @ts-ignore */
-import { jUnit, textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
+import {
+  jUnit,
+  textSummary
+} from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 
 //Settings for the simulation
 export let options: Options = {
@@ -32,9 +35,9 @@ export let options: Options = {
 
 //Before the simulation starts
 export function setup() {
-  console.log("Setup");
-  console.log("  -- Usecase: " + conf.usecase());
-  console.log("  -- Environment: " + conf.host());
+  console.log('Setup');
+  console.log('  -- Usecase: ' + conf.usecase());
+  console.log('  -- Environment: ' + conf.host());
 }
 
 //Run simulations
@@ -52,27 +55,27 @@ export default () => {
 
 //Handle reporting
 export const handleSummary = (data: object) => {
-  console.log("Preparing the end-of-test summary...");
-  console.log("-- " + conf.runFrom());
-  console.log("-- " + conf.host());
+  console.log('Preparing the end-of-test summary...');
+  console.log('-- ' + conf.runFrom());
+  console.log('-- ' + conf.host());
 
   //github actions
-  if (conf.runFrom() === "root") {
+  if (conf.runFrom() === 'root') {
     return {
-      stdout: textSummary(data, { indent: " ", enableColors: true }),
-      "test/dist/results/junit_bff.xml": jUnit(data),
-      "test/dist/results/summary_bff.json": JSON.stringify(data),
+      stdout: textSummary(data, { indent: ' ', enableColors: true }),
+      'test/dist/results/junit_bff.xml': jUnit(data),
+      'test/dist/results/summary_bff.json': JSON.stringify(data)
     };
   }
   //default: 'dist'
   return {
-    stdout: textSummary(data, { indent: " ", enableColors: true }),
-    "dist/results/junit_bff.xml": jUnit(data),
-    "dist/results/summary_bff.json": JSON.stringify(data),
+    stdout: textSummary(data, { indent: ' ', enableColors: true }),
+    'dist/results/junit_bff.xml': jUnit(data),
+    'dist/results/summary_bff.json': JSON.stringify(data)
   };
 };
 
 //After the simulation ends
 export function teardown() {
-  console.log("Teardown");
+  console.log('Teardown');
 }
