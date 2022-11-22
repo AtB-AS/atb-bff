@@ -40,6 +40,9 @@ query quayDepartures(
           transportSubmode
         }
       }
+      situations {
+        ...situation
+      }
     }
     situations {
       ...situation
