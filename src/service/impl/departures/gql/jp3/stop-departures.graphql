@@ -39,6 +39,9 @@ query stopPlaceQuayDepartures(
             transportSubmode
           }
         }
+        situations {
+          ...situation
+        }
       }
       situations {
         ...situation
