@@ -54,10 +54,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
           }
         }
         situations {
-          situationNumber
-          description {
-            value
-          }
+          ...situation
         }
         fromPlace {
           name
