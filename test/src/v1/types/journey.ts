@@ -1,4 +1,4 @@
-export type TripsSimplifiedResponseType = Array<{
+export type TripsSingleSimplifiedResponseType = {
   expectedStartTime: string;
   expectedEndTime: string;
   distance: number;
@@ -13,6 +13,6 @@ export type TripsSimplifiedResponseType = Array<{
       id: string;
     };
   }>;
-}>;
+};
 
-export type TripsSingleSimplifiedResponseType = TripsSimplifiedResponseType[0];
+export type TripsSimplifiedResponseType = TripsSingleSimplifiedResponseType[];

@@ -12,7 +12,7 @@ export type GeocoderFeatureResponseType = Array<{
     source_id: string;
     name: string;
     street: string;
-    distance: 1.895;
+    distance: number;
     accuracy: string;
     country_a: string;
     county: string;
@@ -39,7 +39,7 @@ export type GeocoderReverseResponseType = Array<{
     name: string;
     street: string;
     confidence: string;
-    distance: 1.895;
+    distance: number;
     accuracy: string;
     country_a: string;
     county: string;
