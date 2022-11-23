@@ -27,20 +27,28 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Install dependencies
+        run: |
+          cd test && yarn install
+
+      - name: Bundle with webpack
+        run: |
+          cd test && yarn webpack
+
       - name: Run API tests
-        run: ./k6 run test/k6.js --config=test/config/functional.json --env environment=staging --env runFrom=root --log-output=stdout --logformat=raw | tee test/results/junitLog.txt
+        run: ./k6 run test/dist/k6.js --config=test/dist/config/functional.json --env environment=staging --env runFrom=root --log-output=stdout --logformat=raw | tee test/dist/results/junitLog.txt
 
       - name: Create JUnit from checks
-        run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder results
+        run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder dist/results
         working-directory: test
 
       - name: Create combined JUnit
-        run: python python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder results --addTime true
+        run: python python-tools/combineJUnit/combineJUnit.py --files junit_bff.xml,junitFromChecks.xml --folder dist/results --addTime true
         working-directory: test
 
       - name: Upload test report json
         uses: actions/upload-artifact@v3
         with:
           name: junit-results
-          path: ./test/results/combinedJUnit.xml
+          path: ./test/dist/results/combinedJUnit.xml
           retention-days: 5
