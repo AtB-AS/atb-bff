@@ -60,8 +60,8 @@ export const MapInfoWithFromQuayV2Document = gql`
   }
 }
     `;
-export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C>(requester: Requester<C>) {
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     MapInfoWithFromAndToQuayV2(variables: MapInfoWithFromAndToQuayV2QueryVariables, options?: C): Promise<MapInfoWithFromAndToQuayV2Query> {
       return requester<MapInfoWithFromAndToQuayV2Query, MapInfoWithFromAndToQuayV2QueryVariables>(MapInfoWithFromAndToQuayV2Document, variables, options);
