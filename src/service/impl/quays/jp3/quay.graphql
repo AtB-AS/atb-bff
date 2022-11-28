@@ -1,0 +1,8 @@
+query getQuaysCoordinates($ids: [String]!) {
+    quays(ids: $ids) {
+      id
+      name
+      longitude
+      latitude
+    }
+}
