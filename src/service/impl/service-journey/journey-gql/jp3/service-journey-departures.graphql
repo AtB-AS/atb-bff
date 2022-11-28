@@ -52,6 +52,9 @@ fragment quay on Quay {
   stopPlace {
     ...stopPlace
   }
+  tariffZones {
+    id
+  }
 }
 
 fragment line on Line {

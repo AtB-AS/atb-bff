@@ -62,8 +62,8 @@ export const StopPlaceQuayDeparturesDocument = gql`
   }
 }
     ${SituationFragmentDoc}`;
-export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C>(requester: Requester<C>) {
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     stopPlaceQuayDepartures(variables: StopPlaceQuayDeparturesQueryVariables, options?: C): Promise<StopPlaceQuayDeparturesQuery> {
       return requester<StopPlaceQuayDeparturesQuery, StopPlaceQuayDeparturesQueryVariables>(StopPlaceQuayDeparturesDocument, variables, options);

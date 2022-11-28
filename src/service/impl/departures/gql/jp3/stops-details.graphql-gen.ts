@@ -35,8 +35,8 @@ export const StopsDetailsDocument = gql`
   }
 }
     ${SituationFragmentDoc}`;
-export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C>(requester: Requester<C>) {
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     stopsDetails(variables: StopsDetailsQueryVariables, options?: C): Promise<StopsDetailsQuery> {
       return requester<StopsDetailsQuery, StopsDetailsQueryVariables>(StopsDetailsDocument, variables, options);
