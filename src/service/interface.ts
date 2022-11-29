@@ -65,7 +65,7 @@ import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure
 import { EnrollResponse } from './impl/enrollment';
 import { Boom } from '@hapi/boom';
 import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/jp3/service-journey-departures.graphql-gen';
-import { GetQuaysCoordinatesQuery } from './impl/quays/jp3/quay.graphql-gen';
+import { GetQuaysCoordinatesQuery } from './impl/quays/jp3/quays-coordinates.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;

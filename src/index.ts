@@ -19,7 +19,7 @@ import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
 import departureRoutes from './api/departures';
 import departureFavoritesRoutes from './api/departure-favorites';
-import quayRoutes from './api/quay-locations';
+import quayRoutes from './api/quays';
 
 import serviceJourneyRoutes, {
   serviceJourneyRoutes_v2
