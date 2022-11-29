@@ -1,10 +1,6 @@
 query serviceJourneyDepartures($id: String!, $date: Date) {
-  serviceJourney(
-    id: $id
-  ) {
-    estimatedCalls(
-      date: $date
-    ) {
+  serviceJourney(id: $id) {
+    estimatedCalls(date: $date) {
       ...serviceJourneyEstimatedCall
     }
   }
@@ -53,7 +49,7 @@ fragment quay on Quay {
     ...stopPlace
   }
   tariffZones {
-    id
+    ...tariffZone
   }
 }
 
