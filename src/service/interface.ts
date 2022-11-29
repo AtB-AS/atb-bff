@@ -41,7 +41,8 @@ import {
   QuayDeparturesPayload,
   StopPlaceDeparturesPayload,
   DepartureFavoritesPayload,
-  DepartureFavoritesQuery
+  DepartureFavoritesQuery,
+  QuaysCoordinatesPayload
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -64,6 +65,7 @@ import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure
 import { EnrollResponse } from './impl/enrollment';
 import { Boom } from '@hapi/boom';
 import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/jp3/service-journey-departures.graphql-gen';
+import { GetQuaysCoordinatesQuery } from './impl/quays/jp3/quays-coordinates.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -189,6 +191,12 @@ export interface IDepartureFavoritesService {
     location: DepartureFavoritesPayload,
     query: DepartureFavoritesQuery
   ): Promise<Result<DepartureFavoritesMetadata, APIError>>;
+}
+
+export interface IQuayService {
+  getQuaysCoordinates(
+    payload: QuaysCoordinatesPayload
+  ): Promise<Result<GetQuaysCoordinatesQuery, APIError>>;
 }
 
 export interface IJourneyService {

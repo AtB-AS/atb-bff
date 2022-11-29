@@ -724,6 +724,22 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/quays-coordinates:
+    post:
+      summary: Get quays coordinates
+      operationId: getBffV2QuayCoordinates
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/quayCoordinatesPayload'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v2/departures/quay-departures:
     get:
       summary: Get departures from a quay
@@ -936,6 +952,13 @@ definitions:
         $ref: '#/definitions/favoritesV2'
     required:
       - location
+  quayCoordinatesPayload:
+    type: object
+    properties:
+      ids:
+        type: array
+        items:
+          type: string
   departureFavoritesPayload:
     type: object
     properties:
