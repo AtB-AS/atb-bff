@@ -134,7 +134,6 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
       handler: async (request, h) => {
         const { id } = request.params;
-        console.log("FINDING FOR ID", id);
         const {
           date
         } = (request.query as unknown) as ServiceJourneyWithEstimatedCallsQuery;
