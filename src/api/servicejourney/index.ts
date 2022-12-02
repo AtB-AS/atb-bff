@@ -7,12 +7,12 @@ import {
 } from '../../service/interface';
 import {
   DeparturesForServiceJourneyQuery,
-  ServiceJourneyMapInfoQuery
+  ServiceJourneyMapInfoQuery, ServiceJourneyWithEstimatedCallsQuery
 } from '../../service/types';
 import {
   getDeparturesForServiceJourneyRequest,
   getDeparturesForServiceJourneyRequestV2,
-  getServiceJoruneyMapDataRequest
+  getServiceJoruneyMapDataRequest, getServiceJourneyWithEstimatedCallsV2
 } from './schema';
 import qs from 'querystring';
 
@@ -121,6 +121,24 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
           date
         } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
         return await service.getDeparturesForServiceJourneyV2(id, { date });
+      }
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/bff/v2/servicejourney/{id}/calls',
+      options: {
+        tags: ['api', 'stops', 'otp2'],
+        validate: getServiceJourneyWithEstimatedCallsV2,
+        description: 'Get Service Journey including its estimated calls'
+      },
+      handler: async (request, h) => {
+        const { id } = request.params;
+        console.log("FINDING FOR ID", id);
+        const {
+          date
+        } = (request.query as unknown) as ServiceJourneyWithEstimatedCallsQuery;
+        return await service.getServiceJourneyWithEstimatedCallsV2(id, { date });
       }
     });
   };

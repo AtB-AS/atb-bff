@@ -42,7 +42,7 @@ import {
   StopPlaceDeparturesPayload,
   DepartureFavoritesPayload,
   DepartureFavoritesQuery,
-  QuaysCoordinatesPayload
+  QuaysCoordinatesPayload, ServiceJourneyWithEstimatedCallsQuery
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -66,6 +66,7 @@ import { EnrollResponse } from './impl/enrollment';
 import { Boom } from '@hapi/boom';
 import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/jp3/service-journey-departures.graphql-gen';
 import { GetQuaysCoordinatesQuery } from './impl/quays/jp3/quays-coordinates.graphql-gen';
+import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/jp3/service-journey.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -96,6 +97,10 @@ export interface IServiceJourneyService_v2 {
     id: string,
     query: DeparturesForServiceJourneyQuery
   ): Promise<Result<ServiceJourneyEstimatedCallFragment[] | null, APIError>>;
+  getServiceJourneyWithEstimatedCallsV2(
+    id: string,
+    query: ServiceJourneyWithEstimatedCallsQuery
+  ): Promise<Result<ServiceJourneyWithEstCallsFragment | null, APIError>>;
 }
 
 export interface ITrips_v2 {

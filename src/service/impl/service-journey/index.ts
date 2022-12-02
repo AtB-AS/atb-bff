@@ -27,6 +27,12 @@ import {
   ServiceJourneyDeparturesQuery,
   ServiceJourneyDeparturesQueryVariables
 } from './journey-gql/jp3/service-journey-departures.graphql-gen';
+import {
+  ServiceJourneyWithEstimatedCallsDocument,
+  ServiceJourneyWithEstimatedCallsQuery,
+  ServiceJourneyWithEstimatedCallsQueryVariables
+} from './journey-gql/jp3/service-journey-with-estimated-calls.graphql-gen';
+import { ServiceJourneyWithEstCallsFragment } from '../fragments/jp3/service-journey.graphql-gen';
 
 export default function serviceJourneyService(
   service: EnturServiceAPI
@@ -125,6 +131,30 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         return Result.ok(
           estimatedCalls as ServiceJourneyEstimatedCallFragment[]
         );
+      } catch (error: any) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async getServiceJourneyWithEstimatedCallsV2(id, { date }) {
+      try {
+        const serviceDate = date
+          ? formatISO(date, { representation: 'date' })
+          : undefined;
+
+        const result = await journeyPlannerClient_v3.query<
+          ServiceJourneyWithEstimatedCallsQuery,
+          ServiceJourneyWithEstimatedCallsQueryVariables
+        >({
+          query: ServiceJourneyWithEstimatedCallsDocument,
+          variables: { id, date: serviceDate }
+        });
+
+        if (result.error) {
+          return Result.err(new APIError(result.error));
+        }
+
+        const serviceJourney = result.data.serviceJourney;
+        return Result.ok(serviceJourney as ServiceJourneyWithEstCallsFragment);
       } catch (error: any) {
         return Result.err(new APIError(error));
       }

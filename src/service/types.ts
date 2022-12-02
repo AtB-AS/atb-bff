@@ -211,6 +211,10 @@ export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
 
+export interface ServiceJourneyWithEstimatedCallsQuery {
+  date?: Date;
+}
+
 export interface ServiceJourneyMapInfoQuery {
   fromQuayId: string;
   toQuayId?: string;
