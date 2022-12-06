@@ -1,5 +1,5 @@
 # docker build -t 'gcr.io/atb-mobility-platform/atb-bff-test:sha' -f 'Dockerfile.test' .
-# docker run -e environment=staging gcr.io/atb-mobility-platform/atb-bff-test:sha
+# docker run -e host=https://atb-staging.api.mittatb.no gcr.io/atb-mobility-platform/atb-bff-test:sha
 
 FROM node:16.18-alpine3.16 as dependencies
 WORKDIR /test

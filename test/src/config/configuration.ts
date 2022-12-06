@@ -38,7 +38,7 @@ const envHosts: EnvType = JSON.parse(open('config/env.json'));
 
 //Default options are different for perfTest or not - vu/duration/iteration can be overrun by cli options
 const options =
-  __ENV.isPerformanceTest === 'true'
+  __ENV.performanceTest === 'true'
     ? JSON.parse(open('config/performanceConfig.json'))
     : JSON.parse(open('config/functionalConfig.json'));
 
