@@ -1,0 +1,14 @@
+fragment quay on Quay {
+  id
+  name
+  publicCode
+  situations {
+    ...situation
+  }
+  stopPlace {
+    ...stopPlace
+  }
+  tariffZones {
+    ...tariffZone
+  }
+}

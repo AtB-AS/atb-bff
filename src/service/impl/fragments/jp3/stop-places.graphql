@@ -1,0 +1,6 @@
+fragment stopPlace on StopPlace {
+  id
+  name
+  latitude
+  longitude
+}

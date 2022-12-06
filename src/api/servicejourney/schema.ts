@@ -27,3 +27,12 @@ export const getDeparturesForServiceJourneyRequestV2 = {
     date: Joi.date()
   })
 };
+
+export const getServiceJourneyWithEstimatedCallsV2 = {
+  params: Joi.object({
+    id: Joi.string().required()
+  }).required(),
+  query: Joi.object({
+    date: Joi.date()
+  })
+};
