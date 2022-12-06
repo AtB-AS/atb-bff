@@ -2,10 +2,11 @@ import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-export type NoticeFragment = { text?: string };
+export type NoticeFragment = { id: string, text?: string };
 
 export const NoticeFragmentDoc = gql`
     fragment notice on Notice {
+  id
   text
 }
     `;

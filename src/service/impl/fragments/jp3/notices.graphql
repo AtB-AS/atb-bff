@@ -1,3 +1,4 @@
 fragment notice on Notice {
+  id
   text
 }

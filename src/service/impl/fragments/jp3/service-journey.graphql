@@ -5,6 +5,14 @@ fragment serviceJourneyWithEstCalls on ServiceJourney {
   publicCode
   line {
     publicCode
+    notices {
+      ...notice
+    }
+  }
+  journeyPattern {
+    notices {
+      ...notice
+    }
   }
   notices {
     ...notice

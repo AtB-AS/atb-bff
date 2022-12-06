@@ -23,7 +23,7 @@ fragment serviceJourneyEstimatedCall on EstimatedCall {
     ...notice
   }
   quay {
-    ...quay
+    ...quayWithSituations
   }
   realtime
   serviceJourney {

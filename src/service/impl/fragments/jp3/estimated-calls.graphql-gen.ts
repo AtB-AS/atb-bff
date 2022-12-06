@@ -3,9 +3,9 @@ import * as Types from '../../../../graphql/journeyplanner-types_v3';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { QuayFragmentDoc } from './quays.graphql-gen';
-import { SituationFragmentDoc } from './situations.graphql-gen';
 import { NoticeFragmentDoc } from './notices.graphql-gen';
-export type EstimatedCallWithQuayFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date?: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, forBoarding: boolean, realtime: boolean, destinationDisplay?: { frontText?: string }, quay?: { id: string, name: string, publicCode?: string, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }> }>, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number }, tariffZones: Array<{ id: string, name?: string }> }, notices: Array<{ text?: string }>, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }> }> };
+import { SituationFragmentDoc } from './situations.graphql-gen';
+export type EstimatedCallWithQuayFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date?: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, forBoarding: boolean, realtime: boolean, destinationDisplay?: { frontText?: string }, quay?: { id: string, name: string, publicCode?: string, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number }, tariffZones: Array<{ id: string, name?: string }> }, notices: Array<{ id: string, text?: string }>, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }> }> };
 
 export const EstimatedCallWithQuayFragmentDoc = gql`
     fragment estimatedCallWithQuay on EstimatedCall {
