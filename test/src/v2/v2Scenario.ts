@@ -25,7 +25,11 @@ import {
   serviceJourneyTestData
 } from './testData/testData';
 import { singleTrip, trips, tripsWithCursor } from './trips';
-import { polyline, serviceJourneyDepartures } from './servicejourney';
+import {
+  polyline,
+  serviceJourneyDepartures,
+  serviceJourneyCalls
+} from './servicejourney';
 
 //Scenario with std pattern
 export const departuresScenario = (searchDate: string): void => {
@@ -57,6 +61,7 @@ export const tripsScenario = (searchDate: string): void => {
 export const serviceJourneyScenario = (searchDate: string): void => {
   // Requests
   serviceJourneyDepartures(serviceJourneyTestData, searchDate);
+  serviceJourneyCalls(serviceJourneyTestData, searchDate);
   polyline(serviceJourneyTestData, searchDate);
 };
 

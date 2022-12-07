@@ -8,6 +8,7 @@ import {
   ServiceJourneyDeparturesResponseType
 } from '../types';
 import { TripsQuery } from '../../../../src/service/impl/trips/graphql/jp3/trip.graphql-gen';
+import { ServiceJourneyCallsResponseType } from '../types/servicejourney';
 
 export function serviceJourneyDepartures(
   testData: serviceJourneyTestDataType,
@@ -79,6 +80,98 @@ export function serviceJourneyDepartures(
     metrics.addFailureIfMultipleChecks(
       [resTrip.request.url, resSJD.request.url],
       resTrip.timings.duration + resSJD.timings.duration,
+      requestName,
+      expects
+    );
+  }
+}
+
+// New structured request for 'serviceJourneyDepartures'
+export function serviceJourneyCalls(
+  testData: serviceJourneyTestDataType,
+  searchDate: string
+) {
+  const searchTime = `${searchDate}T10:00:00.000Z`;
+  for (let test of testData.scenarios) {
+    const requestName = `v2_serviceJourneyCalls_${testData.scenarios.indexOf(
+      test
+    )}`;
+
+    // Get service journey id
+    const urlTrip = `${conf.host()}/bff/v2/trips`;
+    test.query.when = searchTime;
+    const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
+      tags: { name: requestName },
+      headers: bffHeadersPost
+    });
+    const jsonTrip = resTrip.json() as TripsQuery;
+    const tripNumber =
+      jsonTrip.trip.tripPatterns[0].legs[0].mode === 'bus' ? 0 : 1;
+    const serviceJourneyId = jsonTrip.trip.tripPatterns[tripNumber].legs[0]
+      .serviceJourney!.id;
+    const lineId = serviceJourneyId.split(':')[2].split('_')[0];
+
+    const urlSJC = `${conf.host()}/bff/v2/servicejourney/${serviceJourneyId}/calls?date=${searchDate}`;
+    const resSJC = http.get(urlSJC, {
+      tags: { name: requestName },
+      headers: bffHeadersGet
+    });
+    const jsonSJC = resSJC.json() as ServiceJourneyCallsResponseType;
+
+    const expects: ExpectsType = [
+      {
+        check: 'should have status 200 on /trip',
+        expect: resTrip.status === 200
+      },
+      {
+        check: 'should have status 200 on /servicejourney',
+        expect: resSJC.status === 200
+      }
+    ];
+
+    if (resSJC.status === 200) {
+      // Assert service journey id and line id
+      expects.push(
+        {
+          check: 'should have departures',
+          expect: jsonSJC.value.estimatedCalls.length > 0
+        },
+        {
+          check: 'should return correct service journey',
+          expect: jsonSJC.value.id === serviceJourneyId
+        },
+        {
+          check: 'should have correct line id',
+          expect: jsonSJC.value.line.publicCode === lineId
+        }
+      );
+      // Assert situations only on estimated call level
+      expects.push(
+        {
+          check: 'should not have situations on top level',
+          expect: resSJC.json('value.situations') === undefined
+        },
+        {
+          check: 'should have situations on estimated call',
+          expect:
+            jsonSJC.value.estimatedCalls.map(call => call.situations).length >=
+            0
+        }
+      );
+      // Assert expected start time from travel search
+      const expStartTime =
+        jsonTrip.trip.tripPatterns[tripNumber].legs[0].expectedStartTime;
+      expects.push({
+        check: 'should have correct expected start time',
+        expect: jsonSJC.value.estimatedCalls
+          .map(call => call.expectedDepartureTime)
+          .includes(expStartTime)
+      });
+    }
+
+    metrics.addFailureIfMultipleChecks(
+      [resTrip.request.url, resSJC.request.url],
+      resTrip.timings.duration + resSJC.timings.duration,
       requestName,
       expects
     );
