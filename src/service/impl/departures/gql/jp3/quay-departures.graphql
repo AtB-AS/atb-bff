@@ -38,10 +38,24 @@ query quayDepartures(
           publicCode
           transportMode
           transportSubmode
+          notices {
+            ...notice
+          }
+        }
+        journeyPattern {
+          notices {
+            ...notice
+          }
+        }
+        notices {
+          ...notice
         }
       }
       situations {
         ...situation
+      }
+      notices {
+        ...notice
       }
     }
     situations {
