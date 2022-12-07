@@ -36,7 +36,7 @@ jobs:
           cd test && yarn webpack
 
       - name: Run API tests
-        run: ./k6 run test/dist/k6.js --config=test/dist/config/functional.json --env environment=staging --env runFrom=root --log-output=stdout --logformat=raw | tee test/dist/results/junitLog.txt
+        run: ./k6 run test/dist/k6.js --env environment=staging --env runFrom=root --log-output=stdout --logformat=raw | tee test/dist/results/junitLog.txt
 
       - name: Create JUnit from checks
         run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder dist/results

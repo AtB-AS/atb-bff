@@ -5,36 +5,65 @@ Configuration that makes parameters from config file available
 import { Counter } from 'k6/metrics';
 import { logResults } from '../utils/log';
 
-const env: string = __ENV.environment || 'staging';
+type ConfigType = {
+  vus: number;
+  iterations?: number;
+  stages?: Array<{
+    duration: string;
+    target: number;
+  }>;
+  usecase: string;
+  summaryTrendStats: Array<string>;
+  thresholds: {
+    [threshold: string]: Array<string>;
+  };
+  junitCheckOutput: boolean;
+};
 
-const envHosts = JSON.parse(open('config/env.json'));
-
-//Default options are different for perfTest or not - vu/duration/iteration can be overrun by cli options
-const options = JSON.parse(open('config/functional.json'));
-
-// *** Functional: Add failed counter ***
-let failureCount = new Counter('reqs_failed');
-
-//Configuration parameters for others to use
-export const conf = {
-  env(): string {
-    return env;
-  },
-  host(): string {
-    return envHosts.environments[env].host;
-  },
-  usecase(): string {
-    return __ENV.usecase || options.usecase;
-  },
-  runFrom(): string {
-    return __ENV.runFrom || 'test';
-  }
+type EnvType = {
+  environments: {
+    [environment: string]: {
+      host: string;
+    };
+  };
 };
 
 export type ExpectsType = Array<{
   check: string;
   expect: boolean | undefined;
 }>;
+
+const env: string = __ENV.environment || 'staging';
+const envHosts: EnvType = JSON.parse(open('config/env.json'));
+
+//Default options are different for perfTest or not - vu/duration/iteration can be overrun by cli options
+const options =
+  __ENV.performanceTest === 'true'
+    ? JSON.parse(open('config/performanceConfig.json'))
+    : JSON.parse(open('config/functionalConfig.json'));
+
+// *** Functional: Add failed counter ***
+let failureCount = new Counter('reqs_failed');
+
+//Configuration parameters for others to use
+export const conf = {
+  // The host to run tests against
+  host(): string {
+    return __ENV.host || envHosts.environments[env].host;
+  },
+  // The usecase to run
+  usecase(): string {
+    return __ENV.usecase || options.usecase;
+  },
+  // Where the tests are run from
+  runFrom(): string {
+    return __ENV.runFrom || 'test';
+  },
+  // The options descibed in ./*Config.json
+  options(): ConfigType {
+    return options;
+  }
+};
 
 //Make metrics available
 export const metrics = {
