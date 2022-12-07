@@ -1,5 +1,155 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`service stops -> departure group utils snapshot - should concatenate notices 1`] = `
+Array [
+  Object {
+    "quays": Array [
+      Object {
+        "group": Array [
+          Object {
+            "departures": Array [
+              Object {
+                "aimedTime": undefined,
+                "notices": Array [
+                  Object {
+                    "id": "notice-on-call-1-id",
+                    "text": "notice-on-call-1-text",
+                  },
+                  Object {
+                    "id": "notice-on-call-2-id",
+                    "text": "notice-on-call-2-text",
+                  },
+                  Object {
+                    "id": "notice-on-sj-1-id",
+                    "text": "notice-on-sj-1-text",
+                  },
+                  Object {
+                    "id": "notice-on-jp-1-id",
+                    "text": "notice-on-jp-1-text",
+                  },
+                  Object {
+                    "id": "notice-on-line-1-id",
+                    "text": "notice-on-line-1-text",
+                  },
+                ],
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141600001_69_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+            ],
+            "lineInfo": Object {
+              "lineId": "ATB:Line:200109141544126_24_200109141539610",
+              "lineName": "City Syd via Kroppanmarka",
+              "lineNumber": "24",
+              "notices": Array [],
+              "quayId": "NSR:Quay:74012",
+              "transportMode": "bus",
+              "transportSubmode": "localBus",
+            },
+          },
+        ],
+        "quay": Object {
+          "__typename": "Quay",
+          "description": null,
+          "id": "NSR:Quay:74012",
+          "latitude": 63.40766,
+          "longitude": 10.403871,
+          "name": "Sorgenfri",
+          "publicCode": "",
+          "situations": Array [],
+        },
+      },
+    ],
+    "stopPlace": Object {
+      "__typename": "StopPlace",
+      "description": "",
+      "id": "NSR:StopPlace:43153",
+      "latitude": 63.407925,
+      "longitude": 10.403864,
+      "name": "Sorgenfri",
+    },
+  },
+]
+`;
+
+exports[`service stops -> departure group utils snapshot - should concatenate notices from call, sj, jp and line 1`] = `
+Array [
+  Object {
+    "quays": Array [
+      Object {
+        "group": Array [
+          Object {
+            "departures": Array [
+              Object {
+                "aimedTime": undefined,
+                "notices": Array [
+                  Object {
+                    "id": "notice-on-call-1-id",
+                    "text": "notice-on-call-1-text",
+                  },
+                  Object {
+                    "id": "notice-on-call-2-id",
+                    "text": "notice-on-call-2-text",
+                  },
+                  Object {
+                    "id": "notice-on-sj-1-id",
+                    "text": "notice-on-sj-1-text",
+                  },
+                  Object {
+                    "id": "notice-on-jp-1-id",
+                    "text": "notice-on-jp-1-text",
+                  },
+                  Object {
+                    "id": "notice-on-line-1-id",
+                    "text": "notice-on-line-1-text",
+                  },
+                ],
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141600001_69_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+            ],
+            "lineInfo": Object {
+              "lineId": "ATB:Line:200109141544126_24_200109141539610",
+              "lineName": "City Syd via Kroppanmarka",
+              "lineNumber": "24",
+              "notices": Array [],
+              "quayId": "NSR:Quay:74012",
+              "transportMode": "bus",
+              "transportSubmode": "localBus",
+            },
+          },
+        ],
+        "quay": Object {
+          "__typename": "Quay",
+          "description": null,
+          "id": "NSR:Quay:74012",
+          "latitude": 63.40766,
+          "longitude": 10.403871,
+          "name": "Sorgenfri",
+          "publicCode": "",
+          "situations": Array [],
+        },
+      },
+    ],
+    "stopPlace": Object {
+      "__typename": "StopPlace",
+      "description": "",
+      "id": "NSR:StopPlace:43153",
+      "latitude": 63.407925,
+      "longitude": 10.403864,
+      "name": "Sorgenfri",
+    },
+  },
+]
+`;
+
 exports[`service stops -> departure group utils snapshot - should group data from address 1`] = `
 Array [
   Object {
@@ -10,6 +160,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -19,6 +170,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -28,6 +180,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -37,6 +190,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -46,6 +200,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -68,6 +223,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -77,6 +233,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -86,6 +243,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -95,6 +253,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -104,6 +263,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -126,6 +286,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -135,6 +296,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -144,6 +306,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -153,6 +316,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -162,6 +326,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -184,6 +349,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -220,6 +386,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -229,6 +396,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -238,6 +406,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -247,6 +416,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -256,6 +426,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -304,6 +475,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -313,6 +485,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -322,6 +495,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -331,6 +505,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -340,6 +515,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -376,6 +552,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -385,6 +562,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -394,6 +572,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -403,6 +582,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -412,6 +592,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -434,6 +615,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -443,6 +625,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -452,6 +635,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -461,6 +645,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -470,6 +655,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -492,6 +678,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -501,6 +688,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -510,6 +698,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -519,6 +708,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -528,6 +718,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -550,6 +741,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -598,6 +790,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -607,6 +800,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -616,6 +810,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -638,6 +833,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -647,6 +843,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -656,6 +853,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -665,6 +863,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -674,6 +873,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -696,6 +896,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -705,6 +906,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -714,6 +916,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -723,6 +926,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -732,6 +936,12 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [
+                  Object {
+                    "__typename": "Notice",
+                    "text": "Kun fredag / Operates only Fridays",
+                  },
+                ],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -754,6 +964,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -763,6 +974,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -772,6 +984,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -781,6 +994,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -790,6 +1004,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -812,6 +1027,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -821,6 +1037,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -830,6 +1047,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -839,6 +1057,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -848,6 +1067,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -870,6 +1090,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -879,6 +1100,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -888,6 +1110,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -897,6 +1120,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -906,6 +1130,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -928,6 +1153,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -950,6 +1176,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -972,6 +1199,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -981,6 +1209,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -990,6 +1219,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -999,6 +1229,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1008,6 +1239,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1030,6 +1262,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1066,6 +1299,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1075,6 +1309,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1084,6 +1319,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1093,6 +1329,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1102,6 +1339,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1124,6 +1362,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1133,6 +1372,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1142,6 +1382,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1151,6 +1392,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1160,6 +1402,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1182,6 +1425,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1191,6 +1435,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1200,6 +1445,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1209,6 +1455,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1218,6 +1465,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1240,6 +1488,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1249,6 +1498,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1258,6 +1508,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1267,6 +1518,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1276,6 +1528,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1298,6 +1551,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1307,6 +1561,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1316,6 +1571,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1325,6 +1581,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1334,6 +1591,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1356,6 +1614,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1365,6 +1624,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1374,6 +1634,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1383,6 +1644,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1392,6 +1654,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1414,6 +1677,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1423,6 +1687,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1432,6 +1697,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1441,6 +1707,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1450,6 +1717,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1516,6 +1784,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1525,6 +1794,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1534,6 +1804,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1543,6 +1814,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1552,6 +1824,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1605,6 +1878,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1614,6 +1888,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1623,6 +1898,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1632,6 +1908,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1641,6 +1918,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1663,6 +1941,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1672,6 +1951,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1681,6 +1961,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1690,6 +1971,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1699,6 +1981,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1721,6 +2004,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1730,6 +2014,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1739,6 +2024,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1748,6 +2034,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1757,6 +2044,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1779,6 +2067,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": false,
                 "serviceDate": undefined,
@@ -1815,6 +2104,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1824,6 +2114,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1833,6 +2124,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1842,6 +2134,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1851,6 +2144,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1917,6 +2211,7 @@ Array [
             "departures": Array [
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1926,6 +2221,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1935,6 +2231,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1944,6 +2241,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,
@@ -1953,6 +2251,7 @@ Array [
               },
               Object {
                 "aimedTime": undefined,
+                "notices": Array [],
                 "predictionInaccurate": false,
                 "realtime": true,
                 "serviceDate": undefined,

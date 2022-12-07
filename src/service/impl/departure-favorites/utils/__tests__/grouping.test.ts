@@ -31,4 +31,9 @@ describe('service stops -> departure group utils', () => {
     const fixture = require('./fixture-address-layer-favorites.json');
     expect(mapQueryToGroups(fixture, favorites)).toMatchSnapshot();
   });
+
+  it('snapshot - should concatenate notices from call, sj, jp and line', () => {
+    const fixture = require('./fixture-venue-layer-notices.json');
+    expect(mapQueryToGroups(fixture)).toMatchSnapshot();
+  });
 });

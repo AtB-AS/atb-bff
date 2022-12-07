@@ -1,0 +1,104 @@
+[
+  {
+    "id": "NSR:StopPlace:43153",
+    "description": "",
+    "name": "Sorgenfri",
+    "latitude": 63.407925,
+    "longitude": 10.403864,
+    "__typename": "StopPlace",
+    "quays": [
+      {
+        "id": "NSR:Quay:74012",
+        "name": "Sorgenfri",
+        "description": null,
+        "publicCode": "",
+        "latitude": 63.40766,
+        "longitude": 10.403871,
+        "situations": [],
+        "__typename": "Quay",
+        "times": [
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "expectedArrivalTime": "2020-12-08T15:06:04+0100",
+            "aimedArrivalTime": "2020-12-08T15:05:00+0100",
+            "predictionInaccurate": false,
+            "realtime": true,
+            "serviceDate": "2020-12-09",
+            "notices": [
+              {
+                "id": "notice-on-call-1-id",
+                "text": "notice-on-call-1-text"
+              },
+              {
+                "id": "notice-on-call-2-id",
+                "text": "notice-on-call-2-text"
+              }
+            ],
+            "situations": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600001_69_200109141539610",
+              "line": {
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "__typename": "Line"
+              },
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          }
+        ],
+        "estimatedCalls": [
+          {
+            "destinationDisplay": {
+              "frontText": "City Syd via Kroppanmarka",
+              "__typename": "DestinationDisplay"
+            },
+            "notices": [],
+            "serviceJourney": {
+              "id": "ATB:ServiceJourney:24_200109141600001_69_200109141539610",
+              "directionType": "outbound",
+              "line": {
+                "description": null,
+                "flexibleLineType": null,
+                "id": "ATB:Line:200109141544126_24_200109141539610",
+                "name": "City Syd- Kroppanmarka- Lerkendal",
+                "notices": [
+                  {
+                    "id": "notice-on-line-1-id",
+                    "text": "notice-on-line-1-text"
+                  }
+                ],
+                "situations": [],
+                "publicCode": "24",
+                "transportMode": "bus",
+                "transportSubmode": "localBus",
+                "__typename": "Line"
+              },
+              "journeyPattern": {
+                "notices": [
+                  {
+                    "id": "notice-on-jp-1-id",
+                    "text": "notice-on-jp-1-text"
+                  }
+                ],
+                "__typename": "JourneyPattern"
+              },
+              "notices": [
+                {
+                  "id": "notice-on-sj-1-id",
+                  "text": "notice-on-sj-1-text"
+                }
+              ],
+              "privateCode": "",
+              "transportSubmode": "localBus",
+              "__typename": "ServiceJourney"
+            },
+            "__typename": "EstimatedCall"
+          }
+        ]
+      }
+    ]
+  }
+]
