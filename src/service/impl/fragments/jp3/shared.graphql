@@ -1,0 +1,14 @@
+ fragment multilingualString on MultilingualString {
+   language
+   value
+ }
+
+ fragment infoLink on infoLink {
+     uri
+     label
+ }
+
+ fragment validityPeriod on ValidityPeriod {
+     startTime
+     endTime
+ }
