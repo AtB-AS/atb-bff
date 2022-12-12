@@ -4,11 +4,11 @@
  }
 
  fragment infoLink on infoLink {
-     uri
-     label
+   uri
+   label
  }
 
  fragment validityPeriod on ValidityPeriod {
-     startTime
-     endTime
+   startTime
+   endTime
  }
