@@ -1,0 +1,23 @@
+fragment serviceJourneyWithEstCalls on ServiceJourney {
+  id
+  transportMode
+  transportSubmode
+  publicCode
+  line {
+    publicCode
+    notices {
+      ...notice
+    }
+  }
+  journeyPattern {
+    notices {
+      ...notice
+    }
+  }
+  notices {
+    ...notice
+  }
+  estimatedCalls(date: $date) {
+    ...estimatedCallWithQuay
+  }
+}

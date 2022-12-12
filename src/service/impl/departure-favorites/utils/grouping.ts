@@ -7,6 +7,7 @@ import {
 import { FavoriteDeparture } from '../../../types';
 import { GroupsByIdQuery } from '../journey-gql/jp3/departure-group.graphql-gen';
 import { SituationFragment } from '../../fragments/jp3/situations.graphql-gen';
+import {NoticeFragment} from "../../fragments/jp3/notices.graphql-gen";
 
 type Notice = { text?: string };
 
@@ -28,6 +29,7 @@ type DepartureTime = {
   situations: SituationFragment[];
   serviceJourneyId?: string;
   serviceDate: string;
+  notices: NoticeFragment[];
 };
 
 type DepartureGroup = {
@@ -127,6 +129,12 @@ export default function mapQueryToGroups(
           }
 
           const departures = times.map<DepartureTime>(function (time) {
+            const notices = [
+              ...(time.notices || []),
+              ...(lineInfoEntry.serviceJourney?.notices || []),
+              ...(lineInfoEntry.serviceJourney?.journeyPattern?.notices || []),
+              ...(lineInfoEntry.serviceJourney?.line.notices || [])
+            ];
             return {
               time: time.expectedDepartureTime,
               aimedTime: time.aimedDepartureTime,
@@ -134,7 +142,8 @@ export default function mapQueryToGroups(
               realtime: time.realtime,
               situations: time.situations,
               serviceJourneyId: time.serviceJourney?.id,
-              serviceDate: time.date
+              serviceDate: time.date,
+              notices
             };
           });
 

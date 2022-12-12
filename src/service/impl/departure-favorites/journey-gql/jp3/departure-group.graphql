@@ -50,7 +50,7 @@ fragment group_estimatedCallFields on EstimatedCall {
     frontText
   }
   notices {
-    ...group_noticeFields
+    ...notice
   }
   serviceJourney {
     ...group_serviceJourneyFields
@@ -67,7 +67,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   predictionInaccurate
   realtime
   notices {
-    ...group_noticeFields
+    ...notice
   }
   situations {
     ...situation
@@ -104,7 +104,7 @@ fragment group_lineFields on Line {
   transportMode
   transportSubmode
   notices {
-    ...group_noticeFields
+    ...notice
   }
   situations {
     ...situation
@@ -130,11 +130,11 @@ fragment group_serviceJourneyFields on ServiceJourney {
   }
   journeyPattern {
     notices {
-      ...group_noticeFields
+      ...notice
     }
   }
   notices {
-    ...group_noticeFields
+    ...notice
   }
   privateCode
   transportSubmode

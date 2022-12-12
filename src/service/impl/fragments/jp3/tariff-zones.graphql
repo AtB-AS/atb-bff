@@ -1,0 +1,4 @@
+fragment tariffZone on TariffZone{
+    id
+    name
+}

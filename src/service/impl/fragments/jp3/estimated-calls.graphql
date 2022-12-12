@@ -1,0 +1,25 @@
+fragment estimatedCallWithQuay on EstimatedCall {
+  actualArrivalTime
+  actualDepartureTime
+  aimedArrivalTime
+  aimedDepartureTime
+  cancellation
+  date
+  destinationDisplay {
+    frontText
+  }
+  expectedDepartureTime
+  expectedArrivalTime
+  forAlighting
+  forBoarding
+  realtime
+  quay {
+    ...quay
+  }
+  notices {
+    ...notice
+  }
+  situations {
+    ...situation
+  }
+}

@@ -7,6 +7,7 @@ import stopsService from './service/impl/stops';
 import journeyService from './service/impl/journey';
 import departuresService from './service/impl/departures';
 import tripsService from './service/impl/trips';
+import quayService from './service/impl/quays';
 import departureFavoritesService from './service/impl/departure-favorites';
 import enrollmentService from './service/impl/enrollment';
 
@@ -18,6 +19,7 @@ import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
 import departureRoutes from './api/departures';
 import departureFavoritesRoutes from './api/departure-favorites';
+import quayRoutes from './api/quays';
 
 import serviceJourneyRoutes, {
   serviceJourneyRoutes_v2
@@ -56,6 +58,7 @@ process.on('unhandledRejection', err => {
     journeyRoutes(server)(js);
     serviceJourneyRoutes(server)(serviceJourneyService(enturService));
     enrollmentRoutes(server)(enrollmentService());
+    quayRoutes(server)(quayService());
 
     // JP3
     tripsRoutes(server)(tripsService());

@@ -1,10 +1,6 @@
 query serviceJourneyDepartures($id: String!, $date: Date) {
-  serviceJourney(
-    id: $id
-  ) {
-    estimatedCalls(
-      date: $date
-    ) {
+  serviceJourney(id: $id) {
+    estimatedCalls(date: $date) {
       ...serviceJourneyEstimatedCall
     }
   }
@@ -27,7 +23,7 @@ fragment serviceJourneyEstimatedCall on EstimatedCall {
     ...notice
   }
   quay {
-    ...quay
+    ...quayWithSituations
   }
   realtime
   serviceJourney {
@@ -38,21 +34,6 @@ fragment serviceJourneyEstimatedCall on EstimatedCall {
   }
 }
 
-fragment notice on Notice {
-  text
-}
-
-fragment quay on Quay {
-  id
-  name
-  publicCode
-  situations {
-    ...situation
-  }
-  stopPlace {
-    ...stopPlace
-  }
-}
 
 fragment line on Line {
   id
@@ -60,13 +41,6 @@ fragment line on Line {
   publicCode
   transportMode
   transportSubmode
-}
-
-fragment stopPlace on StopPlace {
-  id
-  name
-  latitude
-  longitude
 }
 
 fragment serviceJourney on ServiceJourney {

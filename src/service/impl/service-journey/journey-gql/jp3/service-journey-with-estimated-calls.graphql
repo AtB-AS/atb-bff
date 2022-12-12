@@ -1,0 +1,5 @@
+query serviceJourneyWithEstimatedCalls($id: String!, $date: Date) {
+  serviceJourney(id: $id) {
+    ...serviceJourneyWithEstCalls
+  }
+}

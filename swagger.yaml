@@ -383,6 +383,26 @@ paths:
           schema:
             type: string
           description: Successful
+  '/bff/v2/servicejourney/{id}/calls':
+    get:
+      summary: Get ServiceJourney including EstimatedCalls
+      operationId: getBffV2ServicejourneyIdCalls
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - type: string
+          format: date
+          name: date
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   '/bff/v2/servicejourney/{id}/polyline':
     get:
       summary: Get Map info for a serviceJourney
@@ -724,6 +744,22 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/quays-coordinates:
+    post:
+      summary: Get quays coordinates
+      operationId: getBffV2QuayCoordinates
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/quayCoordinatesPayload'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v2/departures/quay-departures:
     get:
       summary: Get departures from a quay
@@ -936,6 +972,13 @@ definitions:
         $ref: '#/definitions/favoritesV2'
     required:
       - location
+  quayCoordinatesPayload:
+    type: object
+    properties:
+      ids:
+        type: array
+        items:
+          type: string
   departureFavoritesPayload:
     type: object
     properties:

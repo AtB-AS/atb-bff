@@ -53,6 +53,10 @@ export type FeaturesQuery = {
   'focus.scale'?: 'string';
 };
 
+export interface QuaysCoordinatesPayload {
+  ids: string[];
+}
+
 export interface QuaysForStopPlaceQuery {
   filterByInUse: boolean;
 }
@@ -204,6 +208,10 @@ export interface DeparturesBetweenStopPlacesQuery {
 }
 
 export interface DeparturesForServiceJourneyQuery {
+  date?: Date;
+}
+
+export interface ServiceJourneyWithEstimatedCallsQuery {
   date?: Date;
 }
 

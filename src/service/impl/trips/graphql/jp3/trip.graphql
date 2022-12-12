@@ -37,6 +37,9 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
           name
           transportSubmode
           publicCode
+          notices {
+            ...notice
+          }
         }
         fromEstimatedCall {
           aimedDepartureTime
@@ -49,8 +52,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             name
           }
           notices {
-            text
-            id
+            ...notice
           }
         }
         situations {
@@ -75,6 +77,9 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             situations {
               ...situation
             }
+            tariffZones {
+              ...tariffZone
+            }
           }
         }
         toPlace {
@@ -96,10 +101,21 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             situations {
               ...situation
             }
+            tariffZones {
+              ...tariffZone
+            }
           }
         }
         serviceJourney {
           id
+          notices {
+            ...notice
+          }
+          journeyPattern {
+            notices {
+              ...notice
+            }
+          }
         }
         interchangeTo {
           toServiceJourney {
