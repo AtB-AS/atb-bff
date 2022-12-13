@@ -116,6 +116,13 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
               ...notice
             }
           }
+          estimatedCalls {
+            actualDepartureTime
+            quay {
+              name
+            }
+            predictionInaccurate
+          }
         }
         interchangeTo {
           toServiceJourney {
