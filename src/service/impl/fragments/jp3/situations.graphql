@@ -2,12 +2,19 @@ fragment situation on PtSituationElement {
   id
   situationNumber
   summary {
-    language
-    value
+    ...multilingualString
   }
   description {
-    language
-    value
+    ...multilingualString
   }
   reportType
+  advice {
+    ...multilingualString
+  }
+  infoLinks {
+    ...infoLink
+  }
+  validityPeriod {
+    ...validityPeriod
+  }
 }
