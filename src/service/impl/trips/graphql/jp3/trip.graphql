@@ -116,13 +116,6 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
               ...notice
             }
           }
-          estimatedCalls {
-            actualDepartureTime
-            quay {
-              name
-            }
-            predictionInaccurate
-          }
         }
         interchangeTo {
           toServiceJourney {
@@ -145,6 +138,15 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
           id
         }
         transportSubmode
+        datedServiceJourney {
+          estimatedCalls {
+            actualDepartureTime
+            quay {
+              name
+            }
+            predictionInaccurate
+          }
+        }
       }
     }
   }
