@@ -154,7 +154,7 @@ export const GroupsByIdDocument = gql`
         timeRange: $timeRange
         numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
         numberOfDepartures: $totalLimit
-        arrivalDeparture: both
+        arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: {lines: $filterByLineIds}
       ) {
@@ -165,7 +165,7 @@ export const GroupsByIdDocument = gql`
         timeRange: $timeRange
         numberOfDepartures: $totalLimit
         numberOfDeparturesPerLineAndDestinationDisplay: 1
-        arrivalDeparture: both
+        arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: {lines: $filterByLineIds}
       ) {
