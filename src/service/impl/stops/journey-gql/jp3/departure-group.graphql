@@ -4,7 +4,7 @@ query GroupsById(
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
-  $filterByLineIds: [String]
+  $filterByLineIds: [ID]
 ) {
   stopPlaces(ids: $ids) {
     ...group_stopPlaceFields
@@ -15,7 +15,7 @@ query GroupsById(
         timeRange: $timeRange
         numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
         numberOfDepartures: $totalLimit
-        omitNonBoarding: false
+        arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: { lines: $filterByLineIds }
       ) {
@@ -26,7 +26,7 @@ query GroupsById(
         timeRange: $timeRange
         numberOfDepartures: $totalLimit
         numberOfDeparturesPerLineAndDestinationDisplay: 1
-        omitNonBoarding: false
+				arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: { lines: $filterByLineIds }
       ) {
@@ -48,15 +48,15 @@ query QuayIdInStops($stopIds: [String]!) {
 query GroupsByNearest(
   $lat: Float!
   $lng: Float!
-  $distance: Int!
+  $distance: Float!
   $startTime: DateTime!
   $fromCursor: String
   $pageSize: Int
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
-  $filterInput: InputFilters
-  $filterByLineIds: [String]
+  $filterInput: InputPlaceIds
+  $filterByLineIds: [ID]
 ) {
   nearest(
     latitude: $lat
@@ -88,7 +88,7 @@ query GroupsByNearest(
                 timeRange: $timeRange
                 numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
                 numberOfDepartures: $totalLimit
-                omitNonBoarding: false
+                arrivalDeparture: departures
                 includeCancelledTrips: false
                 whiteListed: { lines: $filterByLineIds }
               ) {
@@ -99,7 +99,7 @@ query GroupsByNearest(
                 timeRange: $timeRange
                 numberOfDepartures: $totalLimit
                 numberOfDeparturesPerLineAndDestinationDisplay: 1
-                omitNonBoarding: false
+                arrivalDeparture: departures
                 includeCancelledTrips: false
                 whiteListed: { lines: $filterByLineIds }
               ) {

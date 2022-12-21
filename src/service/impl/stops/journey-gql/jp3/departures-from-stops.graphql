@@ -12,7 +12,7 @@ query ById(
         startTime: $startTime
         timeRange: $timeRange
         numberOfDepartures: $limit
-        omitNonBoarding: false
+        arrivalDeparture: departures
         includeCancelledTrips: false
       ) {
         ...estimatedCallFields
@@ -44,7 +44,7 @@ query ByBBox(
         startTime: $startTime
         timeRange: $timeRange
         numberOfDepartures: $limit
-        omitNonBoarding: false
+        arrivalDeparture: departures
         includeCancelledTrips: false
       ) {
         ...estimatedCallFields
@@ -114,10 +114,6 @@ fragment situationFields on PtSituationElement {
     language
     value
   }
-  detail {
-    language
-    value
-  }
   lines {
     ...lineFields
   }
@@ -132,9 +128,6 @@ fragment situationFields on PtSituationElement {
   }
 }
 fragment lineFields on Line {
-  bookingArrangements {
-    ...bookingArrangementFields
-  }
   description
   flexibleLineType
   id
@@ -146,22 +139,12 @@ fragment lineFields on Line {
   transportMode
   transportSubmode
 }
-fragment bookingArrangementFields on BookingArrangement {
-  bookingMethods
-  bookingNote
-  minimumBookingPeriod
-  bookingContact {
-    phone
-    url
-  }
-}
 fragment stopPlaceFields on StopPlace {
   id
   description
   name
   latitude
   longitude
-  wheelchairBoarding
   weighting
   transportMode
   transportSubmode
