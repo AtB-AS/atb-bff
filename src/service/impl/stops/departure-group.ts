@@ -17,7 +17,7 @@ import {
   QuayIdInStopsDocument,
   QuayIdInStopsQuery,
   QuayIdInStopsQueryVariables
-} from './journey-gql/jp2/departure-group.graphql-gen';
+} from './journey-gql/jp3/departure-group.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;

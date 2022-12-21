@@ -24,7 +24,7 @@ import {
   ByIdDocument,
   ByIdQuery,
   ByIdQueryVariables
-} from './journey-gql/jp2/departures-from-stops.graphql-gen';
+} from './journey-gql/jp3/departures-from-stops.graphql-gen';
 
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
