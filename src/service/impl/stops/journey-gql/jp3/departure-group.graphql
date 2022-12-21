@@ -113,55 +113,8 @@ query GroupsByNearest(
   }
 }
 
-fragment group_estimatedCallFields on EstimatedCall {
-  destinationDisplay {
-    frontText
-  }
-  notices {
-    ...group_noticeFields
-  }
-  serviceJourney {
-    ...group_serviceJourneyFields
-  }
-}
-
-fragment group_times_estimatedCallFields on EstimatedCall {
-  destinationDisplay {
-    frontText
-  }
-  date
-  expectedDepartureTime
-  aimedDepartureTime
-  predictionInaccurate
-  realtime
-  notices {
-    ...group_noticeFields
-  }
-  situations {
-    ...group_situationFields
-  }
-  serviceJourney {
-    id
-    line {
-      id
-    }
-  }
-}
-
 fragment group_noticeFields on Notice {
   text
-}
-
-fragment group_quayFields on Quay {
-  id
-  name
-  description
-  publicCode
-  latitude
-  longitude
-  situations {
-    ...group_situationFields
-  }
 }
 
 fragment group_situationFields on PtSituationElement {
@@ -189,46 +142,10 @@ fragment group_situationFields on PtSituationElement {
   }
 }
 
-fragment group_lineFields on Line {
-  description
-  flexibleLineType
-  id
-  name
-  transportMode
-  transportSubmode
-  notices {
-    ...group_noticeFields
-  }
-  situations {
-    ...group_situationFields
-  }
-  publicCode
-  transportMode
-  transportSubmode
-}
-
 fragment group_stopPlaceFields on StopPlace {
   id
   description
   name
   latitude
   longitude
-}
-
-fragment group_serviceJourneyFields on ServiceJourney {
-  id
-  directionType
-  line {
-    ...group_lineFields
-  }
-  journeyPattern {
-    notices {
-      ...group_noticeFields
-    }
-  }
-  notices {
-    ...group_noticeFields
-  }
-  privateCode
-  transportSubmode
 }
