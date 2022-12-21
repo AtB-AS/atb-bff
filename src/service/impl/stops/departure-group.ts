@@ -11,12 +11,14 @@ import {
   GroupsByIdDocument,
   GroupsByIdQuery,
   GroupsByIdQueryVariables,
-  GroupsByNearestDocument,
-  GroupsByNearestQuery,
-  GroupsByNearestQueryVariables,
   QuayIdInStopsDocument,
   QuayIdInStopsQuery,
   QuayIdInStopsQueryVariables
+} from '../departure-favorites/journey-gql/jp3/departure-group.graphql-gen';
+import {
+  GroupsByNearestDocument,
+  GroupsByNearestQuery,
+  GroupsByNearestQueryVariables
 } from './journey-gql/jp3/departure-group.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
 
