@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
+import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import {
   APIError,
@@ -32,7 +32,7 @@ export async function getDeparturesGroupedNearest(
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   let favoriteQuayIds: string[] | undefined = undefined;
   if (favorites?.length) {
-    const quayIdsResult = await journeyPlannerClient.query<
+    const quayIdsResult = await journeyPlannerClient_v3.query<
       QuayIdInStopsQuery,
       QuayIdInStopsQueryVariables
     >({
@@ -83,7 +83,7 @@ export async function getDeparturesGroupedNearest(
       : undefined
   };
 
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient_v3.query<
     GroupsByNearestQuery,
     GroupsByNearestQueryVariables
   >({
@@ -135,7 +135,7 @@ export async function getDeparturesGrouped(
     filterByLineIds: favorites?.map(f => f.lineId)
   };
 
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient_v3.query<
     GroupsByIdQuery,
     GroupsByIdQueryVariables
   >({
