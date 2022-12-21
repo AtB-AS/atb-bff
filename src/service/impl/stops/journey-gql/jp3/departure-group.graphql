@@ -26,7 +26,7 @@ query GroupsById(
         timeRange: $timeRange
         numberOfDepartures: $totalLimit
         numberOfDeparturesPerLineAndDestinationDisplay: 1
-				arrivalDeparture: departures
+        arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: { lines: $filterByLineIds }
       ) {
