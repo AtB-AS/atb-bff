@@ -51,13 +51,15 @@ export async function populateCacheIfNotThere(
 }
 
 export async function getRealtimeDepartureTime(
-  inputQuery: DepartureRealtimeQuery,
-  client: GraphQLClient = journeyPlannerClient_v3
+  inputQuery: DepartureRealtimeQuery
 ): Promise<Result<DeparturesRealtimeData, APIError>> {
   try {
     const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(variables, client);
-    const result = await client.query<
+    const previousResult = getPreviousExpectedFromCache(
+      variables,
+      journeyPlannerClient_v3
+    );
+    const result = await journeyPlannerClient_v3.query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({

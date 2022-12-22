@@ -172,7 +172,7 @@ export default (): IDeparturesService => {
       }
     },
     async getDepartureRealtime(query: DepartureRealtimeQuery) {
-      return getRealtimeDepartureTime(query, journeyPlannerClient_v3);
+      return getRealtimeDepartureTime(query);
     }
   };
 
