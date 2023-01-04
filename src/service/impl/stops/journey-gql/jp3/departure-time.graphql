@@ -10,7 +10,7 @@ query GetDepartureRealtime(
       startTime: $startTime
       numberOfDepartures: $limit
       timeRange: $timeRange
-      omitNonBoarding: false
+      arrivalDeparture: departures
       includeCancelledTrips: false
     ) {
       ...estimatedCall

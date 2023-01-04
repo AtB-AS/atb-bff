@@ -4,7 +4,7 @@ query GroupsById(
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
-  $filterByLineIds: [String]
+  $filterByLineIds: [ID]
 ) {
   stopPlaces(ids: $ids) {
     ...group_stopPlaceFields
@@ -15,7 +15,7 @@ query GroupsById(
         timeRange: $timeRange
         numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
         numberOfDepartures: $totalLimit
-        omitNonBoarding: false
+        arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: { lines: $filterByLineIds }
       ) {
@@ -26,7 +26,7 @@ query GroupsById(
         timeRange: $timeRange
         numberOfDepartures: $totalLimit
         numberOfDeparturesPerLineAndDestinationDisplay: 1
-        omitNonBoarding: false
+        arrivalDeparture: departures
         includeCancelledTrips: false
         whiteListed: { lines: $filterByLineIds }
       ) {
@@ -48,15 +48,15 @@ query QuayIdInStops($stopIds: [String]!) {
 query GroupsByNearest(
   $lat: Float!
   $lng: Float!
-  $distance: Int!
+  $distance: Float!
   $startTime: DateTime!
   $fromCursor: String
   $pageSize: Int
   $timeRange: Int!
   $limitPerLine: Int!
   $totalLimit: Int!
-  $filterInput: InputFilters
-  $filterByLineIds: [String]
+  $filterInput: InputPlaceIds
+  $filterByLineIds: [ID]
 ) {
   nearest(
     latitude: $lat
@@ -88,7 +88,7 @@ query GroupsByNearest(
                 timeRange: $timeRange
                 numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
                 numberOfDepartures: $totalLimit
-                omitNonBoarding: false
+                arrivalDeparture: departures
                 includeCancelledTrips: false
                 whiteListed: { lines: $filterByLineIds }
               ) {
@@ -99,7 +99,7 @@ query GroupsByNearest(
                 timeRange: $timeRange
                 numberOfDepartures: $totalLimit
                 numberOfDeparturesPerLineAndDestinationDisplay: 1
-                omitNonBoarding: false
+                arrivalDeparture: departures
                 includeCancelledTrips: false
                 whiteListed: { lines: $filterByLineIds }
               ) {
@@ -113,55 +113,8 @@ query GroupsByNearest(
   }
 }
 
-fragment group_estimatedCallFields on EstimatedCall {
-  destinationDisplay {
-    frontText
-  }
-  notices {
-    ...group_noticeFields
-  }
-  serviceJourney {
-    ...group_serviceJourneyFields
-  }
-}
-
-fragment group_times_estimatedCallFields on EstimatedCall {
-  destinationDisplay {
-    frontText
-  }
-  date
-  expectedDepartureTime
-  aimedDepartureTime
-  predictionInaccurate
-  realtime
-  notices {
-    ...group_noticeFields
-  }
-  situations {
-    ...group_situationFields
-  }
-  serviceJourney {
-    id
-    line {
-      id
-    }
-  }
-}
-
 fragment group_noticeFields on Notice {
   text
-}
-
-fragment group_quayFields on Quay {
-  id
-  name
-  description
-  publicCode
-  latitude
-  longitude
-  situations {
-    ...group_situationFields
-  }
 }
 
 fragment group_situationFields on PtSituationElement {
@@ -189,46 +142,10 @@ fragment group_situationFields on PtSituationElement {
   }
 }
 
-fragment group_lineFields on Line {
-  description
-  flexibleLineType
-  id
-  name
-  transportMode
-  transportSubmode
-  notices {
-    ...group_noticeFields
-  }
-  situations {
-    ...group_situationFields
-  }
-  publicCode
-  transportMode
-  transportSubmode
-}
-
 fragment group_stopPlaceFields on StopPlace {
   id
   description
   name
   latitude
   longitude
-}
-
-fragment group_serviceJourneyFields on ServiceJourney {
-  id
-  directionType
-  line {
-    ...group_lineFields
-  }
-  journeyPattern {
-    notices {
-      ...group_noticeFields
-    }
-  }
-  notices {
-    ...group_noticeFields
-  }
-  privateCode
-  transportSubmode
 }

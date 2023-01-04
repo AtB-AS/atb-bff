@@ -1,8 +1,5 @@
 import { Result } from '@badrap/result';
-import {
-  GraphQLClient,
-  journeyPlannerClient
-} from '../../../graphql/graphql-client';
+import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import {
   APIError,
   DepartureRealtimeData,
@@ -14,7 +11,7 @@ import {
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
   GetDepartureRealtimeQueryVariables
-} from './journey-gql/jp2/departure-time.graphql-gen';
+} from '../departure-favorites/journey-gql/jp3/departure-time.graphql-gen';
 
 const createVariables = (
   query: DepartureRealtimeQuery
@@ -32,14 +29,11 @@ export async function populateCacheIfNotThere(
   // if the cache is empty
   try {
     const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(
-      variables,
-      journeyPlannerClient
-    );
+    const previousResult = getPreviousExpectedFromCache(variables);
 
     if (previousResult) return;
 
-    await journeyPlannerClient.query<
+    await journeyPlannerClient_v3.query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
@@ -51,13 +45,12 @@ export async function populateCacheIfNotThere(
 }
 
 export async function getRealtimeDepartureTime(
-  inputQuery: DepartureRealtimeQuery,
-  client: GraphQLClient = journeyPlannerClient
+  inputQuery: DepartureRealtimeQuery
 ): Promise<Result<DeparturesRealtimeData, APIError>> {
   try {
     const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(variables, client);
-    const result = await client.query<
+    const previousResult = getPreviousExpectedFromCache(variables);
+    const result = await journeyPlannerClient_v3.query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
@@ -136,11 +129,10 @@ function mapDeparture(
 }
 
 function getPreviousExpectedFromCache(
-  variables: GetDepartureRealtimeQueryVariables,
-  client: GraphQLClient
+  variables: GetDepartureRealtimeQueryVariables
 ) {
   try {
-    const result = client.readQuery<
+    const result = journeyPlannerClient_v3.readQuery<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({

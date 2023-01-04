@@ -8,7 +8,7 @@ import {
 } from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
+import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
 import paginate from '../../pagination';
 import {
   APIError,
@@ -24,7 +24,7 @@ import {
   ByIdDocument,
   ByIdQuery,
   ByIdQueryVariables
-} from './journey-gql/jp2/departures-from-stops.graphql-gen';
+} from './journey-gql/jp3/departures-from-stops.graphql-gen';
 
 export async function getDeparturesFromLocation(
   coordinates: Coordinates,
@@ -40,7 +40,7 @@ export async function getDeparturesFromLocation(
     limit: options.limit
   };
 
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient_v3.query<
     ByBBoxQuery,
     ByBBoxQueryVariables
   >({
@@ -79,7 +79,7 @@ export async function getDeparturesFromStops(
   id: string,
   options: DeparturesFromLocationPagingQuery
 ): Promise<Result<DeparturesMetadata, APIError>> {
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient_v3.query<
     ByIdQuery,
     ByIdQueryVariables
   >({
