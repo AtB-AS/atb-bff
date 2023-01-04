@@ -26,8 +26,16 @@ export const postTripsRequest = {
     walkReluctance: Joi.number(),
     walkSpeed: Joi.number(),
     modes: Joi.object({
-      directMode: Joi.string()
-    })
+      accessMode: Joi.string(),
+      directMode: Joi.string(),
+      egressMode: Joi.string(),
+      transportModes: Joi.array().items(
+        Joi.object({
+          transportMode: Joi.string(),
+          transportSubModes: Joi.array().items(Joi.string())
+        })
+      )
+    }).optional()
   })
 };
 
