@@ -42,7 +42,8 @@ import {
   StopPlaceDeparturesPayload,
   DepartureFavoritesPayload,
   DepartureFavoritesQuery,
-  QuaysCoordinatesPayload, ServiceJourneyWithEstimatedCallsQuery
+  QuaysCoordinatesPayload,
+  ServiceJourneyWithEstimatedCallsQuery
 } from './types';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -81,11 +82,6 @@ export interface IServiceJourneyService {
     serviceJouerneyId: string,
     query: ServiceJourneyMapInfoQuery
   ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
-
-  getDeparturesForServiceJourney(
-    id: string,
-    query: DeparturesForServiceJourneyQuery
-  ): Promise<Result<EstimatedCall[] | null, APIError>>;
 }
 
 export interface IServiceJourneyService_v2 {
