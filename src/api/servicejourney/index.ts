@@ -92,13 +92,17 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
     });
 
     server.route({
-      // Deprecated (used by app version v1.27 and below)
       method: 'GET',
       path: '/bff/v1/servicejourney/{id}/departures',
       options: {
         tags: ['api', 'stops'],
         validate: getDeparturesForServiceJourneyRequestV2,
-        description: 'Get departures for Service Journey'
+        description: 'Get departures for Service Journey',
+        plugins: {
+          'hapi-swagger': {
+            deprecated: true
+          }
+        }
       },
       handler: async (request, h) => {
         const { id } = request.params;
