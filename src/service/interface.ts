@@ -79,14 +79,14 @@ export interface IGeocoderService {
 
 export interface IServiceJourneyService {
   getServiceJourneyMapInfo(
-    serviceJouerneyId: string,
+    serviceJourneyId: string,
     query: ServiceJourneyMapInfoQuery
   ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
 }
 
 export interface IServiceJourneyService_v2 {
   getServiceJourneyMapInfo(
-    serviceJouerneyId: string,
+    serviceJourneyId: string,
     query: ServiceJourneyMapInfoQuery
   ): Promise<Result<ServiceJourneyMapInfoData_v3, APIError>>;
   getDeparturesForServiceJourneyV2(

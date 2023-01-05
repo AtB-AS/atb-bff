@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const getServiceJoruneyMapDataRequest = {
+export const getServiceJourneyMapDataRequest = {
   params: Joi.object({
     id: Joi.string().required()
   }).required(),
