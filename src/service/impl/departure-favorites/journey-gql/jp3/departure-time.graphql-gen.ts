@@ -10,9 +10,9 @@ export type GetDepartureRealtimeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDepartureRealtimeQuery = { quays: Array<{ id: string, estimatedCalls: Array<{ realtime: boolean, expectedArrivalTime: any, expectedDepartureTime: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, serviceJourney?: { id: string } }> }> };
+export type GetDepartureRealtimeQuery = { quays: Array<{ id: string, estimatedCalls: Array<{ realtime: boolean, expectedArrivalTime: any, expectedDepartureTime: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, serviceJourney: { id: string } }> }> };
 
-export type EstimatedCallFragment = { realtime: boolean, expectedArrivalTime: any, expectedDepartureTime: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, serviceJourney?: { id: string } };
+export type EstimatedCallFragment = { realtime: boolean, expectedArrivalTime: any, expectedDepartureTime: any, actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, serviceJourney: { id: string } };
 
 export const EstimatedCallFragmentDoc = gql`
     fragment estimatedCall on EstimatedCall {

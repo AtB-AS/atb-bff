@@ -222,7 +222,7 @@ export type EstimatedCall = {
   /** Whether stop is cancelled. This means that either the ServiceJourney has a planned cancellation, the ServiceJourney has been cancelled by realtime data, or this particular StopPoint has been cancelled. This also means that both boarding and alighting has been cancelled. */
   cancellation: Scalars['Boolean'];
   /** The date the estimated call is valid for. */
-  date?: Maybe<Scalars['Date']>;
+  date: Scalars['Date'];
   datedServiceJourney?: Maybe<DatedServiceJourney>;
   destinationDisplay?: Maybe<DestinationDisplay>;
   /** Expected time of arrival at quay. Updated with real time information if available. Will be null if an actualArrivalTime exists */
@@ -237,13 +237,13 @@ export type EstimatedCall = {
   occupancyStatus: OccupancyStatus;
   /** Whether the updated estimates are expected to be inaccurate. */
   predictionInaccurate: Scalars['Boolean'];
-  quay?: Maybe<Quay>;
+  quay: Quay;
   /** Whether this call has been updated with real time information. */
   realtime: Scalars['Boolean'];
   realtimeState: RealtimeState;
   /** Whether vehicle will only stop on request. */
   requestStop: Scalars['Boolean'];
-  serviceJourney?: Maybe<ServiceJourney>;
+  serviceJourney: ServiceJourney;
   /** Get all relevant situations for this EstimatedCall. */
   situations: Array<PtSituationElement>;
   stopPositionInPattern: Scalars['Int'];
@@ -1487,18 +1487,18 @@ export type TimetabledPassingTime = {
   /** Earliest possible departure time for a service journey with a service window. */
   earliestDepartureTime?: Maybe<TimeAndDayOffset>;
   /** Whether vehicle may be alighted at quay. */
-  forAlighting?: Maybe<Scalars['Boolean']>;
+  forAlighting: Scalars['Boolean'];
   /** Whether vehicle may be boarded at quay. */
-  forBoarding?: Maybe<Scalars['Boolean']>;
+  forBoarding: Scalars['Boolean'];
   /** Latest possible (planned) arrival time for a service journey with a service window. */
   latestArrivalTime?: Maybe<TimeAndDayOffset>;
   notices: Array<Notice>;
-  quay?: Maybe<Quay>;
+  quay: Quay;
   /** Whether vehicle will only stop on request. */
-  requestStop?: Maybe<Scalars['Boolean']>;
-  serviceJourney?: Maybe<ServiceJourney>;
+  requestStop: Scalars['Boolean'];
+  serviceJourney: ServiceJourney;
   /** Whether this is a timing point or not. Boarding and alighting is not allowed at timing points. */
-  timingPoint?: Maybe<Scalars['Boolean']>;
+  timingPoint: Scalars['Boolean'];
 };
 
 export type TransitGeneralizedCostFilterParams = {
