@@ -364,6 +364,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   '/bff/v2/servicejourney/{id}/departures':
     get:
       summary: Get departures for Service Journey

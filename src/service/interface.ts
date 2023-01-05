@@ -77,13 +77,6 @@ export interface IGeocoderService {
   ): Promise<Result<Feature[], APIError>>;
 }
 
-export interface IServiceJourneyService {
-  getServiceJourneyMapInfo(
-    serviceJourneyId: string,
-    query: ServiceJourneyMapInfoQuery
-  ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
-}
-
 export interface IServiceJourneyService_v2 {
   getServiceJourneyMapInfo(
     serviceJourneyId: string,
