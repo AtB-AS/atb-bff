@@ -7,12 +7,13 @@ import {
 } from '../../service/interface';
 import {
   DeparturesForServiceJourneyQuery,
-  ServiceJourneyMapInfoQuery, ServiceJourneyWithEstimatedCallsQuery
+  ServiceJourneyMapInfoQuery,
+  ServiceJourneyWithEstimatedCallsQuery
 } from '../../service/types';
 import {
-  getDeparturesForServiceJourneyRequest,
   getDeparturesForServiceJourneyRequestV2,
-  getServiceJoruneyMapDataRequest, getServiceJourneyWithEstimatedCallsV2
+  getServiceJoruneyMapDataRequest,
+  getServiceJourneyWithEstimatedCallsV2
 } from './schema';
 import qs from 'querystring';
 
@@ -49,23 +50,6 @@ export default function serviceJourneyRoutes(server: Hapi.Server) {
         const { id } = request.params;
         const query = (request.query as unknown) as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo(id, query);
-      }
-    });
-
-    server.route({
-      method: 'GET',
-      path: '/bff/v1/servicejourney/{id}/departures',
-      options: {
-        tags: ['api', 'stops'],
-        validate: getDeparturesForServiceJourneyRequest,
-        description: 'Get departures for Service Journey'
-      },
-      handler: async (request, h) => {
-        const { id } = request.params;
-        const {
-          date
-        } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
-        return await service.getDeparturesForServiceJourney(id, { date });
       }
     });
   };
@@ -109,6 +93,30 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
 
     server.route({
       method: 'GET',
+      path: '/bff/v1/servicejourney/{id}/departures',
+      options: {
+        tags: ['api', 'stops'],
+        validate: getDeparturesForServiceJourneyRequestV2,
+        description: 'Get departures for Service Journey',
+        plugins: {
+          'hapi-swagger': {
+            deprecated: true
+          }
+        }
+      },
+      handler: async (request, h) => {
+        const { id } = request.params;
+        const {
+          date
+        } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
+        return await service.getDeparturesForServiceJourneyV2(id, {
+          date
+        });
+      }
+    });
+
+    server.route({
+      method: 'GET',
       path: '/bff/v2/servicejourney/{id}/departures',
       options: {
         tags: ['api', 'stops', 'otp2'],
@@ -137,7 +145,9 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         const {
           date
         } = (request.query as unknown) as ServiceJourneyWithEstimatedCallsQuery;
-        return await service.getServiceJourneyWithEstimatedCallsV2(id, { date });
+        return await service.getServiceJourneyWithEstimatedCallsV2(id, {
+          date
+        });
       }
     });
   };

@@ -7,9 +7,6 @@ import { randomPort } from './common';
 
 let server: Hapi.Server;
 const svc: jest.Mocked<IServiceJourneyService> = {
-  getDeparturesForServiceJourney: jest.fn((...args: any): any =>
-    Result.ok(Promise.resolve([]))
-  ),
   getServiceJourneyMapInfo: jest.fn((...args: any): any =>
     Result.ok(Promise.resolve([]))
   )
@@ -42,23 +39,6 @@ describe('GET /bff/v1/servicejourney/{id}/polyline', () => {
       {
         fromQuayId: 'NSR:Quay:75300',
         toQuayId: 'NSR:Quay:75301'
-      }
-    );
-  });
-});
-
-describe('GET /bff/v1/servicejourney/{id}/departures', () => {
-  const url =
-    '/bff/v1/servicejourney/ATB%3AServiceJourney%3A1_200109141595335_51/departures';
-  it('parses query parameters correctly', async () => {
-    const res = await server.inject({
-      method: 'get',
-      url: url
-    });
-    expect(svc.getDeparturesForServiceJourney).toBeCalledWith(
-      'ATB:ServiceJourney:1_200109141595335_51',
-      {
-        date: undefined
       }
     );
   });

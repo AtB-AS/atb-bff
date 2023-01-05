@@ -65,23 +65,6 @@ export default function serviceJourneyService(
       } catch (error) {
         return Result.err(new APIError(error));
       }
-    },
-    async getDeparturesForServiceJourney(id, { date }) {
-      try {
-        let serviceDate = date
-          ? formatISO(date, { representation: 'date' })
-          : undefined;
-        const departures = await service.getDeparturesForServiceJourney(
-          id,
-          serviceDate
-        );
-        return Result.ok(departures);
-      } catch (error) {
-        const re = /Entur SDK: No data available/;
-        // @ts-ignore
-        if (error.message.match(re)) return Result.ok(null);
-        return Result.err(new APIError(error));
-      }
     }
   };
 }
