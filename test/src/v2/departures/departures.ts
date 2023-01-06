@@ -3,8 +3,8 @@ import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
 import { departsAfterExpectedStartTime, isEqual } from '../../utils/utils';
 import { JSONObject } from 'k6';
-import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/gql/jp3/quay-departures.graphql-gen';
-import { StopPlaceQuayDeparturesQuery } from '../../../../src/service/impl/departures/gql/jp3/stop-departures.graphql-gen';
+import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/quay-departures.graphql-gen';
+import { StopPlaceQuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/stop-departures.graphql-gen';
 import { RealtimeResponseType } from '../types';
 
 export function realtime(

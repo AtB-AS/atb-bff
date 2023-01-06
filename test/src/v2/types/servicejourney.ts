@@ -1,4 +1,4 @@
-import { ServiceJourneyEstimatedCallFragment } from '../../../../src/service/impl/service-journey/journey-gql/jp3/service-journey-departures.graphql-gen';
+import { ServiceJourneyEstimatedCallFragment } from '../../../../src/service/impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
 import * as Types from '../../../../src/graphql/journeyplanner-types_v3';
 
 export type PolylineSimplifiedResponseType = {

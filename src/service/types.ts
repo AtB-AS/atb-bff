@@ -6,14 +6,12 @@ import {
   StopPlaceDetails,
   Quay,
   Departure,
-  LegMode,
   PointsOnLink
 } from '@entur/sdk';
 import { FetchError } from 'node-fetch';
 import { boomify } from '@hapi/boom';
 import { CursoredQuery } from './cursored';
-import { TransportSubmode } from '../graphql/journey-types';
-import { TripsQuery } from './impl/trips/graphql/jp3/trip.graphql-gen';
+import { TripsQuery } from './impl/trips/journey-gql/trip.graphql-gen';
 import * as Types_v3 from '../graphql/journeyplanner-types_v3';
 
 export interface Coordinates {
@@ -286,9 +284,9 @@ export type DeparturesRealtimeData = {
 };
 
 export type MapLeg = {
-  mode?: LegMode;
+  mode?: Types_v3.Mode;
   faded?: boolean;
-  transportSubmode?: TransportSubmode;
+  transportSubmode?: Types_v3.TransportSubmode;
   pointsOnLink: PointsOnLink;
 };
 

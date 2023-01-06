@@ -2,7 +2,7 @@ import {
   TripsDocument,
   TripsQuery,
   TripsQueryVariables
-} from './graphql/jp3/trip.graphql-gen';
+} from './journey-gql/trip.graphql-gen';
 import { Result } from '@badrap/result';
 import { APIError } from '../../types';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';

@@ -6,7 +6,7 @@ import {
   MapInfoWithFromQuayV2Document,
   MapInfoWithFromQuayV2Query,
   MapInfoWithFromQuayV2QueryVariables
-} from './journey-gql/jp3/service-journey-map.graphql-gen';
+} from './journey-gql/service-journey-map.graphql-gen';
 
 export async function getMapInfoWithFromQuay(
   serviceJourneyId: string,

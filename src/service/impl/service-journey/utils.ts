@@ -2,7 +2,7 @@ import { Coordinates, PointsOnLink } from '@entur/sdk';
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
 import { MapLeg, ServiceJourneyMapInfoData } from '../../types';
-import { MapInfoWithFromAndToQuayV2Query } from './journey-gql/jp3/service-journey-map.graphql-gen';
+import { MapInfoWithFromAndToQuayV2Query } from './journey-gql/service-journey-map.graphql-gen';
 
 type PolylinePair = [lat: number, lng: number];
 

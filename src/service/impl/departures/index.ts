@@ -6,23 +6,23 @@ import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
-} from './gql/jp3/stop-departures.graphql-gen';
+} from './journey-gql/stop-departures.graphql-gen';
 import { getRealtimeDepartureTime } from '../stops/departure-time';
 import {
   QuayDeparturesDocument,
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
-} from './gql/jp3/quay-departures.graphql-gen';
+} from './journey-gql/quay-departures.graphql-gen';
 import {
   NearestStopPlacesDocument,
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables
-} from './gql/jp3/stops-nearest.graphql-gen';
+} from './journey-gql/stops-nearest.graphql-gen';
 import {
   StopsDetailsDocument,
   StopsDetailsQuery,
   StopsDetailsQueryVariables
-} from './gql/jp3/stops-details.graphql-gen';
+} from './journey-gql/stops-details.graphql-gen';
 import {
   filterStopPlaceFavorites,
   filterQuayFavorites

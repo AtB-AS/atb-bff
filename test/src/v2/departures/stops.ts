@@ -7,7 +7,7 @@ import {
   NearestStopPlacesResponseType
 } from '../types';
 import { isEqual } from '../../utils/utils';
-import { StopsDetailsQuery } from '../../../../src/service/impl/departures/gql/jp3/stops-details.graphql-gen';
+import { StopsDetailsQuery } from '../../../../src/service/impl/departures/journey-gql/stops-details.graphql-gen';
 
 export function stopsNearest(testData: stopsNearestTestDataType) {
   for (let test of testData.scenarios) {

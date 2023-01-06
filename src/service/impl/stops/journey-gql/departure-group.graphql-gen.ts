@@ -1,8 +1,8 @@
-import * as Types from '../../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { Group_StopPlaceFieldsFragmentDoc, Group_QuayFieldsFragmentDoc, Group_Times_EstimatedCallFieldsFragmentDoc, Group_EstimatedCallFieldsFragmentDoc } from '../../../departure-favorites/journey-gql/jp3/departure-group.graphql-gen';
+import { Group_StopPlaceFieldsFragmentDoc, Group_QuayFieldsFragmentDoc, Group_Times_EstimatedCallFieldsFragmentDoc, Group_EstimatedCallFieldsFragmentDoc } from '../../departure-favorites/journey-gql/departure-group.graphql-gen';
 export type GroupsByNearestQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lng: Types.Scalars['Float'];
@@ -107,8 +107,8 @@ export const GroupsByNearestDocument = gql`
 ${Group_QuayFieldsFragmentDoc}
 ${Group_Times_EstimatedCallFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;
-export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C>(requester: Requester<C>) {
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     GroupsByNearest(variables: GroupsByNearestQueryVariables, options?: C): Promise<GroupsByNearestQuery> {
       return requester<GroupsByNearestQuery, GroupsByNearestQueryVariables>(GroupsByNearestDocument, variables, options);

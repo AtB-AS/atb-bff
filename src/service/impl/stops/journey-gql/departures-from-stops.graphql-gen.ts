@@ -1,4 +1,4 @@
-import * as Types from '../../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
@@ -223,8 +223,8 @@ export const ByBBoxDocument = gql`
     ${StopPlaceFieldsFragmentDoc}
 ${QuayFieldsFragmentDoc}
 ${EstimatedCallFieldsFragmentDoc}`;
-export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C>(requester: Requester<C>) {
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     ById(variables: ByIdQueryVariables, options?: C): Promise<ByIdQuery> {
       return requester<ByIdQuery, ByIdQueryVariables>(ByIdDocument, variables, options);

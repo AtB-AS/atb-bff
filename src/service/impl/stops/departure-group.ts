@@ -14,12 +14,12 @@ import {
   QuayIdInStopsDocument,
   QuayIdInStopsQuery,
   QuayIdInStopsQueryVariables
-} from '../departure-favorites/journey-gql/jp3/departure-group.graphql-gen';
+} from '../departure-favorites/journey-gql/departure-group.graphql-gen';
 import {
   GroupsByNearestDocument,
   GroupsByNearestQuery,
   GroupsByNearestQueryVariables
-} from './journey-gql/jp3/departure-group.graphql-gen';
+} from './journey-gql/departure-group.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;

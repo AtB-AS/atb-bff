@@ -7,7 +7,7 @@ import {
   PolylineSimplifiedResponseType,
   ServiceJourneyDeparturesResponseType
 } from '../types';
-import { TripsQuery } from '../../../../src/service/impl/trips/graphql/jp3/trip.graphql-gen';
+import { TripsQuery } from '../../../../src/service/impl/trips/journey-gql/trip.graphql-gen';
 import { ServiceJourneyCallsResponseType } from '../types/servicejourney';
 
 export function serviceJourneyDepartures(

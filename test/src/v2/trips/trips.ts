@@ -12,7 +12,7 @@ import {
   TripPatternWithCompressedQuery,
   tripsTestDataType
 } from '../types';
-import { TripsQuery } from '../../../../src/service/impl/trips/graphql/jp3/trip.graphql-gen';
+import { TripsQuery } from '../../../../src/service/impl/trips/journey-gql/trip.graphql-gen';
 
 // Travel search request
 export function trips(

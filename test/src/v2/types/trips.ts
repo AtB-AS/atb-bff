@@ -1,4 +1,4 @@
-import { TripsQuery } from '../../../../src/service/impl/trips/graphql/jp3/trip.graphql-gen';
+import { TripsQuery } from '../../../../src/service/impl/trips/journey-gql/trip.graphql-gen';
 
 // Add 'compressedQuery' to the tripPattern
 export type TripPatternWithCompressedQuery = TripsQuery['trip']['tripPatterns'][0] & {

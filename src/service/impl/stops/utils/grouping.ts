@@ -6,7 +6,7 @@ import {
   TransportSubmode
 } from '../../../../graphql/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
-import { GroupsByIdQuery } from '../../departure-favorites/journey-gql/jp3/departure-group.graphql-gen';
+import { GroupsByIdQuery } from '../../departure-favorites/journey-gql/departure-group.graphql-gen';
 
 type Notice = { text?: string };
 type Situation = {

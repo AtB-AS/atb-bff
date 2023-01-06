@@ -1,7 +1,7 @@
 overwrite: true
 generates:
   src/graphql/journeyplanner-types_v3.ts:
-    documents: ./src/**/jp3/*.graphql
+    documents: ./src/**/journey-gql/*.graphql
     schema:
       - https://api.entur.io/journey-planner/v3/graphql:
           headers:
@@ -14,7 +14,7 @@ generates:
     plugins:
       - typescript
   src/:
-    documents: ./src/**/jp3/*.graphql
+    documents: ./src/**/journey-gql/*.graphql
     schema:
       - https://api.entur.io/journey-planner/v3/graphql:
           headers:

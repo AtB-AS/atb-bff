@@ -1,10 +1,10 @@
-import * as Types from '../../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { NoticeFragmentDoc } from '../../../fragments/jp3/notices.graphql-gen';
-import { QuayWithSituationsFragmentDoc } from '../../../fragments/jp3/quays.graphql-gen';
-import { SituationFragmentDoc } from '../../../fragments/jp3/situations.graphql-gen';
+import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
+import { QuayWithSituationsFragmentDoc } from '../../fragments/journey-gql/quays.graphql-gen';
+import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type ServiceJourneyDeparturesQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
   date?: Types.InputMaybe<Types.Scalars['Date']>;

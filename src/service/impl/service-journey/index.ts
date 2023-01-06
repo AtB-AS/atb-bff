@@ -13,13 +13,13 @@ import {
   ServiceJourneyDeparturesDocument,
   ServiceJourneyDeparturesQuery,
   ServiceJourneyDeparturesQueryVariables
-} from './journey-gql/jp3/service-journey-departures.graphql-gen';
+} from './journey-gql/service-journey-departures.graphql-gen';
 import {
   ServiceJourneyWithEstimatedCallsDocument,
   ServiceJourneyWithEstimatedCallsQuery,
   ServiceJourneyWithEstimatedCallsQueryVariables
-} from './journey-gql/jp3/service-journey-with-estimated-calls.graphql-gen';
-import { ServiceJourneyWithEstCallsFragment } from '../fragments/jp3/service-journey.graphql-gen';
+} from './journey-gql/service-journey-with-estimated-calls.graphql-gen';
+import { ServiceJourneyWithEstCallsFragment } from '../fragments/journey-gql/service-journey.graphql-gen';
 
 export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
   return {

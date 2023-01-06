@@ -6,7 +6,7 @@ import {
   GetQuaysCoordinatesQuery,
   GetQuaysCoordinatesDocument,
   GetQuaysCoordinatesQueryVariables
-} from './jp3/quays-coordinates.graphql-gen';
+} from './journey-gql/quays-coordinates.graphql-gen';
 
 export default (): IQuayService => {
   const api: IQuayService = {
