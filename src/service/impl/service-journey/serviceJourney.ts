@@ -1,4 +1,4 @@
-import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import {
   MapInfoWithFromAndToQuayV2Document,
   MapInfoWithFromAndToQuayV2Query,
@@ -16,7 +16,7 @@ export async function getMapInfoWithFromQuay(
     serviceJourneyId,
     fromQuayId
   };
-  const result = await journeyPlannerClient_v3.query<
+  const result = await journeyPlannerClient.query<
     MapInfoWithFromQuayV2Query,
     MapInfoWithFromQuayV2QueryVariables
   >({
@@ -37,7 +37,7 @@ export async function getMapInfoWithFromAndToQuay(
     fromQuayId,
     toQuayId
   };
-  const result = await journeyPlannerClient_v3.query<
+  const result = await journeyPlannerClient.query<
     MapInfoWithFromAndToQuayV2Query,
     MapInfoWithFromAndToQuayV2QueryVariables
   >({

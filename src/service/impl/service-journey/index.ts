@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
 import { formatISO } from 'date-fns';
-import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { IServiceJourneyService_v2 } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
 import { mapToMapLegs_v3 } from './utils_v3';
@@ -50,7 +50,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
           ? formatISO(date, { representation: 'date' })
           : undefined;
 
-        const result = await journeyPlannerClient_v3.query<
+        const result = await journeyPlannerClient.query<
           ServiceJourneyDeparturesQuery,
           ServiceJourneyDeparturesQueryVariables
         >({
@@ -76,7 +76,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
           ? formatISO(date, { representation: 'date' })
           : undefined;
 
-        const result = await journeyPlannerClient_v3.query<
+        const result = await journeyPlannerClient.query<
           ServiceJourneyWithEstimatedCallsQuery,
           ServiceJourneyWithEstimatedCallsQueryVariables
         >({
