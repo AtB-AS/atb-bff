@@ -8,7 +8,7 @@ import {
 import {
   MapInfoWithFromAndToQuayV2Query,
   MapInfoWithFromQuayV2Query
-} from './journey-gql/jp3/service-journey-map.graphql-gen';
+} from './journey-gql/service-journey-map.graphql-gen';
 import { PointsOnLink } from '../../../graphql/journeyplanner-types_v3';
 
 type PolylinePair = [lat: number, lng: number];

@@ -2,7 +2,7 @@ import http from 'k6/http';
 import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersPost } from '../../utils/headers';
 import { departureFavoritesTestDataType, FavoriteResponseType } from '../types';
-import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/gql/jp3/quay-departures.graphql-gen';
+import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/quay-departures.graphql-gen';
 import { isEqual } from '../../utils/utils';
 
 export function departureFavorites(

@@ -1,8 +1,8 @@
-import * as Types from '../../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { SituationFragmentDoc } from '../../../fragments/jp3/situations.graphql-gen';
+import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type StopsDetailsQueryVariables = Types.Exact<{
   ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
 }>;

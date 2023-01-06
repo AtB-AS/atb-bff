@@ -2,10 +2,10 @@ import {
   TripsDocument,
   TripsQuery,
   TripsQueryVariables
-} from './graphql/jp3/trip.graphql-gen';
+} from './journey-gql/trip.graphql-gen';
 import { Result } from '@badrap/result';
 import { APIError } from '../../types';
-import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 
 import * as Boom from '@hapi/boom';
 import {
@@ -18,7 +18,7 @@ export async function getTrips(
   query: Trips.TripsQueryVariables
 ): Promise<Result<TripsQuery, APIError>> {
   try {
-    const result = await journeyPlannerClient_v3.query<
+    const result = await journeyPlannerClient.query<
       TripsQuery,
       TripsQueryVariables
     >({ query: TripsDocument, variables: query });
@@ -35,7 +35,7 @@ export async function getTrips(
 export async function getSingleTrip(
   query: Trips.TripsQueryWithJourneyIds
 ): Promise<Result<Trips.TripPattern, Boom.Boom>> {
-  const results = await journeyPlannerClient_v3.query<
+  const results = await journeyPlannerClient.query<
     TripsQuery,
     TripsQueryVariables
   >({ query: TripsDocument, variables: query.query });

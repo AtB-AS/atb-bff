@@ -3,7 +3,7 @@ import { TripPattern } from '@entur/sdk';
 import {
   TripsQueryVariables,
   TripsQuery
-} from '../service/impl/trips/graphql/jp3/trip.graphql-gen';
+} from '../service/impl/trips/journey-gql/trip.graphql-gen';
 import {
   Leg,
   TripPattern as TripPattern_v3,

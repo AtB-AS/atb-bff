@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/stop-departures.graphql-gen';
+import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/departures/journey-gql/stop-departures.graphql-gen';
 import { IDeparturesService } from '../../service/interface';
 import {
   getStopDeparturesRequest,
@@ -15,9 +15,9 @@ import {
   QuayDeparturesPayload,
   StopPlaceDeparturesPayload
 } from '../../service/types';
-import { QuayDeparturesQueryVariables } from '../../service/impl/departures/gql/jp3/quay-departures.graphql-gen';
-import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/gql/jp3/stops-nearest.graphql-gen';
-import { StopsDetailsQueryVariables } from '../../service/impl/departures/gql/jp3/stops-details.graphql-gen';
+import { QuayDeparturesQueryVariables } from '../../service/impl/departures/journey-gql/quay-departures.graphql-gen';
+import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/journey-gql/stops-nearest.graphql-gen';
+import { StopsDetailsQueryVariables } from '../../service/impl/departures/journey-gql/stops-details.graphql-gen';
 
 export default (server: Hapi.Server) => (service: IDeparturesService) => {
   server.route({

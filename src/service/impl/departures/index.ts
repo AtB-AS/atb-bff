@@ -1,28 +1,28 @@
 import { Result } from '@badrap/result';
-import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { IDeparturesService } from '../../interface';
 import { APIError, DepartureRealtimeQuery } from '../../types';
 import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
-} from './gql/jp3/stop-departures.graphql-gen';
+} from './journey-gql/stop-departures.graphql-gen';
 import { getRealtimeDepartureTime } from '../stops/departure-time';
 import {
   QuayDeparturesDocument,
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
-} from './gql/jp3/quay-departures.graphql-gen';
+} from './journey-gql/quay-departures.graphql-gen';
 import {
   NearestStopPlacesDocument,
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables
-} from './gql/jp3/stops-nearest.graphql-gen';
+} from './journey-gql/stops-nearest.graphql-gen';
 import {
   StopsDetailsDocument,
   StopsDetailsQuery,
   StopsDetailsQueryVariables
-} from './gql/jp3/stops-details.graphql-gen';
+} from './journey-gql/stops-details.graphql-gen';
 import {
   filterStopPlaceFavorites,
   filterQuayFavorites
@@ -38,7 +38,7 @@ export default (): IDeparturesService => {
       after
     }) {
       try {
-        const result = await journeyPlannerClient_v3.query<
+        const result = await journeyPlannerClient.query<
           NearestStopPlacesQuery,
           NearestStopPlacesQueryVariables
         >({
@@ -64,7 +64,7 @@ export default (): IDeparturesService => {
 
     async getStopsDetails({ ids }) {
       try {
-        const result = await journeyPlannerClient_v3.query<
+        const result = await journeyPlannerClient.query<
           StopsDetailsQuery,
           StopsDetailsQueryVariables
         >({
@@ -104,7 +104,7 @@ export default (): IDeparturesService => {
               numberOfDepartures
             };
 
-        const result = await journeyPlannerClient_v3.query<
+        const result = await journeyPlannerClient.query<
           StopPlaceQuayDeparturesQuery,
           StopPlaceQuayDeparturesQueryVariables
         >({
@@ -145,7 +145,7 @@ export default (): IDeparturesService => {
     ) {
       const favorites = payload?.favorites;
       try {
-        const result = await journeyPlannerClient_v3.query<
+        const result = await journeyPlannerClient.query<
           QuayDeparturesQuery,
           QuayDeparturesQueryVariables
         >({

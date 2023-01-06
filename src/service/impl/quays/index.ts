@@ -1,19 +1,19 @@
 import { Result } from '@badrap/result';
-import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { IQuayService } from '../../interface';
 import { APIError, QuaysCoordinatesPayload } from '../../types';
 import {
   GetQuaysCoordinatesQuery,
   GetQuaysCoordinatesDocument,
   GetQuaysCoordinatesQueryVariables
-} from './jp3/quays-coordinates.graphql-gen';
+} from './journey-gql/quays-coordinates.graphql-gen';
 
 export default (): IQuayService => {
   const api: IQuayService = {
     async getQuaysCoordinates(
       payload: QuaysCoordinatesPayload
     ): Promise<Result<GetQuaysCoordinatesQuery, APIError>> {
-      const result = await journeyPlannerClient_v3.query<
+      const result = await journeyPlannerClient.query<
         GetQuaysCoordinatesQuery,
         GetQuaysCoordinatesQueryVariables
       >({

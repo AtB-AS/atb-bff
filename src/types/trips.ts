@@ -1,4 +1,4 @@
-import * as Types from '../service/impl/trips/graphql/jp3/trip.graphql-gen';
+import * as Types from '../service/impl/trips/journey-gql/trip.graphql-gen';
 
 export type TripsQueryVariables = Types.TripsQueryVariables;
 export type TripsQuery = Types.TripsQuery;

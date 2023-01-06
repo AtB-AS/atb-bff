@@ -22,10 +22,6 @@ const defaultOptions: DefaultOptions = {
 };
 
 const urlJourneyPlanner = ENTUR_BASEURL
-  ? `${ENTUR_BASEURL}/journey-planner/v2/graphql`
-  : 'https://api.entur.io/journey-planner/v2/graphql';
-
-const urlJourneyPlanner_v3 = ENTUR_BASEURL
   ? `${ENTUR_BASEURL}/journey-planner/v3/graphql`
   : 'https://api.entur.io/journey-planner/v3/graphql';
 
@@ -56,6 +52,5 @@ function createClient(url: string) {
 }
 
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
-export const journeyPlannerClient_v3 = createClient(urlJourneyPlanner_v3);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;

@@ -1,8 +1,8 @@
-import * as Types from '../../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { ServiceJourneyWithEstCallsFragmentDoc } from '../../../fragments/jp3/service-journey.graphql-gen';
+import { ServiceJourneyWithEstCallsFragmentDoc } from '../../fragments/journey-gql/service-journey.graphql-gen';
 export type ServiceJourneyWithEstimatedCallsQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
   date?: Types.InputMaybe<Types.Scalars['Date']>;

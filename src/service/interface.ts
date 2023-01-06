@@ -48,26 +48,26 @@ import {
 import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
-} from './impl/departures/gql/jp3/stop-departures.graphql-gen';
+} from './impl/departures/journey-gql/stop-departures.graphql-gen';
 import * as Trips from '../types/trips';
 import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
-} from './impl/departures/gql/jp3/quay-departures.graphql-gen';
+} from './impl/departures/journey-gql/quay-departures.graphql-gen';
 import {
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables
-} from './impl/departures/gql/jp3/stops-nearest.graphql-gen';
+} from './impl/departures/journey-gql/stops-nearest.graphql-gen';
 import {
   StopsDetailsQuery,
   StopsDetailsQueryVariables
-} from './impl/departures/gql/jp3/stops-details.graphql-gen';
+} from './impl/departures/journey-gql/stops-details.graphql-gen';
 import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
 import { EnrollResponse } from './impl/enrollment';
 import { Boom } from '@hapi/boom';
-import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/jp3/service-journey-departures.graphql-gen';
-import { GetQuaysCoordinatesQuery } from './impl/quays/jp3/quays-coordinates.graphql-gen';
-import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/jp3/service-journey.graphql-gen';
+import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
+import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
+import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/journey-gql/service-journey.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;

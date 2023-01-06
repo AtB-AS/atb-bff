@@ -5,9 +5,9 @@ import {
   TransportSubmode
 } from '../../../../graphql/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
-import { GroupsByIdQuery } from '../journey-gql/jp3/departure-group.graphql-gen';
-import { SituationFragment } from '../../fragments/jp3/situations.graphql-gen';
-import {NoticeFragment} from "../../fragments/jp3/notices.graphql-gen";
+import { GroupsByIdQuery } from '../journey-gql/departure-group.graphql-gen';
+import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
+import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
 
 type Notice = { text?: string };
 

@@ -1,13 +1,13 @@
 import { Result } from '@badrap/result';
 import union from 'lodash.union';
-import { journeyPlannerClient_v3 } from '../../../graphql/graphql-client';
+import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import { APIError, DepartureGroupsQuery, FavoriteDeparture } from '../../types';
 import {
   GroupsByIdDocument,
   GroupsByIdQuery,
   GroupsByIdQueryVariables
-} from './journey-gql/jp3/departure-group.graphql-gen';
+} from './journey-gql/departure-group.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
 
 export type DepartureFavoritesMetadata = CursoredData<StopPlaceGroup[]>;
@@ -27,7 +27,7 @@ export async function getDepartureFavorites(
     filterByLineIds: favorites?.map(f => f.lineId)
   };
 
-  const result = await journeyPlannerClient_v3.query<
+  const result = await journeyPlannerClient.query<
     GroupsByIdQuery,
     GroupsByIdQueryVariables
   >({

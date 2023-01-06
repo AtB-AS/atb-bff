@@ -1,10 +1,10 @@
-import * as Types from '../../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { NoticeFragmentDoc } from '../../../fragments/jp3/notices.graphql-gen';
-import { SituationFragmentDoc } from '../../../fragments/jp3/situations.graphql-gen';
-import { TariffZoneFragmentDoc } from '../../../fragments/jp3/tariff-zones.graphql-gen';
+import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
+import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
+import { TariffZoneFragmentDoc } from '../../fragments/journey-gql/tariff-zones.graphql-gen';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
