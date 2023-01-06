@@ -60,25 +60,15 @@ abstraction on top of Entur's GraphQL endpoints.
 ## GraphQL Code Generation
 
 For endpoints that uses GraphQL directly we generate types and code using
-`graphql-code-gen`.
-
-JP2 and JP3 queries must be put in folders named jp2 and jp3 respectively for
-the scripts to know which API version to use.
+`graphql-code-gen`. GraphQL queries against journey planner must be put in
+folders named `journey-gql`.
 
 If the queries, scheme, operations or fragments change, generate the code using
-scripts:
+the script:
 
 ```
 npm run gql-gen
 ```
-
-for Journeyplanner v2 API or
-
-```
-npm run gql-gen-v3
-```
-
-for Journeyplanner v3 API.
 
 This will make a TypeScript representation of the `.graphql` file in the same
 location but with `.graphql-gen.ts` extension. You can use these directly as
