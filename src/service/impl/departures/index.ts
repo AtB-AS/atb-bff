@@ -27,6 +27,7 @@ import {
   filterStopPlaceFavorites,
   filterQuayFavorites
 } from './utils/favorites';
+import * as Boom from '@hapi/boom';
 
 export default (): IDeparturesService => {
   const api: IDeparturesService = {
@@ -77,7 +78,13 @@ export default (): IDeparturesService => {
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
-
+        if (!result.data.stopPlaces.filter(Boolean).length) {
+          return Result.err(
+            Boom.resourceGone(
+              'Stop place not found or no longer available. (No matching stop places)'
+            )
+          );
+        }
         return Result.ok(result.data);
       } catch (error) {
         return Result.err(new APIError(error));
