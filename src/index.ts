@@ -21,12 +21,8 @@ import departureRoutes from './api/departures';
 import departureFavoritesRoutes from './api/departure-favorites';
 import quayRoutes from './api/quays';
 
-import serviceJourneyRoutes, {
-  serviceJourneyRoutes_v2
-} from './api/servicejourney';
-import serviceJourneyService, {
-  serviceJourneyService_v2
-} from './service/impl/service-journey';
+import { serviceJourneyRoutes_v2 } from './api/servicejourney';
+import { serviceJourneyService_v2 } from './service/impl/service-journey';
 import vippsLoginRoutes from './api/vipps-login';
 
 process.on('unhandledRejection', err => {
@@ -56,7 +52,6 @@ process.on('unhandledRejection', err => {
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService));
     journeyRoutes(server)(js);
-    serviceJourneyRoutes(server)(serviceJourneyService(enturService));
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());
 
