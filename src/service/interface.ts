@@ -110,54 +110,6 @@ export interface IStopsService {
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
-
-  // @TODO Deprecate all
-
-  getDepartures(
-    location: FeatureLocation,
-    query: DeparturesFromLocationQuery
-  ): Promise<Result<DeparturesWithStop[], APIError>>;
-
-  getDeparturesPaging(
-    location: FeatureLocation,
-    query: DeparturesFromLocationPagingQuery
-  ): Promise<Result<DeparturesMetadata, APIError>>;
-
-  // @TODO Deprecate all these
-  getNearestDepartures(
-    query: NearestDeparturesQuery
-  ): Promise<Result<EstimatedCall[], APIError>>;
-  getStopPlace(id: string): Promise<Result<StopPlaceDetails | null, APIError>>;
-  getStopPlacesByName(
-    query: StopPlaceByNameQuery
-  ): Promise<Result<StopPlaceDetails[], APIError>>;
-  getDeparturesBetweenStopPlaces(
-    query: DeparturesBetweenStopPlacesQuery,
-    params?: DeparturesBetweenStopPlacesParams
-  ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getStopPlacesByPosition(
-    query: StopPlaceQuery
-  ): Promise<Result<StopPlace[], APIError>>;
-
-  getDeparturesFromStopPlace(
-    id: string,
-    query: DeparturesFromStopPlaceQuery
-  ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getDeparturesFromQuay(
-    id: string,
-    query: DeparturesFromQuayQuery
-  ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getQuaysForStopPlace(
-    id: string,
-    query: QuaysForStopPlaceQuery
-  ): Promise<Result<Quay[] | null, APIError>>;
-
-  getNearestPlaces(
-    query: NearestPlacesQuery
-  ): Promise<Result<NearestPlace[] | null, APIError>>;
 }
 
 export interface IDeparturesService {
