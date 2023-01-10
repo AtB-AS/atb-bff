@@ -33,7 +33,7 @@ export function serviceJourneyDepartures(
     const serviceJourneyId = jsonTrip.trip.tripPatterns[tripNumber].legs[0]
       .serviceJourney!.id;
 
-    const urlSJD = `${conf.host()}/bff/v2/servicejourneyXX/${serviceJourneyId}/departures?date=${searchDate}`;
+    const urlSJD = `${conf.host()}/bff/v2/servicejourney/${serviceJourneyId}/departures?date=${searchDate}`;
     const resSJD = http.get(urlSJD, {
       tags: { name: requestName },
       headers: bffHeadersGet
