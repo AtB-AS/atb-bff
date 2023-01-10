@@ -2,7 +2,6 @@ import {
   departuresGroupedTestDataType,
   geocoderTestDataType,
   serviceJourneyTestDataType,
-  stopDetailsTestDataType,
   tripTestDataType
 } from '../types';
 
@@ -45,21 +44,6 @@ export const departuresGroupedTestData: departuresGroupedTestDataType = {
           shouldHaveDepartures: true
         }
       ]
-    }
-  ]
-};
-
-export const stopDetailsTestData: stopDetailsTestDataType = {
-  scenarios: [
-    {
-      query: {
-        stopPlace: 'NSR:StopPlace:42912'
-      },
-      expectedResult: {
-        stopPlace: 'NSR:StopPlace:42912',
-        name: 'Loddgårdstrøa',
-        quays: ['NSR:Quay:73575', 'NSR:Quay:73576']
-      }
     }
   ]
 };

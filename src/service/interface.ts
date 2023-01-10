@@ -1,73 +1,50 @@
 import { Result } from '@badrap/result';
-import {
-  EstimatedCall,
-  Feature,
-  NearestPlace,
-  Quay,
-  StopPlace,
-  StopPlaceDetails,
-  TripPattern
-} from '@entur/sdk';
-import { DepartureGroupMetadata } from './impl/stops/departure-group';
-import {
-  APIError,
-  DeparturesBetweenStopPlacesParams,
-  DeparturesBetweenStopPlacesQuery,
-  DeparturesForServiceJourneyQuery,
-  DeparturesFromQuayQuery,
-  DeparturesFromStopPlaceQuery,
-  FeaturesQuery,
-  NearestPlacesQuery,
-  QuaysForStopPlaceQuery,
-  ReverseFeaturesQuery,
-  StopPlaceQuery,
-  TripPatternsQuery,
-  TripQuery,
-  StopPlaceByNameQuery,
-  NearestDeparturesQuery,
-  TripPatternQuery,
-  FeatureLocation,
-  DeparturesWithStop,
-  DeparturesFromLocationQuery,
-  DeparturesMetadata,
-  DeparturesRealtimeData,
-  DepartureRealtimeQuery,
-  DeparturesFromLocationPagingQuery,
-  DepartureGroupsQuery,
-  DepartureGroupsPayload,
-  ServiceJourneyMapInfoQuery,
-  ServiceJourneyMapInfoData,
-  ServiceJourneyMapInfoData_v3,
-  QuayDeparturesPayload,
-  StopPlaceDeparturesPayload,
-  DepartureFavoritesPayload,
-  DepartureFavoritesQuery,
-  QuaysCoordinatesPayload,
-  ServiceJourneyWithEstimatedCallsQuery
-} from './types';
-import {
-  StopPlaceQuayDeparturesQuery,
-  StopPlaceQuayDeparturesQueryVariables
-} from './impl/departures/journey-gql/stop-departures.graphql-gen';
+import { Feature, TripPattern } from '@entur/sdk';
+import { Boom } from '@hapi/boom';
 import * as Trips from '../types/trips';
+import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
 import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
 } from './impl/departures/journey-gql/quay-departures.graphql-gen';
 import {
-  NearestStopPlacesQuery,
-  NearestStopPlacesQueryVariables
-} from './impl/departures/journey-gql/stops-nearest.graphql-gen';
+  StopPlaceQuayDeparturesQuery,
+  StopPlaceQuayDeparturesQueryVariables
+} from './impl/departures/journey-gql/stop-departures.graphql-gen';
 import {
   StopsDetailsQuery,
   StopsDetailsQueryVariables
 } from './impl/departures/journey-gql/stops-details.graphql-gen';
-import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
+import {
+  NearestStopPlacesQuery,
+  NearestStopPlacesQueryVariables
+} from './impl/departures/journey-gql/stops-nearest.graphql-gen';
 import { EnrollResponse } from './impl/enrollment';
-import { Boom } from '@hapi/boom';
-import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
-import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
 import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/journey-gql/service-journey.graphql-gen';
+import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
+import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
+import { DepartureGroupMetadata } from './impl/stops/departure-group';
+import {
+  APIError,
+  DepartureFavoritesPayload,
+  DepartureFavoritesQuery,
+  DepartureGroupsPayload,
+  DepartureGroupsQuery,
+  DepartureRealtimeQuery,
+  DeparturesForServiceJourneyQuery,
+  DeparturesRealtimeData,
+  FeaturesQuery,
+  QuayDeparturesPayload,
+  QuaysCoordinatesPayload,
+  ReverseFeaturesQuery,
+  ServiceJourneyMapInfoData_v3,
+  ServiceJourneyMapInfoQuery,
+  ServiceJourneyWithEstimatedCallsQuery,
+  StopPlaceDeparturesPayload,
+  TripPatternQuery,
+  TripPatternsQuery,
+  TripQuery
+} from './types';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -110,54 +87,6 @@ export interface IStopsService {
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
-
-  // @TODO Deprecate all
-
-  getDepartures(
-    location: FeatureLocation,
-    query: DeparturesFromLocationQuery
-  ): Promise<Result<DeparturesWithStop[], APIError>>;
-
-  getDeparturesPaging(
-    location: FeatureLocation,
-    query: DeparturesFromLocationPagingQuery
-  ): Promise<Result<DeparturesMetadata, APIError>>;
-
-  // @TODO Deprecate all these
-  getNearestDepartures(
-    query: NearestDeparturesQuery
-  ): Promise<Result<EstimatedCall[], APIError>>;
-  getStopPlace(id: string): Promise<Result<StopPlaceDetails | null, APIError>>;
-  getStopPlacesByName(
-    query: StopPlaceByNameQuery
-  ): Promise<Result<StopPlaceDetails[], APIError>>;
-  getDeparturesBetweenStopPlaces(
-    query: DeparturesBetweenStopPlacesQuery,
-    params?: DeparturesBetweenStopPlacesParams
-  ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getStopPlacesByPosition(
-    query: StopPlaceQuery
-  ): Promise<Result<StopPlace[], APIError>>;
-
-  getDeparturesFromStopPlace(
-    id: string,
-    query: DeparturesFromStopPlaceQuery
-  ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getDeparturesFromQuay(
-    id: string,
-    query: DeparturesFromQuayQuery
-  ): Promise<Result<EstimatedCall[], APIError>>;
-
-  getQuaysForStopPlace(
-    id: string,
-    query: QuaysForStopPlaceQuery
-  ): Promise<Result<Quay[] | null, APIError>>;
-
-  getNearestPlaces(
-    query: NearestPlacesQuery
-  ): Promise<Result<NearestPlace[] | null, APIError>>;
 }
 
 export interface IDeparturesService {
