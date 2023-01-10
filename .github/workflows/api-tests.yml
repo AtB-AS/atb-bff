@@ -36,7 +36,7 @@ jobs:
           cd test && yarn webpack
 
       - name: Run API tests
-        run: ./k6 run test/dist/k6.js --env environment=staging --env runFrom=root --log-output=stdout --logformat=raw | tee test/dist/results/junitLog.txt
+        run: ./k6 run test/dist/k6.js --env environment=staging --env runFrom=root --log-output=stdout --log-format=raw | tee test/dist/results/junitLog.txt
 
       - name: Create JUnit from checks
         run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder dist/results
@@ -52,3 +52,7 @@ jobs:
           name: junit-results
           path: ./test/dist/results/combinedJUnit.xml
           retention-days: 5
+
+      - name: Re-run API tests
+        run: ./k6 run test/dist/k6.js --env environment=staging --env runFrom=root
+
