@@ -115,6 +115,20 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
     {
       favorites: [
         {
+          lineId: "ATB:Line:2_2",
+          quayId: "NSR:Quay:73152",
+          quayName: "Ladeveien",
+          stopId: "NSR:StopPlace:42686",
+          lineNumber: "2",
+          lineName: "Strindheim via Lade",
+          lineTransportationMode: "bus",
+          lineTransportationSubMode: "localBus",
+        }
+      ]
+    },
+    {
+      favorites: [
+        {
           lineId: 'ATB:Line:2_82',
           quayId: 'NSR:Quay:73576',
           quayName: 'Loddgårdstrøa',
