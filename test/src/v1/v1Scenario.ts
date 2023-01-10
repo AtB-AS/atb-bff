@@ -2,16 +2,9 @@
 Scenarios for v1 requests
  */
 
-import {
-  departuresGrouped,
-  departuresRealtime,
-  quayDepartures,
-  stopDetails,
-  stopQuays
-} from './departures';
+import { departuresGrouped, departuresRealtime } from './departures';
 import {
   departuresGroupedTestData,
-  stopDetailsTestData,
   geocoderFeaturesTestData,
   geocoderReverseTestData,
   tripTestData,
@@ -30,9 +23,6 @@ export const departuresScenarioV1 = (searchDate: string): void => {
   // Requests
   departuresGrouped(departuresGroupedTestData, searchDate);
   departuresRealtime('NSR:Quay:73575', searchDate);
-  quayDepartures('NSR:Quay:73576');
-  stopDetails(stopDetailsTestData);
-  stopQuays(stopDetailsTestData);
 };
 
 //export function geocoderScenarioV1() {
