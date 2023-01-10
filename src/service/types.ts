@@ -1,27 +1,13 @@
-import {
-  Location,
-  QueryMode,
-  DeparturesById,
-  Feature,
-  StopPlaceDetails,
-  Quay,
-  Departure,
-  PointsOnLink
-} from '@entur/sdk';
-import { FetchError } from 'node-fetch';
+import { Location, PointsOnLink, QueryMode } from '@entur/sdk';
 import { boomify } from '@hapi/boom';
-import { CursoredQuery } from './cursored';
-import { TripsQuery } from './impl/trips/journey-gql/trip.graphql-gen';
+import { FetchError } from 'node-fetch';
 import * as Types_v3 from '../graphql/journeyplanner-types_v3';
+import { CursoredQuery } from './cursored';
 
 export interface Coordinates {
   latitude: number;
   longitude: number;
 }
-
-export type FeatureLocation = Feature['properties'] & {
-  coordinates: { longitude: number; latitude: number };
-};
 
 export type FavoriteDeparture = {
   stopId: string;
@@ -55,10 +41,6 @@ export interface QuaysCoordinatesPayload {
   ids: string[];
 }
 
-export interface QuaysForStopPlaceQuery {
-  filterByInUse: boolean;
-}
-
 export type ReverseFeaturesQuery = {
   lat: number;
   lon: number;
@@ -66,45 +48,6 @@ export type ReverseFeaturesQuery = {
   limit?: number;
   layers?: string[];
 };
-
-export interface NearestDeparturesQuery {
-  lat: number;
-  lon: number;
-  offset: number;
-  walkSpeed: number;
-  includeIrrelevant: boolean;
-}
-
-export interface StopPlaceQuery {
-  lat: number;
-  lon: number;
-  distance?: number;
-  includeUnusedQuays?: boolean;
-}
-
-export interface StopPlaceByNameQuery {
-  query: string;
-  lat?: number;
-  lon?: number;
-}
-
-export interface DeparturesFromStopPlaceQuery {
-  start?: Date;
-  timeRange?: number;
-  limit?: number;
-  includeNonBoarding?: boolean;
-}
-
-export interface DeparturesFromLocationQuery {
-  offset: number;
-  walkSpeed: number;
-  includeNonBoarding: boolean;
-}
-
-export type DeparturesFromLocationPagingQuery = PaginatedQuery<{
-  startTime: Date;
-  limit: number;
-}>;
 
 export type DepartureGroupsPayload = {
   location:
@@ -139,14 +82,6 @@ export type DepartureRealtimeQuery = {
   limit: number;
 };
 
-export interface DeparturesFromQuayQuery {
-  start?: Date;
-  timeRange: number;
-  limit: number;
-  omitNonBoarding: boolean;
-  includeCancelledTrips: boolean;
-}
-
 export type StopPlaceDeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
@@ -163,10 +98,6 @@ export interface TripQuery {
   from: string;
   to: string;
   when?: Date;
-}
-
-export interface TripsData {
-  tripPatterns: TripsQuery;
 }
 
 export interface TripPatternsQuery {
@@ -191,20 +122,6 @@ export interface TripPatternQuery {
   serviceIds: string[];
 }
 
-export interface NearestPlacesQuery {
-  lat: number;
-  lon: number;
-  maxDistance?: number;
-  limit?: number;
-  typeFilter: string[];
-  modeFilter: string[];
-}
-
-export interface DeparturesBetweenStopPlacesQuery {
-  from: string;
-  to: string;
-}
-
 export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
@@ -217,30 +134,6 @@ export interface ServiceJourneyMapInfoQuery {
   fromQuayId: string;
   toQuayId?: string;
 }
-
-export interface DeparturesBetweenStopPlacesParams {
-  limit?: number;
-  start?: Date;
-}
-
-export type DeparturesByIdWithStopName = DeparturesById & {
-  name: string;
-};
-
-export type QuayWithCoordinates = Quay & {
-  latitude?: number;
-  longitude?: number;
-};
-
-export type DeparturesWithStop = {
-  stop: StopPlaceDetails;
-  quays: {
-    [quayId: string]: {
-      quay: QuayWithCoordinates;
-      departures: Array<Departure>;
-    };
-  };
-};
 
 export type PaginationInput = {
   pageSize: number;
@@ -263,8 +156,6 @@ export type Paginated<T extends any[] | []> =
       data: T;
       totalResults: number;
     } & PaginationInput);
-
-export type DeparturesMetadata = Paginated<DeparturesWithStop[]>;
 
 export type RealtimeData = {
   serviceJourneyId: string;
