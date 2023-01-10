@@ -2,7 +2,6 @@ import {
   departuresGroupedTestDataType,
   geocoderTestDataType,
   serviceJourneyTestDataType,
-  stopDetailsTestDataType,
   tripTestDataType
 } from '../types';
 

@@ -87,16 +87,3 @@ export type departuresGroupedTestDataType = {
     }>;
   }>;
 };
-
-export type stopDetailsTestDataType = {
-  scenarios: Array<{
-    query: {
-      stopPlace: string;
-    };
-    expectedResult: {
-      stopPlace: string;
-      name: string;
-      quays: Array<string>;
-    };
-  }>;
-};

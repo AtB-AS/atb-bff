@@ -10,4 +10,3 @@ export { serviceJourneyTestDataType } from './testData';
 export { tripTestDataType } from './testData';
 export { geocoderTestDataType } from './testData';
 export { departuresGroupedTestDataType } from './testData';
-export { stopDetailsTestDataType } from './testData';
