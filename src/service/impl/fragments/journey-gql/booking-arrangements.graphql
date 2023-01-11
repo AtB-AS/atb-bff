@@ -1,0 +1,15 @@
+fragment bookingArrangement on BookingArrangement {
+  bookingMethods
+  latestBookingTime
+  bookingNote
+  bookWhen
+  latestBookingTime
+  minimumBookingPeriod
+  bookingContact {
+    contactPerson
+    email
+    url
+    phone
+    furtherDetails
+  }
+}

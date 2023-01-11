@@ -147,6 +147,9 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
             predictionInaccurate
           }
         }
+        bookingArrangements {
+          ...bookingArrangement
+        }
       }
     }
   }
