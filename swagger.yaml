@@ -135,29 +135,6 @@ paths:
             type: string
           description: Successful
   /bff/v1/journey/trip:
-    get:
-      summary: Find trip patterns with a simple query
-      operationId: getBffV1JourneyTrip
-      parameters:
-        - type: string
-          name: from
-          in: query
-          required: true
-        - type: string
-          name: to
-          in: query
-          required: true
-        - type: string
-          format: date
-          name: when
-          in: query
-      tags:
-        - bff
-      responses:
-        default:
-          schema:
-            type: string
-          description: Successful
     post:
       summary: Find trip patterns
       operationId: postBffV1JourneyTrip

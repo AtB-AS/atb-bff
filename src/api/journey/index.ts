@@ -15,19 +15,6 @@ import * as Boom from '@hapi/boom';
 
 export default (server: Hapi.Server) => (service: IJourneyService) => {
   server.route({
-    method: 'GET',
-    path: '/bff/v1/journey/trip',
-    options: {
-      description: 'Find trip patterns with a simple query',
-      tags: ['api', 'journey'],
-      validate: getJourneyRequest
-    },
-    handler: async (request, h) => {
-      const query = (request.query as unknown) as TripQuery;
-      return (await service.getTrips(query)).unwrap();
-    }
-  });
-  server.route({
     method: 'POST',
     path: '/bff/v1/journey/trip',
     options: {
@@ -36,7 +23,7 @@ export default (server: Hapi.Server) => (service: IJourneyService) => {
       validate: postJourneyRequest
     },
     handler: async (request, h) => {
-      const query = (request.payload as unknown) as TripPatternsQuery;
+      const query = request.payload as unknown as TripPatternsQuery;
       return (await service.getTripPatterns(query)).unwrap();
     }
   });
@@ -49,7 +36,7 @@ export default (server: Hapi.Server) => (service: IJourneyService) => {
       validate: getSingleTripPattern
     },
     handler: async (request, h) => {
-      const idParam = (request.query as unknown) as SingleTripPatternQuery;
+      const idParam = request.query as unknown as SingleTripPatternQuery;
       const idObject = parseTripPatternId(
         idParam.id,
         postJourneyRequest.payload

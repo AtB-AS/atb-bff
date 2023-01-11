@@ -11,8 +11,7 @@ import { TripPatternQuery, TripPatternsQuery } from '../../service/types';
 let server: Hapi.Server;
 const svc: jest.Mocked<IJourneyService> = {
   getTripPatterns: jest.fn((args: any): any => Result.ok(Promise.resolve([]))),
-  getTripPattern: jest.fn((args: any): any => Result.ok(Promise.resolve([]))),
-  getTrips: jest.fn((args: any): any => Result.ok(Promise.resolve([])))
+  getTripPattern: jest.fn((args: any): any => Result.ok(Promise.resolve([])))
 };
 
 beforeAll(async () => {
@@ -27,26 +26,6 @@ beforeAll(async () => {
 });
 afterAll(async () => {
   await server.stop();
-});
-
-describe('GET /bff/v1/journey/trip', () => {
-  it('responds with 200', async () => {
-    const res = await server.inject({
-      method: 'get',
-      url: '/bff/v1/journey/trip?from=Trondheim&to=Oslo'
-    });
-
-    expect(res.statusCode).toBe(200);
-  });
-
-  it('responds with 400 for missing required parameters', async () => {
-    const res = await server.inject({
-      method: 'get',
-      url: '/bff/v1/journey/trip?from=Trondheim'
-    });
-
-    expect(res.statusCode).toBe(400);
-  });
 });
 
 describe('POST /bff/v1/journey/trip', () => {

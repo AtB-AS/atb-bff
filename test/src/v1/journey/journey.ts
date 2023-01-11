@@ -3,8 +3,7 @@ import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
 import {
   arrivesBeforeExpectedEndTime,
-  departsAfterExpectedStartTime,
-  isEqual
+  departsAfterExpectedStartTime
 } from '../../utils/utils';
 import {
   tripTestDataType,
@@ -86,71 +85,6 @@ export function trip(
       expects
     );
   }
-}
-
-export function tripPOSTandGET(testData: tripTestDataType, searchDate: string) {
-  const test = testData.scenarios[0];
-  const searchTime = `${searchDate}T10:00:00.000Z`;
-  const requestName = 'v1_tripPOSTandGET';
-  // Update the query
-  test.query.searchDate = searchTime;
-  test.query.arriveBy = false;
-
-  const urlGet = `${conf.host()}/bff/v1/journey/trip?from=${encodeURI(
-    test.query.from.name
-  )}&to=${encodeURI(test.query.to.name)}&when=${searchTime}`;
-  const resGet = http.get(urlGet, {
-    tags: { name: requestName },
-    headers: bffHeadersGet
-  });
-  const jsonGet = resGet.json() as TripsSimplifiedResponseType;
-  // limit POST after the GET response
-  test.query.limit = resGet.json('@this.#') as number;
-  const urlPost = `${conf.host()}/bff/v1/journey/trip`;
-  const resPost = http.post(urlPost, JSON.stringify(test.query), {
-    tags: { name: requestName },
-    headers: bffHeadersPost
-  });
-  const jsonPost = resPost.json() as TripsSimplifiedResponseType;
-
-  const expects: ExpectsType = [
-    { check: 'should have status 200', expect: resPost.status === 200 },
-    { check: 'should have status 200', expect: resGet.status === 200 }
-  ];
-
-  // Assert the expected start times
-  expects.push(
-    {
-      check:
-        'should have expected start times after requested time for GET request',
-      expect: departsAfterExpectedStartTime(
-        jsonGet.map(trip => trip.expectedStartTime),
-        searchTime
-      )
-    },
-    {
-      check:
-        'should have expected start times after requested time for POST request',
-      expect: departsAfterExpectedStartTime(
-        jsonPost.map(trip => trip.expectedStartTime),
-        searchTime
-      )
-    },
-    {
-      check: 'should have same expected start times in GET and POST requests',
-      expect: isEqual(
-        jsonGet.map(trip => trip.expectedStartTime),
-        jsonPost.map(trip => trip.expectedStartTime)
-      )
-    }
-  );
-
-  metrics.addFailureIfMultipleChecks(
-    [resPost.request.url, resGet.request.url],
-    resPost.timings.duration + resGet.timings.duration,
-    requestName,
-    expects
-  );
 }
 
 export function singleTrip(testData: tripTestDataType, searchDate: string) {

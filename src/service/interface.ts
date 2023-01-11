@@ -123,8 +123,6 @@ export interface IQuayService {
 }
 
 export interface IJourneyService {
-  getTrips(query: TripQuery): Promise<Result<TripPattern[], APIError>>;
-
   getTripPattern(
     query: TripPatternQuery
   ): Promise<Result<TripPattern | null, APIError>>;
