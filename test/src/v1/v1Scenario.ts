@@ -11,7 +11,7 @@ import {
   serviceJourneyTestData
 } from './testData/testData';
 import { geocoderFeatures, geocoderReverse } from './geocoder';
-import { singleTrip, trip, tripPOSTandGET } from './journey';
+import { singleTrip, trip } from './journey';
 import {
   serviceJourneyDepartures,
   serviceJourneyPolyline
@@ -37,7 +37,6 @@ export const journeyScenarioV1 = (searchDate: string): void => {
   // Requests
   trip(tripTestData, searchDate, false);
   trip(tripTestData, searchDate, true);
-  tripPOSTandGET(tripTestData, searchDate);
   singleTrip(tripTestData, searchDate);
 };
 

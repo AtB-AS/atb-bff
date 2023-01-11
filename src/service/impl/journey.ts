@@ -8,14 +8,6 @@ import { EnturServiceAPI } from './entur';
 
 export default (service: EnturServiceAPI): IJourneyService => {
   const api: IJourneyService = {
-    async getTrips({ from, to, when }) {
-      try {
-        const trips = await service.findTrips(from, to, when);
-        return Result.ok(trips);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
     async getTripPatterns(query) {
       try {
         const trips = await service.getTripPatterns(query);
