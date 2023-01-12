@@ -4,7 +4,6 @@ import enturClient from './service/impl/entur';
 
 import geocoderService from './service/impl/geocoder';
 import stopsService from './service/impl/stops';
-import journeyService from './service/impl/journey';
 import departuresService from './service/impl/departures';
 import tripsService from './service/impl/trips';
 import quayService from './service/impl/quays';
@@ -13,7 +12,6 @@ import enrollmentService from './service/impl/enrollment';
 
 import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
-import journeyRoutes from './api/journey';
 import healthRoutes from './api/health';
 import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
@@ -47,11 +45,9 @@ process.on('unhandledRejection', err => {
         new Boom('The requested resource was not found.', { statusCode: 404 })
     });
 
-    const js = journeyService(enturService);
     healthRoutes(server);
     stopsRoutes(server)(stopsService(enturService));
     geocoderRoutes(server)(geocoderService(enturService));
-    journeyRoutes(server)(js);
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());
 
