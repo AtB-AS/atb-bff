@@ -8,14 +8,6 @@ import { EnturServiceAPI } from './entur';
 
 export default (service: EnturServiceAPI): IJourneyService => {
   const api: IJourneyService = {
-    async getTripPatterns(query) {
-      try {
-        const trips = await service.getTripPatterns(query);
-        return Result.ok(addIdsToTrips(trips, query));
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
     async getTripPattern({ query, serviceIds }) {
       // There are no ways to get actual specific trip pattern after having retrieved it,
       // So we try to do the search with the same query and hope the first result is the same.
@@ -39,13 +31,6 @@ export default (service: EnturServiceAPI): IJourneyService => {
 
   return api;
 };
-
-function addIdsToTrips(trips: TripPattern[], query: TripPatternsQuery) {
-  return trips.map(oneTrip => ({
-    ...oneTrip,
-    id: generateId(oneTrip, query)
-  }));
-}
 
 function findTripsMatchingServiceIds(
   trips: TripPattern[],

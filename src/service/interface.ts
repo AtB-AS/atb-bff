@@ -76,6 +76,9 @@ export interface ITrips_v2 {
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds
   ): Promise<Result<Trips.TripPattern, Boom>>;
+  getTripPatterns(
+    query: TripPatternsQuery
+  ): Promise<Result<TripPattern[], APIError>>;
 }
 
 export interface IStopsService {
@@ -126,9 +129,6 @@ export interface IJourneyService {
   getTripPattern(
     query: TripPatternQuery
   ): Promise<Result<TripPattern | null, APIError>>;
-  getTripPatterns(
-    query: TripPatternsQuery
-  ): Promise<Result<TripPattern[], APIError>>;
 }
 
 export interface IEnrollmentService {
