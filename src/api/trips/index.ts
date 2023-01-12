@@ -7,11 +7,11 @@ import {
   TripsQueryWithJourneyIds
 } from '../../types/trips';
 import { parseTripQueryString } from '../../utils/journey-utils';
-import { postJourneyRequest } from '../journey/schema';
 import {
   postEncodedSingleTripRequest,
   postSingleTripRequest,
-  postTripsRequest
+  postTripsRequest,
+  postJourneyRequest
 } from './schema';
 
 export default (server: Hapi.Server) => (service: ITrips_v2) => {

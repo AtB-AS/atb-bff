@@ -41,9 +41,7 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
   StopPlaceDeparturesPayload,
-  TripPatternQuery,
-  TripPatternsQuery,
-  TripQuery
+  TripPatternsQuery
 } from './types';
 
 export interface IGeocoderService {
@@ -123,12 +121,6 @@ export interface IQuayService {
   getQuaysCoordinates(
     payload: QuaysCoordinatesPayload
   ): Promise<Result<GetQuaysCoordinatesQuery, APIError>>;
-}
-
-export interface IJourneyService {
-  getTripPattern(
-    query: TripPatternQuery
-  ): Promise<Result<TripPattern | null, APIError>>;
 }
 
 export interface IEnrollmentService {
