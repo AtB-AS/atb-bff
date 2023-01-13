@@ -65,7 +65,10 @@ function mapToLegacyLeg(leg: Leg_v2): Leg {
     line: mapToLegacyLine(leg.line),
     mode: mapToLegacyLegMode(leg.mode),
     pointsOnLink: mapToPointsOnLink(leg.pointsOnLink),
-    serviceJourney: mapToLegacyServiceJourney(leg.serviceJourney),
+    // Casting to allow servicejourney to be null
+    serviceJourney: mapToLegacyServiceJourney(
+      leg.serviceJourney
+    ) as ServiceJourney,
     situations: [],
     transportSubmode: mapToLegacySubMode(leg.transportSubmode)
   };
@@ -90,8 +93,8 @@ function mapToLegacyEstimatedCall(
 
   return {
     ...estimatedCall,
-    aimedArrivalTime: '', // Not used in app
-    expectedArrivalTime: '', // Not used in app
+    aimedArrivalTime: '',
+    expectedArrivalTime: '',
     cancellation: false,
     date: '',
     forAlighting: true,
@@ -99,7 +102,8 @@ function mapToLegacyEstimatedCall(
     predictionInaccurate: false,
     realtime: true,
     requestStop: false,
-    serviceJourney: mapToLegacyServiceJourney(serviceJourney),
+    // Casting to allow servicejourney to be null
+    serviceJourney: mapToLegacyServiceJourney(serviceJourney) as ServiceJourney,
     destinationDisplay: {
       frontText: frontText
     },
@@ -119,8 +123,8 @@ function mapToLegacyIntermediateEstimatedCall(
   return {
     quay: undefined,
     date: estimatedCall.date,
-    aimedArrivalTime: '', // Not used in app
-    expectedArrivalTime: '', // Not used in app
+    aimedArrivalTime: '',
+    expectedArrivalTime: '',
     aimedDepartureTime: '',
     expectedDepartureTime: '',
     cancellation: false,
@@ -129,7 +133,8 @@ function mapToLegacyIntermediateEstimatedCall(
     predictionInaccurate: false,
     realtime: true,
     requestStop: false,
-    serviceJourney: mapToLegacyServiceJourney(serviceJourney),
+    // Casting to allow servicejourney to be null
+    serviceJourney: mapToLegacyServiceJourney(serviceJourney) as ServiceJourney,
     destinationDisplay: {
       frontText: frontText
     },
@@ -143,7 +148,6 @@ function mapToLegacyPlace(place: Place_v2): Place {
     ...place,
     name: place.name || '',
     quay: mapToLegacyQuay(place.quay)
-    // quay: undefined
   };
 }
 
@@ -152,11 +156,11 @@ function mapToLegacyLine(line: Line_v2): Line | undefined {
   if (!line) return;
   return {
     ...line,
-    transportMode: TransportMode.BUS, // TODO: used in app?
+    transportMode: TransportMode.BUS, // Not used in app
+    transportSubmode: TransportSubmode.LOCAL, // Not used in app
     name: line.name || '',
     notices: [],
-    publicCode: line.publicCode || '',
-    transportSubmode: TransportSubmode.LOCAL // TODO: used in app?
+    publicCode: line.publicCode || ''
   };
 }
 
@@ -183,7 +187,8 @@ function mapToLegacySubMode(submode: TransportSubmode_v2): TransportSubmode {
 type ServiceJourney_v2 = Leg_v2['serviceJourney'];
 function mapToLegacyServiceJourney(
   serviceJourney: ServiceJourney_v2
-): ServiceJourney {
+): ServiceJourney | null {
+  if (!serviceJourney?.id) return null;
   return {
     ...serviceJourney,
     id: serviceJourney?.id || '',
