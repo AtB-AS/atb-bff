@@ -157,7 +157,7 @@ function mapToLegacyLine(line: Line_v2): Line | undefined {
   return {
     ...line,
     transportMode: TransportMode.BUS, // Not used in app
-    transportSubmode: TransportSubmode.LOCAL, // Not used in app
+    transportSubmode: TransportSubmode.LOCAL_BUS, // Not used in app
     name: line.name || '',
     notices: [],
     publicCode: line.publicCode || ''
@@ -181,7 +181,7 @@ function mapToLegacySubMode(submode: TransportSubmode_v2): TransportSubmode {
   ) {
     return submode as unknown as TransportSubmode;
   }
-  return TransportSubmode.LOCAL;
+  return TransportSubmode.LOCAL_BUS;
 }
 
 type ServiceJourney_v2 = Leg_v2['serviceJourney'];
