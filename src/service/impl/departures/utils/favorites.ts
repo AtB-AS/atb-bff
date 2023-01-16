@@ -1,4 +1,4 @@
-import { EstimatedCall } from '../../../../graphql/journeyplanner-types_v3';
+import { EstimatedCall } from '../../../../graphql/journey/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
 import { QuayDeparturesQuery } from '../journey-gql/quay-departures.graphql-gen';
 import { StopPlaceQuayDeparturesQuery } from '../journey-gql/stop-departures.graphql-gen';

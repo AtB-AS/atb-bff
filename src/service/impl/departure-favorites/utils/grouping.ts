@@ -3,7 +3,7 @@ import sortBy from 'lodash.sortby';
 import {
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/journeyplanner-types_v3';
+} from '../../../../graphql/journey/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
 import { GroupsByIdQuery } from '../journey-gql/departure-group.graphql-gen';
 import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';

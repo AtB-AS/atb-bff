@@ -1,15 +1,13 @@
-import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-export type StopPlaceFragment = { id: string, name: string, latitude?: number, longitude?: number };
+export type TranslationFragment = { language: string, value: string };
 
-export const StopPlaceFragmentDoc = gql`
-    fragment stopPlace on StopPlace {
-  id
-  name
-  latitude
-  longitude
+export const TranslationFragmentDoc = gql`
+    fragment translation on Translation {
+  language
+  value
 }
     `;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>

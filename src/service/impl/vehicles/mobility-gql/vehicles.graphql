@@ -1,0 +1,33 @@
+fragment pricingSegment on PricingSegment {
+    rate
+    end
+    interval
+    start
+}
+
+query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
+    vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
+        id
+        lat
+        lon
+        pricingPlan {
+            perKmPricing {
+                ...pricingSegment
+            }
+            price
+            perMinPricing {
+                ...pricingSegment
+            }
+        }
+        system {
+            operator {
+                id
+            }
+            name {
+                translation {
+                    ...translation
+                }
+            }
+        }
+    }
+}

@@ -25,6 +25,10 @@ const urlJourneyPlanner = ENTUR_BASEURL
   ? `${ENTUR_BASEURL}/journey-planner/v3/graphql`
   : 'https://api.entur.io/journey-planner/v3/graphql';
 
+const urlMobility = ENTUR_BASEURL
+  ? `${ENTUR_BASEURL}/mobility/v2/graphql`
+  : 'https://api.entur.io/mobility/v2/graphql';
+
 function createClient(url: string) {
   const cache = new InMemoryCache();
   const httpLink = new HttpLink({
@@ -32,8 +36,8 @@ function createClient(url: string) {
 
     // node-fetch uses a different signature than the browser implemented fetch
     // But we use node-fetch's agent option in other parts of the project.
-    // The functionallity overlaps so this works as expected.
-    fetch: (fetch as unknown) as WindowOrWorkerGlobalScope['fetch'],
+    // The functionality overlaps so this works as expected.
+    fetch: fetch as unknown as WindowOrWorkerGlobalScope['fetch'],
 
     headers: {
       'ET-Client-Name': ET_CLIENT_NAME
@@ -52,5 +56,6 @@ function createClient(url: string) {
 }
 
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
+export const mobilityClient = createClient(urlMobility);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;
