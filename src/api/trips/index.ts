@@ -6,7 +6,7 @@ import {
   TripsQueryVariables,
   TripsQueryWithJourneyIds
 } from '../../types/trips';
-import { parseTripQueryString } from '../../utils/journey-utils';
+import { parseTripQueryString } from '../../service/impl/trips/utils';
 import {
   postEncodedSingleTripRequest,
   postSingleTripRequest,
