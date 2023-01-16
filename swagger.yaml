@@ -118,22 +118,6 @@ paths:
           schema:
             type: string
           description: Successful
-  /bff/v1/journey/single-trip:
-    get:
-      summary: Get one specific trip pattern from generated ID
-      operationId: getBffV1JourneySingletrip
-      parameters:
-        - type: string
-          name: id
-          in: query
-          required: true
-      tags:
-        - bff
-      responses:
-        default:
-          schema:
-            type: string
-          description: Successful
   /bff/v1/journey/trip:
     post:
       summary: Find trip patterns
@@ -150,6 +134,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   '/bff/v1/servicejourney/{id}/departures':
     get:
       summary: Get departures for Service Journey

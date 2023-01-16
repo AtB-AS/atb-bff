@@ -1,15 +1,11 @@
 import http from 'k6/http';
 import { conf, ExpectsType, metrics } from '../../config/configuration';
-import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
+import { bffHeadersPost } from '../../utils/headers';
 import {
   arrivesBeforeExpectedEndTime,
   departsAfterExpectedStartTime
 } from '../../utils/utils';
-import {
-  tripTestDataType,
-  TripsSimplifiedResponseType,
-  TripsSingleSimplifiedResponseType
-} from '../types';
+import { tripTestDataType, TripsSimplifiedResponseType } from '../types';
 
 export function trip(
   testData: tripTestDataType,
@@ -85,64 +81,4 @@ export function trip(
       expects
     );
   }
-}
-
-export function singleTrip(testData: tripTestDataType, searchDate: string) {
-  const test = testData.scenarios[0];
-  const searchTime = `${searchDate}T10:00:00.000Z`;
-  const requestName = 'v1_singleTrip';
-  // Update the query
-  test.query.searchDate = searchTime;
-  test.query.limit = 1;
-  test.query.arriveBy = false;
-
-  const urlTrip = `${conf.host()}/bff/v1/journey/trip`;
-  const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
-    tags: { name: requestName },
-    headers: bffHeadersPost
-  });
-  const jsonTrip = resTrip.json() as TripsSimplifiedResponseType;
-  const singleTripId = resTrip.json('@this.0.id') as string;
-  const urlSingleTrip = `${conf.host()}/bff/v1/journey/single-trip?id=${singleTripId}`;
-  const resSingleTrip = http.get(urlSingleTrip, {
-    tags: { name: requestName },
-    headers: bffHeadersGet
-  });
-  const jsonSingleTrip = resSingleTrip.json() as TripsSingleSimplifiedResponseType;
-
-  const expects: ExpectsType = [
-    {
-      check: 'should have status 200 on /trip',
-      expect: resTrip.status === 200
-    },
-    {
-      check: 'should have status 200 on /single-trip',
-      expect: resSingleTrip.status === 200
-    }
-  ];
-
-  // Assert equality
-  expects.push(
-    {
-      check: 'should have same expected start time',
-      expect: jsonTrip[0].expectedStartTime === jsonSingleTrip.expectedStartTime
-    },
-    {
-      check: 'should have same total distance',
-      expect: jsonTrip[0].distance === jsonSingleTrip.distance
-    },
-    {
-      check: 'should have same service journey on the first leg',
-      expect:
-        jsonTrip[0].legs[0].serviceJourney.id ===
-        jsonSingleTrip.legs[0].serviceJourney.id
-    }
-  );
-
-  metrics.addFailureIfMultipleChecks(
-    [resTrip.request.url, resSingleTrip.request.url],
-    resTrip.timings.duration + resSingleTrip.timings.duration,
-    requestName,
-    expects
-  );
 }
