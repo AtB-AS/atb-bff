@@ -115,14 +115,14 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
     {
       favorites: [
         {
-          lineId: "ATB:Line:2_2",
-          quayId: "NSR:Quay:73152",
-          quayName: "Ladeveien",
-          stopId: "NSR:StopPlace:42686",
-          lineNumber: "2",
-          lineName: "Strindheim via Lade",
-          lineTransportationMode: "bus",
-          lineTransportationSubMode: "localBus",
+          lineId: 'ATB:Line:2_2',
+          quayId: 'NSR:Quay:73152',
+          quayName: 'Ladeveien',
+          stopId: 'NSR:StopPlace:42686',
+          lineNumber: '2',
+          lineName: 'Strindheim via Lade',
+          lineTransportationMode: 'bus',
+          lineTransportationSubMode: 'localBus'
         }
       ]
     },

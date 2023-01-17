@@ -27,58 +27,74 @@ export function trip(
       tags: { name: requestName },
       headers: bffHeadersPost
     });
-    const tripsJson = res.json() as TripsSimplifiedResponseType;
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
     ];
 
-    // Assert returned time against expected times
-    if (test.query.arriveBy) {
-      expects.push({
-        check: 'should have expected end times before requested time',
-        expect: arrivesBeforeExpectedEndTime(
-          tripsJson.map(trip => trip.expectedEndTime),
-          searchTime
-        )
-      });
-    } else {
-      expects.push({
-        check: 'should have expected start times after requested time',
-        expect: departsAfterExpectedStartTime(
-          tripsJson.map(trip => trip.expectedStartTime),
-          searchTime
-        )
-      });
-    }
+    try {
+      const tripsJson = res.json() as TripsSimplifiedResponseType;
 
-    // Assert correct start and stop
-    const fromName: string[] = [];
-    const toName: string[] = [];
-    const expFromName = test.query.from.name;
-    const expToName = test.query.to.name;
-
-    for (let trip of tripsJson) {
-      const noLegs: number = trip.legs.length;
-      fromName.push(trip.legs[0].fromPlace.name);
-      toName.push(trip.legs[noLegs - 1].toPlace.name);
-    }
-    expects.push(
-      {
-        check: 'should have correct from names',
-        expect: fromName.filter(e => e !== expFromName).length === 0
-      },
-      {
-        check: 'should have correct to names',
-        expect: toName.filter(e => e !== expToName).length === 0
+      // Assert returned time against expected times
+      if (test.query.arriveBy) {
+        expects.push({
+          check: 'should have expected end times before requested time',
+          expect: arrivesBeforeExpectedEndTime(
+            tripsJson.map(trip => trip.expectedEndTime),
+            searchTime
+          )
+        });
+      } else {
+        expects.push({
+          check: 'should have expected start times after requested time',
+          expect: departsAfterExpectedStartTime(
+            tripsJson.map(trip => trip.expectedStartTime),
+            searchTime
+          )
+        });
       }
-    );
 
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
+      // Assert correct start and stop
+      const fromName: string[] = [];
+      const toName: string[] = [];
+      const expFromName = test.query.from.name;
+      const expToName = test.query.to.name;
+
+      for (let trip of tripsJson) {
+        const noLegs: number = trip.legs.length;
+        fromName.push(trip.legs[0].fromPlace.name);
+        toName.push(trip.legs[noLegs - 1].toPlace.name);
+      }
+      expects.push(
+        {
+          check: 'should have correct from names',
+          expect: fromName.filter(e => e !== expFromName).length === 0
+        },
+        {
+          check: 'should have correct to names',
+          expect: toName.filter(e => e !== expToName).length === 0
+        }
+      );
+
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      //throw exp
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
+      );
+    }
   }
 }

@@ -25,55 +25,70 @@ export function departuresGrouped(
       { check: 'should have status 200', expect: res.status === 200 }
     ];
 
-    // Assert correct stop place
-    const stopPlaces = (res.json('data.#.stopPlace.id') as JSONArray).sort();
-    const stopPlacesExp = test.expectedResults.map(e => e.stopPlace).sort();
-    expects.push({
-      check: 'should have correct stop place',
-      expect: isEqual(stopPlaces, stopPlacesExp)
-    });
-    // Assert correct quays
-    for (let expResult of test.expectedResults) {
-      const quays = (res.json(
-        `data.#(stopPlace.id=="${expResult.stopPlace}")#.quays.#.quay.id`
-      ) as JSONArray).sort();
+    try {
+      // Assert correct stop place
+      const stopPlaces = (res.json('data.#.stopPlace.id') as JSONArray).sort();
+      const stopPlacesExp = test.expectedResults.map(e => e.stopPlace).sort();
       expects.push({
-        check: `should have correct quays for stop place "${expResult.stopPlace}"`,
-        expect: isEqual(quays, expResult.quays)
+        check: 'should have correct stop place',
+        expect: isEqual(stopPlaces, stopPlacesExp)
       });
-    }
-
-    // Assert has departures
-    for (let expResult of test.expectedResults) {
-      if (expResult.shouldHaveDepartures) {
-        let sum = 0;
-        // This json path becomes a nested array
-        (res.json(
-          `data.#(stopPlace.id=="${expResult.stopPlace}")#.quays.#.group.#.departures`
-        ) as JSONArray).forEach(
-          (stopPlace: JSONValue) =>
-            !!stopPlace &&
-            (stopPlace as JSONArray).forEach(
-              (quay: JSONValue) =>
-                !!quay &&
-                (quay as JSONArray).forEach(
-                  (dep: JSONValue) => (sum += (dep as JSONArray).length)
-                )
-            )
-        );
+      // Assert correct quays
+      for (let expResult of test.expectedResults) {
+        const quays = (res.json(
+          `data.#(stopPlace.id=="${expResult.stopPlace}")#.quays.#.quay.id`
+        ) as JSONArray).sort();
         expects.push({
-          check: `should have departures for stop place "${expResult.stopPlace}"`,
-          expect: sum > 0
+          check: `should have correct quays for stop place "${expResult.stopPlace}"`,
+          expect: isEqual(quays, expResult.quays)
         });
       }
-    }
 
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
+      // Assert has departures
+      for (let expResult of test.expectedResults) {
+        if (expResult.shouldHaveDepartures) {
+          let sum = 0;
+          // This json path becomes a nested array
+          (res.json(
+            `data.#(stopPlace.id=="${expResult.stopPlace}")#.quays.#.group.#.departures`
+          ) as JSONArray).forEach(
+            (stopPlace: JSONValue) =>
+              !!stopPlace &&
+              (stopPlace as JSONArray).forEach(
+                (quay: JSONValue) =>
+                  !!quay &&
+                  (quay as JSONArray).forEach(
+                    (dep: JSONValue) => (sum += (dep as JSONArray).length)
+                  )
+              )
+          );
+          expects.push({
+            check: `should have departures for stop place "${expResult.stopPlace}"`,
+            expect: sum > 0
+          });
+        }
+      }
+
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      //throw exp
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
+      );
+    }
   }
 }
 
@@ -91,25 +106,43 @@ export function departuresRealtime(
     headers: bffHeadersGet
   });
 
-  const firstExpDeparture = res.json(
-    `${quayId}.departures.ATB*.timeData.expectedDepartureTime`
-  ) as string;
-  let expects: ExpectsType = [
-    { check: 'should have status 200', expect: res.status === 200 },
-    {
-      check: 'should show correct quay',
-      expect: res.json(`${quayId}.quayId`) === quayId
-    },
-    {
-      check: 'should have expected start times after requested time',
-      expect: Date.parse(firstExpDeparture) > Date.parse(startTime)
-    }
+  const expects: ExpectsType = [
+    { check: 'should have status 200', expect: res.status === 200 }
   ];
 
-  metrics.addFailureIfMultipleChecks(
-    [res.request.url],
-    res.timings.duration,
-    requestName,
-    expects
-  );
+  try {
+    const firstExpDeparture = res.json(
+      `${quayId}.departures.ATB*.timeData.expectedDepartureTime`
+    ) as string;
+    expects.push(
+      {
+        check: 'should show correct quay',
+        expect: res.json(`${quayId}.quayId`) === quayId
+      },
+      {
+        check: 'should have expected start times after requested time',
+        expect: Date.parse(firstExpDeparture) > Date.parse(startTime)
+      }
+    );
+
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      expects
+    );
+  } catch (exp) {
+    //throw exp
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      [
+        {
+          check: `${exp}`,
+          expect: false
+        }
+      ]
+    );
+  }
 }

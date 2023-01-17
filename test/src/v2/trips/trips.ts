@@ -35,117 +35,133 @@ export function trips(
       tags: { name: requestName },
       headers: bffHeadersPost
     });
-    const json: TripsQuery = res.json() as TripsQuery;
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
     ];
 
-    // Assert returned time against expected times
-    if (test.query.arriveBy) {
-      expects.push({
-        check: 'should have expected end times before requested time',
-        expect: arrivesBeforeExpectedEndTime(
-          json.trip.tripPatterns.map(pattern => pattern.expectedEndTime),
-          searchTime
-        )
-      });
-    } else {
-      expects.push({
-        check: 'should have expected start times after requested time',
-        expect: departsAfterExpectedStartTime(
-          json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
-          searchTime
-        )
-      });
-    }
+    try {
+      const json: TripsQuery = res.json() as TripsQuery;
 
-    // Assert correct start and stop
-    // Assert legs are connected
-    // Assert aggregated walk distance is correct on each trip pattern
-    const fromPlaces: string[] = [];
-    const toPlaces: string[] = [];
-    const expFromPlace = test.query.from.hasOwnProperty('place')
-      ? test.query.from.place
-      : test.query.from.name;
-    const expToPlace = test.query.to.hasOwnProperty('place')
-      ? test.query.to.place
-      : test.query.to.name;
-
-    let legsAreConnected = true;
-    let walkDistanceIsCorrect = true;
-    for (let pattern of json.trip.tripPatterns) {
-      const noLegs = pattern.legs.length;
-      // For trip start and stop
-      test.query.from.hasOwnProperty('place')
-        ? fromPlaces.push(pattern.legs[0].fromPlace.quay!.stopPlace!.id)
-        : fromPlaces.push(pattern.legs[0].fromPlace.name!);
-      test.query.to.hasOwnProperty('place')
-        ? toPlaces.push(pattern.legs[noLegs - 1].toPlace.quay!.stopPlace!.id)
-        : toPlaces.push(pattern.legs[noLegs - 1].toPlace.name!);
-      // For connectivity on each trip (disregarding quay or not)
-      let lastTo = '';
-      let walkDistance = 0.0;
-      pattern.legs.forEach((leg, index: number) => {
-        leg.mode === 'foot'
-          ? (walkDistance += leg.distance)
-          : (walkDistance += 0.0);
-        if (index === 0) {
-          lastTo = leg.toPlace.name!;
-        } else {
-          if (leg.fromPlace.name !== lastTo) {
-            legsAreConnected = false;
-          }
-          lastTo = leg.toPlace.name!;
-        }
-      });
-      // For walk distance check
-      if (Math.floor(pattern.walkDistance!) !== Math.floor(walkDistance)) {
-        walkDistanceIsCorrect = false;
-      }
-    }
-    expects.push(
-      {
-        check: 'should have correct from place',
-        expect: fromPlaces.filter(e => e !== expFromPlace).length === 0
-      },
-      {
-        check: 'should have correct to place',
-        expect: toPlaces.filter(e => e !== expToPlace).length === 0
-      },
-      { check: 'should have connected legs', expect: legsAreConnected },
-      {
-        check: 'should have correct aggregated walk distance on legs',
-        expect: walkDistanceIsCorrect
-      }
-    );
-
-    // Assert correct leg modes (for any given)
-    if (test.expectedResult.legModes) {
-      for (let expModes of test.expectedResult.legModes) {
-        const responseLegModes = json.trip.tripPatterns[
-          expModes.pattern
-        ].legs.map(leg => leg.mode);
+      // Assert returned time against expected times
+      if (test.query.arriveBy) {
         expects.push({
-          check: `should have correct leg modes for trip pattern ${expModes.pattern}`,
-          expect: isEqual(responseLegModes, expModes.modes)
+          check: 'should have expected end times before requested time',
+          expect: arrivesBeforeExpectedEndTime(
+            json.trip.tripPatterns.map(pattern => pattern.expectedEndTime),
+            searchTime
+          )
+        });
+      } else {
+        expects.push({
+          check: 'should have expected start times after requested time',
+          expect: departsAfterExpectedStartTime(
+            json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
+            searchTime
+          )
         });
       }
+
+      // Assert correct start and stop
+      // Assert legs are connected
+      // Assert aggregated walk distance is correct on each trip pattern
+      const fromPlaces: string[] = [];
+      const toPlaces: string[] = [];
+      const expFromPlace = test.query.from.hasOwnProperty('place')
+        ? test.query.from.place
+        : test.query.from.name;
+      const expToPlace = test.query.to.hasOwnProperty('place')
+        ? test.query.to.place
+        : test.query.to.name;
+
+      let legsAreConnected = true;
+      let walkDistanceIsCorrect = true;
+      for (let pattern of json.trip.tripPatterns) {
+        const noLegs = pattern.legs.length;
+        // For trip start and stop
+        test.query.from.hasOwnProperty('place')
+          ? fromPlaces.push(pattern.legs[0].fromPlace.quay!.stopPlace!.id)
+          : fromPlaces.push(pattern.legs[0].fromPlace.name!);
+        test.query.to.hasOwnProperty('place')
+          ? toPlaces.push(pattern.legs[noLegs - 1].toPlace.quay!.stopPlace!.id)
+          : toPlaces.push(pattern.legs[noLegs - 1].toPlace.name!);
+        // For connectivity on each trip (disregarding quay or not)
+        let lastTo = '';
+        let walkDistance = 0.0;
+        pattern.legs.forEach((leg, index: number) => {
+          leg.mode === 'foot'
+            ? (walkDistance += leg.distance)
+            : (walkDistance += 0.0);
+          if (index === 0) {
+            lastTo = leg.toPlace.name!;
+          } else {
+            if (leg.fromPlace.name !== lastTo) {
+              legsAreConnected = false;
+            }
+            lastTo = leg.toPlace.name!;
+          }
+        });
+        // For walk distance check
+        if (Math.floor(pattern.walkDistance!) !== Math.floor(walkDistance)) {
+          walkDistanceIsCorrect = false;
+        }
+      }
+      expects.push(
+        {
+          check: 'should have correct from place',
+          expect: fromPlaces.filter(e => e !== expFromPlace).length === 0
+        },
+        {
+          check: 'should have correct to place',
+          expect: toPlaces.filter(e => e !== expToPlace).length === 0
+        },
+        { check: 'should have connected legs', expect: legsAreConnected },
+        {
+          check: 'should have correct aggregated walk distance on legs',
+          expect: walkDistanceIsCorrect
+        }
+      );
+
+      // Assert correct leg modes (for any given)
+      if (test.expectedResult.legModes) {
+        for (let expModes of test.expectedResult.legModes) {
+          const responseLegModes = json.trip.tripPatterns[
+            expModes.pattern
+          ].legs.map(leg => leg.mode);
+          expects.push({
+            check: `should have correct leg modes for trip pattern ${expModes.pattern}`,
+            expect: isEqual(responseLegModes, expModes.modes)
+          });
+        }
+      }
+
+      // Assert number of trip patterns
+      expects.push({
+        check: `should have minimum number of trip patterns ${test.expectedResult.minimumTripPatterns}`,
+        expect:
+          json.trip.tripPatterns.length >=
+          test.expectedResult.minimumTripPatterns
+      });
+
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
+      );
     }
-
-    // Assert number of trip patterns
-    expects.push({
-      check: `should have minimum number of trip patterns ${test.expectedResult.minimumTripPatterns}`,
-      expect:
-        json.trip.tripPatterns.length >= test.expectedResult.minimumTripPatterns
-    });
-
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
   }
 }
 
@@ -170,129 +186,145 @@ export function tripsWithCursor(
     tags: { name: requestName },
     headers: bffHeadersPost
   });
-  const json = res.json() as TripsQuery;
-
-  // Update next request with cursor
-  test.query.cursor = arriveBy
-    ? json.trip.previousPageCursor
-    : json.trip.nextPageCursor;
-  const resNext = http.post(url, JSON.stringify(test.query), {
-    tags: { name: requestName },
-    headers: bffHeadersPost
-  });
-  // Remove cursor on object
-  delete test.query.cursor;
-  const jsonNext = resNext.json() as TripsQuery;
 
   const expects: ExpectsType = [
-    { check: 'should have status 200', expect: res.status === 200 },
-    {
-      check: 'should have status 200 on next cursor',
-      expect: resNext.status === 200
-    }
+    { check: 'should have status 200', expect: res.status === 200 }
   ];
 
-  // Assert returned time against expected times
-  if (test.query.arriveBy) {
-    expects.push(
-      {
-        check:
-          'should have expected end times before requested time on initial request',
-        expect: arrivesBeforeExpectedEndTime(
-          json.trip.tripPatterns.map(pattern => pattern.expectedEndTime),
-          searchTime
-        )
-      },
-      {
-        check:
-          'should have expected end times before requested time on next request',
-        expect: arrivesBeforeExpectedEndTime(
-          json.trip.tripPatterns.map(pattern => pattern.expectedEndTime),
-          searchTime
-        )
-      }
-    );
-  } else {
-    expects.push(
-      {
-        check:
-          'should have expected start times after requested time on initial request',
-        expect: departsAfterExpectedStartTime(
-          json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
-          searchTime
-        )
-      },
-      {
-        check:
-          'should have expected start times after requested time on next request',
-        expect: departsAfterExpectedStartTime(
-          json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
-          searchTime
-        )
-      }
-    );
-  }
+  try {
+    const json = res.json() as TripsQuery;
 
-  // Assert sorted returned times on initial and next request
-  if (test.query.arriveBy) {
-    const expectedEndTimes = json.trip.tripPatterns
-      .map(pattern => pattern.expectedEndTime)
-      .concat(
-        jsonNext.trip.tripPatterns.map(pattern => pattern.expectedEndTime)
-      );
-    expects.push({
-      check: 'should have sorted expected end times in DESC order',
-      expect: timeArrayIsSorted(expectedEndTimes, 'DESC')
+    // Update next request with cursor
+    test.query.cursor = arriveBy
+      ? json.trip.previousPageCursor
+      : json.trip.nextPageCursor;
+    const resNext = http.post(url, JSON.stringify(test.query), {
+      tags: { name: requestName },
+      headers: bffHeadersPost
     });
-  } else {
-    const expectedStartTimes = json.trip.tripPatterns
-      .map(pattern => pattern.expectedStartTime)
-      .concat(
-        jsonNext.trip.tripPatterns.map(pattern => pattern.expectedStartTime)
-      );
+    // Remove cursor on object
+    delete test.query.cursor;
+    const jsonNext = resNext.json() as TripsQuery;
+
     expects.push({
-      check: 'should have sorted expected start times in ASC order',
-      expect: timeArrayIsSorted(expectedStartTimes, 'ASC')
+      check: 'should have status 200 on next cursor',
+      expect: resNext.status === 200
     });
-  }
 
-  // Assert correct start and stop on next request
-  const fromPlaces = [];
-  const toPlaces = [];
-  const expFromPlace = test.query.from.hasOwnProperty('place')
-    ? test.query.from.place
-    : test.query.from.name;
-  const expToPlace = test.query.to.hasOwnProperty('place')
-    ? test.query.to.place
-    : test.query.to.name;
-
-  for (let pattern of jsonNext.trip.tripPatterns) {
-    const noLegs = pattern.legs.length;
-    // For trip start and stops
-    test.query.from.hasOwnProperty('place')
-      ? fromPlaces.push(pattern.legs[0].fromPlace.quay!.stopPlace!.id)
-      : fromPlaces.push(pattern.legs[0].fromPlace.name);
-    test.query.to.hasOwnProperty('place')
-      ? toPlaces.push(pattern.legs[noLegs - 1].toPlace.quay!.stopPlace!.id)
-      : toPlaces.push(pattern.legs[noLegs - 1].toPlace.name);
-  }
-  expects.push(
-    {
-      check: 'should have correct from place',
-      expect: fromPlaces.filter(e => e !== expFromPlace).length === 0
-    },
-    {
-      check: 'should have correct to place',
-      expect: toPlaces.filter(e => e !== expToPlace).length === 0
+    // Assert returned time against expected times
+    if (test.query.arriveBy) {
+      expects.push(
+        {
+          check:
+            'should have expected end times before requested time on initial request',
+          expect: arrivesBeforeExpectedEndTime(
+            json.trip.tripPatterns.map(pattern => pattern.expectedEndTime),
+            searchTime
+          )
+        },
+        {
+          check:
+            'should have expected end times before requested time on next request',
+          expect: arrivesBeforeExpectedEndTime(
+            json.trip.tripPatterns.map(pattern => pattern.expectedEndTime),
+            searchTime
+          )
+        }
+      );
+    } else {
+      expects.push(
+        {
+          check:
+            'should have expected start times after requested time on initial request',
+          expect: departsAfterExpectedStartTime(
+            json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
+            searchTime
+          )
+        },
+        {
+          check:
+            'should have expected start times after requested time on next request',
+          expect: departsAfterExpectedStartTime(
+            json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
+            searchTime
+          )
+        }
+      );
     }
-  );
 
-  metrics.addFailureIfMultipleChecks(
-    [res.request.url],
-    res.timings.duration + resNext.timings.duration,
-    requestName,
-    expects
-  );
+    // Assert sorted returned times on initial and next request
+    if (test.query.arriveBy) {
+      const expectedEndTimes = json.trip.tripPatterns
+        .map(pattern => pattern.expectedEndTime)
+        .concat(
+          jsonNext.trip.tripPatterns.map(pattern => pattern.expectedEndTime)
+        );
+      expects.push({
+        check: 'should have sorted expected end times in DESC order',
+        expect: timeArrayIsSorted(expectedEndTimes, 'DESC')
+      });
+    } else {
+      const expectedStartTimes = json.trip.tripPatterns
+        .map(pattern => pattern.expectedStartTime)
+        .concat(
+          jsonNext.trip.tripPatterns.map(pattern => pattern.expectedStartTime)
+        );
+      expects.push({
+        check: 'should have sorted expected start times in ASC order',
+        expect: timeArrayIsSorted(expectedStartTimes, 'ASC')
+      });
+    }
+
+    // Assert correct start and stop on next request
+    const fromPlaces = [];
+    const toPlaces = [];
+    const expFromPlace = test.query.from.hasOwnProperty('place')
+      ? test.query.from.place
+      : test.query.from.name;
+    const expToPlace = test.query.to.hasOwnProperty('place')
+      ? test.query.to.place
+      : test.query.to.name;
+
+    for (let pattern of jsonNext.trip.tripPatterns) {
+      const noLegs = pattern.legs.length;
+      // For trip start and stops
+      test.query.from.hasOwnProperty('place')
+        ? fromPlaces.push(pattern.legs[0].fromPlace.quay!.stopPlace!.id)
+        : fromPlaces.push(pattern.legs[0].fromPlace.name);
+      test.query.to.hasOwnProperty('place')
+        ? toPlaces.push(pattern.legs[noLegs - 1].toPlace.quay!.stopPlace!.id)
+        : toPlaces.push(pattern.legs[noLegs - 1].toPlace.name);
+    }
+    expects.push(
+      {
+        check: 'should have correct from place',
+        expect: fromPlaces.filter(e => e !== expFromPlace).length === 0
+      },
+      {
+        check: 'should have correct to place',
+        expect: toPlaces.filter(e => e !== expToPlace).length === 0
+      }
+    );
+
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration + resNext.timings.duration,
+      requestName,
+      expects
+    );
+  } catch (exp) {
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      [
+        {
+          check: `${exp}`,
+          expect: false
+        }
+      ]
+    );
+  }
 }
 
 // Single trip request
@@ -315,7 +347,6 @@ export function singleTrip(
     tags: { name: requestName },
     headers: bffHeadersPost
   });
-  const jsonTrips = resTrips.json() as TripsQuery;
 
   const expects: ExpectsType = [
     {
@@ -324,63 +355,79 @@ export function singleTrip(
     }
   ];
 
-  let noSingleTripsTested = 0;
-  let singleTripDuration = 0.0;
-  let urlSingleTripFull = '';
-  let counter = 0;
-  while (noSingleTripsTested < noSingleTripsToTest) {
-    const jsonTripsSingle = jsonTrips.trip.tripPatterns[
-      counter
-    ] as TripPatternWithCompressedQuery;
+  try {
+    const jsonTrips = resTrips.json() as TripsQuery;
 
-    // Note: Only foot pattern reduces start time with 1 minute, and compressed query from singleTrip reduces with even 1 minute more.
-    const noLegs = jsonTripsSingle.legs.length;
-    const firstLegMode = jsonTripsSingle.legs[0].mode;
-    if (!(noLegs === 1 && firstLegMode === 'foot')) {
-      const comprQuery = jsonTripsSingle.compressedQuery;
-      const bodySingle = { compressedQuery: comprQuery };
+    let noSingleTripsTested = 0;
+    let singleTripDuration = 0.0;
+    let urlSingleTripFull = '';
+    let counter = 0;
+    while (noSingleTripsTested < noSingleTripsToTest) {
+      const jsonTripsSingle = jsonTrips.trip.tripPatterns[
+        counter
+      ] as TripPatternWithCompressedQuery;
 
-      const resSingle = http.post(urlSingleTrip, JSON.stringify(bodySingle), {
-        tags: { name: requestName },
-        headers: bffHeadersPost
-      });
-      const jsonSingle = resSingle.json() as TripPatternWithCompressedQuery;
+      // Note: Only foot pattern reduces start time with 1 minute, and compressed query from singleTrip reduces with even 1 minute more.
+      const noLegs = jsonTripsSingle.legs.length;
+      const firstLegMode = jsonTripsSingle.legs[0].mode;
+      if (!(noLegs === 1 && firstLegMode === 'foot')) {
+        const comprQuery = jsonTripsSingle.compressedQuery;
+        const bodySingle = { compressedQuery: comprQuery };
 
-      // Note: The JSON-response is "randomly" ordered for each request. Pick out some test parameters.
-      const tripsTest = [
-        jsonTripsSingle.expectedStartTime,
-        jsonTripsSingle.duration,
-        jsonTripsSingle.walkDistance,
-        jsonTripsSingle.legs.length,
-        jsonTripsSingle.compressedQuery
-      ];
-      const singleTest = [
-        jsonSingle.expectedStartTime,
-        jsonSingle.duration,
-        jsonSingle.walkDistance,
-        jsonSingle.legs.length,
-        jsonSingle.compressedQuery
-      ];
+        const resSingle = http.post(urlSingleTrip, JSON.stringify(bodySingle), {
+          tags: { name: requestName },
+          headers: bffHeadersPost
+        });
+        const jsonSingle = resSingle.json() as TripPatternWithCompressedQuery;
 
-      expects.push(
-        {
-          check: `should have status 200 on /singleTrip #${counter}`,
-          expect: resSingle.status === 200
-        },
-        {
-          check: `single trip details should be equal to trips results details #${counter}`,
-          expect: isEqual(tripsTest, singleTest)
-        }
-      );
-      noSingleTripsTested += 1;
+        // Note: The JSON-response is "randomly" ordered for each request. Pick out some test parameters.
+        const tripsTest = [
+          jsonTripsSingle.expectedStartTime,
+          jsonTripsSingle.duration,
+          jsonTripsSingle.walkDistance,
+          jsonTripsSingle.legs.length,
+          jsonTripsSingle.compressedQuery
+        ];
+        const singleTest = [
+          jsonSingle.expectedStartTime,
+          jsonSingle.duration,
+          jsonSingle.walkDistance,
+          jsonSingle.legs.length,
+          jsonSingle.compressedQuery
+        ];
+
+        expects.push(
+          {
+            check: `should have status 200 on /singleTrip #${counter}`,
+            expect: resSingle.status === 200
+          },
+          {
+            check: `single trip details should be equal to trips results details #${counter}`,
+            expect: isEqual(tripsTest, singleTest)
+          }
+        );
+        noSingleTripsTested += 1;
+      }
+      counter += 1;
     }
-    counter += 1;
-  }
 
-  metrics.addFailureIfMultipleChecks(
-    [urlSingleTripFull],
-    resTrips.timings.duration + singleTripDuration,
-    requestName,
-    expects
-  );
+    metrics.checkForFailures(
+      [urlSingleTripFull],
+      resTrips.timings.duration + singleTripDuration,
+      requestName,
+      expects
+    );
+  } catch (exp) {
+    metrics.checkForFailures(
+      [resTrips.request.url],
+      resTrips.timings.duration,
+      requestName,
+      [
+        {
+          check: `${exp}`,
+          expect: false
+        }
+      ]
+    );
+  }
 }

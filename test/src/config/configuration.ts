@@ -74,7 +74,7 @@ export const metrics = {
   },
   //Add to failure rate if one of multiple checks is false
   //Format expectsArray: [{'check': '<description>', 'expect': '<check>'}, {...}, ...]
-  addFailureIfMultipleChecks(
+  checkForFailures(
     urls: string[],
     duration: number,
     requestName: string,

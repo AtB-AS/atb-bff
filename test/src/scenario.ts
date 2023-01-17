@@ -43,7 +43,7 @@ const bff = (): void => {
 const test = (): void => {
   const searchDate = getNextThursday();
   //departuresScenario(searchDate);
-  serviceJourneyScenario(searchDate);
+  serviceJourneyScenarioV1(searchDate);
 };
 
 //Performance test
