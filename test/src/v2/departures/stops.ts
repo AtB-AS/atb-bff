@@ -20,29 +20,45 @@ export function stopsNearest(testData: stopsNearestTestDataType) {
       tags: { name: requestName },
       headers: bffHeadersGet
     });
-    const json = res.json() as NearestStopPlacesResponseType;
 
-    const expects: ExpectsType = [
-      { check: 'should have status 200', expect: res.status === 200 },
-      {
-        check: 'should have correct number of stop places',
-        expect:
-          json.nearest.edges.length === test.expectedResult.stopPlaces.length
-      },
-      {
-        check: 'should have correct stop places',
-        expect: isEqual(
-          json.nearest.edges.map(edge => edge.node.place.id),
-          test.expectedResult.stopPlaces
-        )
-      }
-    ];
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
+    try {
+      const json = res.json() as NearestStopPlacesResponseType;
+
+      const expects: ExpectsType = [
+        { check: 'should have status 200', expect: res.status === 200 },
+        {
+          check: 'should have correct number of stop places',
+          expect:
+            json.nearest.edges.length === test.expectedResult.stopPlaces.length
+        },
+        {
+          check: 'should have correct stop places',
+          expect: isEqual(
+            json.nearest.edges.map(edge => edge.node.place.id),
+            test.expectedResult.stopPlaces
+          )
+        }
+      ];
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      //throw exp
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
+      );
+    }
   }
 }
 
@@ -57,61 +73,76 @@ export function stopsDetails(testData: stopsDetailsTestDataType) {
       tags: { name: requestName },
       headers: bffHeadersGet
     });
-    const json = res.json() as StopsDetailsQuery;
 
-    const expects: ExpectsType = [
-      { check: 'should have status 200', expect: res.status === 200 }
-    ];
+    try {
+      const json = res.json() as StopsDetailsQuery;
 
-    // Assert per stop place returned
-    for (let expResult of test.expectedResults) {
-      // Names and ids
-      const resStopPlaceNames = json.stopPlaces.filter(
-        stop => stop.id === expResult.stopPlaceId
-      )[0].name;
-      const resQuayIds = json.stopPlaces
-        .filter(stop => stop.id === expResult.stopPlaceId)[0]
-        .quays!.map(quay => quay.id)
-        .sort();
-      const expQuayIds = expResult.quays.map(e => e.id).sort();
-      expects.push(
-        {
-          check: `stop place name should be ${expResult.stopPlaceName}`,
-          expect: resStopPlaceNames === expResult.stopPlaceName
-        },
-        {
-          check: `should have correct quays for stop place '${expResult.stopPlaceId}'`,
-          expect: isEqual(resQuayIds, expQuayIds)
-        }
-      );
-      // Public code and description
-      for (let expQuay of expResult.quays) {
-        if (expQuay.publicCode !== null) {
-          const resQuayPC = json.stopPlaces
-            .filter(stop => stop.id === expResult.stopPlaceId)[0]
-            .quays!.filter(quay => quay.id === expQuay.id)[0].publicCode;
-          expects.push({
-            check: `public code should be '${expQuay.publicCode}' for '${expQuay.id}'`,
-            expect: resQuayPC === expQuay.publicCode
-          });
-        }
-        if (expQuay.description !== null) {
-          const resQuayDesc = json.stopPlaces
-            .filter(stop => stop.id === expResult.stopPlaceId)[0]
-            .quays!.filter(quay => quay.id === expQuay.id)[0].description;
-          expects.push({
-            check: `description should be '${expQuay.description}' for '${expQuay.id}'`,
-            expect: resQuayDesc === expQuay.description
-          });
+      const expects: ExpectsType = [
+        { check: 'should have status 200', expect: res.status === 200 }
+      ];
+
+      // Assert per stop place returned
+      for (let expResult of test.expectedResults) {
+        // Names and ids
+        const resStopPlaceNames = json.stopPlaces.filter(
+          stop => stop.id === expResult.stopPlaceId
+        )[0].name;
+        const resQuayIds = json.stopPlaces
+          .filter(stop => stop.id === expResult.stopPlaceId)[0]
+          .quays!.map(quay => quay.id)
+          .sort();
+        const expQuayIds = expResult.quays.map(e => e.id).sort();
+        expects.push(
+          {
+            check: `stop place name should be ${expResult.stopPlaceName}`,
+            expect: resStopPlaceNames === expResult.stopPlaceName
+          },
+          {
+            check: `should have correct quays for stop place '${expResult.stopPlaceId}'`,
+            expect: isEqual(resQuayIds, expQuayIds)
+          }
+        );
+        // Public code and description
+        for (let expQuay of expResult.quays) {
+          if (expQuay.publicCode !== null) {
+            const resQuayPC = json.stopPlaces
+              .filter(stop => stop.id === expResult.stopPlaceId)[0]
+              .quays!.filter(quay => quay.id === expQuay.id)[0].publicCode;
+            expects.push({
+              check: `public code should be '${expQuay.publicCode}' for '${expQuay.id}'`,
+              expect: resQuayPC === expQuay.publicCode
+            });
+          }
+          if (expQuay.description !== null) {
+            const resQuayDesc = json.stopPlaces
+              .filter(stop => stop.id === expResult.stopPlaceId)[0]
+              .quays!.filter(quay => quay.id === expQuay.id)[0].description;
+            expects.push({
+              check: `description should be '${expQuay.description}' for '${expQuay.id}'`,
+              expect: resQuayDesc === expQuay.description
+            });
+          }
         }
       }
-    }
 
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
+      );
+    }
   }
 }
