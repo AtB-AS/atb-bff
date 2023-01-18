@@ -1,10 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
+import { PricingPlanFragment, OperatorFragment, TranslatedStringFragment } from '../../fragments/mobility-gql/shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { TranslationFragmentDoc } from '../../fragments/mobility-gql/shared.graphql-gen';
-export type PricingSegmentFragment = { rate: number, end?: number, interval: number, start: number };
-
+import { PricingPlanFragmentDoc, OperatorFragmentDoc, TranslatedStringFragmentDoc } from '../../fragments/mobility-gql/shared.graphql-gen';
 export type GetVehiclesQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
@@ -13,16 +12,9 @@ export type GetVehiclesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetVehiclesQuery = { vehicles?: Array<{ id: string, lat: number, lon: number, pricingPlan: { price: number, perKmPricing?: Array<{ rate: number, end?: number, interval: number, start: number }>, perMinPricing?: Array<{ rate: number, end?: number, interval: number, start: number }> }, system: { operator: { id: string }, name: { translation: Array<{ language: string, value: string }> } } }> };
+export type GetVehiclesQuery = { vehicles?: Array<{ id: string, lat: number, lon: number, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment } }> };
 
-export const PricingSegmentFragmentDoc = gql`
-    fragment pricingSegment on PricingSegment {
-  rate
-  end
-  interval
-  start
-}
-    `;
+
 export const GetVehiclesDocument = gql`
     query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
   vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
@@ -30,28 +22,21 @@ export const GetVehiclesDocument = gql`
     lat
     lon
     pricingPlan {
-      perKmPricing {
-        ...pricingSegment
-      }
-      price
-      perMinPricing {
-        ...pricingSegment
-      }
+      ...pricingPlan
     }
     system {
       operator {
-        id
+        ...operator
       }
       name {
-        translation {
-          ...translation
-        }
+        ...translatedString
       }
     }
   }
 }
-    ${PricingSegmentFragmentDoc}
-${TranslationFragmentDoc}`;
+    ${PricingPlanFragmentDoc}
+${OperatorFragmentDoc}
+${TranslatedStringFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
