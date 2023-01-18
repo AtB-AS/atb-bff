@@ -1,9 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { PricingPlanFragment, OperatorFragment, TranslatedStringFragment } from '../../fragments/mobility-gql/shared.graphql-gen';
+import { VehicleFragment } from '../../fragments/mobility-gql/vehicles.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { PricingPlanFragmentDoc, OperatorFragmentDoc, TranslatedStringFragmentDoc } from '../../fragments/mobility-gql/shared.graphql-gen';
+import { VehicleFragmentDoc } from '../../fragments/mobility-gql/vehicles.graphql-gen';
 export type GetVehiclesQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
@@ -12,31 +12,16 @@ export type GetVehiclesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetVehiclesQuery = { vehicles?: Array<{ id: string, lat: number, lon: number, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment } }> };
+export type GetVehiclesQuery = { vehicles?: Array<VehicleFragment> };
 
 
 export const GetVehiclesDocument = gql`
     query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
   vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
-    id
-    lat
-    lon
-    pricingPlan {
-      ...pricingPlan
-    }
-    system {
-      operator {
-        ...operator
-      }
-      name {
-        ...translatedString
-      }
-    }
+    ...vehicle
   }
 }
-    ${PricingPlanFragmentDoc}
-${OperatorFragmentDoc}
-${TranslatedStringFragmentDoc}`;
+    ${VehicleFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

@@ -1,0 +1,33 @@
+fragment vehicleType on VehicleType {
+    id
+    formFactor
+    maxRangeMeters
+    name {
+        ...translatedString
+    }
+}
+
+fragment vehicle on Vehicle {
+    id
+    lat
+    lon
+    isReserved
+    isDisabled
+    currentRangeMeters
+    currentFuelPercent
+    availableUntil
+    vehicleType {
+        ...vehicleType
+    }
+    pricingPlan {
+        ...pricingPlan
+    }
+    system {
+        operator {
+            ...operator
+        }
+        name {
+            ...translatedString
+        }
+    }
+}
