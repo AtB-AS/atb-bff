@@ -1,50 +1,3 @@
-query GroupsById(
-  $ids: [String]
-  $startTime: DateTime!
-  $timeRange: Int!
-  $limitPerLine: Int!
-  $totalLimit: Int!
-  $filterByLineIds: [ID]
-) {
-  stopPlaces(ids: $ids) {
-    ...group_stopPlaceFields
-    quays(filterByInUse: true) {
-      ...group_quayFields
-      times: estimatedCalls(
-        startTime: $startTime
-        timeRange: $timeRange
-        numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
-        numberOfDepartures: $totalLimit
-        arrivalDeparture: departures
-        includeCancelledTrips: false
-        whiteListed: { lines: $filterByLineIds }
-      ) {
-        ...group_times_estimatedCallFields
-      }
-      estimatedCalls(
-        startTime: $startTime
-        timeRange: $timeRange
-        numberOfDepartures: $totalLimit
-        numberOfDeparturesPerLineAndDestinationDisplay: 1
-        arrivalDeparture: departures
-        includeCancelledTrips: false
-        whiteListed: { lines: $filterByLineIds }
-      ) {
-        ...group_estimatedCallFields
-      }
-    }
-  }
-}
-
-query QuayIdInStops($stopIds: [String]!) {
-  stopPlaces(ids: $stopIds) {
-    id
-    quays(filterByInUse: true) {
-      id
-    }
-  }
-}
-
 query GroupsByNearest(
   $lat: Float!
   $lng: Float!
@@ -110,35 +63,6 @@ query GroupsByNearest(
         }
       }
     }
-  }
-}
-
-fragment group_noticeFields on Notice {
-  text
-}
-
-fragment group_situationFields on PtSituationElement {
-  situationNumber
-  summary {
-    language
-    value
-  }
-  description {
-    language
-    value
-  }
-  advice {
-    language
-    value
-  }
-  validityPeriod {
-    startTime
-    endTime
-  }
-  reportType
-  infoLinks {
-    uri
-    label
   }
 }
 
