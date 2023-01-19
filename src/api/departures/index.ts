@@ -3,7 +3,6 @@ import { StopPlaceQuayDeparturesQueryVariables } from '../../service/impl/depart
 import { IDeparturesService } from '../../service/interface';
 import {
   getStopDeparturesRequest,
-  getDepartureRealtime,
   getQuayDeparturesRequest,
   getStopsNearestRequest,
   getStopsDetailsRequest,
@@ -11,7 +10,6 @@ import {
   postQuayDeparturesRequest
 } from './schema';
 import {
-  DepartureRealtimeQuery,
   QuayDeparturesPayload,
   StopPlaceDeparturesPayload
 } from '../../service/types';
@@ -29,7 +27,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       description: 'Find stops near coordinates'
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as NearestStopPlacesQueryVariables;
+      const query = request.query as unknown as NearestStopPlacesQueryVariables;
       return (await service.getStopPlacesByPosition(query)).unwrap();
     }
   });
@@ -42,7 +40,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       description: 'Get details for an array of stop places'
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as StopsDetailsQueryVariables;
+      const query = request.query as unknown as StopsDetailsQueryVariables;
       return (await service.getStopsDetails(query)).unwrap();
     }
   });
@@ -60,7 +58,8 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       }
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
+      const query =
+        request.query as unknown as StopPlaceQuayDeparturesQueryVariables;
       return (await service.getStopQuayDepartures(query)).unwrap();
     }
   });
@@ -74,8 +73,9 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
         'Get stop with departures for every quay, and optionally filter on favorites'
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as StopPlaceQuayDeparturesQueryVariables;
-      const payload = (request.payload as unknown) as StopPlaceDeparturesPayload;
+      const query =
+        request.query as unknown as StopPlaceQuayDeparturesQueryVariables;
+      const payload = request.payload as unknown as StopPlaceDeparturesPayload;
       return (await service.getStopQuayDepartures(query, payload)).unwrap();
     }
   });
@@ -93,7 +93,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       }
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as QuayDeparturesQueryVariables;
+      const query = request.query as unknown as QuayDeparturesQueryVariables;
       return (await service.getQuayDepartures(query)).unwrap();
     }
   });
@@ -107,22 +107,9 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
         'Get departures from a quay, and optionally filter on favorites'
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as QuayDeparturesQueryVariables;
-      const payload = (request.payload as unknown) as QuayDeparturesPayload;
+      const query = request.query as unknown as QuayDeparturesQueryVariables;
+      const payload = request.payload as unknown as QuayDeparturesPayload;
       return (await service.getQuayDepartures(query, payload)).unwrap();
-    }
-  });
-  server.route({
-    method: 'GET',
-    path: '/bff/v2/departures/realtime',
-    options: {
-      tags: ['api', 'quays', 'departures', 'realtime'],
-      validate: getDepartureRealtime,
-      description: 'Get updated realtime information for the given quays'
-    },
-    handler: async (request, h) => {
-      const query = (request.query as unknown) as DepartureRealtimeQuery;
-      return (await service.getDepartureRealtime(query)).unwrap();
     }
   });
 };

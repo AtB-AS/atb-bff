@@ -1,7 +1,5 @@
-import { Result } from '@badrap/result';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import {
-  APIError,
   DepartureRealtimeData,
   DepartureRealtimeQuery,
   DeparturesRealtimeData
@@ -13,7 +11,7 @@ import {
   GetDepartureRealtimeQueryVariables
 } from './journey-gql/departure-time.graphql-gen';
 
-const createVariables = (
+export const createVariables = (
   query: DepartureRealtimeQuery
 ): GetDepartureRealtimeQueryVariables => ({
   ...query,
@@ -44,29 +42,6 @@ export async function populateCacheIfNotThere(
   } catch (e) {}
 }
 
-export async function getRealtimeDepartureTime(
-  inputQuery: DepartureRealtimeQuery
-): Promise<Result<DeparturesRealtimeData, APIError>> {
-  try {
-    const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(variables);
-    const result = await journeyPlannerClient.query<
-      GetDepartureRealtimeQuery,
-      GetDepartureRealtimeQueryVariables
-    >({
-      query: GetDepartureRealtimeDocument,
-      variables
-    });
-
-    if (result.errors) {
-      return Result.err(new APIError(result.errors));
-    }
-    return Result.ok(mapToDepartureRealtime(result.data, previousResult));
-  } catch (error) {
-    return Result.err(new APIError(error));
-  }
-}
-
 type PreviousDepartureTimeLookupService = {
   [serviceJourneyId: string]: { time: string; realtime: boolean };
 };
@@ -74,7 +49,7 @@ type PreviousDepartureTimeLookup = {
   [quayId: string]: PreviousDepartureTimeLookupService;
 };
 
-function mapToDepartureRealtime(
+export function mapToDepartureRealtime(
   input: GetDepartureRealtimeQuery,
   previousResultLookup?: PreviousDepartureTimeLookup
 ): DeparturesRealtimeData {
@@ -128,7 +103,7 @@ function mapDeparture(
   return obj;
 }
 
-function getPreviousExpectedFromCache(
+export function getPreviousExpectedFromCache(
   variables: GetDepartureRealtimeQueryVariables
 ) {
   try {

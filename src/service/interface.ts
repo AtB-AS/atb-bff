@@ -89,6 +89,9 @@ export interface IDeparturesGroupedService {
     location: DepartureFavoritesPayload,
     query: DepartureFavoritesQuery
   ): Promise<Result<DepartureGroupMetadata, APIError>>;
+}
+
+export interface IRealtimeService {
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
@@ -109,9 +112,6 @@ export interface IDeparturesService {
     query: QuayDeparturesQueryVariables,
     payload?: QuayDeparturesPayload
   ): Promise<Result<QuayDeparturesQuery, APIError>>;
-  getDepartureRealtime(
-    query: DepartureRealtimeQuery
-  ): Promise<Result<DeparturesRealtimeData, APIError>>;
 }
 
 export interface IQuayService {
