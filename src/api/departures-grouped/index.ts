@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import { IStopsService } from '../../service/interface';
+import { IDeparturesGroupedService } from '../../service/interface';
 import {
   DepartureGroupsPayload,
   DepartureGroupsQuery,
@@ -13,7 +13,7 @@ import {
   getDepartureFavoritesCursoredRequest
 } from './schema';
 
-export default (server: Hapi.Server) => (service: IStopsService) => {
+export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => {
   server.route({
     method: 'POST',
     path: '/bff/v1/departures-grouped',

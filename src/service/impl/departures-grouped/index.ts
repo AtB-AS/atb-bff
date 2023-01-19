@@ -1,4 +1,4 @@
-import { IStopsService } from '../../interface';
+import { IDeparturesGroupedService } from '../../interface';
 import { DepartureRealtimeQuery } from '../../types';
 import {
   getDeparturesGrouped,
@@ -7,8 +7,8 @@ import {
 import { getRealtimeDepartureTime } from './departure-time';
 import { getDepartureFavorites } from './departure-favorites';
 
-export default (): IStopsService => {
-  const api: IStopsService = {
+export default (): IDeparturesGroupedService => {
+  const api: IDeparturesGroupedService = {
     async getDeparturesGrouped(payload, query) {
       return payload.location.layer === 'venue'
         ? getDeparturesGrouped(payload.location.id, query, payload.favorites)

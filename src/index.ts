@@ -3,7 +3,7 @@ import { createServer, initializePlugins } from './server';
 import enturClient from './service/impl/entur';
 
 import geocoderService from './service/impl/geocoder';
-import stopsService from './service/impl/stops';
+import departuresGroupedService from './service/impl/departures-grouped';
 import departuresService from './service/impl/departures';
 import tripsService from './service/impl/trips';
 import quayService from './service/impl/quays';
@@ -11,7 +11,7 @@ import enrollmentService from './service/impl/enrollment';
 import vehicleService from './service/impl/vehicles';
 
 import geocoderRoutes from './api/geocoder';
-import stopsRoutes from './api/stops';
+import departuresGroupedRoutes from './api/departures-grouped';
 import healthRoutes from './api/health';
 import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
@@ -46,7 +46,7 @@ process.on('unhandledRejection', err => {
     });
 
     healthRoutes(server);
-    stopsRoutes(server)(stopsService());
+    departuresGroupedRoutes(server)(departuresGroupedService());
     geocoderRoutes(server)(geocoderService(enturService));
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());

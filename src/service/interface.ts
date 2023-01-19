@@ -22,7 +22,7 @@ import { EnrollResponse } from './impl/enrollment';
 import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/journey-gql/service-journey.graphql-gen';
 import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
 import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
-import { DepartureGroupMetadata } from './impl/stops/departure-group';
+import { DepartureGroupMetadata } from './impl/departures-grouped/departure-group';
 import {
   APIError,
   DepartureFavoritesPayload,
@@ -80,7 +80,7 @@ export interface ITrips_v2 {
   ): Promise<Result<TripPattern[], APIError>>;
 }
 
-export interface IStopsService {
+export interface IDeparturesGroupedService {
   getDeparturesGrouped(
     location: DepartureGroupsPayload,
     query: DepartureGroupsQuery

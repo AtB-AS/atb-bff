@@ -7,7 +7,7 @@ import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
 } from './journey-gql/stop-departures.graphql-gen';
-import { getRealtimeDepartureTime } from '../stops/departure-time';
+import { getRealtimeDepartureTime } from '../departures-grouped/departure-time';
 import {
   QuayDeparturesDocument,
   QuayDeparturesQuery,

@@ -2,7 +2,7 @@ import { createServer, initializePlugins } from '../../server';
 import { randomPort } from './common';
 import routes from '../trips';
 import Hapi from '@hapi/hapi';
-import { IStopsService, ITrips_v2 } from '../../service/interface';
+import { IDeparturesGroupedService, ITrips_v2 } from '../../service/interface';
 import { Result } from '@badrap/result';
 import { TripsQueryWithJourneyIds } from '../../types/trips';
 import { compressToEncodedURIComponent } from 'lz-string';
