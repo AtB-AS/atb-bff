@@ -2,7 +2,6 @@ import { Result } from '@badrap/result';
 import { Feature, TripPattern } from '@entur/sdk';
 import { Boom } from '@hapi/boom';
 import * as Trips from '../types/trips';
-import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
 import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
@@ -86,7 +85,10 @@ export interface IStopsService {
     location: DepartureGroupsPayload,
     query: DepartureGroupsQuery
   ): Promise<Result<DepartureGroupMetadata, APIError>>;
-
+  getDeparturesFavorites(
+    location: DepartureFavoritesPayload,
+    query: DepartureFavoritesQuery
+  ): Promise<Result<DepartureGroupMetadata, APIError>>;
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
@@ -110,13 +112,6 @@ export interface IDeparturesService {
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
-}
-
-export interface IDepartureFavoritesService {
-  getDeparturesFavorites(
-    location: DepartureFavoritesPayload,
-    query: DepartureFavoritesQuery
-  ): Promise<Result<DepartureFavoritesMetadata, APIError>>;
 }
 
 export interface IQuayService {

@@ -1,14 +1,13 @@
 import { IStopsService } from '../../interface';
 import { DepartureRealtimeQuery } from '../../types';
-import { EnturServiceAPI } from '../entur';
 import {
   getDeparturesGrouped,
   getDeparturesGroupedNearest
 } from './departure-group';
 import { getRealtimeDepartureTime } from './departure-time';
+import { getDepartureFavorites } from './departure-favorites';
 
-export default (service: EnturServiceAPI): IStopsService => {
-  // createTopic might fail if the topic already exists; ignore.
+export default (): IStopsService => {
   const api: IStopsService = {
     async getDeparturesGrouped(payload, query) {
       return payload.location.layer === 'venue'
@@ -22,6 +21,9 @@ export default (service: EnturServiceAPI): IStopsService => {
     },
     async getDepartureRealtime(query: DepartureRealtimeQuery) {
       return getRealtimeDepartureTime(query);
+    },
+    async getDeparturesFavorites(payload, query) {
+      return getDepartureFavorites(query, payload.favorites);
     }
   };
 

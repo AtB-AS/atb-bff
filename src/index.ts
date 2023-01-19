@@ -7,7 +7,6 @@ import stopsService from './service/impl/stops';
 import departuresService from './service/impl/departures';
 import tripsService from './service/impl/trips';
 import quayService from './service/impl/quays';
-import departureFavoritesService from './service/impl/departure-favorites';
 import enrollmentService from './service/impl/enrollment';
 import vehicleService from './service/impl/vehicles';
 
@@ -17,7 +16,6 @@ import healthRoutes from './api/health';
 import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
 import departureRoutes from './api/departures';
-import departureFavoritesRoutes from './api/departure-favorites';
 import quayRoutes from './api/quays';
 import vehicleRoutes from './api/vehicles';
 
@@ -48,7 +46,7 @@ process.on('unhandledRejection', err => {
     });
 
     healthRoutes(server);
-    stopsRoutes(server)(stopsService(enturService));
+    stopsRoutes(server)(stopsService());
     geocoderRoutes(server)(geocoderService(enturService));
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());
@@ -58,7 +56,6 @@ process.on('unhandledRejection', err => {
     tripsRoutes(server)(tripsService());
     departureRoutes(server)(departuresService());
     serviceJourneyRoutes_v2(server)(serviceJourneyService_v2());
-    departureFavoritesRoutes(server)(departureFavoritesService());
     vippsLoginRoutes(server)();
 
     await server.initialize();

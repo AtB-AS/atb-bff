@@ -14,7 +14,7 @@ import {
   QuayIdInStopsDocument,
   QuayIdInStopsQuery,
   QuayIdInStopsQueryVariables
-} from '../departure-favorites/journey-gql/departure-group.graphql-gen';
+} from './journey-gql/departure-group.graphql-gen';
 import {
   GroupsByNearestDocument,
   GroupsByNearestQuery,
