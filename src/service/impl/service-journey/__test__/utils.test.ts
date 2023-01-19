@@ -2,7 +2,7 @@ import polyline from '@mapbox/polyline';
 import {
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/journeyplanner-types_v3';
+} from '../../../../graphql/journey/journeyplanner-types_v3';
 import { MapLeg } from '../../../types';
 import { mapToMapLegs } from '../utils';
 
