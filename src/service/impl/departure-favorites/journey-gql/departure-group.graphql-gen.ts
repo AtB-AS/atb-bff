@@ -1,4 +1,4 @@
-import * as Types from '../../../../graphql/journeyplanner-types_v3';
+import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';

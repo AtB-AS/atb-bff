@@ -9,6 +9,7 @@ import tripsService from './service/impl/trips';
 import quayService from './service/impl/quays';
 import departureFavoritesService from './service/impl/departure-favorites';
 import enrollmentService from './service/impl/enrollment';
+import vehicleService from './service/impl/vehicles';
 
 import geocoderRoutes from './api/geocoder';
 import stopsRoutes from './api/stops';
@@ -18,6 +19,7 @@ import tripsRoutes from './api/trips';
 import departureRoutes from './api/departures';
 import departureFavoritesRoutes from './api/departure-favorites';
 import quayRoutes from './api/quays';
+import vehicleRoutes from './api/vehicles';
 
 import { serviceJourneyRoutes_v2 } from './api/servicejourney';
 import { serviceJourneyService_v2 } from './service/impl/service-journey';
@@ -50,6 +52,7 @@ process.on('unhandledRejection', err => {
     geocoderRoutes(server)(geocoderService(enturService));
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());
+    vehicleRoutes(server)(vehicleService());
 
     // JP3
     tripsRoutes(server)(tripsService());

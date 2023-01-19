@@ -4,7 +4,7 @@ import {
   ReportType,
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/journeyplanner-types_v3';
+} from '../../../../graphql/journey/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
 import { GroupsByIdQuery } from '../../departure-favorites/journey-gql/departure-group.graphql-gen';
 

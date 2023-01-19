@@ -1,0 +1,5 @@
+query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
+    vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
+        ...vehicle
+    }
+}
