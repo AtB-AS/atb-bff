@@ -1,0 +1,34 @@
+fragment operator on Operator {
+    id
+    name {
+        ...translatedString
+    }
+}
+
+fragment pricingPlan on PricingPlan {
+    perKmPricing {
+        ...pricingSegment
+    }
+    price
+    perMinPricing {
+        ...pricingSegment
+    }
+}
+
+fragment pricingSegment on PricingSegment {
+    rate
+    end
+    interval
+    start
+}
+
+fragment translatedString on TranslatedString {
+    translation {
+        ...translation
+    }
+}
+
+fragment translation on Translation {
+    language
+    value
+}

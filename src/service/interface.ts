@@ -37,12 +37,14 @@ import {
   QuayDeparturesPayload,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
+  VehiclesQuery,
   ServiceJourneyMapInfoData_v3,
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
   StopPlaceDeparturesPayload,
   TripPatternsQuery
 } from './types';
+import { GetVehiclesQuery } from './impl/vehicles/mobility-gql/vehicles.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -129,4 +131,10 @@ export interface IEnrollmentService {
     enrollmentId: string,
     code: string
   ): Promise<Result<EnrollResponse, APIError>>;
+}
+
+export interface IMobilityService {
+  getVehicles(
+    query: VehiclesQuery
+  ): Promise<Result<GetVehiclesQuery, APIError>>;
 }

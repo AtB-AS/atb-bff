@@ -4,4 +4,5 @@
 
 # Ignore generated journey planner types
 src/graphql/journey-types.ts
-src/graphql/journeyplanner-types_v3.ts
+src/graphql/journey/journeyplanner-types_v3.ts
+src/graphql/mobility/mobility-types_v2.ts

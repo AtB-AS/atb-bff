@@ -1,8 +1,10 @@
 import { Location, PointsOnLink, QueryMode } from '@entur/sdk';
 import { boomify } from '@hapi/boom';
 import { FetchError } from 'node-fetch';
-import * as Types_v3 from '../graphql/journeyplanner-types_v3';
+import * as Types_v3 from '../graphql/journey/journeyplanner-types_v3';
+import * as Mobility from '../graphql/mobility/mobility-types_v2';
 import { CursoredQuery } from './cursored';
+import { QueryVehiclesArgs } from '../graphql/mobility/mobility-types_v2';
 
 export interface Coordinates {
   latitude: number;
@@ -187,6 +189,17 @@ export type MapLeg_v3 = {
   transportSubmode?: Types_v3.TransportSubmode;
   pointsOnLink: Types_v3.PointsOnLink;
 };
+
+export type Scooter = {
+  id: string;
+  lat: number;
+  lon: number;
+};
+
+export type VehiclesQuery = Pick<
+  Mobility.QueryVehiclesArgs,
+  'lat' | 'lon' | 'range' | 'operators' | 'formFactors'
+>;
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];

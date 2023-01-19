@@ -7,9 +7,9 @@ import {
   departuresGroupedTestData,
   geocoderFeaturesTestData,
   geocoderReverseTestData,
-  tripTestData,
-  serviceJourneyTestData
+  tripTestData
 } from './testData/testData';
+import { serviceJourneyTestData } from '../v2/testData/testData';
 import { geocoderFeatures, geocoderReverse } from './geocoder';
 import { trip } from './journey';
 import {
