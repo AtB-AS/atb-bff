@@ -37,7 +37,7 @@ import {
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
   VehiclesQuery,
-  ServiceJourneyMapInfoData_v3,
+  ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
   StopPlaceDeparturesPayload,
@@ -61,7 +61,7 @@ export interface IServiceJourneyService_v2 {
   getServiceJourneyMapInfo(
     serviceJourneyId: string,
     query: ServiceJourneyMapInfoQuery
-  ): Promise<Result<ServiceJourneyMapInfoData_v3, APIError>>;
+  ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
   getDeparturesForServiceJourneyV2(
     id: string,
     query: DeparturesForServiceJourneyQuery
