@@ -44,6 +44,10 @@ import {
   TripPatternsQuery
 } from './types';
 import { GetVehiclesQuery } from './impl/vehicles/mobility-gql/vehicles.graphql-gen';
+import {
+  TripsQuery,
+  TripsQueryVariables
+} from './impl/trips/journey-gql/trip.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -69,9 +73,7 @@ export interface IServiceJourneyService_v2 {
 }
 
 export interface ITrips_v2 {
-  getTrips(
-    query: Trips.TripsQueryVariables
-  ): Promise<Result<Trips.TripsQuery, APIError>>;
+  getTrips(query: TripsQueryVariables): Promise<Result<TripsQuery, APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds
   ): Promise<Result<Trips.TripPattern, Boom>>;

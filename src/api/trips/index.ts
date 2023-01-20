@@ -3,7 +3,6 @@ import { ITrips_v2 } from '../../service/interface';
 import { TripPatternsQuery } from '../../service/types';
 import {
   CompressedSingleTripQuery,
-  TripsQueryVariables,
   TripsQueryWithJourneyIds
 } from '../../types/trips';
 import { parseTripQueryString } from '../../service/impl/trips/utils';
@@ -13,6 +12,7 @@ import {
   postTripsRequest,
   postJourneyRequest
 } from './schema';
+import { TripsQueryVariables } from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 
 export default (server: Hapi.Server) => (service: ITrips_v2) => {
   server.route({

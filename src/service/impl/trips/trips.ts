@@ -15,7 +15,7 @@ import {
 import * as Trips from '../../../types/trips';
 
 export async function getTrips(
-  query: Trips.TripsQueryVariables
+  query: TripsQueryVariables
 ): Promise<Result<TripsQuery, APIError>> {
   try {
     const result = await journeyPlannerClient.query<

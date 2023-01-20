@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import { TripsQueryVariables } from './journey-gql/trip.graphql-gen';
 import {
-  Leg,
   TripPattern as TripPattern_v3,
   TripsQueryWithJourneyIds
 } from '../../../types/trips';
@@ -29,7 +28,7 @@ export function generateSingleTripQueryString(
   const journeyIds = extractServiceJourneyIds(trip);
 
   // sanitize query, and set search time.
-  const when = getPaddedStartTimeFromLeg(trip.legs[0]);
+  const when = getPaddedStartTime(trip.legs[0].aimedStartTime);
   const {
     from,
     to,
@@ -58,8 +57,8 @@ export function generateSingleTripQueryString(
   );
 }
 
-function getPaddedStartTimeFromLeg(leg: Leg): string {
-  const startTime = parseISO(leg.aimedStartTime);
+function getPaddedStartTime(time: string): string {
+  const startTime = parseISO(time);
   return addSeconds(startTime, -START_TIME_PADDING).toISOString();
 }
 
