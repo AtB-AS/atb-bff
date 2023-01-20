@@ -137,28 +137,6 @@ export interface ServiceJourneyMapInfoQuery {
   toQuayId?: string;
 }
 
-export type PaginationInput = {
-  pageSize: number;
-  pageOffset: number;
-};
-
-export type PaginatedQuery<T> = PaginationInput & T;
-
-export type Paginated<T extends any[] | []> =
-  | ({
-      hasNext: true;
-      nextPageOffset: number;
-
-      data: T;
-      totalResults: number;
-    } & PaginationInput)
-  | ({
-      hasNext: false;
-
-      data: T;
-      totalResults: number;
-    } & PaginationInput);
-
 export type RealtimeData = {
   serviceJourneyId: string;
   timeData: {
