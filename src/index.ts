@@ -5,6 +5,7 @@ import enturClient from './service/impl/entur';
 import geocoderService from './service/impl/geocoder';
 import departuresGroupedService from './service/impl/departures-grouped';
 import departuresService from './service/impl/departures';
+import realtimeService from './service/impl/realtime';
 import tripsService from './service/impl/trips';
 import quayService from './service/impl/quays';
 import enrollmentService from './service/impl/enrollment';
@@ -12,6 +13,7 @@ import vehicleService from './service/impl/vehicles';
 
 import geocoderRoutes from './api/geocoder';
 import departuresGroupedRoutes from './api/departures-grouped';
+import realtimeRoutes from './api/realtime';
 import healthRoutes from './api/health';
 import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
@@ -55,6 +57,7 @@ process.on('unhandledRejection', err => {
     // JP3
     tripsRoutes(server)(tripsService());
     departureRoutes(server)(departuresService());
+    realtimeRoutes(server)(realtimeService());
     serviceJourneyRoutes_v2(server)(serviceJourneyService_v2());
     vippsLoginRoutes(server)();
 
