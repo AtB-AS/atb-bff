@@ -65,11 +65,3 @@ query GroupsByNearest(
     }
   }
 }
-
-fragment group_stopPlaceFields on StopPlace {
-  id
-  description
-  name
-  latitude
-  longitude
-}
