@@ -1,15 +1,35 @@
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 import {
+  ReportType,
   TransportMode,
   TransportSubmode
 } from '../../../../graphql/journey/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
 import { GroupsByIdQuery } from '../journey-gql/departure-group.graphql-gen';
-import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
-import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
 
 type Notice = { text?: string };
+type Situation = {
+  situationNumber?: string;
+  reportType?: ReportType;
+  summary: Array<{
+    language?: string;
+    value?: string;
+  }>;
+  description: Array<{
+    language?: string;
+    value?: string;
+  }>;
+  advice: Array<{
+    language?: string;
+    value?: string;
+  }>;
+  validityPeriod?: {
+    startTime?: any;
+    endTime?: any;
+  };
+  infoLinks?: Array<{ uri?: string; label?: string }>;
+};
 
 type DepartureLineInfo = {
   lineName: string;
@@ -26,10 +46,9 @@ type DepartureTime = {
   aimedTime: string;
   realtime?: boolean;
   predictionInaccurate?: boolean;
-  situations: SituationFragment[];
+  situations: Situation[];
   serviceJourneyId?: string;
   serviceDate: string;
-  notices: NoticeFragment[];
 };
 
 type DepartureGroup = {
@@ -52,7 +71,7 @@ type QuayInfo = {
   publicCode?: string | undefined;
   latitude?: number | undefined;
   longitude?: number | undefined;
-  situations: SituationFragment[];
+  situations: Situation[];
 };
 
 type QuayGroup = {
@@ -129,12 +148,6 @@ export default function mapQueryToGroups(
           }
 
           const departures = times.map<DepartureTime>(function (time) {
-            const notices = [
-              ...(time.notices || []),
-              ...(lineInfoEntry.serviceJourney?.notices || []),
-              ...(lineInfoEntry.serviceJourney?.journeyPattern?.notices || []),
-              ...(lineInfoEntry.serviceJourney?.line.notices || [])
-            ];
             return {
               time: time.expectedDepartureTime,
               aimedTime: time.aimedDepartureTime,
@@ -142,8 +155,7 @@ export default function mapQueryToGroups(
               realtime: time.realtime,
               situations: time.situations,
               serviceJourneyId: time.serviceJourney?.id,
-              serviceDate: time.date,
-              notices
+              serviceDate: time.date
             };
           });
 

@@ -11,11 +11,8 @@ import {
   TransportSubmode,
   TripPattern
 } from '@entur/sdk';
-import {
-  Leg as Leg_v2,
-  TripPattern as TripPattern_v2,
-  TripsQuery
-} from '../../../types/trips';
+import { TripPattern as TripPattern_v2 } from '../../../types/trips';
+import { TripsQuery } from './journey-gql/trip.graphql-gen';
 
 export function mapQueryToLegacyTripPatterns(trips: TripsQuery): TripPattern[] {
   const tripPatterns = trips.trip.tripPatterns;
@@ -36,6 +33,7 @@ function mapToLegacyTripPattern(trip: TripPattern_v2): TripPattern {
   };
 }
 
+type Leg_v2 = Required<TripsQuery>['trip']['tripPatterns'][0]['legs'][0];
 function mapToLegacyLeg(leg: Leg_v2): Leg {
   const fromEstimatedCall = mapToLegacyEstimatedCall(
     leg.fromEstimatedCall,

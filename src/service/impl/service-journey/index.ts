@@ -3,7 +3,7 @@ import { formatISO } from 'date-fns';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { IServiceJourneyService_v2 } from '../../interface';
 import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
-import { mapToMapLegs_v3 } from './utils_v3';
+import { mapToMapLegs } from './utils';
 import {
   getMapInfoWithFromAndToQuay,
   getMapInfoWithFromQuay
@@ -39,7 +39,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
-        return Result.ok(mapToMapLegs_v3(result.data));
+        return Result.ok(mapToMapLegs(result.data));
       } catch (error) {
         return Result.err(new APIError(error));
       }

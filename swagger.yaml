@@ -40,6 +40,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   /bff/v1/geocoder/features:
     get:
       summary: Find features matching query

@@ -1,15 +1,9 @@
 import Joi from 'joi';
-import { TripPattern } from '@entur/sdk';
+import { TripsQueryVariables } from './journey-gql/trip.graphql-gen';
 import {
-  TripsQueryVariables,
-  TripsQuery
-} from '../service/impl/trips/journey-gql/trip.graphql-gen';
-import {
-  Leg,
   TripPattern as TripPattern_v3,
   TripsQueryWithJourneyIds
-} from '../types/trips';
-import { TripPatternsQuery, TripPatternQuery } from '../service/types';
+} from '../../../types/trips';
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent
@@ -17,50 +11,6 @@ import {
 import { addSeconds, parseISO } from 'date-fns';
 
 const START_TIME_PADDING = 60; // time in seconds
-export function generateId(trip: TripPattern, query: TripPatternsQuery) {
-  const fields: TripPatternsQuery = {
-    searchDate: new Date(trip.startTime),
-    ...query
-  };
-  const serviceIds = getServiceIds(trip);
-  return compressToEncodedURIComponent(
-    JSON.stringify({ query: fields, serviceIds })
-  );
-}
-
-export function getServiceIds(trip: TripPattern) {
-  return trip.legs.map(leg => leg.serviceJourney?.id ?? 'null');
-}
-
-export function parseTripPatternId(
-  id: string,
-  queryValidator: Joi.ObjectSchema<any>
-): TripPatternQuery {
-  try {
-    const value = decompressFromEncodedURIComponent(id);
-    if (!value) {
-      throw new Error();
-    }
-    const fields = JSON.parse(value);
-    fields.query = queryValidator.validate(fields.query).value;
-
-    if (isTripPatternsQuery(fields.query) && Array.isArray(fields.serviceIds)) {
-      return fields as TripPatternQuery;
-    }
-  } catch (_) {}
-
-  throw new Error('Could not parse input trip id');
-}
-
-function isTripPatternsQuery(
-  potentialTripPatternsQuery: any
-): potentialTripPatternsQuery is TripPatternsQuery {
-  return (
-    'from' in potentialTripPatternsQuery &&
-    'searchDate' in potentialTripPatternsQuery &&
-    'modes' in potentialTripPatternsQuery
-  );
-}
 
 /**
  * Creates a unique query to fetch updates to a single Trip
@@ -78,7 +28,7 @@ export function generateSingleTripQueryString(
   const journeyIds = extractServiceJourneyIds(trip);
 
   // sanitize query, and set search time.
-  const when = getPaddedStartTimeFromLeg(trip.legs[0]);
+  const when = getPaddedStartTime(trip.legs[0].aimedStartTime);
   const {
     from,
     to,
@@ -107,8 +57,8 @@ export function generateSingleTripQueryString(
   );
 }
 
-function getPaddedStartTimeFromLeg(leg: Leg): string {
-  const startTime = parseISO(leg.aimedStartTime);
+function getPaddedStartTime(time: string): string {
+  const startTime = parseISO(time);
   return addSeconds(startTime, -START_TIME_PADDING).toISOString();
 }
 

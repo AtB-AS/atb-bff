@@ -11,11 +11,11 @@ import * as Boom from '@hapi/boom';
 import {
   extractServiceJourneyIds,
   generateSingleTripQueryString
-} from '../../../utils/journey-utils';
+} from './utils';
 import * as Trips from '../../../types/trips';
 
 export async function getTrips(
-  query: Trips.TripsQueryVariables
+  query: TripsQueryVariables
 ): Promise<Result<TripsQuery, APIError>> {
   try {
     const result = await journeyPlannerClient.query<

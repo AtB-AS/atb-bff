@@ -55,7 +55,7 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
       handler: async (request, h) => {
         const { id } = request.params;
-        const query = (request.query as unknown) as ServiceJourneyMapInfoQuery;
+        const query = request.query as unknown as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo_v2(id, query);
       }
     });
@@ -70,7 +70,7 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
       handler: async (request, h) => {
         const { id } = request.params;
-        const query = (request.query as unknown) as ServiceJourneyMapInfoQuery;
+        const query = request.query as unknown as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo_v2(id, query);
       }
     });
@@ -90,9 +90,8 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
       handler: async (request, h) => {
         const { id } = request.params;
-        const {
-          date
-        } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
+        const { date } =
+          request.query as unknown as DeparturesForServiceJourneyQuery;
         return await service.getDeparturesForServiceJourneyV2(id, {
           date
         });
@@ -109,9 +108,8 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
       handler: async (request, h) => {
         const { id } = request.params;
-        const {
-          date
-        } = (request.query as unknown) as DeparturesForServiceJourneyQuery;
+        const { date } =
+          request.query as unknown as DeparturesForServiceJourneyQuery;
         return await service.getDeparturesForServiceJourneyV2(id, { date });
       }
     });
@@ -126,9 +124,8 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
       handler: async (request, h) => {
         const { id } = request.params;
-        const {
-          date
-        } = (request.query as unknown) as ServiceJourneyWithEstimatedCallsQuery;
+        const { date } =
+          request.query as unknown as ServiceJourneyWithEstimatedCallsQuery;
         return await service.getServiceJourneyWithEstimatedCallsV2(id, {
           date
         });
