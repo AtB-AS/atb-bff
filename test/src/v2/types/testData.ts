@@ -1,3 +1,5 @@
+import { transportModesType } from './trips';
+
 export type departureFavoritesTestDataType = {
   scenarios: Array<{
     favorites: Array<{
@@ -68,6 +70,34 @@ export type serviceJourneyTestDataType = {
       arriveBy: boolean;
     };
   }>;
+};
+
+export type filteredTripsTestDataType = {
+  to: {
+    name: string;
+    coordinates: {
+      latitude: number;
+      longitude: number;
+    };
+    place?: string;
+  };
+  from: {
+    name: string;
+    coordinates: {
+      latitude: number;
+      longitude: number;
+    };
+    place?: string;
+  };
+  when: string;
+  arriveBy: boolean;
+  cursor?: string;
+  modes: {
+    accessMode: string;
+    directMode: string;
+    egressMode: string;
+    transportModes: transportModesType;
+  };
 };
 
 export type tripsTestDataType = {

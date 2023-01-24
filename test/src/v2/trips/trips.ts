@@ -13,6 +13,9 @@ import {
   tripsTestDataType
 } from '../types';
 import { TripsQuery } from '../../../../src/service/impl/trips/journey-gql/trip.graphql-gen';
+import { transportModesType } from '../types/trips';
+import { filteredTripsTestDataType } from '../types/testData';
+import { filteredTripsTestData } from '../testData/testData';
 
 // Travel search request
 export function trips(
@@ -327,6 +330,169 @@ export function tripsWithCursor(
   }
 }
 
+// Travel search request - with filtering
+export function filteredTrips(
+  transportModes: transportModesType,
+  searchDate: string,
+  filterRequestName?: string
+): void {
+  const searchTime = `${searchDate}T08:00:00.000Z`;
+  const requestName = filterRequestName
+    ? `v2_filteredTrips_${filterRequestName}`
+    : `v2_filteredTrips`;
+  const url = `${conf.host()}/bff/v2/trips`;
+  const request: filteredTripsTestDataType = filteredTripsTestData;
+  // Update the search time
+  request.when = searchTime;
+  // Set filters
+  request.modes.transportModes = transportModes;
+  const activeFiltersMode = transportModes.map(mode => mode.transportMode);
+  activeFiltersMode.push('foot');
+  const activeFiltersSubmode = transportModes.flatMap(
+    mode => mode.transportSubModes
+  );
+
+  const res = http.post(url, JSON.stringify(request), {
+    tags: { name: requestName },
+    headers: bffHeadersPost
+  });
+
+  const expects: ExpectsType = [
+    { check: 'should have status 200', expect: res.status === 200 }
+  ];
+
+  try {
+    const json: TripsQuery = res.json() as TripsQuery;
+
+    // Assert returned time against expected times
+    expects.push({
+      check: 'should have expected start times after requested time',
+      expect: departsAfterExpectedStartTime(
+        json.trip.tripPatterns.map(pattern => pattern.expectedStartTime),
+        searchTime
+      )
+    });
+
+    // Assert correct start and stop
+    // Assert legs are connected
+    // Assert aggregated walk distance is correct on each trip pattern
+    const fromPlaces: string[] = [];
+    const toPlaces: string[] = [];
+    const expFromPlace = request.from.hasOwnProperty('place')
+      ? request.from.place
+      : request.from.name;
+    const expToPlace = request.to.hasOwnProperty('place')
+      ? request.to.place
+      : request.to.name;
+
+    let legsAreConnected = true;
+    let walkDistanceIsCorrect = true;
+    for (let pattern of json.trip.tripPatterns) {
+      const noLegs = pattern.legs.length;
+      // For trip start and stop
+      request.from.hasOwnProperty('place')
+        ? fromPlaces.push(pattern.legs[0].fromPlace.quay!.stopPlace!.id)
+        : fromPlaces.push(pattern.legs[0].fromPlace.name!);
+      request.to.hasOwnProperty('place')
+        ? toPlaces.push(pattern.legs[noLegs - 1].toPlace.quay!.stopPlace!.id)
+        : toPlaces.push(pattern.legs[noLegs - 1].toPlace.name!);
+      // For connectivity on each trip (disregarding quay or not)
+      let lastTo = '';
+      let walkDistance = 0.0;
+      pattern.legs.forEach((leg, index: number) => {
+        leg.mode === 'foot'
+          ? (walkDistance += leg.distance)
+          : (walkDistance += 0.0);
+        if (index === 0) {
+          lastTo = leg.toPlace.name!;
+        } else {
+          if (leg.fromPlace.name !== lastTo) {
+            legsAreConnected = false;
+          }
+          lastTo = leg.toPlace.name!;
+        }
+      });
+      // For walk distance check
+      if (Math.floor(pattern.walkDistance!) !== Math.floor(walkDistance)) {
+        walkDistanceIsCorrect = false;
+      }
+    }
+    expects.push(
+      {
+        check: 'should have correct from place',
+        expect: fromPlaces.filter(e => e !== expFromPlace).length === 0
+      },
+      {
+        check: 'should have correct to place',
+        expect: toPlaces.filter(e => e !== expToPlace).length === 0
+      },
+      { check: 'should have connected legs', expect: legsAreConnected },
+      {
+        check: 'should have correct aggregated walk distance on legs',
+        expect: walkDistanceIsCorrect
+      }
+    );
+
+    // Assert returned transport modes on active filters
+    const responseModes = json.trip.tripPatterns.flatMap(pattern =>
+      pattern.legs.map(leg => leg.mode)
+    ) as string[];
+    expects.push({
+      check: `should have correct transport modes from active filters`,
+      expect:
+        responseModes.filter(mode => !activeFiltersMode.includes(mode))
+          .length === 0
+    });
+
+    // Assert returned transport submodes on active filters
+    const responseSubmodes = cleanSubmodes(
+      json.trip.tripPatterns.flatMap(pattern =>
+        pattern.legs.map(leg => leg.line?.transportSubmode)
+      ) as string[]
+    );
+    expects.push({
+      check: `should have correct transport submodes from active filters`,
+      expect:
+        responseSubmodes.filter(mode => !activeFiltersSubmode.includes(mode))
+          .length === 0
+    });
+
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      expects
+    );
+  } catch (exp) {
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      [
+        {
+          check: `${exp}`,
+          expect: false
+        }
+      ]
+    );
+  }
+}
+
+// Remove undefined and unknown (for mode rail) submodes
+const cleanSubmodes = (submodes: string[]): string[] => {
+  const returnSubmodes: string[] = [];
+  for (const submode of submodes) {
+    if (
+      submode !== undefined &&
+      submode.length !== 0 &&
+      submode !== 'unknown'
+    ) {
+      returnSubmodes.push(submode);
+    }
+  }
+  return returnSubmodes;
+};
+
 // Single trip request
 export function singleTrip(
   testData: singleTripsTestDataType,
@@ -360,7 +526,6 @@ export function singleTrip(
 
     let noSingleTripsTested = 0;
     let singleTripDuration = 0.0;
-    let urlSingleTripFull = '';
     let counter = 0;
     while (noSingleTripsTested < noSingleTripsToTest) {
       const jsonTripsSingle = jsonTrips.trip.tripPatterns[
@@ -412,7 +577,7 @@ export function singleTrip(
     }
 
     metrics.checkForFailures(
-      [urlSingleTripFull],
+      [urlSingleTrip],
       resTrips.timings.duration + singleTripDuration,
       requestName,
       expects

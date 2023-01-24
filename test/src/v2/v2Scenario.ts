@@ -24,7 +24,12 @@ import {
   tripsTestData,
   serviceJourneyTestData
 } from './testData/testData';
-import { singleTrip, trips, tripsWithCursor } from './trips';
+import {
+  filteredTripsScenario,
+  singleTrip,
+  trips,
+  tripsWithCursor
+} from './trips';
 import {
   polyline,
   serviceJourneyDepartures,
@@ -56,6 +61,7 @@ export const tripsScenario = (searchDate: string): void => {
   tripsWithCursor(tripsTestData, searchDate, false);
   tripsWithCursor(tripsTestData, searchDate, true);
   singleTrip(tripsTestData.scenarios[1], searchDate);
+  filteredTripsScenario(searchDate);
 };
 
 export const serviceJourneyScenario = (searchDate: string): void => {
