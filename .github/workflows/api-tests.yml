@@ -3,7 +3,7 @@ name: API-tests
 on:
   push:
     branches:
-      - tor/api-test-improvements
+      - tor/api-test-improvments
   schedule:
     - cron: '0 5,7,11,14 * * *'
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: tor/api-test-improvements
+          ref: tor/api-test-improvments
 
       - name: Install k6
         run: |
