@@ -1,3 +1,2 @@
-export { trips } from './trips';
-export { tripsWithCursor } from './trips';
-export { singleTrip } from './trips';
+export { filteredTrips, trips, tripsWithCursor, singleTrip } from './trips';
+export { filteredTripsScenario } from './scenario';

@@ -5,6 +5,7 @@ import {
   stopsNearestTestDataType,
   tripsTestDataType
 } from '../types';
+import { filteredTripsTestDataType } from '../types/testData';
 
 export const stopsNearestTestData: stopsNearestTestDataType = {
   scenarios: [
@@ -195,6 +196,33 @@ export const serviceJourneyTestData: serviceJourneyTestDataType = {
       }
     }
   ]
+};
+
+export const filteredTripsTestData: filteredTripsTestDataType = {
+  to: {
+    name: 'Trondheim lufthavn',
+    coordinates: {
+      latitude: 63.454052,
+      longitude: 10.917269
+    },
+    place: 'NSR:StopPlace:44286'
+  },
+  from: {
+    name: 'Trondheim S',
+    coordinates: {
+      latitude: 63.436107,
+      longitude: 10.40108
+    },
+    place: 'NSR:StopPlace:41742'
+  },
+  when: '',
+  arriveBy: false,
+  modes: {
+    accessMode: 'foot',
+    directMode: 'foot',
+    egressMode: 'foot',
+    transportModes: []
+  }
 };
 
 export const tripsTestData: tripsTestDataType = {
