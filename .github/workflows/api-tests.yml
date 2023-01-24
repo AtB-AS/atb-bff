@@ -3,20 +3,42 @@ name: API-tests
 on:
   push:
     branches:
-      - main
+      - tor/api-test-improvements
   schedule:
     - cron: '0 5,7,11,14 * * *'
   workflow_dispatch:
+    inputs:
+      url:
+        description: 'Specify URL to run tests against'
+        required: true
+        default: 'https://atb-staging.api.mittatb.no'
+      waitSeconds:
+        description: 'Seconds to wait before test run'
+        required: true
+        default: '0'
 
 jobs:
   api-test:
     name: API-tests
     runs-on: ubuntu-latest
+    # As default, wait 0 sec for manual triggered and 300 sec for push (wait for new deploy)
     steps:
+      - name: Set variables
+        env:
+          DEFAULT_URL: 'https://atb-staging.api.mittatb.no'
+          DEFAULT_WAIT_SECONDS: '300'
+        run: |
+          echo "INPUT_URL=${{ github.event.inputs.url || env.DEFAULT_URL }}" >> $GITHUB_ENV
+          echo "INPUT_WAIT_SECONDS=${{ github.event.inputs.waitSeconds || env.DEFAULT_WAIT_SECONDS }}" >> $GITHUB_ENV
+
+      - name: Sleep given seconds to wait for deploy
+        run: sleep ${{ env.INPUT_WAIT_SECONDS }}s
+        shell: bash
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: tor/api-test-improvements
 
       - name: Install k6
         run: |
@@ -36,7 +58,7 @@ jobs:
           cd test && yarn webpack
 
       - name: Run API tests
-        run: ./k6 run test/dist/k6.js --env environment=staging --env runFrom=root --log-output=stdout --log-format=raw | tee test/dist/results/junitLog.txt
+        run: ./k6 run test/dist/k6.js --env host=${{ env.INPUT_URL }} --env runFrom=root --log-output=stdout --log-format=raw | tee test/dist/results/junitLog.txt
 
       - name: Create JUnit from checks
         run: python python-tools/apiCheckToJUnit/apiCheckToJUnit.py --file junitLog.txt --folder dist/results
@@ -54,5 +76,5 @@ jobs:
           retention-days: 5
 
       - name: Re-run API tests
-        run: ./k6 run test/dist/k6.js --env environment=staging --env runFrom=root
+        run: ./k6 run test/dist/k6.js --env host=${{ env.INPUT_URL }} --env runFrom=root
 
