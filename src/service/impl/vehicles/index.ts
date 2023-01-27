@@ -10,20 +10,14 @@ import {
 
 const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
   ...data,
-  vehicles: data.vehicles?.map(vehicle => {
-    let currentFuelPercent;
-    if (vehicle.currentFuelPercent) {
-      currentFuelPercent = vehicle.currentFuelPercent;
-    } else if (vehicle.vehicleType.maxRangeMeters) {
-      currentFuelPercent = Math.floor(
-        (vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) * 100
-      );
-    }
-    return {
-      ...vehicle,
-      currentFuelPercent
-    };
-  })
+  vehicles: data?.vehicles?.map(vehicle => ({
+    ...vehicle,
+    currentFuelPercent: vehicle.currentFuelPercent
+        ? vehicle.currentFuelPercent
+        : vehicle.vehicleType.maxRangeMeters
+            ? Math.floor((vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) * 100)
+            : undefined
+  }))
 });
 
 export default (): IMobilityService => {
