@@ -7,6 +7,8 @@ export type GetDepartureRealtimeQueryVariables = Types.Exact<{
   startTime: Types.Scalars['DateTime'];
   timeRange: Types.Scalars['Int'];
   limit: Types.Scalars['Int'];
+  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
+  lineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
 }>;
 
 
@@ -29,15 +31,17 @@ export const EstimatedCallFragmentDoc = gql`
 }
     `;
 export const GetDepartureRealtimeDocument = gql`
-    query GetDepartureRealtime($quayIds: [String]!, $startTime: DateTime!, $timeRange: Int!, $limit: Int!) {
+    query GetDepartureRealtime($quayIds: [String]!, $startTime: DateTime!, $timeRange: Int!, $limit: Int!, $limitPerLine: Int, $lineIds: [ID]) {
   quays(ids: $quayIds) {
     id
     estimatedCalls(
       startTime: $startTime
       numberOfDepartures: $limit
+      numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
       timeRange: $timeRange
       arrivalDeparture: departures
       includeCancelledTrips: false
+      whiteListed: {lines: $lineIds}
     ) {
       ...estimatedCall
     }

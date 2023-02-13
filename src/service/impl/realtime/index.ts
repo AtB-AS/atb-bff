@@ -30,7 +30,8 @@ export default (): IRealtimeService => {
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
-        return Result.ok(mapToDepartureRealtime(result.data, previousResult));
+        const mapped = mapToDepartureRealtime(result.data, previousResult);
+        return Result.ok(mapped);
       } catch (error) {
         return Result.err(new APIError(error));
       }
