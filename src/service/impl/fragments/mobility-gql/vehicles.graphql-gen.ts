@@ -6,7 +6,9 @@ import gql from 'graphql-tag';
 import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, OperatorFragmentDoc } from './shared.graphql-gen';
 export type VehicleTypeFragment = { id: string, formFactor: Types.FormFactor, maxRangeMeters?: number, name?: TranslatedStringFragment };
 
-export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment } };
+export type RentalUrisFragment = { android?: string, ios?: string };
+
+export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment }, rentalUris?: RentalUrisFragment };
 
 export const VehicleTypeFragmentDoc = gql`
     fragment vehicleType on VehicleType {
@@ -18,6 +20,12 @@ export const VehicleTypeFragmentDoc = gql`
   }
 }
     ${TranslatedStringFragmentDoc}`;
+export const RentalUrisFragmentDoc = gql`
+    fragment rentalUris on RentalUris {
+  android
+  ios
+}
+    `;
 export const VehicleFragmentDoc = gql`
     fragment vehicle on Vehicle {
   id
@@ -42,11 +50,15 @@ export const VehicleFragmentDoc = gql`
       ...translatedString
     }
   }
+  rentalUris {
+    ...rentalUris
+  }
 }
     ${VehicleTypeFragmentDoc}
 ${PricingPlanFragmentDoc}
 ${OperatorFragmentDoc}
-${TranslatedStringFragmentDoc}`;
+${TranslatedStringFragmentDoc}
+${RentalUrisFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

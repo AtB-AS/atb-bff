@@ -7,6 +7,11 @@ fragment vehicleType on VehicleType {
     }
 }
 
+fragment rentalUris on RentalUris {
+    android
+    ios
+}
+
 fragment vehicle on Vehicle {
     id
     lat
@@ -29,5 +34,8 @@ fragment vehicle on Vehicle {
         name {
             ...translatedString
         }
+    }
+    rentalUris {
+        ...rentalUris
     }
 }
