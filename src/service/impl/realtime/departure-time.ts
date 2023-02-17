@@ -37,6 +37,8 @@ export async function populateCacheIfNotThere(
     >({
       query: GetDepartureRealtimeDocument,
       variables,
+      // With fetch policy set to `cache-first`, apollo client will return data
+      // from the cache, or fetch new data and populate the cache.
       fetchPolicy: 'cache-first'
     });
   } catch (e) {}

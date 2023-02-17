@@ -40,6 +40,8 @@ export async function getDeparturesGroupedNearest(
       variables: {
         stopIds: favorites.map(f => f.stopId)
       },
+      // With fetch policy set to `cache-first`, apollo client will return data
+      // from the cache, or fetch new data and populate the cache.
       fetchPolicy: 'cache-first'
     });
 
