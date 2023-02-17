@@ -24,13 +24,17 @@ export default (): IRealtimeService => {
           GetDepartureRealtimeQueryVariables
         >({
           query: GetDepartureRealtimeDocument,
-          variables
+          variables,
+          // With fetch policy set to `network-only`, apollo client will always
+          // fetch and return new data, then update the cache afterwards.
+          fetchPolicy: 'network-only'
         });
 
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
-        return Result.ok(mapToDepartureRealtime(result.data, previousResult));
+        const mapped = mapToDepartureRealtime(result.data, previousResult);
+        return Result.ok(mapped);
       } catch (error) {
         return Result.err(new APIError(error));
       }

@@ -36,7 +36,9 @@ export async function populateCacheIfNotThere(
       GetDepartureRealtimeQueryVariables
     >({
       query: GetDepartureRealtimeDocument,
-      variables: createVariables(inputQuery),
+      variables,
+      // With fetch policy set to `cache-first`, apollo client will return data
+      // from the cache, or fetch new data and populate the cache.
       fetchPolicy: 'cache-first'
     });
   } catch (e) {}
@@ -114,9 +116,8 @@ export function getPreviousExpectedFromCache(
       query: GetDepartureRealtimeDocument,
       variables
     });
-    if (!result) {
-      return undefined;
-    }
+    if (!result) return undefined;
+
     return mapToPreviousResultsHash(result);
   } catch (e) {
     // Nothing in the cache.

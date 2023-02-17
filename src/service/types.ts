@@ -85,6 +85,8 @@ export type DepartureRealtimeQuery = {
   quayIds: string[];
   startTime: Date;
   limit: number;
+  limitPerLine?: number;
+  lineIds?: string[];
 };
 
 export type StopPlaceDeparturesPayload = {
