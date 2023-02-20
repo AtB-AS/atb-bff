@@ -193,7 +193,8 @@ export function realtimeWithLineId(
 // Check that realtime updates for a quay corresponds to quay departures
 export function realtimeForQuayDepartures(quayId: string, startDate: string) {
   const requestName = 'v2_realtimeForQuayDepartures';
-  const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+  const searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;
+  const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${searchTime}&timeRange=86400`;
   const resQD = http.post(urlQD, '{}', {
     tags: { name: requestName },
     headers: bffHeadersPost
@@ -207,7 +208,6 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
     const jsonQD = resQD.json() as QuayDeparturesQuery;
 
     // Get realtime to compare
-    const searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;
     const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=10`;
     const resR = http.get(urlR, {
       tags: { name: requestName },
