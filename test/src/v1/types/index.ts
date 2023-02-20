@@ -1,12 +1,12 @@
-export { TripsSimplifiedResponseType } from './journey';
-export { TripsSingleSimplifiedResponseType } from './journey';
-export {
+export type { TripsSimplifiedResponseType } from './journey';
+export type { TripsSingleSimplifiedResponseType } from './journey';
+export type {
   GeocoderFeatureResponseType,
   GeocoderReverseResponseType
 } from './geocoder';
 
 // Test data
-export { serviceJourneyTestDataType } from './testData';
-export { tripTestDataType } from './testData';
-export { geocoderTestDataType } from './testData';
-export { departuresGroupedTestDataType } from './testData';
+export type { serviceJourneyTestDataType } from './testData';
+export type { tripTestDataType } from './testData';
+export type { geocoderTestDataType } from './testData';
+export type { departuresGroupedTestDataType } from './testData';
