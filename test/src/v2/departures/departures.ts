@@ -1,80 +1,10 @@
 import http from 'k6/http';
 import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
-import { departsAfterExpectedStartTime, isEqual } from '../../utils/utils';
+import { isEqual } from '../../utils/utils';
 import { JSONObject } from 'k6';
 import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/quay-departures.graphql-gen';
 import { StopPlaceQuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/stop-departures.graphql-gen';
-import { RealtimeResponseType } from '../types';
-
-export function realtime(
-  quayId: string,
-  startDate: string,
-  limit: number = 10
-) {
-  const requestName = 'v2_realtime';
-  const startTime = `${startDate}T11:00:00.000Z`;
-  const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${startTime}&limit=${limit}`;
-
-  const res = http.get(url, {
-    tags: { name: requestName },
-    headers: bffHeadersGet
-  });
-
-  const expects: ExpectsType = [
-    {
-      check: 'should have status 200',
-      expect: res.status === 200
-    }
-  ];
-
-  try {
-    const json = res.json() as RealtimeResponseType;
-
-    // Get departure times
-    const depTimes = [];
-    const serviceJourneys = Object.keys(json[quayId].departures);
-    for (let journey of serviceJourneys) {
-      depTimes.push(
-        json[quayId].departures[journey].timeData.expectedDepartureTime
-      );
-    }
-
-    expects.push(
-      {
-        check: 'should have correct quayId',
-        expect: json[quayId].quayId === quayId
-      },
-      {
-        check: 'should have 10 departures',
-        expect: Object.keys(json[quayId].departures).length === 10
-      },
-      {
-        check: 'should have departure times after start time',
-        expect: departsAfterExpectedStartTime(depTimes, startTime)
-      }
-    );
-    metrics.checkForFailures(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
-  } catch (exp) {
-    //throw exp
-    metrics.checkForFailures(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      [
-        {
-          check: `${exp}`,
-          expect: false
-        }
-      ]
-    );
-  }
-}
 
 export function stopDepartures(
   stopId: string,
@@ -347,81 +277,6 @@ export function quayDeparturesPOSTandGET(
     metrics.checkForFailures(
       [resGET.request.url],
       resGET.timings.duration + resPOST.timings.duration,
-      requestName,
-      [
-        {
-          check: `${exp}`,
-          expect: false
-        }
-      ]
-    );
-  }
-}
-
-// Check that realtime updates for a quay corresponds to quay departures
-export function realtimeForQuayDepartures(quayId: string, startDate: string) {
-  const requestName = 'v2_realtimeForQuayDepartures';
-  const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
-  const resQD = http.post(urlQD, '{}', {
-    tags: { name: requestName },
-    headers: bffHeadersPost
-  });
-
-  const expects: ExpectsType = [
-    { check: 'should have status 200', expect: resQD.status === 200 }
-  ];
-
-  try {
-    const jsonQD = resQD.json() as QuayDeparturesQuery;
-
-    // Get realtime to compare
-    const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${startDate}T00:00:00.000Z&limit=10`;
-    const resR = http.get(urlR, {
-      tags: { name: requestName },
-      headers: bffHeadersGet
-    });
-    const jsonR = resR.json() as RealtimeResponseType;
-    // Get departure times
-    const depTimes = [];
-    const serviceJourneys = Object.keys(jsonR[quayId].departures);
-    for (let journey of serviceJourneys) {
-      depTimes.push(
-        jsonR[quayId].departures[journey].timeData.expectedDepartureTime
-      );
-    }
-
-    expects.push(
-      { check: 'should have status 200', expect: resR.status === 200 },
-      {
-        check: 'should return correct realtime departure times',
-        expect: isEqual(
-          jsonQD
-            .quay!.estimatedCalls.map(call => call.expectedDepartureTime)
-            .sort(),
-          depTimes.sort()
-        )
-      },
-      {
-        check: 'should return correct service journeys',
-        expect: isEqual(
-          jsonQD
-            .quay!.estimatedCalls.map(call => call.serviceJourney!.id)
-            .sort(),
-          Object.keys(jsonR[quayId].departures).sort()
-        )
-      }
-    );
-    metrics.checkForFailures(
-      [resQD.request.url, resR.request.url],
-      resQD.timings.duration + resR.timings.duration,
-      requestName,
-      expects
-    );
-  } catch (exp) {
-    //throw exp
-    metrics.checkForFailures(
-      [resQD.request.url],
-      resQD.timings.duration,
       requestName,
       [
         {

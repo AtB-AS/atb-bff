@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
-import { isEqual } from '../../utils/utils';
+import { isEqual, randomNumber } from '../../utils/utils';
 import { departuresGroupedTestDataType } from '../types';
 import { JSONArray, JSONValue } from 'k6';
 
@@ -98,7 +98,7 @@ export function departuresRealtime(
   limit: number = 5
 ) {
   const requestName = 'v1_departuresRealtime';
-  const startTime = startDate + 'T08:00:00.000Z';
+  const startTime = startDate + `T08:00:00.${randomNumber(999, true)}Z`;
   const url = `${conf.host()}/bff/v1/departures-realtime?quayIds=${quayId}&limit=${limit}&startTime=${startTime}`;
 
   const res = http.get(url, {
