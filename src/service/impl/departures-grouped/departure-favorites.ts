@@ -3,7 +3,7 @@ import union from 'lodash.union';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import { APIError, DepartureGroupsQuery, FavoriteDeparture } from '../../types';
-import { populateCacheIfNotThere } from '../realtime/departure-time';
+import { populateRealtimeCacheIfNotThere } from '../realtime/departure-time';
 import {
   GroupsByIdDocument,
   GroupsByIdQuery,
@@ -33,7 +33,7 @@ export async function getDepartureFavorites(
   ) as string[];
   const lineIds = union(favorites?.map(f => f.lineId));
   // Fire and forget population of cache. Not critial if it fails.
-  populateCacheIfNotThere({
+  populateRealtimeCacheIfNotThere({
     limit: 100,
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,

@@ -27,7 +27,7 @@ import {
   filterQuayFavorites
 } from './utils/favorites';
 import * as Boom from '@hapi/boom';
-import { populateCacheIfNotThere } from '../realtime/departure-time';
+import { populateRealtimeCacheIfNotThere } from '../realtime/departure-time';
 
 export default (): IDeparturesService => {
   const api: IDeparturesService = {
@@ -129,7 +129,7 @@ export default (): IDeparturesService => {
         const quayIds = result.data.stopPlace?.quays?.map(q => q.id);
         if (quayIds) {
           // Fire and forget population of cache. Not critial if it fails.
-          populateCacheIfNotThere({
+          populateRealtimeCacheIfNotThere({
             quayIds,
             startTime,
             lineIds,
@@ -168,7 +168,7 @@ export default (): IDeparturesService => {
         const lineIds = favorites?.map(f => f.lineId);
 
         // Fire and forget population of cache. Not critial if it fails.
-        populateCacheIfNotThere({
+        populateRealtimeCacheIfNotThere({
           quayIds: [id],
           startTime,
           lineIds,

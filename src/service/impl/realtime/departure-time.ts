@@ -18,7 +18,7 @@ export const createVariables = (
   timeRange: 72000
 });
 
-export async function populateCacheIfNotThere(
+export async function populateRealtimeCacheIfNotThere(
   inputQuery: DepartureRealtimeQuery
 ) {
   // Trigger realtime fetch to populate cache for query
