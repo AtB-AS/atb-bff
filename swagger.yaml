@@ -33,6 +33,15 @@ paths:
           default: 5
           name: limit
           in: query
+        - type: array
+          items:
+            type: string
+          collectionFormat: multi
+          name: lineIds
+          in: query
+        - type: number
+          name: limit
+          in: query
       tags:
         - bff
       responses:
@@ -526,6 +535,15 @@ paths:
           in: query
         - type: number
           default: 5
+          name: limit
+          in: query
+        - type: array
+          items:
+            type: string
+          collectionFormat: multi
+          name: lineIds
+          in: query
+        - type: number
           name: limit
           in: query
       tags:
