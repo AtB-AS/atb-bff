@@ -76,5 +76,5 @@ jobs:
           retention-days: 5
 
       - name: Re-run API tests
-        run: ./k6 run test/dist/k6.js --env host=${{ env.INPUT_URL }} --env runFrom=root
+        run: ./k6 run test/dist/k6.js --env host=${{ env.INPUT_URL }} --env runFrom=root --quiet
 
