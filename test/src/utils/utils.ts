@@ -5,12 +5,26 @@ Utility functions
 import { RefinedResponse, ResponseType } from 'k6/http';
 import { JSONArray, JSONObject } from 'k6';
 
-export const randomNumber = (max: number): number => {
+export const randomNumber = (
+  max: number,
+  zeroPaddings: boolean = false
+): string => {
   let rand = Math.floor(Math.random() * max);
   if (rand === max) {
     rand = max - 1;
   }
-  return rand;
+  let randS = rand.toString();
+
+  // Add zeros if rand.length < 3
+  if (zeroPaddings) {
+    if (rand < 10) {
+      randS = `00${randS}`;
+    } else if (rand < 100) {
+      randS = `0${randS}`;
+    }
+  }
+
+  return randS;
 };
 
 export const useNoDecimals = (

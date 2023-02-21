@@ -10,8 +10,8 @@ import {
   quayDepartures,
   quayDeparturesPOSTandGET,
   quayDeparturesVsStopDepartures,
-  realtime,
   realtimeForQuayDepartures,
+  realtimeScenario,
   stopDepartures,
   stopDeparturesPOSTandGET,
   stopsDetails,
@@ -46,7 +46,7 @@ export const departuresScenario = (searchDate: string): void => {
   quayDepartures('NSR:Quay:73576', searchDate);
   quayDeparturesPOSTandGET('NSR:Quay:73576', searchDate);
   departureFavorites(departureFavoritesTestData, searchDate);
-  realtime('NSR:Quay:73576', searchDate);
+  realtimeScenario(searchDate);
 
   // Combinations
   quayDeparturesVsStopDepartures('NSR:StopPlace:42912', searchDate);
@@ -78,21 +78,21 @@ export const departuresScenarioPerformance = (searchDate: string): void => {
   // 20 %
   if (rand < 0.2) {
     for (let i = 0; i < randomNumberInclusiveInInterval(1, 5); i++) {
-      realtime('NSR:Quay:73576', searchDate);
+      polyline(serviceJourneyTestData, searchDate);
       sleep(1);
     }
   }
   // 30 %
   else if (rand >= 0.2 && rand < 0.5) {
     for (let i = 0; i < randomNumberInclusiveInInterval(1, 5); i++) {
-      realtime('NSR:Quay:73576', searchDate);
+      polyline(serviceJourneyTestData, searchDate);
       sleep(1);
     }
   }
   // 50 %
   else {
     //0. find recent tickets
-    realtime('NSR:Quay:73576', searchDate);
+    polyline(serviceJourneyTestData, searchDate);
     sleep(1);
   }
 };
