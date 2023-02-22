@@ -3,6 +3,7 @@ import union from 'lodash.union';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
 import { APIError, DepartureGroupsQuery, FavoriteDeparture } from '../../types';
+import { populateRealtimeCacheIfNotThere } from '../realtime/departure-time';
 import {
   GroupsByIdDocument,
   GroupsByIdQuery,
@@ -16,16 +17,29 @@ export async function getDepartureFavorites(
   options: DepartureGroupsQuery,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {
-  const ids = union(favorites?.map(f => f.stopId));
+  const stopIds = union(favorites?.map(f => f.stopId));
 
   const variables: GroupsByIdQueryVariables = {
-    ids,
+    ids: stopIds,
     timeRange: 86400 * 2, // Two days
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,
     totalLimit: options.limitPerLine * 10,
     filterByLineIds: favorites?.map(f => f.lineId)
   };
+
+  const quayIds = union(favorites?.map(f => f.quayId)).filter(
+    Boolean
+  ) as string[];
+  const lineIds = union(favorites?.map(f => f.lineId));
+  // Fire and forget population of cache. Not critial if it fails.
+  populateRealtimeCacheIfNotThere({
+    limit: 100,
+    startTime: options.startTime,
+    limitPerLine: options.limitPerLine,
+    quayIds,
+    lineIds
+  });
 
   const result = await journeyPlannerClient.query<
     GroupsByIdQuery,
