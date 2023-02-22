@@ -57,6 +57,7 @@ export const getDepartureFavoritesCursoredRequest = {
   query: Joi.object({
     limitPerLine: Joi.number().default(5),
     startTime: Joi.date().default(() => new Date()),
+    includeCancelledTrips: Joi.boolean(),
 
     // Paging
     pageSize: Joi.number().default(3),

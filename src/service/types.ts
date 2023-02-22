@@ -70,6 +70,7 @@ export type DepartureGroupsPayload = {
 export type DepartureGroupsQuery = CursoredQuery<{
   startTime: Date;
   limitPerLine: number;
+  includeCancelledTrips?: boolean;
 }>;
 
 export type DepartureFavoritesPayload = {

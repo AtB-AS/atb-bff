@@ -49,6 +49,7 @@ type DepartureTime = {
   situations: Situation[];
   serviceJourneyId?: string;
   serviceDate: string;
+  cancellation: boolean;
 };
 
 type DepartureGroup = {
@@ -155,7 +156,8 @@ export default function mapQueryToGroups(
               realtime: time.realtime,
               situations: time.situations,
               serviceJourneyId: time.serviceJourney?.id,
-              serviceDate: time.date
+              serviceDate: time.date,
+              cancellation: time.cancellation
             };
           });
 
