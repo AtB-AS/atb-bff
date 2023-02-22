@@ -300,6 +300,9 @@ paths:
           default: 3
           name: pageSize
           in: query
+        - type: boolean
+          name: includeCancelledTrips
+          in: query
         - type: string
           name: cursor
           in: query
