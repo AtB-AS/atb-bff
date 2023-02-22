@@ -1,11 +1,4 @@
-query GroupsById(
-  $ids: [String]
-  $startTime: DateTime!
-  $timeRange: Int!
-  $limitPerLine: Int!
-  $totalLimit: Int!
-  $filterByLineIds: [ID]
-) {
+query GroupsById($ids: [String], $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID], $includeCancelledTrips: Boolean) {
   stopPlaces(ids: $ids) {
     ...group_stopPlaceFields
     quays(filterByInUse: true) {
@@ -16,8 +9,8 @@ query GroupsById(
         numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
         numberOfDepartures: $totalLimit
         arrivalDeparture: departures
-        includeCancelledTrips: false
-        whiteListed: { lines: $filterByLineIds }
+        includeCancelledTrips: $includeCancelledTrips
+        whiteListed: {lines: $filterByLineIds}
       ) {
         ...group_times_estimatedCallFields
       }
@@ -27,8 +20,8 @@ query GroupsById(
         numberOfDepartures: $totalLimit
         numberOfDeparturesPerLineAndDestinationDisplay: 1
         arrivalDeparture: departures
-        includeCancelledTrips: false
-        whiteListed: { lines: $filterByLineIds }
+        includeCancelledTrips: $includeCancelledTrips
+        whiteListed: {lines: $filterByLineIds}
       ) {
         ...group_estimatedCallFields
       }
@@ -66,6 +59,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   aimedDepartureTime
   predictionInaccurate
   realtime
+  cancellation
   notices {
     ...notice
   }

@@ -25,7 +25,8 @@ export async function getDepartureFavorites(
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,
     totalLimit: options.limitPerLine * 10,
-    filterByLineIds: favorites?.map(f => f.lineId)
+    filterByLineIds: favorites?.map(f => f.lineId),
+    includeCancelledTrips: options.includeCancelledTrips
   };
 
   const quayIds = union(favorites?.map(f => f.quayId)).filter(
