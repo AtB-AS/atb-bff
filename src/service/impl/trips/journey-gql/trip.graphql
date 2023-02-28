@@ -148,6 +148,15 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
         bookingArrangements {
           ...bookingArrangement
         }
+        datedServiceJourney {
+          estimatedCalls {
+            quay {
+              name
+              id
+            }
+            date
+          }
+        }
       }
     }
   }
