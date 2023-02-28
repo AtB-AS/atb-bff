@@ -147,11 +147,11 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
         }
         datedServiceJourney {
           estimatedCalls {
+            actualDepartureTime
             quay {
               name
-              id
             }
-            date
+            predictionInaccurate
           }
         }
       }
