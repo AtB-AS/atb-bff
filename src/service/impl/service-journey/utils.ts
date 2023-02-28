@@ -1,15 +1,18 @@
-import { Coordinates, PointsOnLink } from '@entur/sdk';
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
-import { MapLeg, ServiceJourneyMapInfoData } from '../../types';
-import { MapInfoWithFromAndToQuayV2Query } from './journey-gql/service-journey-map.graphql-gen';
+import { PointsOnLink } from '../../../graphql/journey/journeyplanner-types_v3';
+import { Coordinates, MapLeg, ServiceJourneyMapInfoData } from '../../types';
+import {
+  MapInfoWithFromAndToQuayV2Query,
+  MapInfoWithFromQuayV2Query
+} from './journey-gql/service-journey-map.graphql-gen';
 
 type PolylinePair = [lat: number, lng: number];
 
 const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 3;
 
 export function mapToMapLegs(
-  data: MapInfoWithFromAndToQuayV2Query
+  data: MapInfoWithFromQuayV2Query & MapInfoWithFromAndToQuayV2Query
 ): ServiceJourneyMapInfoData {
   const baseItem = {
     mode: data.serviceJourney?.line.transportMode,

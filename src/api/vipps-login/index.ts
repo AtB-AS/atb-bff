@@ -53,11 +53,8 @@ export default (server: Hapi.Server) => () => {
     handler: async request => {
       const callbackUrl = request.query.callbackUrl;
       const client = await getClient(callbackUrl);
-      const {
-        authorizationCode,
-        state,
-        nonce
-      } = (request.payload as unknown) as VippsCustomTokenRequest;
+      const { authorizationCode, state, nonce } =
+        request.payload as unknown as VippsCustomTokenRequest;
       const params = await client.callback(
         callbackUrl,
         { code: authorizationCode, state: state },

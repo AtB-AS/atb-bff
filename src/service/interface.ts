@@ -2,7 +2,6 @@ import { Result } from '@badrap/result';
 import { Feature, TripPattern } from '@entur/sdk';
 import { Boom } from '@hapi/boom';
 import * as Trips from '../types/trips';
-import { DepartureFavoritesMetadata } from './impl/departure-favorites/departure-group';
 import {
   QuayDeparturesQuery,
   QuayDeparturesQueryVariables
@@ -23,7 +22,7 @@ import { EnrollResponse } from './impl/enrollment';
 import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/journey-gql/service-journey.graphql-gen';
 import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
 import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
-import { DepartureGroupMetadata } from './impl/stops/departure-group';
+import { DepartureGroupMetadata } from './impl/departures-grouped/departure-group';
 import {
   APIError,
   DepartureFavoritesPayload,
@@ -37,14 +36,18 @@ import {
   QuayDeparturesPayload,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
-  ServiceJourneyMapInfoData_v3,
+  VehiclesQuery,
+  ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
   StopPlaceDeparturesPayload,
-  TripPatternQuery,
-  TripPatternsQuery,
-  TripQuery
+  TripPatternsQuery
 } from './types';
+import { GetVehiclesQuery } from './impl/vehicles/mobility-gql/vehicles.graphql-gen';
+import {
+  TripsQuery,
+  TripsQueryVariables
+} from './impl/trips/journey-gql/trip.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -58,7 +61,7 @@ export interface IServiceJourneyService_v2 {
   getServiceJourneyMapInfo(
     serviceJourneyId: string,
     query: ServiceJourneyMapInfoQuery
-  ): Promise<Result<ServiceJourneyMapInfoData_v3, APIError>>;
+  ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
   getDeparturesForServiceJourneyV2(
     id: string,
     query: DeparturesForServiceJourneyQuery
@@ -70,20 +73,27 @@ export interface IServiceJourneyService_v2 {
 }
 
 export interface ITrips_v2 {
-  getTrips(
-    query: Trips.TripsQueryVariables
-  ): Promise<Result<Trips.TripsQuery, APIError>>;
+  getTrips(query: TripsQueryVariables): Promise<Result<TripsQuery, APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds
   ): Promise<Result<Trips.TripPattern, Boom>>;
+  getTripPatterns(
+    query: TripPatternsQuery
+  ): Promise<Result<TripPattern[], APIError>>;
 }
 
-export interface IStopsService {
+export interface IDeparturesGroupedService {
   getDeparturesGrouped(
     location: DepartureGroupsPayload,
     query: DepartureGroupsQuery
   ): Promise<Result<DepartureGroupMetadata, APIError>>;
+  getDeparturesFavorites(
+    location: DepartureFavoritesPayload,
+    query: DepartureFavoritesQuery
+  ): Promise<Result<DepartureGroupMetadata, APIError>>;
+}
 
+export interface IRealtimeService {
   getDepartureRealtime(
     query: DepartureRealtimeQuery
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
@@ -104,16 +114,6 @@ export interface IDeparturesService {
     query: QuayDeparturesQueryVariables,
     payload?: QuayDeparturesPayload
   ): Promise<Result<QuayDeparturesQuery, APIError>>;
-  getDepartureRealtime(
-    query: DepartureRealtimeQuery
-  ): Promise<Result<DeparturesRealtimeData, APIError>>;
-}
-
-export interface IDepartureFavoritesService {
-  getDeparturesFavorites(
-    location: DepartureFavoritesPayload,
-    query: DepartureFavoritesQuery
-  ): Promise<Result<DepartureFavoritesMetadata, APIError>>;
 }
 
 export interface IQuayService {
@@ -122,19 +122,16 @@ export interface IQuayService {
   ): Promise<Result<GetQuaysCoordinatesQuery, APIError>>;
 }
 
-export interface IJourneyService {
-  getTripPattern(
-    query: TripPatternQuery
-  ): Promise<Result<TripPattern | null, APIError>>;
-  getTripPatterns(
-    query: TripPatternsQuery
-  ): Promise<Result<TripPattern[], APIError>>;
-}
-
 export interface IEnrollmentService {
   enroll(
     customerAccountId: string,
     enrollmentId: string,
     code: string
   ): Promise<Result<EnrollResponse, APIError>>;
+}
+
+export interface IMobilityService {
+  getVehicles(
+    query: VehiclesQuery
+  ): Promise<Result<GetVehiclesQuery, APIError>>;
 }

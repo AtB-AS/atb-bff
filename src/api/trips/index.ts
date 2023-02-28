@@ -1,16 +1,18 @@
 import Hapi from '@hapi/hapi';
 import { ITrips_v2 } from '../../service/interface';
+import { TripPatternsQuery } from '../../service/types';
 import {
   CompressedSingleTripQuery,
-  TripsQueryVariables,
   TripsQueryWithJourneyIds
 } from '../../types/trips';
+import { parseTripQueryString } from '../../service/impl/trips/utils';
 import {
   postEncodedSingleTripRequest,
   postSingleTripRequest,
-  postTripsRequest
+  postTripsRequest,
+  postJourneyRequest
 } from './schema';
-import { parseTripQueryString } from '../../utils/journey-utils';
+import { TripsQueryVariables } from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 
 export default (server: Hapi.Server) => (service: ITrips_v2) => {
   server.route({
@@ -23,7 +25,7 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     },
 
     handler: async (request, h) => {
-      const query = (request.payload as unknown) as TripsQueryVariables;
+      const query = request.payload as unknown as TripsQueryVariables;
       const result = await service.getTrips(query);
       const unwrapped = result.unwrap();
       return unwrapped;
@@ -45,6 +47,24 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       );
       const result = await service.getSingleTrip(query);
       return result.unwrap();
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/bff/v1/journey/trip',
+    options: {
+      description: 'Find trip patterns',
+      tags: ['api', 'journey'],
+      validate: postJourneyRequest,
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
+    },
+    handler: async (request, h) => {
+      const query = request.payload as unknown as TripPatternsQuery;
+      return (await service.getTripPatterns(query)).unwrap();
     }
   });
 };

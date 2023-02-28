@@ -1,0 +1,38 @@
+query GetDepartureRealtime(
+  $quayIds: [String]!
+  $startTime: DateTime!
+  $timeRange: Int!
+  $limit: Int!
+  $limitPerLine: Int
+  $lineIds: [ID]
+) {
+  quays(ids: $quayIds) {
+    id
+    estimatedCalls(
+      startTime: $startTime
+      numberOfDepartures: $limit,
+      numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
+      timeRange: $timeRange
+      arrivalDeparture: departures
+      includeCancelledTrips: false
+      whiteListed: {
+        lines: $lineIds
+      }
+    ) {
+      ...estimatedCall
+    }
+  }
+}
+
+fragment estimatedCall on EstimatedCall {
+  realtime
+  serviceJourney {
+    id
+  }
+  expectedArrivalTime
+  expectedDepartureTime
+  actualArrivalTime
+  actualDepartureTime
+  aimedArrivalTime
+  aimedDepartureTime
+}

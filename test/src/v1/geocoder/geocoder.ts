@@ -24,51 +24,67 @@ export function geocoderFeatures(
       tags: { name: requestName },
       headers: bffHeadersGet
     });
-    const json = res.json() as GeocoderFeatureResponseType;
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
     ];
 
-    // Asserts
-    for (let expResult of test.expectedResults) {
-      expects.push(
-        {
-          check: `should include "${expResult.id}"`,
-          expect: json
-            .map(feature => feature.properties.id)
-            .includes(expResult.id)
-        },
-        {
-          check: `should have correct name for "${expResult.id}"`,
-          expect:
-            json.filter(feature => feature.properties.id === expResult.id)[0]
-              .properties.name === expResult.name
-        },
-        {
-          check: `should include category "${expResult.category}" for "${expResult.id}"`,
-          expect: json
-            .filter(feature => feature.properties.id === expResult.id)[0]
-            .properties.category.flat()
-            .includes(expResult.category)
-        }
+    try {
+      const json = res.json() as GeocoderFeatureResponseType;
+
+      // Asserts
+      for (let expResult of test.expectedResults) {
+        expects.push(
+          {
+            check: `should include "${expResult.id}"`,
+            expect: json
+              .map(feature => feature.properties.id)
+              .includes(expResult.id)
+          },
+          {
+            check: `should have correct name for "${expResult.id}"`,
+            expect:
+              json.filter(feature => feature.properties.id === expResult.id)[0]
+                .properties.name === expResult.name
+          },
+          {
+            check: `should include category "${expResult.category}" for "${expResult.id}"`,
+            expect: json
+              .filter(feature => feature.properties.id === expResult.id)[0]
+              .properties.category.flat()
+              .includes(expResult.category)
+          }
+        );
+      }
+
+      // Assert if more hits
+      if (test.moreResults) {
+        expects.push({
+          check: `should have more hits than ${test.expectedResults.length}`,
+          expect: json.length > test.expectedResults.length
+        });
+      }
+
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      //throw exp
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
       );
     }
-
-    // Assert if more hits
-    if (test.moreResults) {
-      expects.push({
-        check: `should have more hits than ${test.expectedResults.length}`,
-        expect: json.length > test.expectedResults.length
-      });
-    }
-
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
   }
 }
 
@@ -88,50 +104,66 @@ export function geocoderReverse(
       tags: { name: requestName },
       headers: bffHeadersGet
     });
-    const json = res.json() as GeocoderReverseResponseType;
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
     ];
 
-    // Asserts
-    for (let expResult of test.expectedResults) {
-      expects.push(
-        {
-          check: `should include "${expResult.id}"`,
-          expect: json
-            .map(feature => feature.properties.id)
-            .includes(expResult.id)
-        },
-        {
-          check: `should have correct name for "${expResult.id}"`,
-          expect:
-            json.filter(feature => feature.properties.id === expResult.id)[0]
-              .properties.name === expResult.name
-        },
-        {
-          check: `should include category "${expResult.category}" for "${expResult.id}"`,
-          expect: json
-            .filter(feature => feature.properties.id === expResult.id)[0]
-            .properties.category.flat()
-            .includes(expResult.category)
-        }
+    try {
+      const json = res.json() as GeocoderReverseResponseType;
+
+      // Asserts
+      for (let expResult of test.expectedResults) {
+        expects.push(
+          {
+            check: `should include "${expResult.id}"`,
+            expect: json
+              .map(feature => feature.properties.id)
+              .includes(expResult.id)
+          },
+          {
+            check: `should have correct name for "${expResult.id}"`,
+            expect:
+              json.filter(feature => feature.properties.id === expResult.id)[0]
+                .properties.name === expResult.name
+          },
+          {
+            check: `should include category "${expResult.category}" for "${expResult.id}"`,
+            expect: json
+              .filter(feature => feature.properties.id === expResult.id)[0]
+              .properties.category.flat()
+              .includes(expResult.category)
+          }
+        );
+      }
+
+      // Assert if more hits
+      if (test.moreResults) {
+        expects.push({
+          check: `should have more hits than ${test.expectedResults.length}`,
+          expect: json.length > test.expectedResults.length
+        });
+      }
+
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        expects
+      );
+    } catch (exp) {
+      //throw exp
+      metrics.checkForFailures(
+        [res.request.url],
+        res.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
       );
     }
-
-    // Assert if more hits
-    if (test.moreResults) {
-      expects.push({
-        check: `should have more hits than ${test.expectedResults.length}`,
-        expect: json.length > test.expectedResults.length
-      });
-    }
-
-    metrics.addFailureIfMultipleChecks(
-      [res.request.url],
-      res.timings.duration,
-      requestName,
-      expects
-    );
   }
 }

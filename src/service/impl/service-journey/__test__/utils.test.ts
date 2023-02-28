@@ -2,8 +2,7 @@ import polyline from '@mapbox/polyline';
 import {
   TransportMode,
   TransportSubmode
-} from '../../../../graphql/journey-types';
-import { MapLeg } from '../../../types';
+} from '../../../../graphql/journey/journeyplanner-types_v3';
 import { mapToMapLegs } from '../utils';
 
 const exampleQuay: [number, number] = [63.37024, 10.37406];
@@ -23,7 +22,7 @@ const fixtureLines: [number, number][] = [
 ];
 
 describe('mapToMapLegs', () => {
-  const point = (leg: MapLeg) => polyline.decode(leg.pointsOnLink.points);
+  const point = (points: string) => polyline.decode(points);
   it('should split fromQuay when quay location is the same', async () => {
     const result = mapToMapLegs({
       serviceJourney: {
@@ -41,8 +40,13 @@ describe('mapToMapLegs', () => {
 
     expect(result.mapLegs.length).toEqual(2);
 
-    const first = point(result.mapLegs[0]);
-    const second = point(result.mapLegs[1]);
+    const firstPoints = result.mapLegs[0].pointsOnLink.points;
+    const secondPoints = result.mapLegs[1].pointsOnLink.points;
+    expect(firstPoints).toBeDefined();
+    expect(secondPoints).toBeDefined();
+
+    const first = point(firstPoints as string);
+    const second = point(secondPoints as string);
     expect(result.mapLegs[0].faded).toEqual(true);
     expect(result.mapLegs[1].faded).toEqual(false);
 
@@ -73,9 +77,16 @@ describe('mapToMapLegs', () => {
 
     expect(result.mapLegs.length).toEqual(3);
 
-    const first = point(result.mapLegs[0]);
-    const second = point(result.mapLegs[1]);
-    const third = point(result.mapLegs[2]);
+    const firstPoints = result.mapLegs[0].pointsOnLink.points;
+    const secondPoints = result.mapLegs[1].pointsOnLink.points;
+    const thirdPoints = result.mapLegs[2].pointsOnLink.points;
+    expect(firstPoints).toBeDefined();
+    expect(secondPoints).toBeDefined();
+    expect(thirdPoints).toBeDefined();
+
+    const first = point(firstPoints as string);
+    const second = point(secondPoints as string);
+    const third = point(thirdPoints as string);
     expect(result.mapLegs[0].faded).toEqual(true);
     expect(result.mapLegs[1].faded).toEqual(false);
     expect(result.mapLegs[2].faded).toEqual(true);

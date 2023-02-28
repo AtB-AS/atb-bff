@@ -19,7 +19,7 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
       validate: postEnrollmentGroupRequest
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as EnrollmentQuery;
+      const query = request.query as unknown as EnrollmentQuery;
       const customerAccountId =
         request.headers['entur-customer-account-id'] || '';
 

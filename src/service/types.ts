@@ -1,7 +1,12 @@
-import { Location, PointsOnLink, QueryMode } from '@entur/sdk';
+import { Location, QueryMode } from '@entur/sdk';
 import { boomify } from '@hapi/boom';
 import { FetchError } from 'node-fetch';
-import * as Types_v3 from '../graphql/journeyplanner-types_v3';
+import {
+  Mode,
+  PointsOnLink,
+  TransportSubmode
+} from '../graphql/journey/journeyplanner-types_v3';
+import * as Mobility from '../graphql/mobility/mobility-types_v2';
 import { CursoredQuery } from './cursored';
 
 export interface Coordinates {
@@ -65,6 +70,7 @@ export type DepartureGroupsPayload = {
 export type DepartureGroupsQuery = CursoredQuery<{
   startTime: Date;
   limitPerLine: number;
+  includeCancelledTrips?: boolean;
 }>;
 
 export type DepartureFavoritesPayload = {
@@ -80,6 +86,8 @@ export type DepartureRealtimeQuery = {
   quayIds: string[];
   startTime: Date;
   limit: number;
+  limitPerLine?: number;
+  lineIds?: string[];
 };
 
 export type StopPlaceDeparturesPayload = {
@@ -92,12 +100,6 @@ export type QuayDeparturesPayload = {
 
 export interface EnrollmentQuery {
   inviteKey: string;
-}
-
-export interface TripQuery {
-  from: string;
-  to: string;
-  when?: Date;
 }
 
 export interface TripPatternsQuery {
@@ -113,15 +115,6 @@ export interface TripPatternsQuery {
   wheelchairAccessible: boolean;
 }
 
-export interface SingleTripPatternQuery {
-  id: string;
-}
-
-export interface TripPatternQuery {
-  query: TripPatternsQuery;
-  serviceIds: string[];
-}
-
 export interface DeparturesForServiceJourneyQuery {
   date?: Date;
 }
@@ -134,28 +127,6 @@ export interface ServiceJourneyMapInfoQuery {
   fromQuayId: string;
   toQuayId?: string;
 }
-
-export type PaginationInput = {
-  pageSize: number;
-  pageOffset: number;
-};
-
-export type PaginatedQuery<T> = PaginationInput & T;
-
-export type Paginated<T extends any[] | []> =
-  | ({
-      hasNext: true;
-      nextPageOffset: number;
-
-      data: T;
-      totalResults: number;
-    } & PaginationInput)
-  | ({
-      hasNext: false;
-
-      data: T;
-      totalResults: number;
-    } & PaginationInput);
 
 export type RealtimeData = {
   serviceJourneyId: string;
@@ -175,27 +146,25 @@ export type DeparturesRealtimeData = {
 };
 
 export type MapLeg = {
-  mode?: Types_v3.Mode;
-  faded?: boolean;
-  transportSubmode?: Types_v3.TransportSubmode;
+  mode?: Mode;
+  faded: boolean;
+  transportSubmode?: TransportSubmode;
   pointsOnLink: PointsOnLink;
 };
 
-export type MapLeg_v3 = {
-  mode?: Types_v3.Mode;
-  faded: boolean;
-  transportSubmode?: Types_v3.TransportSubmode;
-  pointsOnLink: Types_v3.PointsOnLink;
+export type Scooter = {
+  id: string;
+  lat: number;
+  lon: number;
 };
+
+export type VehiclesQuery = Pick<
+  Mobility.QueryVehiclesArgs,
+  'lat' | 'lon' | 'range' | 'operators' | 'formFactors'
+>;
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];
-  start?: Coordinates;
-  stop?: Coordinates;
-};
-
-export type ServiceJourneyMapInfoData_v3 = {
-  mapLegs: MapLeg_v3[];
   start?: Coordinates;
   stop?: Coordinates;
 };

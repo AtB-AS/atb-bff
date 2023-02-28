@@ -11,6 +11,7 @@ import {
   journeyScenarioV1,
   serviceJourneyScenarioV1
 } from './v1/v1Scenario';
+import { realtimeScenario } from './v2/departures';
 
 //Scenarios
 export const scn = (usecase: string): void => {
@@ -42,8 +43,7 @@ const bff = (): void => {
 //Test
 const test = (): void => {
   const searchDate = getNextThursday();
-  //departuresScenario(searchDate);
-  serviceJourneyScenario(searchDate);
+  realtimeScenario(searchDate);
 };
 
 //Performance test

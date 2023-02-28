@@ -19,7 +19,6 @@ import { Options } from 'k6/options';
 import { conf } from './config/configuration';
 import { scn } from './scenario';
 import { createJUnitCheckOutput } from './utils/log';
-//WIP
 /* @ts-ignore */
 import { jUnit, textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 

@@ -33,6 +33,15 @@ paths:
           default: 5
           name: limit
           in: query
+        - type: array
+          items:
+            type: string
+          collectionFormat: multi
+          name: lineIds
+          in: query
+        - type: number
+          name: limit
+          in: query
       tags:
         - bff
       responses:
@@ -40,6 +49,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   /bff/v1/geocoder/features:
     get:
       summary: Find features matching query
@@ -118,22 +128,6 @@ paths:
           schema:
             type: string
           description: Successful
-  /bff/v1/journey/single-trip:
-    get:
-      summary: Get one specific trip pattern from generated ID
-      operationId: getBffV1JourneySingletrip
-      parameters:
-        - type: string
-          name: id
-          in: query
-          required: true
-      tags:
-        - bff
-      responses:
-        default:
-          schema:
-            type: string
-          description: Successful
   /bff/v1/journey/trip:
     post:
       summary: Find trip patterns
@@ -150,6 +144,7 @@ paths:
           schema:
             type: string
           description: Successful
+      deprecated: true
   '/bff/v1/servicejourney/{id}/departures':
     get:
       summary: Get departures for Service Journey
@@ -540,6 +535,15 @@ paths:
           in: query
         - type: number
           default: 5
+          name: limit
+          in: query
+        - type: array
+          items:
+            type: string
+          collectionFormat: multi
+          name: lineIds
+          in: query
+        - type: number
           name: limit
           in: query
       tags:

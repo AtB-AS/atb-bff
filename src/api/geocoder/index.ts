@@ -43,7 +43,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
       }
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as FeaturesQuery;
+      const query = request.query as unknown as FeaturesQuery;
       return server.methods.feature(query);
     }
   });
@@ -61,7 +61,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
       }
     },
     handler: async (request, h) => {
-      const query = (request.query as unknown) as ReverseFeaturesQuery;
+      const query = request.query as unknown as ReverseFeaturesQuery;
       return server.methods.reverse(query);
     }
   });
