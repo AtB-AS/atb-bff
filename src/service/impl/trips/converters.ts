@@ -68,6 +68,7 @@ function mapToLegacyLeg(leg: Leg_v2): Leg {
       leg.serviceJourney
     ) as ServiceJourney,
     situations: [],
+    bookingArrangements: undefined,
     transportSubmode: mapToLegacySubMode(leg.transportSubmode)
   };
 }
