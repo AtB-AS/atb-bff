@@ -176,11 +176,11 @@ export const TripsDocument = gql`
         }
         datedServiceJourney {
           estimatedCalls {
+            actualDepartureTime
             quay {
               name
-              id
             }
-            date
+            predictionInaccurate
           }
         }
       }
