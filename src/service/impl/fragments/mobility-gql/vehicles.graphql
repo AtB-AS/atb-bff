@@ -12,6 +12,20 @@ fragment rentalUris on RentalUris {
     ios
 }
 
+fragment rentalApp on RentalApp {
+    discoveryUri
+    storeUri
+}
+
+fragment rentalApps on RentalApps {
+    android {
+        ...rentalApp
+    }
+    ios {
+        ...rentalApp
+    }
+}
+
 fragment vehicle on Vehicle {
     id
     lat
@@ -33,6 +47,9 @@ fragment vehicle on Vehicle {
         }
         name {
             ...translatedString
+        }
+        rentalApps {
+            ...rentalApps
         }
     }
     rentalUris {

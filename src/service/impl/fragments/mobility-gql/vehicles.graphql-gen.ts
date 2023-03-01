@@ -8,7 +8,11 @@ export type VehicleTypeFragment = { id: string, formFactor: Types.FormFactor, ma
 
 export type RentalUrisFragment = { android?: string, ios?: string };
 
-export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment }, rentalUris?: RentalUrisFragment };
+export type RentalAppFragment = { discoveryUri?: string, storeUri?: string };
+
+export type RentalAppsFragment = { android?: RentalAppFragment, ios?: RentalAppFragment };
+
+export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment, rentalApps?: RentalAppsFragment }, rentalUris?: RentalUrisFragment };
 
 export const VehicleTypeFragmentDoc = gql`
     fragment vehicleType on VehicleType {
@@ -20,6 +24,22 @@ export const VehicleTypeFragmentDoc = gql`
   }
 }
     ${TranslatedStringFragmentDoc}`;
+export const RentalAppFragmentDoc = gql`
+    fragment rentalApp on RentalApp {
+  discoveryUri
+  storeUri
+}
+    `;
+export const RentalAppsFragmentDoc = gql`
+    fragment rentalApps on RentalApps {
+  android {
+    ...rentalApp
+  }
+  ios {
+    ...rentalApp
+  }
+}
+    ${RentalAppFragmentDoc}`;
 export const RentalUrisFragmentDoc = gql`
     fragment rentalUris on RentalUris {
   android
@@ -49,6 +69,9 @@ export const VehicleFragmentDoc = gql`
     name {
       ...translatedString
     }
+    rentalApps {
+      ...rentalApps
+    }
   }
   rentalUris {
     ...rentalUris
@@ -58,6 +81,7 @@ export const VehicleFragmentDoc = gql`
 ${PricingPlanFragmentDoc}
 ${OperatorFragmentDoc}
 ${TranslatedStringFragmentDoc}
+${RentalAppsFragmentDoc}
 ${RentalUrisFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
