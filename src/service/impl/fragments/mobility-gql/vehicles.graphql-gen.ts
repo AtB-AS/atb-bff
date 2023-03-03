@@ -12,7 +12,9 @@ export type RentalAppFragment = { discoveryUri?: string, storeUri?: string };
 
 export type RentalAppsFragment = { android?: RentalAppFragment, ios?: RentalAppFragment };
 
-export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment, rentalApps?: RentalAppsFragment }, rentalUris?: RentalUrisFragment };
+export type BrandAssetsFragment = { brandImageUrl: string, brandImageUrlDark?: string, brandLastModified: string };
+
+export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: { operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment }, rentalUris?: RentalUrisFragment };
 
 export const VehicleTypeFragmentDoc = gql`
     fragment vehicleType on VehicleType {
@@ -24,6 +26,13 @@ export const VehicleTypeFragmentDoc = gql`
   }
 }
     ${TranslatedStringFragmentDoc}`;
+export const BrandAssetsFragmentDoc = gql`
+    fragment brandAssets on BrandAssets {
+  brandImageUrl
+  brandImageUrlDark
+  brandLastModified
+}
+    `;
 export const RentalAppFragmentDoc = gql`
     fragment rentalApp on RentalApp {
   discoveryUri
@@ -69,6 +78,9 @@ export const VehicleFragmentDoc = gql`
     name {
       ...translatedString
     }
+    brandAssets {
+      ...brandAssets
+    }
     rentalApps {
       ...rentalApps
     }
@@ -81,6 +93,7 @@ export const VehicleFragmentDoc = gql`
 ${PricingPlanFragmentDoc}
 ${OperatorFragmentDoc}
 ${TranslatedStringFragmentDoc}
+${BrandAssetsFragmentDoc}
 ${RentalAppsFragmentDoc}
 ${RentalUrisFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>

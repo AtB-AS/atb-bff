@@ -26,6 +26,12 @@ fragment rentalApps on RentalApps {
     }
 }
 
+fragment brandAssets on BrandAssets {
+    brandImageUrl
+    brandImageUrlDark
+    brandLastModified
+}
+
 fragment vehicle on Vehicle {
     id
     lat
@@ -47,6 +53,9 @@ fragment vehicle on Vehicle {
         }
         name {
             ...translatedString
+        }
+        brandAssets {
+            ...brandAssets
         }
         rentalApps {
             ...rentalApps
