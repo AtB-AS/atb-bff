@@ -41,13 +41,14 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
   StopPlaceDeparturesPayload,
-  TripPatternsQuery
-} from './types';
+  TripPatternsQuery, StationsQuery
+} from "./types";
 import { GetVehiclesQuery } from './impl/vehicles/mobility-gql/vehicles.graphql-gen';
 import {
   TripsQuery,
   TripsQueryVariables
 } from './impl/trips/journey-gql/trip.graphql-gen';
+import { GetStationsQuery } from "./impl/stations/mobility-gql/stations.graphql-gen";
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -130,8 +131,14 @@ export interface IEnrollmentService {
   ): Promise<Result<EnrollResponse, APIError>>;
 }
 
-export interface IMobilityService {
+export interface IVehiclesService {
   getVehicles(
     query: VehiclesQuery
   ): Promise<Result<GetVehiclesQuery, APIError>>;
+}
+
+export interface IStationsService {
+  getStations(
+    query: StationsQuery
+  ): Promise<Result<GetStationsQuery, APIError>>;
 }

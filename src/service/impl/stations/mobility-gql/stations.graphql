@@ -1,0 +1,5 @@
+query getStations($lat: Float!, $lon: Float!, $range: Int!, $availableFormFactors: [FormFactor]) {
+    stations(lat: $lat, lon: $lon, range: $range, availableFormFactors: $availableFormFactors) {
+        ...station
+    }
+}

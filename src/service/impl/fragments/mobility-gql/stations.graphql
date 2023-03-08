@@ -1,0 +1,5 @@
+fragment station on Station {
+    id
+    lat
+    lon
+}
