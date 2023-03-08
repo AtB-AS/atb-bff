@@ -2,4 +2,30 @@ fragment station on Station {
     id
     lat
     lon
+    name {
+        ...translatedString
+    }
+    capacity
+    numBikesAvailable
+    numDocksAvailable
+    pricingPlans {
+        ...pricingPlan
+    }
+    system {
+        operator {
+            ...operator
+        }
+        name {
+            ...translatedString
+        }
+        brandAssets {
+            ...brandAssets
+        }
+        rentalApps {
+            ...rentalApps
+        }
+    }
+    rentalUris {
+        ...rentalUris
+    }
 }
