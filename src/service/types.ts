@@ -163,6 +163,11 @@ export type VehiclesQuery = Pick<
   'lat' | 'lon' | 'range' | 'operators' | 'formFactors'
 >;
 
+export type StationsQuery = Pick<
+  Mobility.QueryStationsArgs,
+  'lat' | 'lon' | 'range' | 'operators' | 'availableFormFactors'
+>;
+
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];
   start?: Coordinates;
