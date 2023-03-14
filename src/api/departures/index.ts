@@ -115,7 +115,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as QuayDeparturesQueryVariables;
-      return (
+      const response = (
         await service.getDepartures(
           {
             ...query,
@@ -124,6 +124,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
           {}
         )
       ).unwrap();
+      return { quay: response.quays[0] };
     }
   });
   server.route({
@@ -143,7 +144,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query = request.query as unknown as QuayDeparturesQueryVariables;
       const payload = request.payload as unknown as DeparturesPayload;
-      return (
+      const response = (
         await service.getDepartures(
           {
             ...query,
@@ -152,6 +153,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
           payload
         )
       ).unwrap();
+      return { quay: response.quays[0] };
     }
   });
 };

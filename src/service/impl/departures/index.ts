@@ -84,7 +84,6 @@ export default (): IDeparturesService => {
           }
         });
 
-        console.log(result.data);
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
