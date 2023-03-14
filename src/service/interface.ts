@@ -3,10 +3,6 @@ import { Feature, TripPattern } from '@entur/sdk';
 import { Boom } from '@hapi/boom';
 import * as Trips from '../types/trips';
 import {
-  QuayDeparturesQuery,
-  QuayDeparturesQueryVariables
-} from './impl/departures/journey-gql/quay-departures.graphql-gen';
-import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
 } from './impl/departures/journey-gql/stop-departures.graphql-gen';
@@ -33,14 +29,12 @@ import {
   DeparturesForServiceJourneyQuery,
   DeparturesRealtimeData,
   FeaturesQuery,
-  QuayDeparturesPayload,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
   VehiclesQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
-  StopPlaceDeparturesPayload,
   TripPatternsQuery,
   StationsQuery,
   DeparturesPayload
@@ -119,12 +113,8 @@ export interface IDeparturesService {
   ): Promise<Result<StopsDetailsQuery, APIError>>;
   getStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables,
-    payload?: StopPlaceDeparturesPayload
+    payload?: DeparturesPayload
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
-  getQuayDepartures(
-    query: QuayDeparturesQueryVariables,
-    payload?: QuayDeparturesPayload
-  ): Promise<Result<QuayDeparturesQuery, APIError>>;
 }
 
 export interface IQuayService {

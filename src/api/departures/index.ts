@@ -12,10 +12,8 @@ import {
 } from './schema';
 import {
   DeparturesPayload,
-  QuayDeparturesPayload,
-  StopPlaceDeparturesPayload
+  QuayDeparturesQueryVariables
 } from '../../service/types';
-import { QuayDeparturesQueryVariables } from '../../service/impl/departures/journey-gql/quay-departures.graphql-gen';
 import { NearestStopPlacesQueryVariables } from '../../service/impl/departures/journey-gql/stops-nearest.graphql-gen';
 import { StopsDetailsQueryVariables } from '../../service/impl/departures/journey-gql/stops-details.graphql-gen';
 import { DeparturesQueryVariables } from '../../service/impl/departures/journey-gql/departures.graphql-gen';
@@ -98,7 +96,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query =
         request.query as unknown as StopPlaceQuayDeparturesQueryVariables;
-      const payload = request.payload as unknown as StopPlaceDeparturesPayload;
+      const payload = request.payload as unknown as DeparturesPayload;
       return (await service.getStopQuayDepartures(query, payload)).unwrap();
     }
   });
@@ -117,7 +115,15 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as QuayDeparturesQueryVariables;
-      return (await service.getQuayDepartures(query)).unwrap();
+      return (
+        await service.getDepartures(
+          {
+            ...query,
+            ids: [query.id]
+          },
+          {}
+        )
+      ).unwrap();
     }
   });
   server.route({
@@ -136,8 +142,16 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as QuayDeparturesQueryVariables;
-      const payload = request.payload as unknown as QuayDeparturesPayload;
-      return (await service.getQuayDepartures(query, payload)).unwrap();
+      const payload = request.payload as unknown as DeparturesPayload;
+      return (
+        await service.getDepartures(
+          {
+            ...query,
+            ids: [query.id]
+          },
+          payload
+        )
+      ).unwrap();
     }
   });
 };
