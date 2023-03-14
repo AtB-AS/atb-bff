@@ -38,6 +38,9 @@ export function filterFavoriteDepartures(
   };
 }
 
+/**
+ * Deprecated. Should be removed together with /bff/v2/departures/stop-departures
+ */
 export function filterStopPlaceFavorites(
   result?: StopPlaceQuayDeparturesQuery,
   favorites?: FavoriteDeparture[],
@@ -78,6 +81,9 @@ export function filterStopPlaceFavorites(
   };
 }
 
+/**
+ * Deprecated. Should be removed together with /bff/v2/departures/quay-departures
+ */
 export function filterQuayFavorites(
   result?: QuayDeparturesQuery,
   favorites?: FavoriteDeparture[]

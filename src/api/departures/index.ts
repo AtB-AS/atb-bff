@@ -88,7 +88,12 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       tags: ['api', 'departures', 'stopPlace', 'estimatedCalls'],
       validate: postStopDeparturesRequest,
       description:
-        'Get stop with departures for every quay, and optionally filter on favorites'
+        'Get stop with departures for every quay, and optionally filter on favorites',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const query =
@@ -122,7 +127,12 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       tags: ['api', 'departures', 'quay', 'estimatedCalls'],
       validate: postQuayDeparturesRequest,
       description:
-        'Get departures from a quay, and optionally filter on favorites'
+        'Get departures from a quay, and optionally filter on favorites',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true
+        }
+      }
     },
     handler: async (request, h) => {
       const query = request.query as unknown as QuayDeparturesQueryVariables;
