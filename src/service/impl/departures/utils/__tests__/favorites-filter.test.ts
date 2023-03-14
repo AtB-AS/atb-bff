@@ -1,4 +1,7 @@
-import { filterStopPlaceFavorites, filterQuayFavorites } from '../favorites';
+import {
+  filterStopPlaceFavorites,
+  filterFavoriteDepartures
+} from '../favorites';
 
 const favoriteWithoutLineName = [
   {
@@ -48,15 +51,15 @@ describe('filter favorites from departure queries', () => {
   it('filter quay favorites without line name', () => {
     const input = require('./fixture-quay-departures.json');
     const expectedOutput = require('./fixture-quay-departures-filtered-26.json');
-    expect(filterQuayFavorites(input, favoriteWithoutLineName)).toMatchObject(
-      expectedOutput
-    );
+    expect(
+      filterFavoriteDepartures(input, favoriteWithoutLineName)
+    ).toMatchObject(expectedOutput);
   });
 
   it('filter quay favorites with line name', () => {
     const input = require('./fixture-quay-departures.json');
     const expectedOutput = require('./fixture-quay-departures-filtered-26-steinkjer.json');
-    expect(filterQuayFavorites(input, favoriteWithLineName)).toMatchObject(
+    expect(filterFavoriteDepartures(input, favoriteWithLineName)).toMatchObject(
       expectedOutput
     );
   });
@@ -64,7 +67,7 @@ describe('filter favorites from departure queries', () => {
   it('filter quay favorites with unrelated favorite', () => {
     const input = require('./fixture-quay-departures.json');
     const expectedOutput = require('./fixture-quay-departures-filtered-none.json');
-    expect(filterQuayFavorites(input, favoriteUnrelated)).toMatchObject(
+    expect(filterFavoriteDepartures(input, favoriteUnrelated)).toMatchObject(
       expectedOutput
     );
   });
