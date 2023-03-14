@@ -333,6 +333,40 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/departures/departures:
+    post:
+      summary: Get departures for a list of quays
+      operationId: postBffV2Departures
+      parameters:
+        - type: array
+          items:
+            type: string
+          collectionFormat: multi
+          name: ids
+          in: query
+          required: true
+        - type: number
+          name: numberOfDepartures
+          default: 10
+          in: query
+        - type: string
+          format: date
+          name: startTime
+          in: query
+        - type: number
+          name: timeRange
+          in: query
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/departuresPayload'
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v2/departures/stops-nearest:
     get:
       summary: Get stops geographically nearest to a set of coordinates
