@@ -98,6 +98,10 @@ export type QuayDeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
 
+export type DeparturesPayload = {
+  favorites?: FavoriteDeparture[];
+};
+
 export interface EnrollmentQuery {
   inviteKey: string;
 }

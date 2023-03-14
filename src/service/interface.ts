@@ -41,14 +41,20 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
   StopPlaceDeparturesPayload,
-  TripPatternsQuery, StationsQuery
-} from "./types";
+  TripPatternsQuery,
+  StationsQuery,
+  DeparturesPayload
+} from './types';
 import { GetVehiclesQuery } from './impl/vehicles/mobility-gql/vehicles.graphql-gen';
 import {
   TripsQuery,
   TripsQueryVariables
 } from './impl/trips/journey-gql/trip.graphql-gen';
-import { GetStationsQuery } from "./impl/stations/mobility-gql/stations.graphql-gen";
+import { GetStationsQuery } from './impl/stations/mobility-gql/stations.graphql-gen';
+import {
+  DeparturesQuery,
+  DeparturesQueryVariables
+} from './impl/departures/journey-gql/departures.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -101,6 +107,10 @@ export interface IRealtimeService {
 }
 
 export interface IDeparturesService {
+  getDepartures(
+    query: DeparturesQueryVariables,
+    payload: DeparturesPayload
+  ): Promise<Result<DeparturesQuery, APIError>>;
   getStopPlacesByPosition(
     query: NearestStopPlacesQueryVariables
   ): Promise<Result<NearestStopPlacesQuery, APIError>>;

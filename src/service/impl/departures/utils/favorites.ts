@@ -1,5 +1,6 @@
 import { EstimatedCall } from '../../../../graphql/journey/journeyplanner-types_v3';
 import { FavoriteDeparture } from '../../../types';
+import { DeparturesQuery } from '../journey-gql/departures.graphql-gen';
 import { QuayDeparturesQuery } from '../journey-gql/quay-departures.graphql-gen';
 import { StopPlaceQuayDeparturesQuery } from '../journey-gql/stop-departures.graphql-gen';
 
@@ -72,5 +73,39 @@ export function filterQuayFavorites(
         isFavorite(estimatedCall as EstimatedCall)
       )
     }
+  };
+}
+
+export function filterFavoritesFromDepartures(
+  result?: DeparturesQuery,
+  favorites?: FavoriteDeparture[]
+): DeparturesQuery {
+  const quays = result?.quays;
+  if (!quays) return { quays: [] };
+
+  /**
+   * Returns whether a departure is a favorite, but if no favorites are
+   * provided, returns true. Ignores the StopPlace ID in favorites, and requires
+   * a Quay ID.
+   */
+  const isFavorite = (item: EstimatedCall) =>
+    !favorites ||
+    favorites.some(
+      f =>
+        (!f.lineName || item.destinationDisplay?.frontText === f.lineName) &&
+        item.serviceJourney?.line.id === f.lineId &&
+        item.quay?.id === f.quayId
+    );
+
+  return {
+    ...result,
+    quays: quays.map(quay => {
+      return {
+        ...quay,
+        estimatedCalls: quay.estimatedCalls.filter(estimatedCall =>
+          isFavorite(estimatedCall as EstimatedCall)
+        )
+      };
+    })
   };
 }

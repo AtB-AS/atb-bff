@@ -24,13 +24,70 @@ import {
 } from './journey-gql/stops-details.graphql-gen';
 import {
   filterStopPlaceFavorites,
-  filterQuayFavorites
+  filterQuayFavorites,
+  filterFavoritesFromDepartures
 } from './utils/favorites';
 import * as Boom from '@hapi/boom';
 import { populateRealtimeCacheIfNotThere } from '../realtime/departure-time';
+import {
+  DeparturesDocument,
+  DeparturesQuery,
+  DeparturesQueryVariables
+} from './journey-gql/departures.graphql-gen';
 
 export default (): IDeparturesService => {
   const api: IDeparturesService = {
+    async getDepartures(
+      {
+        ids,
+        numberOfDepartures = 1000,
+        startTime,
+        timeRange = 86400, // 24 hours
+        limitPerLine
+      },
+      payload
+    ) {
+      const favorites = payload?.favorites;
+      const quayIds = typeof ids === 'string' ? [ids] : ids;
+      try {
+        const lineIds = favorites?.map(f => f.lineId);
+
+        // Fire and forget population of cache. Not critial if it fails.
+        populateRealtimeCacheIfNotThere({
+          quayIds,
+          startTime,
+          lineIds,
+          limit: numberOfDepartures,
+          limitPerLine: limitPerLine
+        });
+
+        const result = await journeyPlannerClient.query<
+          DeparturesQuery,
+          DeparturesQueryVariables
+        >({
+          query: DeparturesDocument,
+          variables: {
+            ids: quayIds,
+            numberOfDepartures,
+            startTime,
+            timeRange,
+            filterByLineIds: lineIds,
+            limitPerLine
+          }
+        });
+
+        console.log(result.data);
+        if (result.errors) {
+          return Result.err(new APIError(result.errors));
+        }
+
+        const data = filterFavoritesFromDepartures(result.data, favorites);
+
+        return Result.ok(data);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
     async getStopPlacesByPosition({
       latitude,
       longitude,
