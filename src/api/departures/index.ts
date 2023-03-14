@@ -8,7 +8,7 @@ import {
   getStopsDetailsRequest,
   postStopDeparturesRequest,
   postQuayDeparturesRequest,
-  getDeparturesRequest
+  postDeparturesRequest
 } from './schema';
 import {
   DeparturesPayload,
@@ -26,11 +26,11 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     path: '/bff/v2/departures/departures',
     options: {
       tags: ['api', 'departures', 'quay', 'estimatedCalls'],
-      validate: getDeparturesRequest,
+      validate: postDeparturesRequest,
       description:
-        'Get departures from a set of quays, and optionally filter on favorites'
+        'Get departures for a list of quays, and optionally filter on favorites'
     },
-    handler: async (request, h) => {
+    handler: async request => {
       const query = request.query as unknown as DeparturesQueryVariables;
       const payload = request.payload as unknown as DeparturesPayload;
       return (await service.getDepartures(query, payload)).unwrap();

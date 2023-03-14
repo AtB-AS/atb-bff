@@ -25,7 +25,7 @@ import {
 import {
   filterStopPlaceFavorites,
   filterQuayFavorites,
-  filterFavoritesFromDepartures
+  filterFavoriteDepartures
 } from './utils/favorites';
 import * as Boom from '@hapi/boom';
 import { populateRealtimeCacheIfNotThere } from '../realtime/departure-time';
@@ -81,7 +81,7 @@ export default (): IDeparturesService => {
           return Result.err(new APIError(result.errors));
         }
 
-        const data = filterFavoritesFromDepartures(result.data, favorites);
+        const data = filterFavoriteDepartures(result.data, favorites);
 
         return Result.ok(data);
       } catch (error) {

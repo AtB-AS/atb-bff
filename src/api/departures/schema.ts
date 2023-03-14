@@ -48,7 +48,7 @@ export const postStopDeparturesRequest = {
   })
 };
 
-export const getDeparturesRequest = {
+export const postDeparturesRequest = {
   payload: Joi.object({
     favorites: Joi.array()
       .single()
