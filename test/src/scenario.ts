@@ -2,7 +2,8 @@ import {
   departuresScenario,
   departuresScenarioPerformance,
   serviceJourneyScenario,
-  tripsScenario
+  tripsScenario,
+  mobilityScenario
 } from './v2/v2Scenario';
 import { getNextThursday } from './utils/utils';
 import {
@@ -11,7 +12,6 @@ import {
   journeyScenarioV1,
   serviceJourneyScenarioV1
 } from './v1/v1Scenario';
-import { realtimeScenario } from './v2/departures';
 
 //Scenarios
 export const scn = (usecase: string): void => {
@@ -38,12 +38,12 @@ const bff = (): void => {
   departuresScenario(searchDate);
   tripsScenario(searchDate);
   serviceJourneyScenario(searchDate);
+  mobilityScenario();
 };
 
 //Test
 const test = (): void => {
-  const searchDate = getNextThursday();
-  realtimeScenario(searchDate);
+  mobilityScenario();
 };
 
 //Performance test
