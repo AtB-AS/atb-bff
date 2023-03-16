@@ -1,12 +1,12 @@
-query quayDepartures(
-  $id: String!,
+query departures(
+  $ids: [String]!,
   $numberOfDepartures: Int,
   $startTime: DateTime,
   $timeRange: Int,
   $filterByLineIds: [ID],
   $limitPerLine: Int
 ) {
-  quay(id: $id) {
+  quays(ids: $ids) {
     id
     description
     publicCode

@@ -48,6 +48,28 @@ export const postStopDeparturesRequest = {
   })
 };
 
+export const postDeparturesRequest = {
+  payload: Joi.object({
+    favorites: Joi.array()
+      .single()
+      .items(
+        Joi.object({
+          stopId: Joi.string().required(),
+          lineName: Joi.string(),
+          lineId: Joi.string().required(),
+          quayId: Joi.string()
+        }).options({ stripUnknown: true })
+      )
+  }),
+  query: Joi.object({
+    ids: Joi.array().single().items(Joi.string()).required(),
+    numberOfDepartures: Joi.number().default(1000),
+    startTime: Joi.string(),
+    timeRange: Joi.number().default(86400),
+    limitPerLine: Joi.number()
+  })
+};
+
 export const getQuayDeparturesRequest = {
   query: Joi.object({
     id: Joi.string().required(),

@@ -1,5 +1,5 @@
 {
-  "quay": {
+  "quays": [{
     "id": "NSR:Quay:644",
     "description": null,
     "publicCode": "1",
@@ -144,5 +144,5 @@
         }
       }
     ]
-  }
+  }]
 }

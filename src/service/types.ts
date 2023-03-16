@@ -90,11 +90,16 @@ export type DepartureRealtimeQuery = {
   lineIds?: string[];
 };
 
-export type StopPlaceDeparturesPayload = {
-  favorites?: FavoriteDeparture[];
+export type QuayDeparturesQueryVariables = {
+  id: string;
+  numberOfDepartures?: number;
+  startTime?: string;
+  timeRange?: number;
+  filterByLineIds?: string[];
+  limitPerLine?: number;
 };
 
-export type QuayDeparturesPayload = {
+export type DeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
 
