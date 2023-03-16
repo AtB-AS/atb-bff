@@ -35,6 +35,7 @@ import {
   serviceJourneyDepartures,
   serviceJourneyCalls
 } from './servicejourney';
+import { stations, vehicles } from './mobility';
 
 //Scenario with std pattern
 export const departuresScenario = (searchDate: string): void => {
@@ -69,6 +70,12 @@ export const serviceJourneyScenario = (searchDate: string): void => {
   serviceJourneyDepartures(serviceJourneyTestData, searchDate);
   serviceJourneyCalls(serviceJourneyTestData, searchDate);
   polyline(serviceJourneyTestData, searchDate);
+};
+
+export const mobilityScenario = (): void => {
+  // Requests
+  vehicles(200);
+  stations(250);
 };
 
 //Performance scenario with different patterns
