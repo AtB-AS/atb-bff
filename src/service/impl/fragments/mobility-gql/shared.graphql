@@ -32,3 +32,18 @@ fragment translation on Translation {
     language
     value
 }
+
+fragment system on System {
+    operator {
+        ...operator
+    }
+    name {
+        ...translatedString
+    }
+    brandAssets {
+        ...brandAssets
+    }
+    rentalApps {
+        ...rentalApps
+    }
+}
