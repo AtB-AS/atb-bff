@@ -1,11 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { TranslatedStringFragment, PricingPlanFragment, SystemFragment } from './shared.graphql-gen';
-import { RentalUrisFragment } from './vehicles.graphql-gen';
+import { TranslatedStringFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc } from './shared.graphql-gen';
-import { RentalUrisFragmentDoc } from './vehicles.graphql-gen';
+import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
 export type StationFragment = { id: string, lat: number, lon: number, capacity?: number, numBikesAvailable: number, numDocksAvailable?: number, name: TranslatedStringFragment, pricingPlans: Array<PricingPlanFragment>, system: SystemFragment, rentalUris?: RentalUrisFragment };
 
 export const StationFragmentDoc = gql`

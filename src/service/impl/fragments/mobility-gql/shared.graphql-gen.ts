@@ -1,9 +1,7 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { BrandAssetsFragment, RentalAppsFragment } from './vehicles.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { BrandAssetsFragmentDoc, RentalAppsFragmentDoc } from './vehicles.graphql-gen';
 export type OperatorFragment = { id: string, name: TranslatedStringFragment };
 
 export type PricingPlanFragment = { price: number, perKmPricing?: Array<PricingSegmentFragment>, perMinPricing?: Array<PricingSegmentFragment> };
@@ -13,6 +11,14 @@ export type PricingSegmentFragment = { rate: number, end?: number, interval: num
 export type TranslatedStringFragment = { translation: Array<TranslationFragment> };
 
 export type TranslationFragment = { language: string, value: string };
+
+export type RentalUrisFragment = { android?: string, ios?: string };
+
+export type RentalAppFragment = { discoveryUri?: string, storeUri?: string };
+
+export type RentalAppsFragment = { android?: RentalAppFragment, ios?: RentalAppFragment };
+
+export type BrandAssetsFragment = { brandImageUrl: string, brandImageUrlDark?: string, brandLastModified: string };
 
 export type SystemFragment = { operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment };
 
@@ -35,6 +41,12 @@ export const PricingPlanFragmentDoc = gql`
   }
 }
     ${PricingSegmentFragmentDoc}`;
+export const RentalUrisFragmentDoc = gql`
+    fragment rentalUris on RentalUris {
+  android
+  ios
+}
+    `;
 export const TranslationFragmentDoc = gql`
     fragment translation on Translation {
   language
@@ -56,6 +68,29 @@ export const OperatorFragmentDoc = gql`
   }
 }
     ${TranslatedStringFragmentDoc}`;
+export const BrandAssetsFragmentDoc = gql`
+    fragment brandAssets on BrandAssets {
+  brandImageUrl
+  brandImageUrlDark
+  brandLastModified
+}
+    `;
+export const RentalAppFragmentDoc = gql`
+    fragment rentalApp on RentalApp {
+  discoveryUri
+  storeUri
+}
+    `;
+export const RentalAppsFragmentDoc = gql`
+    fragment rentalApps on RentalApps {
+  android {
+    ...rentalApp
+  }
+  ios {
+    ...rentalApp
+  }
+}
+    ${RentalAppFragmentDoc}`;
 export const SystemFragmentDoc = gql`
     fragment system on System {
   operator {

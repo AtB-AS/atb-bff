@@ -33,6 +33,31 @@ fragment translation on Translation {
     value
 }
 
+fragment rentalUris on RentalUris {
+    android
+    ios
+}
+
+fragment rentalApp on RentalApp {
+    discoveryUri
+    storeUri
+}
+
+fragment rentalApps on RentalApps {
+    android {
+        ...rentalApp
+    }
+    ios {
+        ...rentalApp
+    }
+}
+
+fragment brandAssets on BrandAssets {
+    brandImageUrl
+    brandImageUrlDark
+    brandLastModified
+}
+
 fragment system on System {
     operator {
         ...operator
