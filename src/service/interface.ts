@@ -44,7 +44,7 @@ import {
   TripsQuery,
   TripsQueryVariables
 } from './impl/trips/journey-gql/trip.graphql-gen';
-import { GetStationsQuery } from './impl/stations/mobility-gql/stations.graphql-gen';
+import { GetStationsQuery } from './impl/mobility/mobility-gql/stations.graphql-gen';
 import {
   DeparturesQuery,
   DeparturesQueryVariables
@@ -135,9 +135,6 @@ export interface IMobilityService {
   getVehicles(
     query: VehiclesQuery
   ): Promise<Result<GetVehiclesQuery, APIError>>;
-}
-
-export interface IStationsService {
   getStations(
     query: StationsQuery
   ): Promise<Result<GetStationsQuery, APIError>>;

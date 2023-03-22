@@ -7,6 +7,11 @@ import {
   GetVehiclesQuery,
   GetVehiclesQueryVariables
 } from './mobility-gql/vehicles.graphql-gen';
+import {
+  GetStationsDocument,
+  GetStationsQuery,
+  GetStationsQueryVariables
+} from './mobility-gql/stations.graphql-gen';
 
 const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
   ...data,
@@ -37,6 +42,23 @@ export default (): IMobilityService => ({
         return Result.err(new APIError(result.errors));
       }
       return Result.ok(calculateFuelPercent(result.data));
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+  async getStations(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetStationsQuery,
+        GetStationsQueryVariables
+      >({
+        query: GetStationsDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
     } catch (error) {
       return Result.err(new APIError(error));
     }

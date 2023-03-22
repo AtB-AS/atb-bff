@@ -14,3 +14,17 @@ export const getScootersRequest = {
     operators: Joi.array().items(Joi.string()).optional().single()
   })
 };
+
+export const getStationsRequest = {
+  query: Joi.object({
+    availableFormFactors: Joi.array()
+      .items(Joi.string())
+      .optional()
+      .default(FormFactor.Bicycle)
+      .single(),
+    lat: Joi.number().required(),
+    lon: Joi.number().required(),
+    range: Joi.number().optional().default(500),
+    operators: Joi.array().items(Joi.string()).optional().single()
+  })
+};
