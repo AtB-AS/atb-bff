@@ -7,30 +7,6 @@ fragment vehicleType on VehicleType {
     }
 }
 
-fragment rentalUris on RentalUris {
-    android
-    ios
-}
-
-fragment rentalApp on RentalApp {
-    discoveryUri
-    storeUri
-}
-
-fragment rentalApps on RentalApps {
-    android {
-        ...rentalApp
-    }
-    ios {
-        ...rentalApp
-    }
-}
-
-fragment brandAssets on BrandAssets {
-    brandImageUrl
-    brandImageUrlDark
-    brandLastModified
-}
 
 fragment vehicle on Vehicle {
     id
@@ -48,18 +24,7 @@ fragment vehicle on Vehicle {
         ...pricingPlan
     }
     system {
-        operator {
-            ...operator
-        }
-        name {
-            ...translatedString
-        }
-        brandAssets {
-            ...brandAssets
-        }
-        rentalApps {
-            ...rentalApps
-        }
+        ...system
     }
     rentalUris {
         ...rentalUris

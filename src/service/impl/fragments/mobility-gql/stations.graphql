@@ -12,18 +12,7 @@ fragment station on Station {
         ...pricingPlan
     }
     system {
-        operator {
-            ...operator
-        }
-        name {
-            ...translatedString
-        }
-        brandAssets {
-            ...brandAssets
-        }
-        rentalApps {
-            ...rentalApps
-        }
+        ...system
     }
     rentalUris {
         ...rentalUris

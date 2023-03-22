@@ -12,6 +12,41 @@ export type TranslatedStringFragment = { translation: Array<TranslationFragment>
 
 export type TranslationFragment = { language: string, value: string };
 
+export type RentalUrisFragment = { android?: string, ios?: string };
+
+export type RentalAppFragment = { discoveryUri?: string, storeUri?: string };
+
+export type RentalAppsFragment = { android?: RentalAppFragment, ios?: RentalAppFragment };
+
+export type BrandAssetsFragment = { brandImageUrl: string, brandImageUrlDark?: string, brandLastModified: string };
+
+export type SystemFragment = { operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment };
+
+export const PricingSegmentFragmentDoc = gql`
+    fragment pricingSegment on PricingSegment {
+  rate
+  end
+  interval
+  start
+}
+    `;
+export const PricingPlanFragmentDoc = gql`
+    fragment pricingPlan on PricingPlan {
+  perKmPricing {
+    ...pricingSegment
+  }
+  price
+  perMinPricing {
+    ...pricingSegment
+  }
+}
+    ${PricingSegmentFragmentDoc}`;
+export const RentalUrisFragmentDoc = gql`
+    fragment rentalUris on RentalUris {
+  android
+  ios
+}
+    `;
 export const TranslationFragmentDoc = gql`
     fragment translation on Translation {
   language
@@ -33,25 +68,48 @@ export const OperatorFragmentDoc = gql`
   }
 }
     ${TranslatedStringFragmentDoc}`;
-export const PricingSegmentFragmentDoc = gql`
-    fragment pricingSegment on PricingSegment {
-  rate
-  end
-  interval
-  start
+export const BrandAssetsFragmentDoc = gql`
+    fragment brandAssets on BrandAssets {
+  brandImageUrl
+  brandImageUrlDark
+  brandLastModified
 }
     `;
-export const PricingPlanFragmentDoc = gql`
-    fragment pricingPlan on PricingPlan {
-  perKmPricing {
-    ...pricingSegment
+export const RentalAppFragmentDoc = gql`
+    fragment rentalApp on RentalApp {
+  discoveryUri
+  storeUri
+}
+    `;
+export const RentalAppsFragmentDoc = gql`
+    fragment rentalApps on RentalApps {
+  android {
+    ...rentalApp
   }
-  price
-  perMinPricing {
-    ...pricingSegment
+  ios {
+    ...rentalApp
   }
 }
-    ${PricingSegmentFragmentDoc}`;
+    ${RentalAppFragmentDoc}`;
+export const SystemFragmentDoc = gql`
+    fragment system on System {
+  operator {
+    ...operator
+  }
+  name {
+    ...translatedString
+  }
+  brandAssets {
+    ...brandAssets
+  }
+  rentalApps {
+    ...rentalApps
+  }
+}
+    ${OperatorFragmentDoc}
+${TranslatedStringFragmentDoc}
+${BrandAssetsFragmentDoc}
+${RentalAppsFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
