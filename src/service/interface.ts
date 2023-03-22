@@ -39,12 +39,12 @@ import {
   StationsQuery,
   DeparturesPayload
 } from './types';
-import { GetVehiclesQuery } from './impl/vehicles/mobility-gql/vehicles.graphql-gen';
+import { GetVehiclesQuery } from './impl/mobility/mobility-gql/vehicles.graphql-gen';
 import {
   TripsQuery,
   TripsQueryVariables
 } from './impl/trips/journey-gql/trip.graphql-gen';
-import { GetStationsQuery } from './impl/stations/mobility-gql/stations.graphql-gen';
+import { GetStationsQuery } from './impl/mobility/mobility-gql/stations.graphql-gen';
 import {
   DeparturesQuery,
   DeparturesQueryVariables
@@ -131,13 +131,10 @@ export interface IEnrollmentService {
   ): Promise<Result<EnrollResponse, APIError>>;
 }
 
-export interface IVehiclesService {
+export interface IMobilityService {
   getVehicles(
     query: VehiclesQuery
   ): Promise<Result<GetVehiclesQuery, APIError>>;
-}
-
-export interface IStationsService {
   getStations(
     query: StationsQuery
   ): Promise<Result<GetStationsQuery, APIError>>;
