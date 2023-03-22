@@ -29,6 +29,10 @@ const urlMobility = ENTUR_BASEURL
   ? `${ENTUR_BASEURL}/mobility/v2/graphql`
   : 'https://api.entur.io/mobility/v2/graphql';
 
+const urlVehicles = ENTUR_BASEURL
+  ? `${ENTUR_BASEURL}/realtime/v1/vehicles/graphql`
+  : 'https://api.entur.io/realtime/v1/vehicles/graphql';
+
 function createClient(url: string) {
   const cache = new InMemoryCache();
   const httpLink = new HttpLink({
@@ -57,5 +61,6 @@ function createClient(url: string) {
 
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
 export const mobilityClient = createClient(urlMobility);
+export const vehiclesClient = createClient(urlVehicles);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;
