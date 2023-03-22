@@ -1,22 +1,29 @@
-import { IVehiclesService } from "../../interface";
-import { Result } from "@badrap/result";
-import { APIError } from "../../types";
-import { mobilityClient } from "../../../graphql/graphql-client";
-import { GetVehiclesDocument, GetVehiclesQuery, GetVehiclesQueryVariables } from "./mobility-gql/vehicles.graphql-gen";
+import { IMobilityService } from '../../interface';
+import { Result } from '@badrap/result';
+import { APIError } from '../../types';
+import { mobilityClient } from '../../../graphql/graphql-client';
+import {
+  GetVehiclesDocument,
+  GetVehiclesQuery,
+  GetVehiclesQueryVariables
+} from './mobility-gql/vehicles.graphql-gen';
 
 const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
   ...data,
   vehicles: data?.vehicles?.map(vehicle => ({
     ...vehicle,
     currentFuelPercent: vehicle.currentFuelPercent
-        ? vehicle.currentFuelPercent
-        : vehicle.vehicleType.maxRangeMeters
-            ? Math.floor((vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) * 100)
-            : undefined
+      ? vehicle.currentFuelPercent
+      : vehicle.vehicleType.maxRangeMeters
+      ? Math.floor(
+          (vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) *
+            100
+        )
+      : undefined
   }))
 });
 
-export default (): IVehiclesService => ({
+export default (): IMobilityService => ({
   async getVehicles(query) {
     try {
       const result = await mobilityClient.query<
@@ -34,4 +41,4 @@ export default (): IVehiclesService => ({
       return Result.err(new APIError(error));
     }
   }
-})
+});
