@@ -15,7 +15,7 @@ export const createVariables = (
   query: DepartureRealtimeQuery
 ): GetDepartureRealtimeQueryVariables => ({
   ...query,
-  timeRange: 72000
+  timeRange: query.timeRange ?? 72000
 });
 
 export async function populateRealtimeCacheIfNotThere(
