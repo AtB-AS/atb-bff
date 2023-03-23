@@ -67,7 +67,8 @@ export default (): IDeparturesService => {
           startTime,
           lineIds,
           limit: limit.numberOfDepartures,
-          limitPerLine: limit.limitPerLine
+          limitPerLine: limit.limitPerLine,
+          timeRange
         });
 
         const result = await journeyPlannerClient.query<
@@ -198,7 +199,8 @@ export default (): IDeparturesService => {
             startTime,
             lineIds,
             limit: limit.numberOfDepartures,
-            limitPerLine: limit.limitPerLine
+            limitPerLine: limit.limitPerLine,
+            timeRange
           });
         }
 
