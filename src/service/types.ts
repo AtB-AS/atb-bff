@@ -88,6 +88,7 @@ export type DepartureRealtimeQuery = {
   limit: number;
   limitPerLine?: number;
   lineIds?: string[];
+  timeRange?: number;
 };
 
 export type QuayDeparturesQueryVariables = {

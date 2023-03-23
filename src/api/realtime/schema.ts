@@ -6,6 +6,7 @@ export const getDepartureRealtime = {
     startTime: Joi.date(),
     limit: Joi.number().default(5),
     lineIds: Joi.array().items(Joi.string()).single(),
-    limitPerLine: Joi.number()
+    limitPerLine: Joi.number(),
+    timeRange: Joi.number()
   })
 };

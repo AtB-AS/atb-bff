@@ -15,16 +15,20 @@ export const createVariables = (
   query: DepartureRealtimeQuery
 ): GetDepartureRealtimeQueryVariables => ({
   ...query,
-  timeRange: 72000
+  timeRange: query.timeRange ?? 86400
 });
 
+/**
+ * Trigger realtime fetch to populate cache for the query, reducing the amount
+ * of data for the initial realtime query. Can be fire-and-forget, as it's not
+ * critical if the cache is empty.
+ *
+ * To get a cache hit, `inputQuery` needs to match the query for the subsequent
+ * realtime request.
+ */
 export async function populateRealtimeCacheIfNotThere(
   inputQuery: DepartureRealtimeQuery
 ) {
-  // Trigger realtime fetch to populate cache for query
-  // Reducing the amount of data for the initial realtime query.
-  // Can be fire-and-forget, as it's not critical
-  // if the cache is empty
   try {
     const variables = createVariables(inputQuery);
     const previousResult = getPreviousExpectedFromCache(variables);
