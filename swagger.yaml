@@ -584,6 +584,9 @@ paths:
         - type: number
           name: limit
           in: query
+        - type: number
+          name: timeRange
+          in: query
       tags:
         - bff
       responses:
