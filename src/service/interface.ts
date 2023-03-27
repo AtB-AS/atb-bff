@@ -27,17 +27,19 @@ import {
   DepartureGroupsQuery,
   DepartureRealtimeQuery,
   DeparturesForServiceJourneyQuery,
+  DeparturesPayload,
   DeparturesRealtimeData,
   FeaturesQuery,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
-  VehiclesQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
-  TripPatternsQuery,
   StationsQuery,
-  DeparturesPayload
+  TripPatternsQuery,
+  VehiclesData,
+  VehiclesDataQueryVariables,
+  VehiclesQuery
 } from './types';
 import { GetVehiclesQuery } from './impl/mobility/mobility-gql/vehicles.graphql-gen';
 import {
@@ -129,6 +131,12 @@ export interface IEnrollmentService {
     enrollmentId: string,
     code: string
   ): Promise<Result<EnrollResponse, APIError>>;
+}
+
+export interface IVehiclesService {
+  getVehiclesData(
+    query: VehiclesDataQueryVariables
+  ): Promise<Result<VehiclesData, APIError>>;
 }
 
 export interface IMobilityService {

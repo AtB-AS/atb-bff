@@ -1,0 +1,14 @@
+query getVehiclesData($serviceJourneyId: String!) {
+  vehicles(serviceJourneyId: $serviceJourneyId) {
+    lastUpdated
+    location {
+      latitude
+      longitude
+    }
+    bearing
+    mode
+    serviceJourney {
+      id
+    }
+  }
+}

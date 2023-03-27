@@ -900,10 +900,7 @@ export type QueryType = {
   stopPlacesByBbox: Array<Maybe<StopPlace>>;
   /** Input type for executing a travel search for a trip between two locations. Returns trip patterns describing suggested alternatives for the trip. */
   trip: Trip;
-  /**
-   * Via trip search. Find trip patterns traveling via one or more intermediate (via) locations.
-   * @deprecated This API is under development, expect the contract to change
-   */
+  /** Via trip search. Find trip patterns traveling via one or more intermediate (via) locations. */
   viaTrip: ViaTrip;
 };
 
@@ -1097,6 +1094,7 @@ export type QueryTypeTripArgs = {
   includeRealtimeCancellations?: InputMaybe<Scalars['Boolean']>;
   itineraryFilters?: InputMaybe<ItineraryFilters>;
   locale?: InputMaybe<Locale>;
+  maxAccessEgressDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
   maximumAdditionalTransfers?: InputMaybe<Scalars['Int']>;
   maximumTransfers?: InputMaybe<Scalars['Int']>;
   modes?: InputMaybe<Modes>;
@@ -1511,6 +1509,12 @@ export enum StreetMode {
   ScooterRental = 'scooter_rental'
 }
 
+/** A combination of street mode and corresponding duration */
+export type StreetModeDurationInput = {
+  duration: Scalars['Duration'];
+  streetMode: StreetMode;
+};
+
 /** Input format for specifying which modes will be allowed for this search. If this element is not present, it will default to all to foot. */
 export type StreetModes = {
   /** The mode used to get from the origin to the access stops in the transit network the transit network (first-mile). If the element is not present or null,only transit that can be immediately boarded from the origin will be used. */
@@ -1788,6 +1792,8 @@ export type TripFilterInput = {
 export type TripFilterSelectInput = {
   /** Set of ids for authorities that should be included in/excluded from search */
   authorities?: InputMaybe<Array<Scalars['ID']>>;
+  /** Set of ids for group of lines that should be included in/excluded from the search */
+  groupOfLines?: InputMaybe<Array<Scalars['ID']>>;
   /** Set of ids for lines that should be included in/excluded from search */
   lines?: InputMaybe<Array<Scalars['ID']>>;
   /** Set of ids for service journeys that should be included in/excluded from search */
