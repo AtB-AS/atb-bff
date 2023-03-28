@@ -167,7 +167,7 @@ export type GetServiceJourneyVehicles = Required<
   Required<GetServiceJourneyVehiclesQuery>['vehicles']
 >;
 
-export type ServiceJourneyVehicle = Array<{
+export type ServiceJourneyVehicles = Array<{
   lastUpdated?: any;
   bearing?: number;
   mode?: Types.VehicleModeEnumeration;

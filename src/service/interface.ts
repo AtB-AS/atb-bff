@@ -34,7 +34,7 @@ import {
   ReverseFeaturesQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneyVehicle,
+  ServiceJourneyVehicles,
   ServiceJourneyVehiclesQueryVariables,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
@@ -136,7 +136,7 @@ export interface IEnrollmentService {
 export interface IVehiclesService {
   getVehiclesData(
     query: ServiceJourneyVehiclesQueryVariables
-  ): Promise<Result<ServiceJourneyVehicle, APIError>>;
+  ): Promise<Result<ServiceJourneyVehicles, APIError>>;
 }
 
 export interface IMobilityService {
