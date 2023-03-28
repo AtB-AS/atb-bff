@@ -3,20 +3,20 @@ import { Result } from '@badrap/result';
 import { APIError, GetServiceJourneyVehicles } from '../../types';
 import { vehiclesClient } from '../../../graphql/graphql-client';
 import {
-  GetServiceJourneyVehiclesDocument,
-  GetServiceJourneyVehiclesQuery,
-  GetServiceJourneyVehiclesQueryVariables
+  GetServiceJourneyVehicleDocument,
+  GetServiceJourneyVehicleQuery,
+  GetServiceJourneyVehicleQueryVariables
 } from './vehicles-gql/vehicles.graphql-gen';
 
 export default (): IVehiclesService => ({
-  async getVehiclesData(query) {
+  async getServiceJourneyVehicles(query) {
     try {
       const results = query.serviceJourneyIds.map(id => {
         return vehiclesClient.query<
-          GetServiceJourneyVehiclesQuery,
-          GetServiceJourneyVehiclesQueryVariables
+          GetServiceJourneyVehicleQuery,
+          GetServiceJourneyVehicleQueryVariables
         >({
-          query: GetServiceJourneyVehiclesDocument,
+          query: GetServiceJourneyVehicleDocument,
           variables: {
             serviceJourneyId: id
           }

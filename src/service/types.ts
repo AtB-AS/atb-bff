@@ -8,7 +8,7 @@ import {
 } from '../graphql/journey/journeyplanner-types_v3';
 import * as Mobility from '../graphql/mobility/mobility-types_v2';
 import { CursoredQuery } from './cursored';
-import { GetServiceJourneyVehiclesQuery } from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
+import { GetServiceJourneyVehicleQuery } from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
 import * as Types from '../graphql/vehicles/vehicles-types_v1';
 
 export interface Coordinates {
@@ -159,12 +159,12 @@ export type MapLeg = {
   pointsOnLink: PointsOnLink;
 };
 
-export type ServiceJourneyVehiclesQueryVariables = {
+export type ServiceJourneyVehicleQueryVariables = {
   serviceJourneyIds: string[];
 };
 
 export type GetServiceJourneyVehicles = Required<
-  Required<GetServiceJourneyVehiclesQuery>['vehicles']
+  Required<GetServiceJourneyVehicleQuery>['vehicles']
 >;
 
 export type ServiceJourneyVehicles = Array<{
