@@ -34,11 +34,11 @@ import {
   ReverseFeaturesQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
+  ServiceJourneyVehicle,
+  ServiceJourneyVehiclesQueryVariables,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
   TripPatternsQuery,
-  VehiclesData,
-  VehiclesDataQueryVariables,
   VehiclesQuery
 } from './types';
 import { GetVehiclesQuery } from './impl/mobility/mobility-gql/vehicles.graphql-gen';
@@ -135,8 +135,8 @@ export interface IEnrollmentService {
 
 export interface IVehiclesService {
   getVehiclesData(
-    query: VehiclesDataQueryVariables
-  ): Promise<Result<VehiclesData, APIError>>;
+    query: ServiceJourneyVehiclesQueryVariables
+  ): Promise<Result<ServiceJourneyVehicle, APIError>>;
 }
 
 export interface IMobilityService {

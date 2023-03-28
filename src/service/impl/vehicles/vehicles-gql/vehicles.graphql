@@ -1,4 +1,4 @@
-query getVehiclesData($serviceJourneyId: String!) {
+query getServiceJourneyVehicles($serviceJourneyId: String!) {
   vehicles(serviceJourneyId: $serviceJourneyId) {
     lastUpdated
     location {
