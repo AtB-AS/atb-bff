@@ -10,7 +10,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
     options: {
       tags: ['api', 'vehicle', 'coordinates'],
       validate: getVehiclesRequest,
-      description: 'Get vehicles for realtime'
+      description: 'Get vehicle information for a list of service journeys'
     },
     handler: async request => {
       const payload =
