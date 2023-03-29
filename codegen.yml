@@ -26,6 +26,19 @@ generates:
       preResolveTypes: true
     plugins:
       - typescript
+  src/graphql/vehicles/vehicles-types_v1.ts:
+    documents: ./src/**/vehicles-gql/*.graphql
+    schema:
+      - https://api.entur.io/realtime/v1/vehicles/graphql:
+          headers:
+            ET-Client-Name: ${ET_CLIENT_NAME:'atb-bff'}
+    config:
+      maybeValue: T
+      skipTypename: true
+      exportFragmentSpreadSubTypes: true
+      preResolveTypes: true
+    plugins:
+      - typescript
   src/graphql/journey:
     documents:
       - ./src/**/journey-gql/*.graphql
@@ -60,6 +73,30 @@ generates:
     presetConfig:
       extension: .graphql-gen.ts
       baseTypesPath: mobility-types_v2.ts
+    config:
+      skipTypename: true
+      # This causes some types to be wrong (e.g. in departure query dates are any type)
+      # but it makes using the types waay easier. Necessary evil in my mind.
+      preResolveTypes: true
+      exportFragmentSpreadSubTypes: true
+      # Looks like almost all types in the GraphQL server is optional but actually are set. The Maybe combinator
+      # is a pain to work with when traversing the types.
+      maybeValue: T
+      inlineFragmentTypes: combine
+    plugins:
+      - 'typescript-operations'
+      - 'typescript-generic-sdk'
+  src/graphql/vehicles:
+    documents:
+      - ./src/**/vehicles-gql/*.graphql
+    schema:
+      - https://api.entur.io/realtime/v1/vehicles/graphql:
+          headers:
+            ET-Client-Name: ${ET_CLIENT_NAME:'atb-bff'}
+    preset: near-operation-file
+    presetConfig:
+      extension: .graphql-gen.ts
+      baseTypesPath: vehicles-types_v1.ts
     config:
       skipTypename: true
       # This causes some types to be wrong (e.g. in departure query dates are any type)
