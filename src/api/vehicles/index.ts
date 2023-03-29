@@ -6,7 +6,7 @@ import { getVehiclesRequest } from './schema';
 export default (server: Hapi.Server) => (service: IVehiclesService) => {
   server.route({
     method: 'GET',
-    path: '/bff/v2/vehicles/service-journey',
+    path: '/bff/v2/vehicles/service-journeys',
     options: {
       tags: ['api', 'vehicle', 'coordinates'],
       validate: getVehiclesRequest,

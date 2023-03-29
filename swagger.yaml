@@ -623,6 +623,23 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/vehicles/service-journeys:
+    get:
+      summary: Get vehicle information for a list of service journeys
+      operationId: getBffVehiclesServiceJourneys
+      parameters:
+        - type: array
+          items:
+            type: string
+          name: serviceJourneyIds
+          in: query
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/login/vipps/authorization-url:
     get:
       summary: Get Vipps authorisation url
