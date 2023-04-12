@@ -6,5 +6,6 @@ declare module '@hapi/hapi' {
     requestId?: string;
     appVersion?: string;
     correlationId?: string;
+    customerAccountId?: string;
   }
 }
