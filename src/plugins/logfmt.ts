@@ -35,7 +35,7 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
   dependencies: 'atb-headers',
   register: async (server: Server, options: LogFmtOptions) => {
     const logger = (request: Hapi.Request): Logger => {
-      let l = logfmt.time('took');
+      let l = logfmt.time('duration');
       l.stringify = JSON.stringify;
       if (!options.stream) options.stream = discardLogger;
       if (options.defaultFields) {
@@ -61,14 +61,19 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
     });
     server.ext('onPreResponse', (request, h, err) => {
       if (request.response instanceof Boom) {
-        request.logfmt.with({ err: request.response.message });
-        request.logfmt.with({ stackTrace: request.response.stack });
+        request.logfmt.with({ error: request.response.message });
       }
       return h.continue;
     });
     server.events.on('response', request => {
       if (request.raw.res && request.raw.res.statusCode) {
-        request.logfmt.with({ code: request.raw.res.statusCode.toString() });
+        const statusCode = request.raw.res.statusCode;
+        request.logfmt.with({ code: statusCode.toString() });
+        if (statusCode >= 400) {
+          request.logfmt.with({ severity: 'ERROR' });
+        } else {
+          request.logfmt.with({ severity: 'INFO' });
+        }
       }
       request.logfmt.log();
     });

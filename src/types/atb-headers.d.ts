@@ -4,5 +4,7 @@ declare module '@hapi/hapi' {
   interface Request {
     installId?: string;
     requestId?: string;
+    appVersion?: string;
+    correlationId?: string;
   }
 }
