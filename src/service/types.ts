@@ -176,16 +176,12 @@ export type ServiceJourneyVehicles = Array<{
   serviceJourney?: { id: string };
 }>;
 
-export type Scooter = {
-  id: string;
-  lat: number;
-  lon: number;
-};
+export type VehicleQuery = { id: string } & Pick<Mobility.QueryVehiclesArgs, 'lat' | 'lon' | 'range' | 'formFactors'>
 
 export type VehiclesQuery = Pick<
   Mobility.QueryVehiclesArgs,
   'lat' | 'lon' | 'range' | 'operators' | 'formFactors'
->;
+> & { basic: boolean };
 
 export type StationsQuery = Pick<
   Mobility.QueryStationsArgs,

@@ -1,19 +1,18 @@
-import { IMobilityService } from '../../interface';
-import { Result } from '@badrap/result';
-import { APIError } from '../../types';
-import { mobilityClient } from '../../../graphql/graphql-client';
+import { GetVehiclesQuery, IMobilityService } from "../../interface";
+import { Result } from "@badrap/result";
+import { APIError } from "../../types";
+import { mobilityClient } from "../../../graphql/graphql-client";
+import { GetStationsDocument, GetStationsQuery, GetStationsQueryVariables } from "./mobility-gql/stations.graphql-gen";
 import {
-  GetVehiclesDocument,
-  GetVehiclesQuery,
-  GetVehiclesQueryVariables
-} from './mobility-gql/vehicles.graphql-gen';
-import {
-  GetStationsDocument,
-  GetStationsQuery,
-  GetStationsQueryVariables
-} from './mobility-gql/stations.graphql-gen';
+  GetVehiclesBasicDocument,
+  GetVehiclesBasicQuery,
+  GetVehiclesBasicQueryVariables,
+  GetVehiclesExtendedDocument,
+  GetVehiclesExtendedQuery,
+  GetVehiclesExtendedQueryVariables
+} from "./mobility-gql/vehicles.graphql-gen";
 
-const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
+const calculateFuelPercent = <T extends GetVehiclesBasicQuery | GetVehiclesExtendedQuery>(data: T): T => ({
   ...data,
   vehicles: data?.vehicles?.map(vehicle => ({
     ...vehicle,
@@ -28,14 +27,40 @@ const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
   }))
 });
 
+const stripProps = (data: GetVehiclesBasicQuery): GetVehiclesQuery => ({
+  ...data,
+  vehicles: data.vehicles?.map(v => ({
+    id: v.id,
+    lat: v.lat,
+    lon: v.lon
+  }))
+});
+
 export default (): IMobilityService => ({
   async getVehicles(query) {
     try {
       const result = await mobilityClient.query<
-        GetVehiclesQuery,
-        GetVehiclesQueryVariables
+        GetVehiclesBasicQuery,
+        GetVehiclesBasicQueryVariables
       >({
-        query: GetVehiclesDocument,
+        query: GetVehiclesBasicDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(stripProps(calculateFuelPercent(result.data)));
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+  async getVehiclesExtended(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetVehiclesExtendedQuery,
+        GetVehiclesExtendedQueryVariables
+      >({
+        query: GetVehiclesExtendedDocument,
         variables: query
       });
       if (result.errors) {

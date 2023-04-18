@@ -41,7 +41,6 @@ import {
   TripPatternsQuery,
   VehiclesQuery
 } from './types';
-import { GetVehiclesQuery } from './impl/mobility/mobility-gql/vehicles.graphql-gen';
 import {
   TripsQuery,
   TripsQueryVariables
@@ -51,6 +50,8 @@ import {
   DeparturesQuery,
   DeparturesQueryVariables
 } from './impl/departures/journey-gql/departures.graphql-gen';
+import { GetVehiclesBasicQuery, GetVehiclesExtendedQuery } from "./impl/mobility/mobility-gql/vehicles.graphql-gen";
+import { VehicleBasicFragment } from "./impl/fragments/mobility-gql/vehicles.graphql-gen";
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -139,10 +140,16 @@ export interface IVehiclesService {
   ): Promise<Result<ServiceJourneyVehicles, APIError>>;
 }
 
+export type VehicleFragment = Pick<VehicleBasicFragment, 'id' | 'lat' | 'lon'>
+export type GetVehiclesQuery = Omit<GetVehiclesBasicQuery, 'vehicles'> & { vehicles?: Array<VehicleFragment>}
+
 export interface IMobilityService {
   getVehicles(
     query: VehiclesQuery
   ): Promise<Result<GetVehiclesQuery, APIError>>;
+  getVehiclesExtended(
+    query: VehiclesQuery
+  ): Promise<Result<GetVehiclesExtendedQuery, APIError>>;
   getStations(
     query: StationsQuery
   ): Promise<Result<GetStationsQuery, APIError>>;
