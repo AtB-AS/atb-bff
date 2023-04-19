@@ -7,6 +7,8 @@ export const PERIOD_TICKET_INVITE_KEY: string | undefined =
 export const FLEX_TICKET_INVITE_KEY: string | undefined =
   process.env.FLEX_TICKET_INVITE_KEY;
 export const ENTUR_BASEURL: string | undefined = process.env.ENTUR_BASEURL;
+export const ENTUR_WEBSOCKET_BASEURL: string | undefined =
+  process.env.ENTUR_WEBSOCKET_BASEURL;
 
 export const ET_CLIENT_NAME = process.env.CLIENT_NAME || 'atb-bff';
 

@@ -3,12 +3,24 @@ import {
   ApolloClient,
   DefaultOptions,
   HttpLink,
-  ApolloLink
+  ApolloLink,
+  split,
+  Operation
 } from '@apollo/client/core';
+import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { onError } from '@apollo/client/link/error';
 import fetch from 'node-fetch';
-import { ENTUR_BASEURL, ET_CLIENT_NAME } from '../config/env';
+import {
+  ENTUR_BASEURL,
+  ENTUR_WEBSOCKET_BASEURL,
+  ET_CLIENT_NAME
+} from '../config/env';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import WebSocket from 'ws';
+import { createClient as createWsClient } from 'graphql-ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -32,6 +44,10 @@ const urlMobility = ENTUR_BASEURL
 const urlVehicles = ENTUR_BASEURL
   ? `${ENTUR_BASEURL}/realtime/v1/vehicles/graphql`
   : 'https://api.entur.io/realtime/v1/vehicles/graphql';
+
+const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
+  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
+  : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
 function createClient(url: string) {
   const cache = new InMemoryCache();
@@ -59,8 +75,66 @@ function createClient(url: string) {
   });
 }
 
+function createWebSocketClient(url: string) {
+  const cache = new InMemoryCache({
+    addTypename: false
+  });
+
+  // const wsLink = new GraphQLWsLink(
+  //   createWsClient({
+  //     url: urlVehiclesWss,
+  //     webSocketImpl: WebSocket,
+  //   })
+  // );
+  // const wsLink = new WebSocketLink({
+  //   uri: urlVehiclesWss,
+
+  //   webSocketImpl: WebSocket,
+  //   options: {
+  //     reconnect: true
+  //   }
+  // });
+
+  const wsLink = new WebSocketLink(
+    new SubscriptionClient(
+      'wss://localhost:8080/bff/ws-test',
+      {
+        reconnect: true
+      },
+      WebSocket
+    )
+  );
+
+  const def = ({ query }: Operation) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  };
+
+  // const splitLink = split(
+  //   def,
+  //   wsLink,
+  // );
+
+  const errorLink = onError(error =>
+    console.log('Apollo Error:', JSON.stringify(error))
+  );
+  const link = ApolloLink.from([errorLink, wsLink]);
+
+  console.log('Apollo');
+
+  return new ApolloClient({
+    link,
+    cache,
+    defaultOptions
+  });
+}
+
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
 export const mobilityClient = createClient(urlMobility);
 export const vehiclesClient = createClient(urlVehicles);
+export const vehiclesSubscriptionClient = createWebSocketClient(urlVehiclesWss);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;
