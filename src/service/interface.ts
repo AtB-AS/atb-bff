@@ -36,7 +36,7 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyVehicleQueryVariables,
   ServiceJourneyVehicles,
-  ServiceJourneyVehicleSubscriptionQueryVariables,
+  ServiceJourneySubscriptionQueryVariables,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
   TripPatternsQuery,
@@ -140,8 +140,8 @@ export interface IVehiclesService {
   getServiceJourneyVehicles(
     query: ServiceJourneyVehicleQueryVariables
   ): Promise<Result<ServiceJourneyVehicles, APIError>>;
-  createServiceJourneyVehicleSubscription(
-    query: ServiceJourneyVehicleSubscriptionQueryVariables,
+  createServiceJourneySubscription(
+    query: ServiceJourneySubscriptionQueryVariables,
     ws: WebSocket.WebSocket
   ): Subscription;
 }

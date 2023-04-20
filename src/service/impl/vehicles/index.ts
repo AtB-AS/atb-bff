@@ -10,7 +10,7 @@ import {
   GetServiceJourneyVehicleQuery,
   GetServiceJourneyVehicleQueryVariables
 } from './vehicles-gql/vehicles.graphql-gen';
-import gql from 'graphql-tag';
+import { ServiceJourneyDocument } from './vehicles-gql/service-journey-subscription.graphql-gen';
 
 export default (): IVehiclesService => ({
   async getServiceJourneyVehicles(query) {
@@ -43,15 +43,11 @@ export default (): IVehiclesService => ({
       return Result.err(new APIError(error));
     }
   },
-  createServiceJourneyVehicleSubscription(query, ws) {
+  createServiceJourneySubscription(query, ws) {
     return vehiclesSubscriptionClient
       .subscribe({
-        query: VEHICLE_UPDATES_SUBSCRIPTION,
-        fetchPolicy: 'no-cache',
-        variables: {
-          serviceJourneyId: query.serviceJourneyId,
-          includePointsOnLink: false
-        }
+        query: ServiceJourneyDocument,
+        variables: query
       })
       .subscribe({
         next: value => ws.send(JSON.stringify(value.data)),
@@ -61,28 +57,3 @@ export default (): IVehiclesService => ({
       });
   }
 });
-
-export const VEHICLE_FRAGMENT = gql`
-  fragment VehicleFragment on VehicleUpdate {
-    serviceJourney {
-      id
-    }
-    mode
-    lastUpdated
-    lastUpdatedEpochSecond
-    monitored
-    bearing
-    location {
-      latitude
-      longitude
-    }
-  }
-`;
-export const VEHICLE_UPDATES_SUBSCRIPTION = gql`
-  subscription VehicleUpdates($serviceJourneyId: String, $monitored: Boolean) {
-    vehicleUpdates(serviceJourneyId: $serviceJourneyId, monitored: $monitored) {
-      ...VehicleFragment
-    }
-  }
-  ${VEHICLE_FRAGMENT}
-`;

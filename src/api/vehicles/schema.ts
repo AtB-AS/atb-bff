@@ -6,7 +6,7 @@ export const getVehiclesRequest = {
   })
 };
 
-export const getVehicleSubscriptionRequest = {
+export const postServiceJourneySubscriptionRequest = {
   query: Joi.object({
     serviceJourneyId: Joi.string()
   })

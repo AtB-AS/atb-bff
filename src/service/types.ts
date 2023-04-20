@@ -164,7 +164,7 @@ export type ServiceJourneyVehicleQueryVariables = {
   serviceJourneyIds: string[];
 };
 
-export type ServiceJourneyVehicleSubscriptionQueryVariables = {
+export type ServiceJourneySubscriptionQueryVariables = {
   serviceJourneyId: string;
 };
 
