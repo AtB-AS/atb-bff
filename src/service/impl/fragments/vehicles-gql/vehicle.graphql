@@ -1,4 +1,4 @@
-fragment VehicleFragment on VehicleUpdate {
+fragment Vehicle on VehicleUpdate {
   serviceJourney {
     id
   }

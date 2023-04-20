@@ -10,7 +10,10 @@ import {
   GetServiceJourneyVehicleQuery,
   GetServiceJourneyVehicleQueryVariables
 } from './vehicles-gql/vehicles.graphql-gen';
-import { ServiceJourneyDocument } from './vehicles-gql/service-journey-subscription.graphql-gen';
+import {
+  ServiceJourneyDocument,
+  ServiceJourneySubscription
+} from './vehicles-gql/service-journey-subscription.graphql-gen';
 
 export default (): IVehiclesService => ({
   async getServiceJourneyVehicles(query) {
@@ -47,13 +50,15 @@ export default (): IVehiclesService => ({
     return vehiclesSubscriptionClient
       .subscribe({
         query: ServiceJourneyDocument,
+        fetchPolicy: 'no-cache',
         variables: query
       })
       .subscribe({
-        next: value => ws.send(JSON.stringify(value.data)),
-        complete: console.log,
-        error: console.error,
-        start: console.log
+        next: value => {
+          const data = value.data as ServiceJourneySubscription;
+          if (!data.vehicles || data.vehicles?.length === 0) return;
+          ws.send(JSON.stringify(value.data));
+        }
       });
   }
 });
