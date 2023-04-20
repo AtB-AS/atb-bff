@@ -3,12 +3,9 @@ import {
   ApolloClient,
   DefaultOptions,
   HttpLink,
-  ApolloLink,
-  split,
-  Operation
+  ApolloLink
 } from '@apollo/client/core';
 import { WebSocketLink } from '@apollo/client/link/ws';
-
 import { onError } from '@apollo/client/link/error';
 import fetch from 'node-fetch';
 import {
@@ -16,10 +13,7 @@ import {
   ENTUR_WEBSOCKET_BASEURL,
   ET_CLIENT_NAME
 } from '../config/env';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import WebSocket from 'ws';
-import { createClient as createWsClient } from 'graphql-ws';
-import { getMainDefinition } from '@apollo/client/utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const defaultOptions: DefaultOptions = {
@@ -80,50 +74,21 @@ function createWebSocketClient(url: string) {
     addTypename: false
   });
 
-  // const wsLink = new GraphQLWsLink(
-  //   createWsClient({
-  //     url: urlVehiclesWss,
-  //     webSocketImpl: WebSocket,
-  //   })
-  // );
-  // const wsLink = new WebSocketLink({
-  //   uri: urlVehiclesWss,
-
-  //   webSocketImpl: WebSocket,
-  //   options: {
-  //     reconnect: true
-  //   }
-  // });
-
   const wsLink = new WebSocketLink(
     new SubscriptionClient(
-      'wss://localhost:8080/bff/ws-test',
+      url,
       {
-        reconnect: true
+        reconnect: true,
+        lazy: true
       },
       WebSocket
     )
   );
 
-  const def = ({ query }: Operation) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  };
-
-  // const splitLink = split(
-  //   def,
-  //   wsLink,
-  // );
-
   const errorLink = onError(error =>
     console.log('Apollo Error:', JSON.stringify(error))
   );
   const link = ApolloLink.from([errorLink, wsLink]);
-
-  console.log('Apollo');
 
   return new ApolloClient({
     link,

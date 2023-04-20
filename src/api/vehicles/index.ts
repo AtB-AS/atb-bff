@@ -32,14 +32,12 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
           only: true,
           initially: true,
           connect: ({ ctx, ws }) => {
-            console.log('Connecting');
-
             const client = vehiclesSubscriptionClient
               .subscribe({
                 query: VEHICLE_UPDATES_SUBSCRIPTION,
                 fetchPolicy: 'no-cache',
                 variables: {
-                  serviceJourneyId: 'ATB:ServiceJourney:3_230227084808524_96',
+                  serviceJourneyId: 'ATB:ServiceJourney:3_230227084808512_72',
                   includePointsOnLink: false
                 }
               })
@@ -50,16 +48,10 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
                 start: console.log
               });
 
-            // ctx.client = client;
-
-            ctx.to = setInterval(() => {
-              console.log('PING');
-              if (ws.readyState === WebSocket.OPEN)
-                ws.send(JSON.stringify({ cmd: 'PING' }));
-            }, 5000);
+            ctx.client = client;
           },
           disconnect: ({ ctx }) => {
-            if (ctx.client !== null) {
+            if (ctx.client !== null && ctx.client !== undefined) {
               ctx.client.unsubscribe();
               ctx.client = null;
             }
@@ -93,7 +85,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
             }, 5000);
           },
           disconnect: ({ ctx }) => {
-            if (ctx.to !== null) {
+            if (ctx.to !== null && ctx.to !== undefined) {
               clearTimeout(ctx.to);
               ctx.to = null;
             }
