@@ -36,6 +36,7 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyVehicleQueryVariables,
   ServiceJourneyVehicles,
+  ServiceJourneyVehicleSubscriptionQueryVariables,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
   TripPatternsQuery,
@@ -51,6 +52,8 @@ import {
   DeparturesQuery,
   DeparturesQueryVariables
 } from './impl/departures/journey-gql/departures.graphql-gen';
+import WebSocket from 'ws';
+import { Subscription } from 'zen-observable-ts';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -137,6 +140,10 @@ export interface IVehiclesService {
   getServiceJourneyVehicles(
     query: ServiceJourneyVehicleQueryVariables
   ): Promise<Result<ServiceJourneyVehicles, APIError>>;
+  createServiceJourneyVehicleSubscription(
+    query: ServiceJourneyVehicleSubscriptionQueryVariables,
+    ws: WebSocket.WebSocket
+  ): Subscription;
 }
 
 export interface IMobilityService {

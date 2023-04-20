@@ -164,6 +164,10 @@ export type ServiceJourneyVehicleQueryVariables = {
   serviceJourneyIds: string[];
 };
 
+export type ServiceJourneyVehicleSubscriptionQueryVariables = {
+  serviceJourneyId: string;
+};
+
 export type GetServiceJourneyVehicles = Required<
   Required<GetServiceJourneyVehicleQuery>['vehicles']
 >;

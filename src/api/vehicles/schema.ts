@@ -5,3 +5,9 @@ export const getVehiclesRequest = {
     serviceJourneyIds: Joi.array().items(Joi.string()).default([]).single()
   })
 };
+
+export const getVehicleSubscriptionRequest = {
+  query: Joi.object({
+    serviceJourneyId: Joi.string()
+  })
+};
