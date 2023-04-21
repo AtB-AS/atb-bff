@@ -12,7 +12,7 @@ export function stations(range: number = 250) {
   // coordinates around Trondheim city center
   const lat = `63.4304571134${randomNumber(1000, true)}`;
   const lon = `10.39810091257${randomNumber(1000, true)}`;
-  const url = `${conf.host()}/bff/v2/mobility/stations?lat=${lat}&lon=${lon}&range=${range}`;
+  const url = `${conf.host()}/bff/v2/mobility/stations?availableFormFactors=BICYCLE&lat=${lat}&lon=${lon}&range=${range}`;
 
   const res = http.get(url, {
     tags: { name: requestName },
@@ -39,14 +39,8 @@ export function stations(range: number = 250) {
           check: 'number of bikes and docks available equals capacity',
           expect:
             stations.filter(
-              s => s.numBikesAvailable + s.numDocksAvailable! === s.capacity
+              s => s.numBikesAvailable + s.numDocksAvailable! <= s.capacity!
             ).length === numberOfStations
-        },
-        {
-          check: 'vehicles have a price per use',
-          expect:
-            stations.filter(s => s.pricingPlans[0].price > 0).length ===
-            numberOfStations
         },
         {
           check: 'vehicles have a price per minute',

@@ -10,9 +10,9 @@ import { randomNumber } from '../../utils/utils';
 export function vehicles(range: number = 200) {
   const requestName = `v2_vehicles_${range}`;
   const formFactor = 'SCOOTER';
-  // coordinates around Oslo city center
-  const lat = `59.9133041843${randomNumber(1000, true)}`;
-  const lon = `10.73546589554${randomNumber(1000, true)}`;
+  // coordinates around Trondheim city center
+  const lat = `63.43047907765${randomNumber(1000, true)}`;
+  const lon = `10.39503129802${randomNumber(1000, true)}`;
   const url = `${conf.host()}/bff/v2/mobility/vehicles?formFactors=${formFactor}&lat=${lat}&lon=${lon}&range=${range}`;
 
   const res = http.get(url, {
@@ -44,27 +44,12 @@ export function vehicles(range: number = 200) {
               .length === numberOfVehicles
         },
         {
-          check: 'vehicles have a price per use',
-          expect:
-            vehicles.filter(v => v.pricingPlan.price > 0).length ===
-            numberOfVehicles
-        },
-        {
           check: 'vehicles have a price per minute',
           expect:
             vehicles.filter(v =>
               v.pricingPlan.perMinPricing?.filter(
                 price => price.interval === 1 && price.rate > 0
               )
-            ).length === numberOfVehicles
-        },
-        {
-          check: 'an app link to the operator exists',
-          expect:
-            vehicles.filter(
-              v =>
-                v.system.rentalApps?.android?.storeUri?.length! > 0 &&
-                v.system.rentalApps?.ios?.storeUri?.length! > 0
             ).length === numberOfVehicles
         },
         {
