@@ -32,7 +32,8 @@ const stripProps = (data: GetVehiclesBasicQuery): GetVehiclesQuery => ({
   vehicles: data.vehicles?.map(v => ({
     id: v.id,
     lat: v.lat,
-    lon: v.lon
+    lon: v.lon,
+    currentFuelPercent: v.currentFuelPercent
   }))
 });
 
