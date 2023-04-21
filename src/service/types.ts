@@ -1,15 +1,11 @@
-import { Location, QueryMode } from '@entur/sdk';
-import { boomify } from '@hapi/boom';
-import { FetchError } from 'node-fetch';
-import {
-  Mode,
-  PointsOnLink,
-  TransportSubmode
-} from '../graphql/journey/journeyplanner-types_v3';
-import * as Mobility from '../graphql/mobility/mobility-types_v2';
-import { CursoredQuery } from './cursored';
-import { GetServiceJourneyVehicleQuery } from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
-import * as Types from '../graphql/vehicles/vehicles-types_v1';
+import { Location, QueryMode } from "@entur/sdk";
+import { boomify } from "@hapi/boom";
+import { FetchError } from "node-fetch";
+import { Mode, PointsOnLink, TransportSubmode } from "../graphql/journey/journeyplanner-types_v3";
+import * as Mobility from "../graphql/mobility/mobility-types_v2";
+import { CursoredQuery } from "./cursored";
+import { GetServiceJourneyVehicleQuery } from "./impl/vehicles/vehicles-gql/vehicles.graphql-gen";
+import * as Types from "../graphql/vehicles/vehicles-types_v1";
 
 export interface Coordinates {
   latitude: number;
