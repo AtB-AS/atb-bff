@@ -12,7 +12,6 @@ export const getVehiclesRequest = {
     lon: Joi.number().required(),
     range: Joi.number().optional(),
     operators: Joi.array().items(Joi.string()).optional().single(),
-    basic: Joi.boolean().optional().default(false)
   })
 };
 export const getVehicleRequest = {

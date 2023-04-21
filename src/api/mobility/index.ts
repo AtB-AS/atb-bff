@@ -14,8 +14,7 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     },
     handler: async request => {
       const payload = request.query as unknown as VehiclesQuery;
-      if (payload.basic) return (await service.getVehicles(payload)).unwrap();
-      return (await service.getVehiclesExtended(payload)).unwrap();
+      return (await service.getVehicles(payload)).unwrap();
     }
   });
 
@@ -29,10 +28,11 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     },
     handler: async request => {
       const payload = request.query as unknown as VehicleQuery;
-      return (await service.getVehiclesExtended({
-        ...payload,
-        basic: false
-      })).unwrap().vehicles?.filter(v => v.id === payload.id).at(0);
+      return (await service.getVehiclesExtended(payload))
+        .unwrap()
+        .vehicles
+        ?.filter(v => v.id === payload.id)
+        .at(0);
 
     }
   });

@@ -181,7 +181,7 @@ export type VehicleQuery = { id: string } & Pick<Mobility.QueryVehiclesArgs, 'la
 export type VehiclesQuery = Pick<
   Mobility.QueryVehiclesArgs,
   'lat' | 'lon' | 'range' | 'operators' | 'formFactors'
-> & { basic: boolean };
+>;
 
 export type StationsQuery = Pick<
   Mobility.QueryStationsArgs,
