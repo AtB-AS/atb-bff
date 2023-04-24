@@ -1,21 +1,30 @@
+fragment vehicleRange on VehicleType {
+    maxRangeMeters
+}
 fragment vehicleType on VehicleType {
+    ...vehicleRange
     id
     formFactor
-    maxRangeMeters
     name {
         ...translatedString
     }
 }
 
-
-fragment vehicle on Vehicle {
+fragment vehicleBasic on Vehicle {
     id
     lat
     lon
+    currentFuelPercent
+    currentRangeMeters
+    vehicleType {
+        ...vehicleRange
+    }
+}
+
+fragment vehicleExtended on Vehicle {
+    ...vehicleBasic
     isReserved
     isDisabled
-    currentRangeMeters
-    currentFuelPercent
     availableUntil
     vehicleType {
         ...vehicleType
