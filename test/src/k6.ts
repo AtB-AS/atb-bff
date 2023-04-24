@@ -49,7 +49,7 @@ export default () => {
   scn(conf.usecase());
 
   //Create JUnit log lines for a post-k6-processor to pick up
-  if (conf.options().junitCheckOutput) {
+  if (conf.printJUnit()) {
     createJUnitCheckOutput();
   }
 };

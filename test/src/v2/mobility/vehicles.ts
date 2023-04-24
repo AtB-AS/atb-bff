@@ -6,8 +6,9 @@ import {
   Vehicle
 } from '../../../../src/graphql/mobility/mobility-types_v2';
 import { randomNumber } from '../../utils/utils';
+import { VehicleInfoType } from '../types/mobility';
 
-export function vehicles(range: number = 200) {
+export function vehicles(range: number = 200): VehicleInfoType | undefined {
   const requestName = `v2_vehicles_${range}`;
   const formFactor = 'SCOOTER';
   // coordinates around Trondheim city center
@@ -20,49 +21,117 @@ export function vehicles(range: number = 200) {
     headers: bffHeadersGet
   });
 
+  let returnVehicle = undefined;
+
   try {
     const json = res.json() as Query;
-    const vehicles = json.vehicles! as Vehicle[];
+    const vehicles = json.vehicles! as VehicleInfoType[];
     const numberOfVehicles = vehicles.length;
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
     ];
     if (numberOfVehicles != 0) {
+      // Vehicle to return
+      returnVehicle = vehicles[0] as VehicleInfoType;
+
       expects.push(
+        {
+          check: 'vehicles have id',
+          expect: vehicles.filter(v => v!.id).length === numberOfVehicles
+        },
+        {
+          check: 'vehicles have latitude',
+          expect: vehicles.filter(v => v!.lat).length === numberOfVehicles
+        },
+        {
+          check: 'vehicles have longitude',
+          expect: vehicles.filter(v => v!.lon).length === numberOfVehicles
+        },
         {
           check: 'currentFuelPercent is 0-100',
           expect:
             vehicles.filter(
-              v => v.currentFuelPercent! >= 0 && v.currentFuelPercent! <= 100
-            ).length === numberOfVehicles
-        },
-        {
-          check: 'type of vehicle is correct',
-          expect:
-            vehicles.filter(v => v.vehicleType.formFactor === formFactor)
-              .length === numberOfVehicles
-        },
-        {
-          check: 'vehicles have a price per minute',
-          expect:
-            vehicles.filter(v =>
-              v.pricingPlan.perMinPricing?.filter(
-                price => price.interval === 1 && price.rate > 0
-              )
-            ).length === numberOfVehicles
-        },
-        {
-          check: 'an url to the operator exists',
-          expect:
-            vehicles.filter(
-              v =>
-                v.rentalUris?.android?.length! > 0 &&
-                v.rentalUris?.ios?.length! > 0
+              v => v!.currentFuelPercent! >= 0 && v!.currentFuelPercent! <= 100
             ).length === numberOfVehicles
         }
       );
     }
+
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      expects
+    );
+
+    return returnVehicle;
+  } catch (exp) {
+    //throw exp
+    metrics.checkForFailures(
+      [res.request.url],
+      res.timings.duration,
+      requestName,
+      [
+        {
+          check: `${exp}`,
+          expect: false
+        }
+      ]
+    );
+
+    return returnVehicle;
+  }
+}
+
+export function vehicle(vehicleInfo: VehicleInfoType, range: number = 100) {
+  const requestName = `v2_vehicle_${range}`;
+  const formFactor = 'SCOOTER';
+  const url = `${conf.host()}/bff/v2/mobility/vehicle?id=${
+    vehicleInfo!.id
+  }&formFactors=${formFactor}&lat=${vehicleInfo!.lat}&lon=${
+    vehicleInfo!.lon
+  }&range=${range}`;
+
+  const res = http.get(url, {
+    tags: { name: requestName },
+    headers: bffHeadersGet
+  });
+
+  try {
+    const json = res.json() as Query;
+    const vehicle = json as Vehicle;
+
+    const expects: ExpectsType = [
+      { check: 'should have status 200', expect: res.status === 200 }
+    ];
+    expects.push(
+      {
+        check: 'vehicle id is correct',
+        expect: vehicle.id === vehicleInfo!.id
+      },
+      {
+        check: 'currentFuelPercent is correct',
+        expect: vehicle.currentFuelPercent! === vehicleInfo!.currentFuelPercent
+      },
+      {
+        check: 'type of vehicle is correct',
+        expect: vehicle.vehicleType.formFactor === formFactor
+      },
+      {
+        check: 'vehicle have a price per minute',
+        expect:
+          vehicle.pricingPlan.perMinPricing?.filter(
+            price => price.interval === 1 && price.rate > 0
+          ).length === 1
+      },
+      {
+        check: 'an url to the operator exists',
+        expect:
+          vehicle.rentalUris?.android?.length! > 0 &&
+          vehicle.rentalUris?.ios?.length! > 0
+      }
+    );
 
     metrics.checkForFailures(
       [res.request.url],
