@@ -72,3 +72,15 @@ fragment system on System {
         ...rentalApps
     }
 }
+
+fragment vehicleRange on VehicleType {
+    maxRangeMeters
+}
+fragment vehicleType on VehicleType {
+    ...vehicleRange
+    id
+    formFactor
+    name {
+        ...translatedString
+    }
+}

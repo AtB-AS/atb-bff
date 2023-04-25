@@ -1,9 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { StationFragment } from '../../fragments/mobility-gql/stations.graphql-gen';
+import { StationBasicFragment } from '../../fragments/mobility-gql/stations.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { StationFragmentDoc } from '../../fragments/mobility-gql/stations.graphql-gen';
+import { StationBasicFragmentDoc } from '../../fragments/mobility-gql/stations.graphql-gen';
 export type GetStationsQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
@@ -12,7 +12,7 @@ export type GetStationsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetStationsQuery = { stations?: Array<StationFragment> };
+export type GetStationsQuery = { stations?: Array<StationBasicFragment> };
 
 
 export const GetStationsDocument = gql`
@@ -23,10 +23,10 @@ export const GetStationsDocument = gql`
     range: $range
     availableFormFactors: $availableFormFactors
   ) {
-    ...station
+    ...stationBasic
   }
 }
-    ${StationFragmentDoc}`;
+    ${StationBasicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
