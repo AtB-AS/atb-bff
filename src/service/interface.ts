@@ -20,7 +20,7 @@ import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordin
 import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
 import { DepartureGroupMetadata } from './impl/departures-grouped/departure-group';
 import {
-  APIError, CarStationQuery,
+  APIError, BikeStationQuery, CarStationQuery,
   DepartureFavoritesPayload,
   DepartureFavoritesQuery,
   DepartureGroupsPayload,
@@ -45,7 +45,11 @@ import {
   TripsQuery,
   TripsQueryVariables
 } from './impl/trips/journey-gql/trip.graphql-gen';
-import { GetCarStationQuery, GetStationsQuery } from "./impl/mobility/mobility-gql/stations.graphql-gen";
+import {
+  GetBikeStationQuery,
+  GetCarStationQuery,
+  GetStationsQuery
+} from "./impl/mobility/mobility-gql/stations.graphql-gen";
 import {
   DeparturesQuery,
   DeparturesQueryVariables
@@ -153,8 +157,10 @@ export interface IMobilityService {
   getStations(
     query: StationsQuery
   ): Promise<Result<GetStationsQuery, APIError>>;
-
   getCarStation(
     query: CarStationQuery
   ): Promise<Result<GetCarStationQuery, APIError>>;
+  getBikeStation(
+    query: BikeStationQuery
+  ): Promise<Result<GetBikeStationQuery, APIError>>;
 }

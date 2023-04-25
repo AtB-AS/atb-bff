@@ -185,6 +185,7 @@ export type StationsQuery = Pick<
 >;
 
 export type CarStationQuery = { ids: string[] }
+export type BikeStationQuery = { ids: string[] }
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];

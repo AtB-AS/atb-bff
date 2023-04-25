@@ -3,6 +3,8 @@ import { Result } from "@badrap/result";
 import { APIError } from "../../types";
 import { mobilityClient } from "../../../graphql/graphql-client";
 import {
+  GetBikeStationDocument,
+  GetBikeStationQuery, GetBikeStationQueryVariables,
   GetCarStationDocument,
   GetCarStationQuery,
   GetCarStationQueryVariables,
@@ -103,6 +105,23 @@ export default (): IMobilityService => ({
         GetCarStationQueryVariables
       >({
         query: GetCarStationDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+  async getBikeStation(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetBikeStationQuery,
+        GetBikeStationQueryVariables
+      >({
+        query: GetBikeStationDocument,
         variables: query
       });
       if (result.errors) {

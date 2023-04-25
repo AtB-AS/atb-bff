@@ -1,9 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { StationBasicFragment, CarStationFragment } from '../../fragments/mobility-gql/stations.graphql-gen';
+import { StationBasicFragment, CarStationFragment, BikeStationFragment } from '../../fragments/mobility-gql/stations.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { StationBasicFragmentDoc, CarStationFragmentDoc } from '../../fragments/mobility-gql/stations.graphql-gen';
+import { StationBasicFragmentDoc, CarStationFragmentDoc, BikeStationFragmentDoc } from '../../fragments/mobility-gql/stations.graphql-gen';
 export type GetStationsQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
@@ -20,6 +20,13 @@ export type GetCarStationQueryVariables = Types.Exact<{
 
 
 export type GetCarStationQuery = { stationsById?: Array<CarStationFragment> };
+
+export type GetBikeStationQueryVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
+}>;
+
+
+export type GetBikeStationQuery = { stationsById?: Array<BikeStationFragment> };
 
 
 export const GetStationsDocument = gql`
@@ -41,6 +48,13 @@ export const GetCarStationDocument = gql`
   }
 }
     ${CarStationFragmentDoc}`;
+export const GetBikeStationDocument = gql`
+    query getBikeStation($ids: [String]!) {
+  stationsById(ids: $ids) {
+    ...bikeStation
+  }
+}
+    ${BikeStationFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
@@ -49,6 +63,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getCarStation(variables: GetCarStationQueryVariables, options?: C): Promise<GetCarStationQuery> {
       return requester<GetCarStationQuery, GetCarStationQueryVariables>(GetCarStationDocument, variables, options);
+    },
+    getBikeStation(variables: GetBikeStationQueryVariables, options?: C): Promise<GetBikeStationQuery> {
+      return requester<GetBikeStationQuery, GetBikeStationQueryVariables>(GetBikeStationDocument, variables, options);
     }
   };
 }

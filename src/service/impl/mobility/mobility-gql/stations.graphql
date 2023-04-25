@@ -9,3 +9,9 @@ query getCarStation($ids: [String]!) {
         ...carStation
     }
 }
+
+query getBikeStation($ids: [String]!) {
+    stationsById(ids: $ids) {
+        ...bikeStation
+    }
+}
