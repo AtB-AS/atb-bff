@@ -65,11 +65,15 @@ export const initializePlugins = async (server: hapi.Server) => {
       json: true,
       stream: process.env.NODE_ENV === 'test' ? undefined : process.stdout,
       defaultFields: request => ({
-        ts: new Date(request.info.received).toISOString(),
+        time: new Date(request.info.received).toISOString(),
         method: request.method.toUpperCase(),
         url: url.format(request.url, { search: false }),
         requestId: request.requestId,
-        installId: request.installId
+        installId: request.installId,
+        appVersion: request.appVersion,
+        correlationId: request.correlationId,
+        customerAccountId: request.customerAccountId,
+        message: 'handle request'
       })
     }
   });
