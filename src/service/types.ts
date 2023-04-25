@@ -184,6 +184,8 @@ export type StationsQuery = Pick<
   'lat' | 'lon' | 'range' | 'operators' | 'availableFormFactors'
 >;
 
+export type CarStationQuery = { ids: string[] }
+
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];
   start?: Coordinates;

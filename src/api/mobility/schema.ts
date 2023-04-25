@@ -41,3 +41,8 @@ export const getStationsRequest = {
     operators: Joi.array().items(Joi.string()).optional().single()
   })
 };
+export const getCarStationRequest = {
+  query: Joi.object({
+    ids: Joi.array().items(Joi.string()).required().single()
+  })
+};

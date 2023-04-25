@@ -2,7 +2,14 @@ import { GetVehiclesQuery, IMobilityService } from "../../interface";
 import { Result } from "@badrap/result";
 import { APIError } from "../../types";
 import { mobilityClient } from "../../../graphql/graphql-client";
-import { GetStationsDocument, GetStationsQuery, GetStationsQueryVariables } from "./mobility-gql/stations.graphql-gen";
+import {
+  GetCarStationDocument,
+  GetCarStationQuery,
+  GetCarStationQueryVariables,
+  GetStationsDocument,
+  GetStationsQuery,
+  GetStationsQueryVariables
+} from "./mobility-gql/stations.graphql-gen";
 import {
   GetVehiclesBasicDocument,
   GetVehiclesBasicQuery,
@@ -79,6 +86,23 @@ export default (): IMobilityService => ({
         GetStationsQueryVariables
       >({
         query: GetStationsDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+  async getCarStation(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetCarStationQuery,
+        GetCarStationQueryVariables
+      >({
+        query: GetCarStationDocument,
         variables: query
       });
       if (result.errors) {

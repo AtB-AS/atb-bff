@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
 import { IMobilityService } from '../../service/interface';
-import { StationsQuery, VehicleQuery, VehiclesQuery } from "../../service/types";
-import { getVehiclesRequest, getStationsRequest, getVehicleRequest } from "./schema";
+import { CarStationQuery, StationsQuery, VehicleQuery, VehiclesQuery } from "../../service/types";
+import { getVehiclesRequest, getStationsRequest, getVehicleRequest, getCarStationRequest } from "./schema";
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
   server.route({
@@ -49,6 +49,21 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       const payload = request.query as unknown as StationsQuery;
 
       return (await service.getStations(payload)).unwrap();
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/station/car',
+    options: {
+      tags: ['api', 'mobility', 'station', 'car'],
+      validate: getCarStationRequest,
+      description: 'Get details about a single car station'
+    },
+    handler: async request => {
+      const payload = request.query as unknown as CarStationQuery;
+
+      return (await service.getCarStation(payload)).unwrap();
     }
   });
 };
