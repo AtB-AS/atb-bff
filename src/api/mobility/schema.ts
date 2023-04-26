@@ -16,15 +16,7 @@ export const getVehiclesRequest = {
 };
 export const getVehicleRequest = {
   query: Joi.object({
-    id: Joi.string().required(),
-    formFactors: Joi.array()
-      .items(Joi.string())
-      .optional()
-      .default(FormFactor.Scooter)
-      .single(),
-    lat: Joi.number().required(),
-    lon: Joi.number().required(),
-    range: Joi.number().default(100).optional()
+    ids: Joi.array().items(Joi.string()).required().single()
   })
 };
 
