@@ -4,14 +4,14 @@ query getStations($lat: Float!, $lon: Float!, $range: Int!, $availableFormFactor
     }
 }
 
-query getCarStation($ids: [String]!) {
-    stationsById(ids: $ids) {
+query getCarStation($ids: [String!]) {
+    stations(ids: $ids) {
         ...carStation
     }
 }
 
-query getBikeStation($ids: [String]!) {
-    stationsById(ids: $ids) {
+query getBikeStation($ids: [String!]) {
+    stations(ids: $ids) {
         ...bikeStation
     }
 }

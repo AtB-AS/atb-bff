@@ -15,18 +15,18 @@ export type GetStationsQueryVariables = Types.Exact<{
 export type GetStationsQuery = { stations?: Array<StationBasicFragment> };
 
 export type GetCarStationQueryVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
+  ids?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
 }>;
 
 
-export type GetCarStationQuery = { stationsById?: Array<CarStationFragment> };
+export type GetCarStationQuery = { stations?: Array<CarStationFragment> };
 
 export type GetBikeStationQueryVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
+  ids?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
 }>;
 
 
-export type GetBikeStationQuery = { stationsById?: Array<BikeStationFragment> };
+export type GetBikeStationQuery = { stations?: Array<BikeStationFragment> };
 
 
 export const GetStationsDocument = gql`
@@ -42,15 +42,15 @@ export const GetStationsDocument = gql`
 }
     ${StationBasicFragmentDoc}`;
 export const GetCarStationDocument = gql`
-    query getCarStation($ids: [String]!) {
-  stationsById(ids: $ids) {
+    query getCarStation($ids: [String!]) {
+  stations(ids: $ids) {
     ...carStation
   }
 }
     ${CarStationFragmentDoc}`;
 export const GetBikeStationDocument = gql`
-    query getBikeStation($ids: [String]!) {
-  stationsById(ids: $ids) {
+    query getBikeStation($ids: [String!]) {
+  stations(ids: $ids) {
     ...bikeStation
   }
 }
@@ -61,10 +61,10 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     getStations(variables: GetStationsQueryVariables, options?: C): Promise<GetStationsQuery> {
       return requester<GetStationsQuery, GetStationsQueryVariables>(GetStationsDocument, variables, options);
     },
-    getCarStation(variables: GetCarStationQueryVariables, options?: C): Promise<GetCarStationQuery> {
+    getCarStation(variables?: GetCarStationQueryVariables, options?: C): Promise<GetCarStationQuery> {
       return requester<GetCarStationQuery, GetCarStationQueryVariables>(GetCarStationDocument, variables, options);
     },
-    getBikeStation(variables: GetBikeStationQueryVariables, options?: C): Promise<GetBikeStationQuery> {
+    getBikeStation(variables?: GetBikeStationQueryVariables, options?: C): Promise<GetBikeStationQuery> {
       return requester<GetBikeStationQuery, GetBikeStationQueryVariables>(GetBikeStationDocument, variables, options);
     }
   };
