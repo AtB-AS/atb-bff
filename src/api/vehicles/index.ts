@@ -25,7 +25,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
   });
   server.route({
     method: 'POST',
-    path: '/bff/v2/vehicles/service-journey/subscription',
+    path: '/ws/v2/vehicles/service-journey/subscription',
     options: {
       tags: ['api', 'websocket', 'vehicle', 'coordinates'],
       validate: postServiceJourneySubscriptionRequest,

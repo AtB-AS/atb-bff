@@ -57,7 +57,7 @@ export default (): IVehiclesService => ({
         next: value => {
           const data = value.data as ServiceJourneySubscription;
           if (!data.vehicles || data.vehicles?.length === 0) return;
-          ws.send(JSON.stringify(value.data));
+          ws.send(JSON.stringify(data));
         }
       });
   }
