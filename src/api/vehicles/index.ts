@@ -54,6 +54,8 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
             if (ctx.client) {
               ctx.client.unsubscribe();
               ctx.client = null;
+            } else {
+              console.error('WebSocket error: Failed to unsubscribe');
             }
           }
         }
