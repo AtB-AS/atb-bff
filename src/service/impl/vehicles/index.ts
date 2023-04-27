@@ -56,8 +56,11 @@ export default (): IVehiclesService => ({
       .subscribe({
         next: value => {
           const data = value.data as ServiceJourneySubscription;
-          if (!data.vehicles || data.vehicles?.length === 0) return;
-          ws.send(JSON.stringify(data));
+          const vehicle = data.vehicles?.find(
+            v => v.serviceJourney?.id === query.serviceJourneyId
+          );
+          if (!vehicle) return;
+          ws.send(JSON.stringify(vehicle));
         }
       });
   }

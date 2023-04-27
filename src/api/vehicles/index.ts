@@ -29,7 +29,8 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
     options: {
       tags: ['api', 'websocket', 'vehicle', 'coordinates'],
       validate: postServiceJourneySubscriptionRequest,
-      description: 'Get vehicle information for a list of service journeys',
+      description:
+        'Subscription for vehicle updates for a single service journey',
       plugins: {
         websocket: {
           only: true,
