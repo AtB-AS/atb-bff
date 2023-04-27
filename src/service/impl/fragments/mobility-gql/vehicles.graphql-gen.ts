@@ -1,32 +1,33 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { TranslatedStringFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
+import { VehicleRangeFragment, VehicleTypeFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
-export type VehicleTypeFragment = { id: string, formFactor: Types.FormFactor, maxRangeMeters?: number, name?: TranslatedStringFragment };
+import { VehicleRangeFragmentDoc, VehicleTypeFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
+export type VehicleBasicFragment = { id: string, lat: number, lon: number, currentFuelPercent?: number, currentRangeMeters: number, vehicleType: VehicleRangeFragment };
 
-export type VehicleFragment = { id: string, lat: number, lon: number, isReserved: boolean, isDisabled: boolean, currentRangeMeters: number, currentFuelPercent?: number, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: SystemFragment, rentalUris?: RentalUrisFragment };
+export type VehicleExtendedFragment = (
+  { isReserved: boolean, isDisabled: boolean, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: SystemFragment, rentalUris?: RentalUrisFragment }
+  & VehicleBasicFragment
+);
 
-export const VehicleTypeFragmentDoc = gql`
-    fragment vehicleType on VehicleType {
-  id
-  formFactor
-  maxRangeMeters
-  name {
-    ...translatedString
-  }
-}
-    ${TranslatedStringFragmentDoc}`;
-export const VehicleFragmentDoc = gql`
-    fragment vehicle on Vehicle {
+export const VehicleBasicFragmentDoc = gql`
+    fragment vehicleBasic on Vehicle {
   id
   lat
   lon
+  currentFuelPercent
+  currentRangeMeters
+  vehicleType {
+    ...vehicleRange
+  }
+}
+    ${VehicleRangeFragmentDoc}`;
+export const VehicleExtendedFragmentDoc = gql`
+    fragment vehicleExtended on Vehicle {
+  ...vehicleBasic
   isReserved
   isDisabled
-  currentRangeMeters
-  currentFuelPercent
   availableUntil
   vehicleType {
     ...vehicleType
@@ -41,7 +42,8 @@ export const VehicleFragmentDoc = gql`
     ...rentalUris
   }
 }
-    ${VehicleTypeFragmentDoc}
+    ${VehicleBasicFragmentDoc}
+${VehicleTypeFragmentDoc}
 ${PricingPlanFragmentDoc}
 ${SystemFragmentDoc}
 ${RentalUrisFragmentDoc}`;

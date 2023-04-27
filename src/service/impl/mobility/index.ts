@@ -1,19 +1,27 @@
-import { IMobilityService } from '../../interface';
-import { Result } from '@badrap/result';
-import { APIError } from '../../types';
-import { mobilityClient } from '../../../graphql/graphql-client';
+import { GetVehiclesListQuery, IMobilityService } from "../../interface";
+import { Result } from "@badrap/result";
+import { APIError } from "../../types";
+import { mobilityClient } from "../../../graphql/graphql-client";
 import {
-  GetVehiclesDocument,
-  GetVehiclesQuery,
-  GetVehiclesQueryVariables
-} from './mobility-gql/vehicles.graphql-gen';
-import {
+  GetBikeStationDocument,
+  GetBikeStationQuery, GetBikeStationQueryVariables,
+  GetCarStationDocument,
+  GetCarStationQuery,
+  GetCarStationQueryVariables,
   GetStationsDocument,
   GetStationsQuery,
   GetStationsQueryVariables
-} from './mobility-gql/stations.graphql-gen';
+} from "./mobility-gql/stations.graphql-gen";
+import {
+  GetVehicleDocument,
+  GetVehicleQuery, GetVehicleQueryVariables,
+  GetVehiclesDocument,
+  GetVehiclesQuery,
+  GetVehiclesQueryVariables
+} from "./mobility-gql/vehicles.graphql-gen";
 
-const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
+
+const calculateFuelPercent = <T extends GetVehicleQuery | GetVehiclesQuery>(data: T): T => ({
   ...data,
   vehicles: data?.vehicles?.map(vehicle => ({
     ...vehicle,
@@ -25,6 +33,16 @@ const calculateFuelPercent = (data: GetVehiclesQuery): GetVehiclesQuery => ({
             100
         )
       : undefined
+  }))
+});
+
+const stripProps = (data: GetVehiclesQuery): GetVehiclesListQuery => ({
+  ...data,
+  vehicles: data.vehicles?.map(v => ({
+    id: v.id,
+    lat: v.lat,
+    lon: v.lon,
+    currentFuelPercent: v.currentFuelPercent
   }))
 });
 
@@ -41,11 +59,30 @@ export default (): IMobilityService => ({
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
+      return Result.ok(stripProps(calculateFuelPercent(result.data)));
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async getVehicle(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetVehicleQuery,
+        GetVehicleQueryVariables
+      >({
+        query: GetVehicleDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
       return Result.ok(calculateFuelPercent(result.data));
     } catch (error) {
       return Result.err(new APIError(error));
     }
   },
+
   async getStations(query) {
     try {
       const result = await mobilityClient.query<
@@ -53,6 +90,42 @@ export default (): IMobilityService => ({
         GetStationsQueryVariables
       >({
         query: GetStationsDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async getCarStation(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetCarStationQuery,
+        GetCarStationQueryVariables
+      >({
+        query: GetCarStationDocument,
+        variables: query
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async getBikeStation(query) {
+    try {
+      const result = await mobilityClient.query<
+        GetBikeStationQuery,
+        GetBikeStationQueryVariables
+      >({
+        query: GetBikeStationDocument,
         variables: query
       });
       if (result.errors) {

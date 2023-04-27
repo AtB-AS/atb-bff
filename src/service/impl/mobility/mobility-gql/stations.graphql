@@ -1,5 +1,17 @@
 query getStations($lat: Float!, $lon: Float!, $range: Int!, $availableFormFactors: [FormFactor]) {
     stations(lat: $lat, lon: $lon, range: $range, availableFormFactors: $availableFormFactors) {
-        ...station
+        ...stationBasic
+    }
+}
+
+query getCarStation($ids: [String!]) {
+    stations(ids: $ids) {
+        ...carStation
+    }
+}
+
+query getBikeStation($ids: [String!]) {
+    stations(ids: $ids) {
+        ...bikeStation
     }
 }

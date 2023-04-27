@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
 import { IMobilityService } from '../../service/interface';
-import { StationsQuery, VehiclesQuery } from '../../service/types';
-import { getScootersRequest, getStationsRequest } from './schema';
+import { BikeStationQuery, CarStationQuery, StationsQuery, VehicleQuery, VehiclesQuery } from "../../service/types";
+import { getVehiclesRequest, getStationsRequest, getVehicleRequest, getCarStationRequest } from "./schema";
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
   server.route({
@@ -9,15 +9,29 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     path: '/bff/v2/mobility/vehicles',
     options: {
       tags: ['api', 'vehicle', 'scooter', 'bike', 'coordinates'],
-      validate: getScootersRequest,
+      validate: getVehiclesRequest,
       description: 'Get vehicles (scooters, bikes etc.) within an area'
     },
     handler: async request => {
       const payload = request.query as unknown as VehiclesQuery;
-
       return (await service.getVehicles(payload)).unwrap();
     }
   });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/vehicle',
+    options: {
+      tags: ['api', 'vehicle', 'scooter', 'bike', 'coordinates'],
+      validate: getVehicleRequest,
+      description: 'Gets a single vehicle (scooter, bike etc.) within an area'
+    },
+    handler: async request => {
+      const payload = request.query as unknown as VehicleQuery;
+      return (await service.getVehicle(payload)).unwrap()
+    }
+  });
+
   server.route({
     method: 'GET',
     path: '/bff/v2/mobility/stations',
@@ -30,6 +44,36 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       const payload = request.query as unknown as StationsQuery;
 
       return (await service.getStations(payload)).unwrap();
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/station/car',
+    options: {
+      tags: ['api', 'mobility', 'station', 'car'],
+      validate: getCarStationRequest,
+      description: 'Get details about a single car station'
+    },
+    handler: async request => {
+      const payload = request.query as unknown as CarStationQuery;
+
+      return (await service.getCarStation(payload)).unwrap();
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/station/bike',
+    options: {
+      tags: ['api', 'mobility', 'station', 'bike'],
+      validate: getCarStationRequest,
+      description: 'Get details about a single bike station'
+    },
+    handler: async request => {
+      const payload = request.query as unknown as BikeStationQuery;
+
+      return (await service.getBikeStation(payload)).unwrap();
     }
   });
 };

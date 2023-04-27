@@ -62,6 +62,15 @@ export const conf = {
   // The options descibed in ./*Config.json
   options(): ConfigType {
     return options;
+  },
+  // Whether to print a JUnit summary (default in ./*Config.json)
+  printJUnit(): boolean {
+    if (__ENV.printJUnit === 'true') {
+      return true;
+    } else if (__ENV.printJUnit === 'false') {
+      return false;
+    }
+    return this.options().junitCheckOutput;
   }
 };
 
