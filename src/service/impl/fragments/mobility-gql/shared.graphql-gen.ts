@@ -22,6 +22,13 @@ export type BrandAssetsFragment = { brandImageUrl: string, brandImageUrlDark?: s
 
 export type SystemFragment = { operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment };
 
+export type VehicleRangeFragment = { maxRangeMeters?: number };
+
+export type VehicleTypeFragment = (
+  { id: string, formFactor: Types.FormFactor, name?: TranslatedStringFragment }
+  & VehicleRangeFragment
+);
+
 export const PricingSegmentFragmentDoc = gql`
     fragment pricingSegment on PricingSegment {
   rate
@@ -110,6 +117,22 @@ export const SystemFragmentDoc = gql`
 ${TranslatedStringFragmentDoc}
 ${BrandAssetsFragmentDoc}
 ${RentalAppsFragmentDoc}`;
+export const VehicleRangeFragmentDoc = gql`
+    fragment vehicleRange on VehicleType {
+  maxRangeMeters
+}
+    `;
+export const VehicleTypeFragmentDoc = gql`
+    fragment vehicleType on VehicleType {
+  ...vehicleRange
+  id
+  formFactor
+  name {
+    ...translatedString
+  }
+}
+    ${VehicleRangeFragmentDoc}
+${TranslatedStringFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

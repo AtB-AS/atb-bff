@@ -16,15 +16,7 @@ export const getVehiclesRequest = {
 };
 export const getVehicleRequest = {
   query: Joi.object({
-    id: Joi.string().required(),
-    formFactors: Joi.array()
-      .items(Joi.string())
-      .optional()
-      .default(FormFactor.Scooter)
-      .single(),
-    lat: Joi.number().required(),
-    lon: Joi.number().required(),
-    range: Joi.number().default(100).optional()
+    ids: Joi.array().items(Joi.string()).required().single()
   })
 };
 
@@ -39,5 +31,10 @@ export const getStationsRequest = {
     lon: Joi.number().required(),
     range: Joi.number().optional().default(500),
     operators: Joi.array().items(Joi.string()).optional().single()
+  })
+};
+export const getCarStationRequest = {
+  query: Joi.object({
+    ids: Joi.array().items(Joi.string()).required().single()
   })
 };

@@ -1,16 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { TranslatedStringFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
+import { VehicleRangeFragment, VehicleTypeFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
-export type VehicleRangeFragment = { maxRangeMeters?: number };
-
-export type VehicleTypeFragment = (
-  { id: string, formFactor: Types.FormFactor, name?: TranslatedStringFragment }
-  & VehicleRangeFragment
-);
-
+import { VehicleRangeFragmentDoc, VehicleTypeFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
 export type VehicleBasicFragment = { id: string, lat: number, lon: number, currentFuelPercent?: number, currentRangeMeters: number, vehicleType: VehicleRangeFragment };
 
 export type VehicleExtendedFragment = (
@@ -18,11 +11,6 @@ export type VehicleExtendedFragment = (
   & VehicleBasicFragment
 );
 
-export const VehicleRangeFragmentDoc = gql`
-    fragment vehicleRange on VehicleType {
-  maxRangeMeters
-}
-    `;
 export const VehicleBasicFragmentDoc = gql`
     fragment vehicleBasic on Vehicle {
   id
@@ -35,17 +23,6 @@ export const VehicleBasicFragmentDoc = gql`
   }
 }
     ${VehicleRangeFragmentDoc}`;
-export const VehicleTypeFragmentDoc = gql`
-    fragment vehicleType on VehicleType {
-  ...vehicleRange
-  id
-  formFactor
-  name {
-    ...translatedString
-  }
-}
-    ${VehicleRangeFragmentDoc}
-${TranslatedStringFragmentDoc}`;
 export const VehicleExtendedFragmentDoc = gql`
     fragment vehicleExtended on Vehicle {
   ...vehicleBasic

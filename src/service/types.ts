@@ -2,7 +2,7 @@ import { Location, QueryMode } from "@entur/sdk";
 import { boomify } from "@hapi/boom";
 import { FetchError } from "node-fetch";
 import { Mode, PointsOnLink, TransportSubmode } from "../graphql/journey/journeyplanner-types_v3";
-import * as Mobility from "../graphql/mobility/mobility-types_v2";
+import { FormFactor } from "../graphql/mobility/mobility-types_v2";
 import { CursoredQuery } from "./cursored";
 import { GetServiceJourneyVehicleQuery } from "./impl/vehicles/vehicles-gql/vehicles.graphql-gen";
 import * as Types from "../graphql/vehicles/vehicles-types_v1";
@@ -172,17 +172,26 @@ export type ServiceJourneyVehicles = Array<{
   serviceJourney?: { id: string };
 }>;
 
-export type VehicleQuery = { id: string } & Pick<Mobility.QueryVehiclesArgs, 'lat' | 'lon' | 'range' | 'formFactors'>
+export type VehicleQuery = {
+  ids: string | string[]
+};
 
-export type VehiclesQuery = Pick<
-  Mobility.QueryVehiclesArgs,
-  'lat' | 'lon' | 'range' | 'operators' | 'formFactors'
->;
+export type VehiclesQuery = {
+  lat: number,
+  lon: number,
+  range: number,
+  formFactors?: FormFactor | FormFactor[]
+};
 
-export type StationsQuery = Pick<
-  Mobility.QueryStationsArgs,
-  'lat' | 'lon' | 'range' | 'operators' | 'availableFormFactors'
->;
+export type StationsQuery = {
+  lat: number,
+  lon: number,
+  range: number,
+  availableFormFactors?: FormFactor | FormFactor[]
+}
+
+export type CarStationQuery = { ids: string[] }
+export type BikeStationQuery = { ids: string[] }
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];

@@ -4,7 +4,7 @@ import { VehicleBasicFragment, VehicleExtendedFragment } from '../../fragments/m
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { VehicleBasicFragmentDoc, VehicleExtendedFragmentDoc } from '../../fragments/mobility-gql/vehicles.graphql-gen';
-export type GetVehiclesBasicQueryVariables = Types.Exact<{
+export type GetVehiclesQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
   range: Types.Scalars['Int'];
@@ -12,29 +12,26 @@ export type GetVehiclesBasicQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetVehiclesBasicQuery = { vehicles?: Array<VehicleBasicFragment> };
+export type GetVehiclesQuery = { vehicles?: Array<VehicleBasicFragment> };
 
-export type GetVehiclesExtendedQueryVariables = Types.Exact<{
-  lat: Types.Scalars['Float'];
-  lon: Types.Scalars['Float'];
-  range: Types.Scalars['Int'];
-  formFactors?: Types.InputMaybe<Array<Types.InputMaybe<Types.FormFactor>> | Types.InputMaybe<Types.FormFactor>>;
+export type GetVehicleQueryVariables = Types.Exact<{
+  ids?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
 }>;
 
 
-export type GetVehiclesExtendedQuery = { vehicles?: Array<VehicleExtendedFragment> };
+export type GetVehicleQuery = { vehicles?: Array<VehicleExtendedFragment> };
 
 
-export const GetVehiclesBasicDocument = gql`
-    query getVehiclesBasic($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
+export const GetVehiclesDocument = gql`
+    query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
   vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
     ...vehicleBasic
   }
 }
     ${VehicleBasicFragmentDoc}`;
-export const GetVehiclesExtendedDocument = gql`
-    query getVehiclesExtended($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
-  vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
+export const GetVehicleDocument = gql`
+    query getVehicle($ids: [String!]) {
+  vehicles(ids: $ids) {
     ...vehicleExtended
   }
 }
@@ -42,11 +39,11 @@ export const GetVehiclesExtendedDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    getVehiclesBasic(variables: GetVehiclesBasicQueryVariables, options?: C): Promise<GetVehiclesBasicQuery> {
-      return requester<GetVehiclesBasicQuery, GetVehiclesBasicQueryVariables>(GetVehiclesBasicDocument, variables, options);
+    getVehicles(variables: GetVehiclesQueryVariables, options?: C): Promise<GetVehiclesQuery> {
+      return requester<GetVehiclesQuery, GetVehiclesQueryVariables>(GetVehiclesDocument, variables, options);
     },
-    getVehiclesExtended(variables: GetVehiclesExtendedQueryVariables, options?: C): Promise<GetVehiclesExtendedQuery> {
-      return requester<GetVehiclesExtendedQuery, GetVehiclesExtendedQueryVariables>(GetVehiclesExtendedDocument, variables, options);
+    getVehicle(variables?: GetVehicleQueryVariables, options?: C): Promise<GetVehicleQuery> {
+      return requester<GetVehicleQuery, GetVehicleQueryVariables>(GetVehicleDocument, variables, options);
     }
   };
 }

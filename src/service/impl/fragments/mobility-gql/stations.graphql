@@ -1,13 +1,26 @@
-fragment station on Station {
+fragment vehicleTypeAvailabilityBasic on VehicleTypeAvailability {
+    count
+    vehicleType {
+        formFactor
+    }
+}
+
+
+fragment stationBasic on Station {
     id
     lat
     lon
+    vehicleTypesAvailable {
+        ...vehicleTypeAvailabilityBasic
+    }
+}
+
+fragment bikeStation on Station {
+    ...stationBasic
+    numDocksAvailable
     name {
         ...translatedString
     }
-    capacity
-    numBikesAvailable
-    numDocksAvailable
     pricingPlans {
         ...pricingPlan
     }
@@ -17,4 +30,44 @@ fragment station on Station {
     rentalUris {
         ...rentalUris
     }
+}
+
+fragment carVehicleType on VehicleType {
+    formFactor
+    propulsionType
+    maxRangeMeters
+    riderCapacity
+    make
+    model
+    name {
+        ...translatedString
+    }
+    vehicleAccessories
+}
+
+fragment carAvailability on VehicleTypeAvailability {
+    count
+    vehicleType {
+        ...carVehicleType
+    }
+}
+
+fragment carStation on Station {
+    ...stationBasic
+    name {
+        ...translatedString
+    }
+    pricingPlans {
+        ...pricingPlan
+    }
+    system {
+        ...system
+    }
+    rentalUris {
+        ...rentalUris
+    }
+    vehicleTypesAvailable {
+        ...carAvailability
+    }
+
 }
