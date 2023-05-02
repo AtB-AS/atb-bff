@@ -1,0 +1,12 @@
+fragment Vehicle on VehicleUpdate {
+  serviceJourney {
+    id
+  }
+  mode
+  lastUpdated
+  bearing
+  location {
+    latitude
+    longitude
+  }
+}

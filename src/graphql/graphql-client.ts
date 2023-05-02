@@ -5,10 +5,16 @@ import {
   HttpLink,
   ApolloLink
 } from '@apollo/client/core';
-
+import { WebSocketLink } from '@apollo/client/link/ws';
 import { onError } from '@apollo/client/link/error';
 import fetch from 'node-fetch';
-import { ENTUR_BASEURL, ET_CLIENT_NAME } from '../config/env';
+import {
+  ENTUR_BASEURL,
+  ENTUR_WEBSOCKET_BASEURL,
+  ET_CLIENT_NAME
+} from '../config/env';
+import WebSocket from 'ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -32,6 +38,10 @@ const urlMobility = ENTUR_BASEURL
 const urlVehicles = ENTUR_BASEURL
   ? `${ENTUR_BASEURL}/realtime/v1/vehicles/graphql`
   : 'https://api.entur.io/realtime/v1/vehicles/graphql';
+
+const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
+  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
+  : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
 function createClient(url: string) {
   const cache = new InMemoryCache();
@@ -59,8 +69,37 @@ function createClient(url: string) {
   });
 }
 
+function createWebSocketClient(url: string) {
+  const cache = new InMemoryCache({
+    addTypename: false
+  });
+
+  const wsLink = new WebSocketLink(
+    new SubscriptionClient(
+      url,
+      {
+        reconnect: true,
+        lazy: true
+      },
+      WebSocket
+    )
+  );
+
+  const errorLink = onError(error =>
+    console.log('Apollo Error:', JSON.stringify(error))
+  );
+  const link = ApolloLink.from([errorLink, wsLink]);
+
+  return new ApolloClient({
+    link,
+    cache,
+    defaultOptions
+  });
+}
+
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
 export const mobilityClient = createClient(urlMobility);
 export const vehiclesClient = createClient(urlVehicles);
+export const vehiclesSubscriptionClient = createWebSocketClient(urlVehiclesWss);
 
 export type GraphQLClient = ApolloClient<NormalizedCacheObject>;

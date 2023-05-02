@@ -1,23 +1,44 @@
-import { Result } from "@badrap/result";
-import { Feature, TripPattern } from "@entur/sdk";
-import { Boom } from "@hapi/boom";
-import * as Trips from "../types/trips";
+import { Result } from '@badrap/result';
+import { Feature, TripPattern } from '@entur/sdk';
+import { Boom } from '@hapi/boom';
+import WebSocket from 'ws';
+import { Subscription } from 'zen-observable-ts';
+import * as Trips from '../types/trips';
+import { DepartureGroupMetadata } from './impl/departures-grouped/departure-group';
+import {
+  DeparturesQuery,
+  DeparturesQueryVariables
+} from './impl/departures/journey-gql/departures.graphql-gen';
 import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables
-} from "./impl/departures/journey-gql/stop-departures.graphql-gen";
-import { StopsDetailsQuery, StopsDetailsQueryVariables } from "./impl/departures/journey-gql/stops-details.graphql-gen";
+} from './impl/departures/journey-gql/stop-departures.graphql-gen';
+import {
+  StopsDetailsQuery,
+  StopsDetailsQueryVariables
+} from './impl/departures/journey-gql/stops-details.graphql-gen';
 import {
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables
-} from "./impl/departures/journey-gql/stops-nearest.graphql-gen";
-import { EnrollResponse } from "./impl/enrollment";
-import { ServiceJourneyWithEstCallsFragment } from "./impl/fragments/journey-gql/service-journey.graphql-gen";
-import { GetQuaysCoordinatesQuery } from "./impl/quays/journey-gql/quays-coordinates.graphql-gen";
+} from './impl/departures/journey-gql/stops-nearest.graphql-gen';
+import { EnrollResponse } from './impl/enrollment';
+import { ServiceJourneyWithEstCallsFragment } from './impl/fragments/journey-gql/service-journey.graphql-gen';
+import { VehicleBasicFragment } from './impl/fragments/mobility-gql/vehicles.graphql-gen';
 import {
-  ServiceJourneyEstimatedCallFragment
-} from "./impl/service-journey/journey-gql/service-journey-departures.graphql-gen";
-import { DepartureGroupMetadata } from "./impl/departures-grouped/departure-group";
+  GetBikeStationQuery,
+  GetCarStationQuery,
+  GetStationsQuery
+} from './impl/mobility/mobility-gql/stations.graphql-gen';
+import {
+  GetVehicleQuery,
+  GetVehiclesQuery
+} from './impl/mobility/mobility-gql/vehicles.graphql-gen';
+import { GetQuaysCoordinatesQuery } from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
+import { ServiceJourneyEstimatedCallFragment } from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
+import {
+  TripsQuery,
+  TripsQueryVariables
+} from './impl/trips/journey-gql/trip.graphql-gen';
 import {
   APIError,
   BikeStationQuery,
@@ -35,6 +56,7 @@ import {
   ReverseFeaturesQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
+  ServiceJourneySubscriptionQueryVariables,
   ServiceJourneyVehicleQueryVariables,
   ServiceJourneyVehicles,
   ServiceJourneyWithEstimatedCallsQuery,
@@ -42,16 +64,7 @@ import {
   TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery
-} from "./types";
-import { TripsQuery, TripsQueryVariables } from "./impl/trips/journey-gql/trip.graphql-gen";
-import {
-  GetBikeStationQuery,
-  GetCarStationQuery,
-  GetStationsQuery
-} from "./impl/mobility/mobility-gql/stations.graphql-gen";
-import { DeparturesQuery, DeparturesQueryVariables } from "./impl/departures/journey-gql/departures.graphql-gen";
-import { VehicleBasicFragment } from "./impl/fragments/mobility-gql/vehicles.graphql-gen";
-import { GetVehicleQuery, GetVehiclesQuery } from "./impl/mobility/mobility-gql/vehicles.graphql-gen";
+} from './types';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -138,18 +151,25 @@ export interface IVehiclesService {
   getServiceJourneyVehicles(
     query: ServiceJourneyVehicleQueryVariables
   ): Promise<Result<ServiceJourneyVehicles, APIError>>;
+  createServiceJourneySubscription(
+    query: ServiceJourneySubscriptionQueryVariables,
+    ws: WebSocket.WebSocket
+  ): Subscription;
 }
 
-export type VehicleFragment = Pick<VehicleBasicFragment, 'id' | 'lat' | 'lon' | 'currentFuelPercent'>
-export type GetVehiclesListQuery = Omit<GetVehiclesQuery, 'vehicles'> & { vehicles?: Array<VehicleFragment>}
+export type VehicleFragment = Pick<
+  VehicleBasicFragment,
+  'id' | 'lat' | 'lon' | 'currentFuelPercent'
+>;
+export type GetVehiclesListQuery = Omit<GetVehiclesQuery, 'vehicles'> & {
+  vehicles?: Array<VehicleFragment>;
+};
 
 export interface IMobilityService {
   getVehicles(
     query: VehiclesQuery
   ): Promise<Result<GetVehiclesListQuery, APIError>>;
-  getVehicle(
-    query: VehicleQuery
-  ): Promise<Result<GetVehicleQuery, APIError>>;
+  getVehicle(query: VehicleQuery): Promise<Result<GetVehicleQuery, APIError>>;
   getStations(
     query: StationsQuery
   ): Promise<Result<GetStationsQuery, APIError>>;

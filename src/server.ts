@@ -13,6 +13,7 @@ import url from 'url';
 import Redis from '@hapi/catbox-redis';
 import Memory from '@hapi/catbox-memory';
 import { REDIS_HOST, REDIS_PORT } from './config/env';
+import HAPIPluginWebsocket from 'hapi-plugin-websocket';
 
 interface ServerOptions {
   port: string;
@@ -97,6 +98,8 @@ export const initializePlugins = async (server: hapi.Server) => {
       }
     }
   });
+
+  await server.register(HAPIPluginWebsocket);
 
   return server;
 };

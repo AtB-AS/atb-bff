@@ -1,12 +1,19 @@
 import { IVehiclesService } from '../../interface';
 import { Result } from '@badrap/result';
 import { APIError, GetServiceJourneyVehicles } from '../../types';
-import { vehiclesClient } from '../../../graphql/graphql-client';
+import {
+  vehiclesClient,
+  vehiclesSubscriptionClient
+} from '../../../graphql/graphql-client';
 import {
   GetServiceJourneyVehicleDocument,
   GetServiceJourneyVehicleQuery,
   GetServiceJourneyVehicleQueryVariables
 } from './vehicles-gql/vehicles.graphql-gen';
+import {
+  ServiceJourneyDocument,
+  ServiceJourneySubscription
+} from './vehicles-gql/service-journey-subscription.graphql-gen';
 
 export default (): IVehiclesService => ({
   async getServiceJourneyVehicles(query) {
@@ -38,5 +45,23 @@ export default (): IVehiclesService => ({
     } catch (error) {
       return Result.err(new APIError(error));
     }
+  },
+  createServiceJourneySubscription(query, ws) {
+    return vehiclesSubscriptionClient
+      .subscribe({
+        query: ServiceJourneyDocument,
+        fetchPolicy: 'no-cache',
+        variables: query
+      })
+      .subscribe({
+        next: value => {
+          const data = value.data as ServiceJourneySubscription;
+          const vehicle = data.vehicles?.find(
+            v => v.serviceJourney?.id === query.serviceJourneyId
+          );
+          if (!vehicle) return;
+          ws.send(JSON.stringify(vehicle));
+        }
+      });
   }
 });
