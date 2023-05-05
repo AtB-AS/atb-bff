@@ -1,12 +1,12 @@
 FROM node:lts-slim AS proddeps
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --omit dev
+RUN npm ci --omit dev
 
 FROM node:lts-slim AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
