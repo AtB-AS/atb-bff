@@ -6,3 +6,11 @@ export type VehicleInfoType =
       currentFuelPercent: number;
     }
   | undefined;
+
+export type StationInfoType =
+  | {
+      id: string;
+      count: number;
+      formFactor: string;
+    }
+  | undefined;

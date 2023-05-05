@@ -1,15 +1,29 @@
 import { vehicle, vehicles } from './vehicles';
-import { VehicleInfoType } from '../types/mobility';
+import { StationInfoType, VehicleInfoType } from '../types/mobility';
+import { station, stations } from './stations';
 
 // Get vehicles and ask for a specific vehicle
 export function vehicleByIdScenario(): void {
   let vehicleInfo: VehicleInfoType = vehicles(200);
   if (vehicleInfo !== undefined) {
-    vehicle(vehicleInfo, 100);
+    vehicle(vehicleInfo);
   }
 
   vehicleInfo = vehicles(300);
   if (vehicleInfo !== undefined) {
-    vehicle(vehicleInfo, 100);
+    vehicle(vehicleInfo);
+  }
+}
+
+// Get vehicles and ask for a specific vehicle
+export function stationByIdScenario(): void {
+  let stationInfo: StationInfoType = stations(250);
+  if (stationInfo !== undefined) {
+    station(stationInfo);
+  }
+
+  stationInfo = stations(400);
+  if (stationInfo !== undefined) {
+    station(stationInfo);
   }
 }

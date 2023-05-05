@@ -84,14 +84,11 @@ export function vehicles(range: number = 200): VehicleInfoType | undefined {
   }
 }
 
-export function vehicle(vehicleInfo: VehicleInfoType, range: number = 100) {
-  const requestName = `v2_vehicle_${range}`;
+// Get one vehicle
+export function vehicle(vehicleInfo: VehicleInfoType) {
+  const requestName = `v2_vehicle`;
   const formFactor = 'SCOOTER';
-  const url = `${conf.host()}/bff/v2/mobility/vehicle?id=${
-    vehicleInfo!.id
-  }&formFactors=${formFactor}&lat=${vehicleInfo!.lat}&lon=${
-    vehicleInfo!.lon
-  }&range=${range}`;
+  const url = `${conf.host()}/bff/v2/mobility/vehicle?ids=${vehicleInfo!.id}`;
 
   const res = http.get(url, {
     tags: { name: requestName },
@@ -100,12 +97,18 @@ export function vehicle(vehicleInfo: VehicleInfoType, range: number = 100) {
 
   try {
     const json = res.json() as Query;
-    const vehicle = json as Vehicle;
+    const vehicles = json.vehicles as Vehicle[];
+    const vehicle = vehicles[0];
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
     ];
+
     expects.push(
+      {
+        check: 'should return only one vehicle',
+        expect: vehicles.length === 1
+      },
       {
         check: 'vehicle id is correct',
         expect: vehicle.id === vehicleInfo!.id

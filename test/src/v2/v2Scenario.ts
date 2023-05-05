@@ -36,6 +36,7 @@ import {
   serviceJourneyCalls
 } from './servicejourney';
 import { stations, vehicleByIdScenario, vehicles } from './mobility';
+import { stationByIdScenario } from './mobility/scenario';
 
 //Scenario with std pattern
 export const departuresScenario = (searchDate: string): void => {
@@ -78,6 +79,7 @@ export const mobilityScenario = (): void => {
   stations(250);
 
   vehicleByIdScenario();
+  stationByIdScenario();
 };
 
 //Performance scenario with different patterns
