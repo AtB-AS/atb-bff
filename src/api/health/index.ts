@@ -8,4 +8,11 @@ export default (server: Hapi.Server) => {
       return 'OK';
     }
   });
+  server.route({
+    method: 'GET',
+    path: '/ws/health',
+    handler: (request, h, err) => {
+      return 'OK';
+    }
+  });
 };
