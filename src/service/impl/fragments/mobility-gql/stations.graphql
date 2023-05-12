@@ -43,6 +43,7 @@ fragment carVehicleType on VehicleType {
         ...translatedString
     }
     vehicleAccessories
+    vehicleImage
 }
 
 fragment carAvailability on VehicleTypeAvailability {
