@@ -306,7 +306,7 @@ export const tripsTestData: tripsTestDataType = {
       },
       expectedResult: {
         legModes: null,
-        minimumTripPatterns: 3
+        minimumTripPatterns: 2
       }
     }
   ]

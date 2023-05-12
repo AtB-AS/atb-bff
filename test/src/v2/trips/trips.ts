@@ -23,7 +23,7 @@ export function trips(
   searchDate: string,
   arriveBy: boolean = false
 ): void {
-  const searchTime = `${searchDate}T08:00:00.000Z`;
+  const searchTime = `${searchDate}T07:00:00.000Z`;
   for (let test of testData.scenarios) {
     const requestName = arriveBy
       ? `v2_trips_arriveBy_${testData.scenarios.indexOf(test)}`
@@ -131,6 +131,7 @@ export function trips(
           const responseLegModes = json.trip.tripPatterns[
             expModes.pattern
           ].legs.map(leg => leg.mode);
+          //console.log(`** ${testData.scenarios.indexOf(test)} ** ${expModes.pattern} ** ${responseLegModes} - ${expModes.modes}`)
           expects.push({
             check: `should have correct leg modes for trip pattern ${expModes.pattern}`,
             expect: isEqual(responseLegModes, expModes.modes)
@@ -175,7 +176,7 @@ export function tripsWithCursor(
   arriveBy: boolean = false
 ) {
   const test = testData.scenarios[0];
-  const searchTime = `${searchDate}T08:00:00.000Z`;
+  const searchTime = `${searchDate}T07:00:00.000Z`;
   const requestName = arriveBy
     ? `v2_tripsWithCursor_arriveBy`
     : `v2_tripsWithCursor_departAfter`;
@@ -336,7 +337,7 @@ export function filteredTrips(
   searchDate: string,
   filterRequestName?: string
 ): void {
-  const searchTime = `${searchDate}T08:00:00.000Z`;
+  const searchTime = `${searchDate}T07:00:00.000Z`;
   const requestName = filterRequestName
     ? `v2_filteredTrips_${filterRequestName}`
     : `v2_filteredTrips`;
@@ -500,7 +501,7 @@ export function singleTrip(
   arriveBy: boolean = false
 ) {
   const requestName = 'v2_singleTrip';
-  const searchTime = `${searchDate}T08:00:00.000Z`;
+  const searchTime = `${searchDate}T07:00:00.000Z`;
   const noSingleTripsToTest = 2;
   const urlTrips = `${conf.host()}/bff/v2/trips`;
   const urlSingleTrip = `${conf.host()}/bff/v2/singleTrip`;

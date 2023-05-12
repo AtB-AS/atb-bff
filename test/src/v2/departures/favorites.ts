@@ -1,8 +1,11 @@
 import http from 'k6/http';
 import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersPost } from '../../utils/headers';
-import { departureFavoritesTestDataType, FavoriteResponseType } from '../types';
-import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/quay-departures.graphql-gen';
+import {
+  departureFavoritesTestDataType,
+  FavoriteResponseType,
+  QuayDeparturesType
+} from '../types';
 import { isEqual } from '../../utils/utils';
 
 export function departureFavorites(
@@ -16,7 +19,7 @@ export function departureFavorites(
     )}`;
     const url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limitPerLine}`;
 
-    const res = http.post(url, JSON.stringify(test), {
+    let res = http.post(url, JSON.stringify(test), {
       tags: { name: requestName },
       headers: bffHeadersPost
     });
@@ -133,7 +136,7 @@ export function departureFavoritesVsQuayDepartures(
 
   try {
     const jsonFav = resFav.json() as FavoriteResponseType;
-    const jsonDep = resDep.json() as QuayDeparturesQuery;
+    const jsonDep = resDep.json() as QuayDeparturesType;
 
     const expects: ExpectsType = [
       {
@@ -146,13 +149,13 @@ export function departureFavoritesVsQuayDepartures(
     const serviceJourneyFavorites = jsonFav.data[0].quays
       .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
       .group[0].departures.map(dep => dep.serviceJourneyId);
-    const serviceJourneyDepartures = jsonDep.quay!.estimatedCalls.map(
+    const serviceJourneyDepartures = jsonDep.quay.estimatedCalls.map(
       call => call.serviceJourney!.id
     );
     const aimedTimeFavorites = jsonFav.data[0].quays
       .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
       .group[0].departures.map(dep => dep.aimedTime);
-    const aimedTimeDepartures = jsonDep.quay!.estimatedCalls.map(
+    const aimedTimeDepartures = jsonDep.quay.estimatedCalls.map(
       call => call.aimedDepartureTime
     );
     expects.push(
