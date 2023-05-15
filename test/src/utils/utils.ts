@@ -104,10 +104,10 @@ export const arrivesBeforeExpectedEndTime = (
   return true;
 };
 
-// Return next Thursday as a date - to be used in search
-export const getNextThursday = (): string => {
+// Return next Friday as a date - to be used in search
+export const getNextFriday = (): string => {
   const today = new Date();
-  const increaseDays = 4 - today.getDay() + 7; // Thursday = 4
+  const increaseDays = 5 - today.getDay() + 7; // Friday = 5
   today.setDate(today.getDate() + increaseDays);
 
   return today.toISOString().split('T')[0];

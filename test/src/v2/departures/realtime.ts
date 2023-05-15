@@ -6,8 +6,7 @@ import {
   isEqual,
   randomNumber
 } from '../../utils/utils';
-import { RealtimeResponseType } from '../types';
-import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/quay-departures.graphql-gen';
+import { QuayDeparturesType, RealtimeResponseType } from '../types';
 
 export function realtimeScenario(searchDate: string): void {
   const quayId = 'NSR:Quay:73576';
@@ -205,7 +204,7 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
   ];
 
   try {
-    const jsonQD = resQD.json() as QuayDeparturesQuery;
+    const jsonQD = resQD.json() as QuayDeparturesType;
 
     // Get realtime to compare
     searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;

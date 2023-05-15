@@ -3,8 +3,8 @@ import { conf, ExpectsType, metrics } from '../../config/configuration';
 import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
 import { isEqual } from '../../utils/utils';
 import { JSONObject } from 'k6';
-import { QuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/quay-departures.graphql-gen';
 import { StopPlaceQuayDeparturesQuery } from '../../../../src/service/impl/departures/journey-gql/stop-departures.graphql-gen';
+import { QuayDeparturesType } from '../types';
 
 export function stopDepartures(
   stopId: string,
@@ -144,7 +144,7 @@ export function quayDeparturesVsStopDepartures(
         tags: { name: requestName },
         headers: bffHeadersPost
       });
-      const jsonQD = resQD.json() as QuayDeparturesQuery;
+      const jsonQD = resQD.json() as QuayDeparturesType;
 
       const expects: ExpectsType = [
         { check: 'should have status 200', expect: resSD.status === 200 },
@@ -200,7 +200,7 @@ export function quayDepartures(
   ];
 
   try {
-    const json = res.json() as QuayDeparturesQuery;
+    const json = res.json() as QuayDeparturesType;
 
     expects.push(
       {
