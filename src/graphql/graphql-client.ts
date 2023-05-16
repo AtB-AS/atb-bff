@@ -60,7 +60,11 @@ function createClient(url: string) {
   const errorLink = onError(error =>
     console.log('Apollo Error:', JSON.stringify(error))
   );
-  const link = ApolloLink.from([errorLink, httpLink]);
+  const loggingLink = new ApolloLink((operation, forward) => {
+    console.log(JSON.stringify({ variables: operation.variables }));
+    return forward(operation);
+  });
+  const link = ApolloLink.from([loggingLink, errorLink, httpLink]);
 
   return new ApolloClient({
     link,
