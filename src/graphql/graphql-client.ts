@@ -61,8 +61,17 @@ function createClient(url: string) {
     console.log('Apollo Error:', JSON.stringify(error))
   );
   const loggingLink = new ApolloLink((operation, forward) => {
-    console.log(JSON.stringify({ variables: operation.variables }));
-    return forward(operation);
+    return forward(operation).map(response => {
+      const context = operation.getContext();
+      [
+        'rate-limit-allowed',
+        'rate-limit-used',
+        'rate-limit-available',
+        'rate-limit-range',
+        'rate-limit-expiry-time'
+      ].forEach(h => console.log(`${h}: ${context.response.headers.get(h)}`));
+      return response;
+    });
   });
   const link = ApolloLink.from([loggingLink, errorLink, httpLink]);
 
