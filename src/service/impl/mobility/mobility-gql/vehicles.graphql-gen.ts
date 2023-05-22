@@ -9,6 +9,7 @@ export type GetVehiclesQueryVariables = Types.Exact<{
   lon: Types.Scalars['Float'];
   range: Types.Scalars['Int'];
   formFactors?: Types.InputMaybe<Array<Types.InputMaybe<Types.FormFactor>> | Types.InputMaybe<Types.FormFactor>>;
+  operators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
 }>;
 
 
@@ -23,8 +24,14 @@ export type GetVehicleQuery = { vehicles?: Array<VehicleExtendedFragment> };
 
 
 export const GetVehiclesDocument = gql`
-    query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor]) {
-  vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors) {
+    query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor], $operators: [String]) {
+  vehicles(
+    lat: $lat
+    lon: $lon
+    range: $range
+    formFactors: $formFactors
+    operators: $operators
+  ) {
     ...vehicleBasic
   }
 }

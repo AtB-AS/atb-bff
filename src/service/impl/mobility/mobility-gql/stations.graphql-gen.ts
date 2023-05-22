@@ -9,6 +9,7 @@ export type GetStationsQueryVariables = Types.Exact<{
   lon: Types.Scalars['Float'];
   range: Types.Scalars['Int'];
   availableFormFactors?: Types.InputMaybe<Array<Types.InputMaybe<Types.FormFactor>> | Types.InputMaybe<Types.FormFactor>>;
+  operators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
 }>;
 
 
@@ -30,12 +31,13 @@ export type GetBikeStationQuery = { stations?: Array<BikeStationFragment> };
 
 
 export const GetStationsDocument = gql`
-    query getStations($lat: Float!, $lon: Float!, $range: Int!, $availableFormFactors: [FormFactor]) {
+    query getStations($lat: Float!, $lon: Float!, $range: Int!, $availableFormFactors: [FormFactor], $operators: [String]) {
   stations(
     lat: $lat
     lon: $lon
     range: $range
     availableFormFactors: $availableFormFactors
+    operators: $operators
   ) {
     ...stationBasic
   }
