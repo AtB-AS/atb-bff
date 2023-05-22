@@ -63,13 +63,14 @@ function createClient(url: string) {
   const loggingLink = new ApolloLink((operation, forward) => {
     return forward(operation).map(response => {
       const context = operation.getContext();
-      [
+      const rateHeaders = [
         'rate-limit-allowed',
         'rate-limit-used',
         'rate-limit-available',
         'rate-limit-range',
         'rate-limit-expiry-time'
-      ].forEach(h => console.log(`${h}: ${context.response.headers.get(h)}`));
+      ].reduce((a, h) => ({ ...a, [h]: context.response.headers.get(h) }), {});
+      console.log(JSON.stringify(rateHeaders));
       return response;
     });
   });
