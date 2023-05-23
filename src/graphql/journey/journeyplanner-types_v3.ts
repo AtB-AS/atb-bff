@@ -233,9 +233,9 @@ export enum DirectionType {
 
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
-  /** Actual time of arrival at quay. Updated from real time information if available. NOT IMPLEMENTED */
+  /** Actual time of arrival at quay. Updated from real time information if available. */
   actualArrivalTime?: Maybe<Scalars['DateTime']>;
-  /** Actual time of departure from quay. Updated with real time information if available. NOT IMPLEMENTED */
+  /** Actual time of departure from quay. Updated with real time information if available. */
   actualDepartureTime?: Maybe<Scalars['DateTime']>;
   /** Scheduled time of arrival at quay. Not affected by read time updated */
   aimedArrivalTime: Scalars['DateTime'];
@@ -330,6 +330,7 @@ export type InputCoordinates = {
 export enum InputField {
   DateTime = 'dateTime',
   From = 'from',
+  IntermediatePlace = 'intermediatePlace',
   To = 'to'
 }
 
@@ -878,7 +879,7 @@ export type QueryType = {
   quays: Array<Maybe<Quay>>;
   /** Get all quays within the specified bounding box */
   quaysByBbox: Array<Maybe<Quay>>;
-  /** Get all quays within the specified walking radius from a location. The returned type has two fields quay and distance */
+  /** Get all quays within the specified walking radius from a location. There are no maximum limits for the input parameters, but the query will timeout and return if the parameters are too high. */
   quaysByRadius?: Maybe<QuayAtDistanceConnection>;
   /** Get default routing parameters. */
   routingParameters?: Maybe<RoutingParameters>;
@@ -1205,6 +1206,8 @@ export enum RoutingErrorCode {
   OutsideBounds = 'outsideBounds',
   /** The date specified is outside the range of data currently loaded into the system */
   OutsideServicePeriod = 'outsideServicePeriod',
+  /** The routing request timed out. */
+  ProcessingTimeout = 'processingTimeout',
   /** An unknown error happened during the search. The details have been logged to the server logs */
   SystemError = 'systemError',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */

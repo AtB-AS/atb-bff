@@ -140,6 +140,9 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
         transportSubmode
         serviceJourneyEstimatedCalls {
           actualDepartureTime
+          realtime
+          aimedDepartureTime
+          expectedDepartureTime
           quay {
             name
           }
