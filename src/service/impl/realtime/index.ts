@@ -15,11 +15,11 @@ import {
 
 export default (): IRealtimeService => {
   const api: IRealtimeService = {
-    async getDepartureRealtime(query: DepartureRealtimeQuery) {
+    async getDepartureRealtime(query: DepartureRealtimeQuery, headers) {
       try {
         const variables = createVariables(query);
-        const previousResult = getPreviousExpectedFromCache(variables);
-        const result = await journeyPlannerClient.query<
+        const previousResult = getPreviousExpectedFromCache(variables, headers);
+        const result = await journeyPlannerClient(headers).query<
           GetDepartureRealtimeQuery,
           GetDepartureRealtimeQueryVariables
         >({

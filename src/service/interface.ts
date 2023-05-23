@@ -1,4 +1,5 @@
 import { Result } from '@badrap/result';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 import { Feature, TripPattern } from '@entur/sdk';
 import { Boom } from '@hapi/boom';
 import WebSocket from 'ws';
@@ -77,65 +78,81 @@ export interface IGeocoderService {
 export interface IServiceJourneyService_v2 {
   getServiceJourneyMapInfo(
     serviceJourneyId: string,
-    query: ServiceJourneyMapInfoQuery
+    query: ServiceJourneyMapInfoQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
   getDeparturesForServiceJourneyV2(
     id: string,
-    query: DeparturesForServiceJourneyQuery
+    query: DeparturesForServiceJourneyQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<ServiceJourneyEstimatedCallFragment[] | null, APIError>>;
   getServiceJourneyWithEstimatedCallsV2(
     id: string,
-    query: ServiceJourneyWithEstimatedCallsQuery
+    query: ServiceJourneyWithEstimatedCallsQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<ServiceJourneyWithEstCallsFragment | null, APIError>>;
 }
 
 export interface ITrips_v2 {
-  getTrips(query: TripsQueryVariables): Promise<Result<TripsQuery, APIError>>;
+  getTrips(
+    query: TripsQueryVariables,
+    headers: Request<ReqRefDefaults>
+  ): Promise<Result<TripsQuery, APIError>>;
   getSingleTrip(
-    query: Trips.TripsQueryWithJourneyIds
+    query: Trips.TripsQueryWithJourneyIds,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<Trips.TripPattern, Boom>>;
   getTripPatterns(
-    query: TripPatternsQuery
+    query: TripPatternsQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<TripPattern[], APIError>>;
 }
 
 export interface IDeparturesGroupedService {
   getDeparturesGrouped(
     location: DepartureGroupsPayload,
-    query: DepartureGroupsQuery
+    query: DepartureGroupsQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<DepartureGroupMetadata, APIError>>;
   getDeparturesFavorites(
     location: DepartureFavoritesPayload,
-    query: DepartureFavoritesQuery
+    query: DepartureFavoritesQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<DepartureGroupMetadata, APIError>>;
 }
 
 export interface IRealtimeService {
   getDepartureRealtime(
-    query: DepartureRealtimeQuery
+    query: DepartureRealtimeQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<DeparturesRealtimeData, APIError>>;
 }
 
 export interface IDeparturesService {
   getDepartures(
     query: DeparturesQueryVariables,
-    payload: DeparturesPayload
+    payload: DeparturesPayload,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<DeparturesQuery, APIError>>;
   getStopPlacesByPosition(
-    query: NearestStopPlacesQueryVariables
+    query: NearestStopPlacesQueryVariables,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<NearestStopPlacesQuery, APIError>>;
   getStopsDetails(
-    query: StopsDetailsQueryVariables
+    query: StopsDetailsQueryVariables,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<StopsDetailsQuery, APIError>>;
   getStopQuayDepartures(
     query: StopPlaceQuayDeparturesQueryVariables,
+    headers: Request<ReqRefDefaults>,
     payload?: DeparturesPayload
   ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
 }
 
 export interface IQuayService {
   getQuaysCoordinates(
-    payload: QuaysCoordinatesPayload
+    payload: QuaysCoordinatesPayload,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<GetQuaysCoordinatesQuery, APIError>>;
 }
 
@@ -149,7 +166,8 @@ export interface IEnrollmentService {
 
 export interface IVehiclesService {
   getServiceJourneyVehicles(
-    query: ServiceJourneyVehicleQueryVariables
+    query: ServiceJourneyVehicleQueryVariables,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<ServiceJourneyVehicles, APIError>>;
   createServiceJourneySubscription(
     query: ServiceJourneySubscriptionQueryVariables,
@@ -167,16 +185,23 @@ export type GetVehiclesListQuery = Omit<GetVehiclesQuery, 'vehicles'> & {
 
 export interface IMobilityService {
   getVehicles(
-    query: VehiclesQuery
+    query: VehiclesQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<GetVehiclesListQuery, APIError>>;
-  getVehicle(query: VehicleQuery): Promise<Result<GetVehicleQuery, APIError>>;
+  getVehicle(
+    query: VehicleQuery,
+    headers: Request<ReqRefDefaults>
+  ): Promise<Result<GetVehicleQuery, APIError>>;
   getStations(
-    query: StationsQuery
+    query: StationsQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<GetStationsQuery, APIError>>;
   getCarStation(
-    query: CarStationQuery
+    query: CarStationQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<GetCarStationQuery, APIError>>;
   getBikeStation(
-    query: BikeStationQuery
+    query: BikeStationQuery,
+    headers: Request<ReqRefDefaults>
   ): Promise<Result<GetBikeStationQuery, APIError>>;
 }

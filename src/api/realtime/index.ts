@@ -20,7 +20,7 @@ export default (server: Hapi.Server) => (service: IRealtimeService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as DepartureRealtimeQuery;
-      return (await service.getDepartureRealtime(query)).unwrap();
+      return (await service.getDepartureRealtime(query, h.request)).unwrap();
     }
   });
   server.route({
@@ -33,7 +33,7 @@ export default (server: Hapi.Server) => (service: IRealtimeService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as DepartureRealtimeQuery;
-      return (await service.getDepartureRealtime(query)).unwrap();
+      return (await service.getDepartureRealtime(query, h.request)).unwrap();
     }
   });
 };

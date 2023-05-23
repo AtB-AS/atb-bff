@@ -28,10 +28,10 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       description:
         'Get departures for a list of quays, and optionally filter on favorites'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const query = request.query as unknown as DeparturesQueryVariables;
       const payload = request.payload as unknown as DeparturesPayload;
-      return (await service.getDepartures(query, payload)).unwrap();
+      return (await service.getDepartures(query, payload, h.request)).unwrap();
     }
   });
   server.route({
@@ -44,7 +44,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as NearestStopPlacesQueryVariables;
-      return (await service.getStopPlacesByPosition(query)).unwrap();
+      return (await service.getStopPlacesByPosition(query, h.request)).unwrap();
     }
   });
   server.route({
@@ -57,7 +57,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as StopsDetailsQueryVariables;
-      return (await service.getStopsDetails(query)).unwrap();
+      return (await service.getStopsDetails(query, h.request)).unwrap();
     }
   });
   server.route({
@@ -76,7 +76,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query =
         request.query as unknown as StopPlaceQuayDeparturesQueryVariables;
-      return (await service.getStopQuayDepartures(query)).unwrap();
+      return (await service.getStopQuayDepartures(query, h.request)).unwrap();
     }
   });
   server.route({
@@ -97,7 +97,9 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
       const query =
         request.query as unknown as StopPlaceQuayDeparturesQueryVariables;
       const payload = request.payload as unknown as DeparturesPayload;
-      return (await service.getStopQuayDepartures(query, payload)).unwrap();
+      return (
+        await service.getStopQuayDepartures(query, h.request, payload)
+      ).unwrap();
     }
   });
   server.route({
@@ -121,7 +123,8 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
             ...query,
             ids: [query.id]
           },
-          {}
+          {},
+          h.request
         )
       ).unwrap();
       return { quay: response.quays[0] };
@@ -150,7 +153,8 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
             ...query,
             ids: [query.id]
           },
-          payload
+          payload,
+          h.request
         )
       ).unwrap();
       return { quay: response.quays[0] };

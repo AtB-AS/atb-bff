@@ -13,15 +13,17 @@ import {
   getServiceJourneyWithEstimatedCallsV2
 } from './schema';
 import qs from 'querystring';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 export function serviceJourneyRoutes_v2(server: Hapi.Server) {
   return (service: IServiceJourneyService_v2) => {
     const getServiceJourneyMapInfo_v2 = async (
       serviceJourneyId: string,
-      query: ServiceJourneyMapInfoQuery
+      query: ServiceJourneyMapInfoQuery,
+      headers: Request<ReqRefDefaults>
     ) =>
       (
-        await service.getServiceJourneyMapInfo(serviceJourneyId, query)
+        await service.getServiceJourneyMapInfo(serviceJourneyId, query, headers)
       ).unwrap();
 
     server.method('getServiceJourneyMapInfo_v2', getServiceJourneyMapInfo_v2, {
@@ -92,9 +94,13 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         const { id } = request.params;
         const { date } =
           request.query as unknown as DeparturesForServiceJourneyQuery;
-        return await service.getDeparturesForServiceJourneyV2(id, {
-          date
-        });
+        return await service.getDeparturesForServiceJourneyV2(
+          id,
+          {
+            date
+          },
+          h.request
+        );
       }
     });
 
@@ -110,7 +116,11 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         const { id } = request.params;
         const { date } =
           request.query as unknown as DeparturesForServiceJourneyQuery;
-        return await service.getDeparturesForServiceJourneyV2(id, { date });
+        return await service.getDeparturesForServiceJourneyV2(
+          id,
+          { date },
+          h.request
+        );
       }
     });
 
@@ -126,9 +136,13 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         const { id } = request.params;
         const { date } =
           request.query as unknown as ServiceJourneyWithEstimatedCallsQuery;
-        return await service.getServiceJourneyWithEstimatedCallsV2(id, {
-          date
-        });
+        return await service.getServiceJourneyWithEstimatedCallsV2(
+          id,
+          {
+            date
+          },
+          h.request
+        );
       }
     });
   };

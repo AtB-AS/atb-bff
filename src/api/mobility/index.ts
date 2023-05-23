@@ -1,7 +1,18 @@
 import Hapi from '@hapi/hapi';
 import { IMobilityService } from '../../service/interface';
-import { BikeStationQuery, CarStationQuery, StationsQuery, VehicleQuery, VehiclesQuery } from "../../service/types";
-import { getVehiclesRequest, getStationsRequest, getVehicleRequest, getCarStationRequest } from "./schema";
+import {
+  BikeStationQuery,
+  CarStationQuery,
+  StationsQuery,
+  VehicleQuery,
+  VehiclesQuery
+} from '../../service/types';
+import {
+  getVehiclesRequest,
+  getStationsRequest,
+  getVehicleRequest,
+  getCarStationRequest
+} from './schema';
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
   server.route({
@@ -12,9 +23,9 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       validate: getVehiclesRequest,
       description: 'Get vehicles (scooters, bikes etc.) within an area'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const payload = request.query as unknown as VehiclesQuery;
-      return (await service.getVehicles(payload)).unwrap();
+      return (await service.getVehicles(payload, h.request)).unwrap();
     }
   });
 
@@ -26,9 +37,9 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       validate: getVehicleRequest,
       description: 'Gets a single vehicle (scooter, bike etc.) within an area'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const payload = request.query as unknown as VehicleQuery;
-      return (await service.getVehicle(payload)).unwrap()
+      return (await service.getVehicle(payload, h.request)).unwrap();
     }
   });
 
@@ -40,10 +51,10 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       validate: getStationsRequest,
       description: 'Get stations for bikes, car sharing etc.'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const payload = request.query as unknown as StationsQuery;
 
-      return (await service.getStations(payload)).unwrap();
+      return (await service.getStations(payload, h.request)).unwrap();
     }
   });
 
@@ -55,10 +66,10 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       validate: getCarStationRequest,
       description: 'Get details about a single car station'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const payload = request.query as unknown as CarStationQuery;
 
-      return (await service.getCarStation(payload)).unwrap();
+      return (await service.getCarStation(payload, h.request)).unwrap();
     }
   });
 
@@ -70,10 +81,10 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       validate: getCarStationRequest,
       description: 'Get details about a single bike station'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const payload = request.query as unknown as BikeStationQuery;
 
-      return (await service.getBikeStation(payload)).unwrap();
+      return (await service.getBikeStation(payload, h.request)).unwrap();
     }
   });
 };

@@ -16,11 +16,13 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
       validate: getVehiclesRequest,
       description: 'Get vehicle information for a list of service journeys'
     },
-    handler: async request => {
+    handler: async (request, h) => {
       const payload =
         request.query as unknown as ServiceJourneyVehicleQueryVariables;
 
-      return (await service.getServiceJourneyVehicles(payload)).unwrap();
+      return (
+        await service.getServiceJourneyVehicles(payload, h.request)
+      ).unwrap();
     }
   });
   server.route({

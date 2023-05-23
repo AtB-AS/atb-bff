@@ -15,6 +15,7 @@ import {
 } from '../config/env';
 import WebSocket from 'ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -44,49 +45,52 @@ const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
 function createClient(url: string) {
-  const cache = new InMemoryCache();
-  const httpLink = new HttpLink({
-    uri: url,
+  return function (headers: Request<ReqRefDefaults>) {
+    const cache = new InMemoryCache();
+    const httpLink = new HttpLink({
+      uri: url,
 
-    // node-fetch uses a different signature than the browser implemented fetch
-    // But we use node-fetch's agent option in other parts of the project.
-    // The functionality overlaps so this works as expected.
-    fetch: fetch as unknown as WindowOrWorkerGlobalScope['fetch'],
+      // node-fetch uses a different signature than the browser implemented fetch
+      // But we use node-fetch's agent option in other parts of the project.
+      // The functionality overlaps so this works as expected.
+      fetch: fetch as unknown as WindowOrWorkerGlobalScope['fetch'],
 
-    headers: {
-      'ET-Client-Name': ET_CLIENT_NAME
-    }
-  });
-  const errorLink = onError(error =>
-    console.log('Apollo Error:', JSON.stringify(error))
-  );
-  const loggingLink = new ApolloLink((operation, forward) => {
-    return forward(operation).map(response => {
-      const context = operation.getContext();
-      const date = new Date();
-
-      const log = {
-        time: date.toISOString(),
-        message: 'handle request',
-        url: context.response.url,
-        code: context.response.status,
-        rateLimitUsed: context.response.headers.get('rate-limit-used'),
-        rateLimitAllowed: context.response.headers.get('rate-limit-allowed'),
-        requestId: context.response.headers.get('Atb-Request-Id'),
-        installId: context.response.headers.get('Atb-Install-Id'),
-        appVersion: context.response.headers.get('Atb-App-Version')
-      };
-      console.log(JSON.stringify(log));
-      return response;
+      headers: {
+        'ET-Client-Name': ET_CLIENT_NAME,
+        'X-Correlation-Id': headers['correlationId']
+      }
     });
-  });
-  const link = ApolloLink.from([loggingLink, errorLink, httpLink]);
+    const errorLink = onError(error =>
+      console.log('Apollo Error:', JSON.stringify(error))
+    );
+    const loggingLink = new ApolloLink((operation, forward) => {
+      return forward(operation).map(response => {
+        const context = operation.getContext();
 
-  return new ApolloClient({
-    link,
-    cache,
-    defaultOptions
-  });
+        const log = {
+          time: new Date(context.response.headers.get('date')).toISOString(),
+          message: 'graphql call',
+          url: context.response.url,
+          code: context.response.status,
+          rateLimitUsed: context.response.headers.get('rate-limit-used'),
+          rateLimitAllowed: context.response.headers.get('rate-limit-allowed'),
+          correlationId: context.response.headers.get('x-correlation-id'),
+          requestId: headers['requestId'],
+          installId: headers['installId'],
+          appVersion: headers['appVersion']
+        };
+        console.log(JSON.stringify(log));
+        return response;
+      });
+    });
+    const link = ApolloLink.from([loggingLink, errorLink, httpLink]);
+
+    return new ApolloClient({
+      link,
+      cache,
+      defaultOptions
+    });
+  };
 }
 
 function createWebSocketClient(url: string) {

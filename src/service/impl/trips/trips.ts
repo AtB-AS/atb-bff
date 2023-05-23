@@ -6,6 +6,7 @@ import {
 import { Result } from '@badrap/result';
 import { APIError } from '../../types';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 import * as Boom from '@hapi/boom';
 import {
@@ -15,13 +16,17 @@ import {
 import * as Trips from '../../../types/trips';
 
 export async function getTrips(
-  query: TripsQueryVariables
+  query: TripsQueryVariables,
+  headers: Request<ReqRefDefaults>
 ): Promise<Result<TripsQuery, APIError>> {
   try {
-    const result = await journeyPlannerClient.query<
+    const result = await journeyPlannerClient(headers).query<
       TripsQuery,
       TripsQueryVariables
-    >({ query: TripsDocument, variables: query });
+    >({
+      query: TripsDocument,
+      variables: query
+    });
 
     if (result.errors) {
       return Result.err(new APIError(result.errors));
@@ -33,12 +38,16 @@ export async function getTrips(
 }
 
 export async function getSingleTrip(
-  query: Trips.TripsQueryWithJourneyIds
+  query: Trips.TripsQueryWithJourneyIds,
+  headers: Request<ReqRefDefaults>
 ): Promise<Result<Trips.TripPattern, Boom.Boom>> {
-  const results = await journeyPlannerClient.query<
+  const results = await journeyPlannerClient(headers).query<
     TripsQuery,
     TripsQueryVariables
-  >({ query: TripsDocument, variables: query.query });
+  >({
+    query: TripsDocument,
+    variables: query.query
+  });
 
   if (results.errors) {
     return Result.err(Boom.internal('Error fetching data', results.errors));

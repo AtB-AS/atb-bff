@@ -10,6 +10,7 @@ import {
   GetDepartureRealtimeQuery,
   GetDepartureRealtimeQueryVariables
 } from './journey-gql/departure-time.graphql-gen';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 export const createVariables = (
   query: DepartureRealtimeQuery
@@ -27,15 +28,16 @@ export const createVariables = (
  * realtime request.
  */
 export async function populateRealtimeCacheIfNotThere(
-  inputQuery: DepartureRealtimeQuery
+  inputQuery: DepartureRealtimeQuery,
+  headers: Request<ReqRefDefaults>
 ) {
   try {
     const variables = createVariables(inputQuery);
-    const previousResult = getPreviousExpectedFromCache(variables);
+    const previousResult = getPreviousExpectedFromCache(variables, headers);
 
     if (previousResult) return;
 
-    await journeyPlannerClient.query<
+    await journeyPlannerClient(headers).query<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
@@ -110,10 +112,11 @@ function mapDeparture(
 }
 
 export function getPreviousExpectedFromCache(
-  variables: GetDepartureRealtimeQueryVariables
+  variables: GetDepartureRealtimeQueryVariables,
+  headers: Request<ReqRefDefaults>
 ) {
   try {
-    const result = journeyPlannerClient.readQuery<
+    const result = journeyPlannerClient(headers).readQuery<
       GetDepartureRealtimeQuery,
       GetDepartureRealtimeQueryVariables
     >({
