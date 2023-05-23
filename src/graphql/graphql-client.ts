@@ -63,14 +63,20 @@ function createClient(url: string) {
   const loggingLink = new ApolloLink((operation, forward) => {
     return forward(operation).map(response => {
       const context = operation.getContext();
-      const rateHeaders = [
-        'rate-limit-allowed',
-        'rate-limit-used',
-        'rate-limit-available',
-        'rate-limit-range',
-        'rate-limit-expiry-time'
-      ].reduce((a, h) => ({ ...a, [h]: context.response.headers.get(h) }), {});
-      console.log(JSON.stringify(rateHeaders));
+      const date = new Date();
+
+      const log = {
+        time: date.toISOString(),
+        message: 'handle request',
+        url: context.response.url,
+        code: context.response.status,
+        rateLimitUsed: context.response.headers.get('rate-limit-used'),
+        rateLimitAllowed: context.response.headers.get('rate-limit-allowed'),
+        requestId: context.response.headers.get('Atb-Request-Id'),
+        installId: context.response.headers.get('Atb-Install-Id'),
+        appVersion: context.response.headers.get('Atb-App-Version')
+      };
+      console.log(JSON.stringify(log));
       return response;
     });
   });
