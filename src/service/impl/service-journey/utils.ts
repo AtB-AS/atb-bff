@@ -9,7 +9,7 @@ import {
 
 type PolylinePair = [lat: number, lng: number];
 
-const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 3;
+const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 20;
 
 export function mapToMapLegs(
   data: MapInfoWithFromQuayV2Query & MapInfoWithFromAndToQuayV2Query
