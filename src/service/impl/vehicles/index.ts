@@ -16,10 +16,10 @@ import {
 } from './vehicles-gql/service-journey-subscription.graphql-gen';
 
 export default (): IVehiclesService => ({
-  async getServiceJourneyVehicles(query) {
+  async getServiceJourneyVehicles(query, headers) {
     try {
       const results = query.serviceJourneyIds.map(id => {
-        return vehiclesClient.query<
+        return vehiclesClient(headers).query<
           GetServiceJourneyVehicleQuery,
           GetServiceJourneyVehicleQueryVariables
         >({

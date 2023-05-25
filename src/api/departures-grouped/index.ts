@@ -23,7 +23,9 @@ export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => 
     handler: async (request, h) => {
       const location = request.payload as unknown as DepartureGroupsPayload;
       const query = request.query as unknown as DepartureGroupsQuery;
-      return (await service.getDeparturesGrouped(location, query)).unwrap();
+      return (
+        await service.getDeparturesGrouped(location, query, h.request)
+      ).unwrap();
     }
   });
   server.route({
@@ -38,7 +40,9 @@ export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => 
       const location = request.payload as unknown as DepartureFavoritesPayload;
       const query = request.query as unknown as DepartureFavoritesQuery;
 
-      return (await service.getDeparturesFavorites(location, query)).unwrap();
+      return (
+        await service.getDeparturesFavorites(location, query, h.request)
+      ).unwrap();
     }
   });
 };

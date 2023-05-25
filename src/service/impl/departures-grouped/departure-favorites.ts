@@ -10,11 +10,13 @@ import {
   GroupsByIdQueryVariables
 } from './journey-gql/departure-group.graphql-gen';
 import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 export type DepartureFavoritesMetadata = CursoredData<StopPlaceGroup[]>;
 
 export async function getDepartureFavorites(
   options: DepartureGroupsQuery,
+  headers: Request<ReqRefDefaults>,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {
   const stopIds = union(favorites?.map(f => f.stopId));
@@ -34,15 +36,18 @@ export async function getDepartureFavorites(
   ) as string[];
   const lineIds = union(favorites?.map(f => f.lineId));
   // Fire and forget population of cache. Not critial if it fails.
-  populateRealtimeCacheIfNotThere({
-    limit: 100,
-    startTime: options.startTime,
-    limitPerLine: options.limitPerLine,
-    quayIds,
-    lineIds
-  });
+  populateRealtimeCacheIfNotThere(
+    {
+      limit: 100,
+      startTime: options.startTime,
+      limitPerLine: options.limitPerLine,
+      quayIds,
+      lineIds
+    },
+    headers
+  );
 
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient(headers).query<
     GroupsByIdQuery,
     GroupsByIdQueryVariables
   >({

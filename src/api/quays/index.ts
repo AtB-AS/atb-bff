@@ -15,7 +15,7 @@ export default (server: Hapi.Server) => (service: IQuayService) => {
     handler: async (request, h) => {
       const payload = request.payload as unknown as QuaysCoordinatesPayload;
 
-      return (await service.getQuaysCoordinates(payload)).unwrap();
+      return (await service.getQuaysCoordinates(payload, h.request)).unwrap();
     }
   });
 };

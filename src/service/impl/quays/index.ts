@@ -7,13 +7,15 @@ import {
   GetQuaysCoordinatesDocument,
   GetQuaysCoordinatesQueryVariables
 } from './journey-gql/quays-coordinates.graphql-gen';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 export default (): IQuayService => {
   const api: IQuayService = {
     async getQuaysCoordinates(
-      payload: QuaysCoordinatesPayload
+      payload: QuaysCoordinatesPayload,
+      headers: Request<ReqRefDefaults>
     ): Promise<Result<GetQuaysCoordinatesQuery, APIError>> {
-      const result = await journeyPlannerClient.query<
+      const result = await journeyPlannerClient(headers).query<
         GetQuaysCoordinatesQuery,
         GetQuaysCoordinatesQueryVariables
       >({

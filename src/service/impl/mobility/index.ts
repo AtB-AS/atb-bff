@@ -1,27 +1,30 @@
-import { GetVehiclesListQuery, IMobilityService } from "../../interface";
-import { Result } from "@badrap/result";
-import { APIError } from "../../types";
-import { mobilityClient } from "../../../graphql/graphql-client";
+import { GetVehiclesListQuery, IMobilityService } from '../../interface';
+import { Result } from '@badrap/result';
+import { APIError } from '../../types';
+import { mobilityClient } from '../../../graphql/graphql-client';
 import {
   GetBikeStationDocument,
-  GetBikeStationQuery, GetBikeStationQueryVariables,
+  GetBikeStationQuery,
+  GetBikeStationQueryVariables,
   GetCarStationDocument,
   GetCarStationQuery,
   GetCarStationQueryVariables,
   GetStationsDocument,
   GetStationsQuery,
   GetStationsQueryVariables
-} from "./mobility-gql/stations.graphql-gen";
+} from './mobility-gql/stations.graphql-gen';
 import {
   GetVehicleDocument,
-  GetVehicleQuery, GetVehicleQueryVariables,
+  GetVehicleQuery,
+  GetVehicleQueryVariables,
   GetVehiclesDocument,
   GetVehiclesQuery,
   GetVehiclesQueryVariables
-} from "./mobility-gql/vehicles.graphql-gen";
+} from './mobility-gql/vehicles.graphql-gen';
 
-
-const calculateFuelPercent = <T extends GetVehicleQuery | GetVehiclesQuery>(data: T): T => ({
+const calculateFuelPercent = <T extends GetVehicleQuery | GetVehiclesQuery>(
+  data: T
+): T => ({
   ...data,
   vehicles: data?.vehicles?.map(vehicle => ({
     ...vehicle,
@@ -47,9 +50,9 @@ const stripProps = (data: GetVehiclesQuery): GetVehiclesListQuery => ({
 });
 
 export default (): IMobilityService => ({
-  async getVehicles(query) {
+  async getVehicles(query, headers) {
     try {
-      const result = await mobilityClient.query<
+      const result = await mobilityClient(headers).query<
         GetVehiclesQuery,
         GetVehiclesQueryVariables
       >({
@@ -65,9 +68,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getVehicle(query) {
+  async getVehicle(query, headers) {
     try {
-      const result = await mobilityClient.query<
+      const result = await mobilityClient(headers).query<
         GetVehicleQuery,
         GetVehicleQueryVariables
       >({
@@ -83,9 +86,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getStations(query) {
+  async getStations(query, headers) {
     try {
-      const result = await mobilityClient.query<
+      const result = await mobilityClient(headers).query<
         GetStationsQuery,
         GetStationsQueryVariables
       >({
@@ -101,9 +104,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getCarStation(query) {
+  async getCarStation(query, headers) {
     try {
-      const result = await mobilityClient.query<
+      const result = await mobilityClient(headers).query<
         GetCarStationQuery,
         GetCarStationQueryVariables
       >({
@@ -119,9 +122,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getBikeStation(query) {
+  async getBikeStation(query, headers) {
     try {
-      const result = await mobilityClient.query<
+      const result = await mobilityClient(headers).query<
         GetBikeStationQuery,
         GetBikeStationQueryVariables
       >({

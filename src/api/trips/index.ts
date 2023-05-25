@@ -26,7 +26,7 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
 
     handler: async (request, h) => {
       const query = request.payload as unknown as TripsQueryVariables;
-      const result = await service.getTrips(query);
+      const result = await service.getTrips(query, h.request);
       const unwrapped = result.unwrap();
       return unwrapped;
     }
@@ -45,7 +45,7 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
         queryString.compressedQuery,
         postSingleTripRequest.payload
       );
-      const result = await service.getSingleTrip(query);
+      const result = await service.getSingleTrip(query, h.request);
       return result.unwrap();
     }
   });
@@ -64,7 +64,7 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     },
     handler: async (request, h) => {
       const query = request.payload as unknown as TripPatternsQuery;
-      return (await service.getTripPatterns(query)).unwrap();
+      return (await service.getTripPatterns(query, h.request)).unwrap();
     }
   });
 };

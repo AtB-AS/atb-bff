@@ -5,24 +5,31 @@ import { TripsQueryWithJourneyIds } from '../../../types/trips';
 import { APIError } from '../../types';
 import { mapQueryToLegacyTripPatterns } from './converters';
 import { getSingleTrip, getTrips } from './trips';
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 
 export default (): ITrips_v2 => {
   const api: ITrips_v2 = {
-    async getTrips(query) {
-      return getTrips(query);
+    async getTrips(query, headers: Request<ReqRefDefaults>) {
+      return getTrips(query, headers);
     },
 
-    async getSingleTrip(queryWithIds: TripsQueryWithJourneyIds) {
-      return getSingleTrip(queryWithIds);
+    async getSingleTrip(
+      queryWithIds: TripsQueryWithJourneyIds,
+      headers: Request<ReqRefDefaults>
+    ) {
+      return getSingleTrip(queryWithIds, headers);
     },
-    async getTripPatterns(query) {
+    async getTripPatterns(query, headers) {
       try {
-        const trips = await getTrips({
-          from: query.from,
-          to: query.to,
-          arriveBy: query.arriveBy,
-          when: query.searchDate
-        });
+        const trips = await getTrips(
+          {
+            from: query.from,
+            to: query.to,
+            arriveBy: query.arriveBy,
+            when: query.searchDate
+          },
+          headers
+        );
 
         if (trips.isErr) {
           return Result.err(new APIError(trips.error));

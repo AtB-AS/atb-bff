@@ -39,7 +39,8 @@ export default (): IDeparturesService => {
         timeRange = 86400, // 24 hours
         limitPerLine
       },
-      payload
+      payload,
+      headers
     ) {
       const favorites = payload?.favorites;
       const quayIds = typeof ids === 'string' ? [ids] : ids;
@@ -62,16 +63,19 @@ export default (): IDeparturesService => {
             };
 
         // Fire and forget population of cache. Not critial if it fails.
-        populateRealtimeCacheIfNotThere({
-          quayIds,
-          startTime,
-          lineIds,
-          limit: limit.numberOfDepartures,
-          limitPerLine: limit.limitPerLine,
-          timeRange
-        });
+        populateRealtimeCacheIfNotThere(
+          {
+            quayIds,
+            startTime,
+            lineIds,
+            limit: limit.numberOfDepartures,
+            limitPerLine: limit.limitPerLine,
+            timeRange
+          },
+          headers
+        );
 
-        const result = await journeyPlannerClient.query<
+        const result = await journeyPlannerClient(headers).query<
           DeparturesQuery,
           DeparturesQueryVariables
         >({
@@ -96,15 +100,12 @@ export default (): IDeparturesService => {
         return Result.err(new APIError(error));
       }
     },
-    async getStopPlacesByPosition({
-      latitude,
-      longitude,
-      distance = 1000,
-      count = 10,
-      after
-    }) {
+    async getStopPlacesByPosition(
+      { latitude, longitude, distance = 1000, count = 10, after },
+      headers
+    ) {
       try {
-        const result = await journeyPlannerClient.query<
+        const result = await journeyPlannerClient(headers).query<
           NearestStopPlacesQuery,
           NearestStopPlacesQueryVariables
         >({
@@ -128,9 +129,9 @@ export default (): IDeparturesService => {
       }
     },
 
-    async getStopsDetails({ ids }) {
+    async getStopsDetails({ ids }, headers) {
       try {
-        const result = await journeyPlannerClient.query<
+        const result = await journeyPlannerClient(headers).query<
           StopsDetailsQuery,
           StopsDetailsQueryVariables
         >({
@@ -157,6 +158,7 @@ export default (): IDeparturesService => {
     },
     async getStopQuayDepartures(
       { id, numberOfDepartures = 10, startTime, timeRange, limitPerLine },
+      headers,
       payload
     ) {
       const favorites = payload?.favorites;
@@ -177,7 +179,7 @@ export default (): IDeparturesService => {
             };
         const lineIds = favorites?.map(f => f.lineId);
 
-        const result = await journeyPlannerClient.query<
+        const result = await journeyPlannerClient(headers).query<
           StopPlaceQuayDeparturesQuery,
           StopPlaceQuayDeparturesQueryVariables
         >({
@@ -194,14 +196,17 @@ export default (): IDeparturesService => {
         const quayIds = result.data.stopPlace?.quays?.map(q => q.id);
         if (quayIds) {
           // Fire and forget population of cache. Not critial if it fails.
-          populateRealtimeCacheIfNotThere({
-            quayIds,
-            startTime,
-            lineIds,
-            limit: limit.numberOfDepartures,
-            limitPerLine: limit.limitPerLine,
-            timeRange
-          });
+          populateRealtimeCacheIfNotThere(
+            {
+              quayIds,
+              startTime,
+              lineIds,
+              limit: limit.numberOfDepartures,
+              limitPerLine: limit.limitPerLine,
+              timeRange
+            },
+            headers
+          );
         }
 
         if (result.errors) {

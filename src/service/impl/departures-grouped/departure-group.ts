@@ -1,3 +1,4 @@
+import { ReqRefDefaults, Request } from '@hapi/hapi';
 import { Result } from '@badrap/result';
 import { journeyPlannerClient } from '../../../graphql/graphql-client';
 import { CursoredData, generateCursorData } from '../../cursored';
@@ -28,11 +29,12 @@ export async function getDeparturesGroupedNearest(
   coordinates: Coordinates,
   distance: number = 1000,
   options: DepartureGroupsQuery,
+  headers: Request<ReqRefDefaults>,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   let favoriteQuayIds: string[] | undefined = undefined;
   if (favorites?.length) {
-    const quayIdsResult = await journeyPlannerClient.query<
+    const quayIdsResult = await journeyPlannerClient(headers).query<
       QuayIdInStopsQuery,
       QuayIdInStopsQueryVariables
     >({
@@ -85,7 +87,7 @@ export async function getDeparturesGroupedNearest(
       : undefined
   };
 
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient(headers).query<
     GroupsByNearestQuery,
     GroupsByNearestQueryVariables
   >({
@@ -124,6 +126,7 @@ export async function getDeparturesGroupedNearest(
 export async function getDeparturesGrouped(
   id: string[] | string,
   options: DepartureGroupsQuery,
+  headers: Request<ReqRefDefaults>,
   favorites?: FavoriteDeparture[]
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   let ids = Array.isArray(id) ? id : [id];
@@ -137,7 +140,7 @@ export async function getDeparturesGrouped(
     filterByLineIds: favorites?.map(f => f.lineId)
   };
 
-  const result = await journeyPlannerClient.query<
+  const result = await journeyPlannerClient(headers).query<
     GroupsByIdQuery,
     GroupsByIdQueryVariables
   >({

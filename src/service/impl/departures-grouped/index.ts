@@ -7,18 +7,24 @@ import { getDepartureFavorites } from './departure-favorites';
 
 export default (): IDeparturesGroupedService => {
   const api: IDeparturesGroupedService = {
-    async getDeparturesGrouped(payload, query) {
+    async getDeparturesGrouped(payload, query, headers) {
       return payload.location.layer === 'venue'
-        ? getDeparturesGrouped(payload.location.id, query, payload.favorites)
+        ? getDeparturesGrouped(
+            payload.location.id,
+            query,
+            headers,
+            payload.favorites
+          )
         : getDeparturesGroupedNearest(
             payload.location.coordinates,
             1000,
             query,
+            headers,
             payload.favorites
           );
     },
-    async getDeparturesFavorites(payload, query) {
-      return getDepartureFavorites(query, payload.favorites);
+    async getDeparturesFavorites(payload, query, headers) {
+      return getDepartureFavorites(query, headers, payload.favorites);
     }
   };
 
