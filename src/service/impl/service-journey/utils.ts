@@ -92,7 +92,7 @@ function findIndex<T>(
   quayCoords?: PolylinePair
 ): number {
   if (!quayCoords) return -1;
-  let closestIndex = 0;
+  let closestIndex = -1;
   let closestDistance = 100;
   array.forEach((t, index) => {
     if (haversineDistance(t, quayCoords) < closestDistance) {
