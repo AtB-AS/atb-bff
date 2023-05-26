@@ -37,6 +37,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
           name
           transportSubmode
           publicCode
+          flexibleLineType
           notices {
             ...notice
           }

@@ -394,8 +394,37 @@ export enum InterchangeWeighting {
   RecommendedInterchange = 'recommendedInterchange'
 }
 
+/**
+ * Enable this to attach a system notice to itineraries instead of removing them. This is very
+ * convenient when tuning the itinerary-filter-chain.
+ */
+export enum ItineraryFilterDebugProfile {
+  /**
+   * Only return the requested number of itineraries, counting both actual and deleted ones.
+   * The top `numItineraries` using the request sort order is returned. This does not work
+   * with paging, itineraries after the limit, but inside the search-window are skipped when
+   * moving to the next page.
+   */
+  LimitToNumOfItineraries = 'limitToNumOfItineraries',
+  /**
+   * Return all itineraries, including deleted ones, inside the actual search-window used
+   * (the requested search-window may differ).
+   */
+  LimitToSearchWindow = 'limitToSearchWindow',
+  /** List all itineraries, including all deleted itineraries. */
+  ListAll = 'listAll',
+  /** By default, the debug itinerary filters is turned off. */
+  Off = 'off'
+}
+
 /** Parameters for the OTP Itinerary Filter Chain. These parameters SHOULD be configured on the server side and should not be used by the client. They are made available here to be able to experiment and tune the server. */
 export type ItineraryFilters = {
+  /**
+   * Use this parameter to debug the itinerary-filter-chain. The default is `off`
+   * (itineraries are filtered and not returned). For all other values the unwanted
+   * itineraries are returned with a system notice, and not deleted.
+   */
+  debug?: InputMaybe<ItineraryFilterDebugProfile>;
   /** Pick ONE itinerary from each group after putting itineraries that is 85% similar together. */
   groupSimilarityKeepOne?: InputMaybe<Scalars['Float']>;
   /** Reduce the number of itineraries in each group to to maximum 3 itineraries. The itineraries are grouped by similar legs (on board same journey). So, if  68% of the distance is traveled by similar legs, then two itineraries are in the same group. Default value is 68%, must be at least 50%. */
@@ -1252,6 +1281,7 @@ export type RoutingParameters = {
   carSpeed?: Maybe<Scalars['Float']>;
   /** @deprecated NOT IN USE IN OTP2. */
   compactLegsByReversedSearch?: Maybe<Scalars['Boolean']>;
+  /** @deprecated Use `itineraryFilter.debug` instead. */
   debugItineraryFilter?: Maybe<Scalars['Boolean']>;
   /**
    * Option to disable the default filtering of GTFS-RT alerts by time.
@@ -1528,7 +1558,17 @@ export type StreetModes = {
   egressMode?: InputMaybe<StreetMode>;
 };
 
-/** A system notice is used to tag elements with system information for debugging or other system related purpose. One use-case is to run a routing search with 'itineraryFilters.debug: true'. This will then tag itineraries instead of removing them from the result. This make it possible to inspect the itinerary-filter-chain. A SystemNotice only have english text, because the primary user are technical staff, like testers and developers. */
+/**
+ * A system notice is used to tag elements with system information for debugging or other
+ * system related purpose. One use-case is to run a routing search with
+ * `itineraryFilters.debug=listAll`. This will then tag itineraries instead of removing
+ * them from the result. This make it possible to inspect the itinerary-filter-chain. A
+ * SystemNotice only have english text, because the primary user are technical staff, like
+ * testers and developers.
+ *
+ * **NOTE!** _A SystemNotice is for debugging the system, avoid putting logic on it in the
+ * client. The tags and usage may change without notice._
+ */
 export type SystemNotice = {
   tag?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
