@@ -9,8 +9,6 @@ import {
 
 type PolylinePair = [lat: number, lng: number];
 
-const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 20;
-
 export function mapToMapLegs(
   data: MapInfoWithFromQuayV2Query & MapInfoWithFromAndToQuayV2Query
 ): ServiceJourneyMapInfoData {
@@ -45,16 +43,8 @@ export function mapToMapLegs(
     return defaultValue;
   }
 
-  const splitIndexFrom = findIfDefined(
-    'findIndex',
-    coordinates,
-    fromQuayCoordinates
-  );
-  const splitIndexTo = findIfDefined(
-    'findLastIndex',
-    coordinates,
-    toQuayCoordinates
-  );
+  const splitIndexTo = findIndex(coordinates, toQuayCoordinates);
+  const splitIndexFrom = findIndex(coordinates, fromQuayCoordinates);
 
   if (splitIndexFrom < 0 && splitIndexTo < 0) {
     return defaultValue;
@@ -97,37 +87,20 @@ export function mapToMapLegs(
   };
 }
 
-function findIfDefined(
-  fn: 'findIndex' | 'findLastIndex',
-  coordinates: PolylinePair[],
-  quayCoords?: PolylinePair
-) {
-  const func = fn === 'findIndex' ? findIndex : findLastIndex;
-  return quayCoords
-    ? func<PolylinePair>(
-        coordinates,
-        c =>
-          haversineDistance(c, quayCoords) <=
-          COORDINATE_DISTANCE_THRESHOLD_IN_METERS
-      )
-    : -1;
-}
-
-function findLastIndex<T>(
-  array: Array<T>,
-  predicate: (value: T, index: number, obj: T[]) => boolean
-): number {
-  let l = array.length;
-  while (l--) {
-    if (predicate(array[l], l, array)) return l;
-  }
-  return -1;
-}
 function findIndex<T>(
-  array: Array<T>,
-  predicate: (value: T, index: number, obj: T[]) => boolean
+  array: Array<PolylinePair>,
+  quayCoords?: PolylinePair
 ): number {
-  return array.findIndex(predicate);
+  if (!quayCoords) return -1;
+  let closestIndex = 0;
+  let closestDistance = 100;
+  array.forEach((t, index) => {
+    if (haversineDistance(t, quayCoords) < closestDistance) {
+      closestIndex = index;
+      closestDistance = haversineDistance(t, quayCoords);
+    }
+  });
+  return closestIndex;
 }
 
 function polypairToCoordinates(
