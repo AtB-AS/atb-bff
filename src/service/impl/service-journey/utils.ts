@@ -59,15 +59,17 @@ export function mapToMapLegs(
   if (splitIndexFrom < 0 && splitIndexTo < 0) {
     return defaultValue;
   }
+  const isNoneOrFirst = splitIndexFrom < 1;
+  const isNoneOrLast =
+    splitIndexTo < 0 || splitIndexTo >= coordinates.length - 1;
 
   // before should also include quay.
-  const before =
-    splitIndexFrom < 0 ? [] : coordinates.slice(0, splitIndexFrom + 1);
+  const before = isNoneOrFirst ? [] : coordinates.slice(0, splitIndexFrom + 1);
   const mainLeg = coordinates.slice(
-    splitIndexFrom < 0 ? 0 : splitIndexFrom,
-    splitIndexTo < 0 ? coordinates.length : splitIndexTo + 1
+    isNoneOrFirst ? 0 : splitIndexFrom,
+    isNoneOrLast ? coordinates.length : splitIndexTo + 1
   );
-  const after = splitIndexTo < 0 ? [] : coordinates.slice(splitIndexTo);
+  const after = isNoneOrLast ? [] : coordinates.slice(splitIndexTo);
 
   const itemIfDefined = (
     item: PolylinePair[],
