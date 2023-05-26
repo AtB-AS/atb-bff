@@ -74,7 +74,7 @@ function createClient(url: string) {
           code: context.response.status,
           rateLimitUsed: context.response.headers.get('rate-limit-used'),
           rateLimitAllowed: context.response.headers.get('rate-limit-allowed'),
-          correlationId: context.response.headers.get('x-correlation-id'),
+          correlationId: headers['correlationId'],
           requestId: headers['requestId'],
           installId: headers['installId'],
           appVersion: headers['appVersion']
