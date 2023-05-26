@@ -156,7 +156,7 @@ function mapToLegacyLine(line: Line_v2): Line | undefined {
   if (!line) return;
   return {
     ...line,
-    flexibleLineType: line.flexibleLineType as FlexibleLineType,
+    flexibleLineType: undefined,
     transportMode: TransportMode.BUS, // Not used in app
     transportSubmode: TransportSubmode.LOCAL_BUS, // Not used in app
     name: line.name || '',
