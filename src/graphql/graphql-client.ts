@@ -74,6 +74,8 @@ function createClient(url: string) {
         } else if (url.includes('/journey-planner')) {
           operationNameGroup =
             operation.operationName == 'Trips' ? 'trips' : 'nontrip';
+        } else {
+          operationNameGroup = 'other';
         }
 
         const rateLimitUsed = context.response.headers.get('rate-limit-used');
