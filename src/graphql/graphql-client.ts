@@ -66,6 +66,8 @@ function createClient(url: string) {
     const loggingLink = new ApolloLink((operation, forward) => {
       return forward(operation).map(response => {
         const context = operation.getContext();
+        const operationNameGroup =
+          operation.operationName == 'Trips' ? 'trips' : 'nontrip';
 
         const log = {
           time: new Date(context.response.headers.get('date')).toISOString(),
@@ -74,6 +76,7 @@ function createClient(url: string) {
           code: context.response.status,
           rateLimitUsed: context.response.headers.get('rate-limit-used'),
           rateLimitAllowed: context.response.headers.get('rate-limit-allowed'),
+          rateLimitGroup: operationNameGroup,
           correlationId: headers['correlationId'],
           requestId: headers['requestId'],
           installId: headers['installId'],
