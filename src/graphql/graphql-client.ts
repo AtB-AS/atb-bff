@@ -73,7 +73,9 @@ function createClient(url: string) {
           operationNameGroup = 'mobility';
         } else if (url.includes('/journey-planner')) {
           operationNameGroup =
-            operation.operationName == 'Trips' ? 'trips' : 'nontrip';
+            operation.operationName == 'Trips'
+              ? 'planner-trip'
+              : 'planner-nontrip';
         } else {
           operationNameGroup = 'other';
         }
