@@ -67,7 +67,7 @@ function createClient(url: string) {
       return forward(operation).map(response => {
         const context = operation.getContext();
         const operationNameGroup =
-          operation.operationName == 'Trips' ? 'trips' : 'other';
+          operation.operationName == 'Trips' ? 'trips' : 'nontrip';
 
         const log = {
           time: new Date(context.response.headers.get('date')).toISOString(),
