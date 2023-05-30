@@ -1,6 +1,5 @@
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
-import { PointsOnLink } from '../../../graphql/journey/journeyplanner-types_v3';
 import { Coordinates, MapLeg, ServiceJourneyMapInfoData } from '../../types';
 import {
   MapInfoWithFromAndToQuayV2Query,
@@ -8,8 +7,6 @@ import {
 } from './journey-gql/service-journey-map.graphql-gen';
 
 type PolylinePair = [lat: number, lng: number];
-
-const COORDINATE_DISTANCE_THRESHOLD_IN_METERS = 3;
 
 export function mapToMapLegs(
   data: MapInfoWithFromQuayV2Query & MapInfoWithFromAndToQuayV2Query
@@ -25,107 +22,55 @@ export function mapToMapLegs(
     ? [data.toQuay.latitude ?? 0, data.toQuay.longitude ?? 0]
     : undefined;
 
-  const coordinates: PolylinePair[] = polyline.decode(
+  const pointsCoords: PolylinePair[] = polyline.decode(
     data.serviceJourney?.pointsOnLink?.points ?? ''
   );
-  const defaultValue = {
-    start: polypairToCoordinates(coordinates[0]),
-    stop: polypairToCoordinates(coordinates[coordinates.length - 1]),
 
-    mapLegs: [
-      {
-        ...baseItem,
-        faded: false,
-        pointsOnLink: data.serviceJourney?.pointsOnLink as PointsOnLink
-      } as MapLeg
-    ]
-  };
+  const mainStartIndex = fromQuayCoordinates
+    ? findIndex(pointsCoords, fromQuayCoordinates)
+    : 0;
+  const mainEndIndex = toQuayCoordinates
+    ? findIndex(pointsCoords, toQuayCoordinates)
+    : pointsCoords.length - 1;
 
-  if (!fromQuayCoordinates && !toQuayCoordinates) {
-    return defaultValue;
-  }
+  const beforeLegCoords = pointsCoords.slice(0, mainStartIndex + 1);
+  const mainLegCoords = pointsCoords.slice(mainStartIndex, mainEndIndex + 1);
+  const afterLegCoords = pointsCoords.slice(mainEndIndex);
 
-  const splitIndexFrom = findIfDefined(
-    'findIndex',
-    coordinates,
-    fromQuayCoordinates
-  );
-  const splitIndexTo = findIfDefined(
-    'findLastIndex',
-    coordinates,
-    toQuayCoordinates
-  );
+  const toMapLeg = (item: PolylinePair[], faded: boolean): MapLeg =>
+    ({
+      ...baseItem,
+      faded,
+      pointsOnLink: {
+        length: item.length,
+        points: polyline.encode(item)
+      }
+    } as MapLeg);
 
-  if (splitIndexFrom < 0 && splitIndexTo < 0) {
-    return defaultValue;
-  }
-
-  // before should also include quay.
-  const before =
-    splitIndexFrom < 0 ? [] : coordinates.slice(0, splitIndexFrom + 1);
-  const mainLeg = coordinates.slice(
-    splitIndexFrom < 0 ? 0 : splitIndexFrom,
-    splitIndexTo < 0 ? coordinates.length : splitIndexTo + 1
-  );
-  const after = splitIndexTo < 0 ? [] : coordinates.slice(splitIndexTo);
-
-  const itemIfDefined = (
-    item: PolylinePair[],
-    faded: boolean
-  ): MapLeg | undefined =>
-    item.length
-      ? ({
-          ...baseItem,
-          faded,
-          pointsOnLink: {
-            length: item.length,
-            points: polyline.encode(item)
-          }
-        } as MapLeg)
-      : undefined;
   const mapLegs: MapLeg[] = [
-    itemIfDefined(before, true),
-    itemIfDefined(mainLeg, false),
-    itemIfDefined(after, true)
-  ].filter(Boolean) as MapLeg[];
+    toMapLeg(beforeLegCoords, true),
+    toMapLeg(mainLegCoords, false),
+    toMapLeg(afterLegCoords, true)
+  ].filter(leg => (leg.pointsOnLink.length || 0) > 1);
 
   return {
-    ...defaultValue,
+    start: polypairToCoordinates(pointsCoords[0]),
+    stop: polypairToCoordinates(pointsCoords[pointsCoords.length - 1]),
     mapLegs
   };
 }
 
-function findIfDefined(
-  fn: 'findIndex' | 'findLastIndex',
-  coordinates: PolylinePair[],
-  quayCoords?: PolylinePair
-) {
-  const func = fn === 'findIndex' ? findIndex : findLastIndex;
-  return quayCoords
-    ? func<PolylinePair>(
-        coordinates,
-        c =>
-          haversineDistance(c, quayCoords) <=
-          COORDINATE_DISTANCE_THRESHOLD_IN_METERS
-      )
-    : -1;
-}
-
-function findLastIndex<T>(
-  array: Array<T>,
-  predicate: (value: T, index: number, obj: T[]) => boolean
-): number {
-  let l = array.length;
-  while (l--) {
-    if (predicate(array[l], l, array)) return l;
-  }
-  return -1;
-}
 function findIndex<T>(
-  array: Array<T>,
-  predicate: (value: T, index: number, obj: T[]) => boolean
+  array: Array<PolylinePair>,
+  quayCoords: PolylinePair
 ): number {
-  return array.findIndex(predicate);
+  return array.reduce(
+    (closest, t, index) => {
+      const distance = haversineDistance(t, quayCoords);
+      return distance < closest.distance ? { index, distance } : closest;
+    },
+    { index: -1, distance: 100 }
+  ).index;
 }
 
 function polypairToCoordinates(
