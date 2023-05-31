@@ -68,23 +68,23 @@ function createClient(url: string) {
         const context = operation.getContext();
         const url = context.response.url;
 
-        let operationNameGroup;
-        if (url.includes('/mobility')) {
-          operationNameGroup = 'mobility';
-        } else if (url.includes('/journey-planner')) {
-          operationNameGroup =
-            operation.operationName == 'Trips'
-              ? 'planner-trip'
-              : 'planner-nontrip';
-        } else {
-          operationNameGroup = 'other';
-        }
-
         const rateLimitUsed = context.response.headers.get('rate-limit-used');
         const rateLimitAllowed =
           context.response.headers.get('rate-limit-allowed');
 
         if (rateLimitUsed && rateLimitAllowed) {
+          let operationNameGroup;
+          if (url.includes('/mobility')) {
+            operationNameGroup = 'mobility';
+          } else if (url.includes('/journey-planner')) {
+            operationNameGroup =
+              operation.operationName == 'Trips'
+                ? 'planner-trip'
+                : 'planner-nontrip';
+          } else {
+            operationNameGroup = 'other';
+          }
+
           const log = {
             time: new Date(context.response.headers.get('date')).toISOString(),
             message: 'graphql call',
