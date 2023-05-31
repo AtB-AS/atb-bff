@@ -66,23 +66,40 @@ function createClient(url: string) {
     const loggingLink = new ApolloLink((operation, forward) => {
       return forward(operation).map(response => {
         const context = operation.getContext();
-        const operationNameGroup =
-          operation.operationName == 'Trips' ? 'trips' : 'nontrip';
+        const url = context.response.url;
 
-        const log = {
-          time: new Date(context.response.headers.get('date')).toISOString(),
-          message: 'graphql call',
-          url: context.response.url,
-          code: context.response.status,
-          rateLimitUsed: context.response.headers.get('rate-limit-used'),
-          rateLimitAllowed: context.response.headers.get('rate-limit-allowed'),
-          rateLimitGroup: operationNameGroup,
-          correlationId: headers['correlationId'],
-          requestId: headers['requestId'],
-          installId: headers['installId'],
-          appVersion: headers['appVersion']
-        };
-        console.log(JSON.stringify(log));
+        const rateLimitUsed = context.response.headers.get('rate-limit-used');
+        const rateLimitAllowed =
+          context.response.headers.get('rate-limit-allowed');
+
+        if (rateLimitUsed && rateLimitAllowed) {
+          let operationNameGroup;
+          if (url.includes('/mobility')) {
+            operationNameGroup = 'mobility';
+          } else if (url.includes('/journey-planner')) {
+            operationNameGroup =
+              operation.operationName == 'Trips'
+                ? 'planner-trip'
+                : 'planner-nontrip';
+          } else {
+            operationNameGroup = 'other';
+          }
+
+          const log = {
+            time: new Date(context.response.headers.get('date')).toISOString(),
+            message: 'graphql call',
+            url: url,
+            code: context.response.status,
+            rateLimitUsed: rateLimitUsed,
+            rateLimitAllowed: rateLimitAllowed,
+            rateLimitGroup: operationNameGroup,
+            correlationId: headers['correlationId'],
+            requestId: headers['requestId'],
+            installId: headers['installId'],
+            appVersion: headers['appVersion']
+          };
+          console.log(JSON.stringify(log));
+        }
         return response;
       });
     });
