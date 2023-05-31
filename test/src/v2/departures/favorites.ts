@@ -9,13 +9,13 @@ import {
 import { isEqual } from '../../utils/utils';
 
 export function departureFavorites(
-  testData: departureFavoritesTestDataType,
-  startDate: string,
-  limitPerLine: number = 7
+    testData: departureFavoritesTestDataType,
+    startDate: string,
+    limitPerLine: number = 7
 ) {
   for (let test of testData.scenarios) {
     const requestName = `v2_departureFavorites_${testData.scenarios.indexOf(
-      test
+        test
     )}`;
     const url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limitPerLine}`;
 
@@ -32,8 +32,8 @@ export function departureFavorites(
       const expQuayIds = test.favorites.map(e => e.quayId).sort();
       const expLineIds = test.favorites.map(e => e.lineId).sort();
       const resQuayIds = json.data
-        .map(fav => fav.quays.map(quay => quay.quay.id))
-        .flat();
+          .map(fav => fav.quays.map(quay => quay.quay.id))
+          .flat();
 
       const expects: ExpectsType = [
         { check: 'should have status 200', expect: res.status === 200 }
@@ -61,20 +61,20 @@ export function departureFavorites(
             });
             for (let line of quay.group) {
               expects.push(
-                {
-                  check: `should have correct line from quay '${quay.quay.id}'`,
-                  expect: expLineIds.includes(line.lineInfo.lineId)
-                },
-                {
-                  check: `should have correct date for departures from quay '${quay.quay.id}'`,
-                  expect:
-                    line.departures.filter(dep => dep.serviceDate !== startDate)
-                      .length === 0
-                },
-                {
-                  check: `should have correct number of departures from quay '${quay.quay.id}'`,
-                  expect: line.departures.length === limitPerLine
-                }
+                  {
+                    check: `should have correct line from quay '${quay.quay.id}'`,
+                    expect: expLineIds.includes(line.lineInfo.lineId)
+                  },
+                  {
+                    check: `should have correct date for departures from quay '${quay.quay.id}'`,
+                    expect:
+                        line.departures.filter(dep => dep.serviceDate !== startDate)
+                            .length === 0
+                  },
+                  {
+                    check: `should have correct number of departures from quay '${quay.quay.id}'`,
+                    expect: line.departures.length === limitPerLine
+                  }
               );
             }
           } else {
@@ -87,23 +87,23 @@ export function departureFavorites(
       }
 
       metrics.checkForFailures(
-        [res.request.url],
-        res.timings.duration,
-        requestName,
-        expects
+          [res.request.url],
+          res.timings.duration,
+          requestName,
+          expects
       );
     } catch (exp) {
       //throw exp
       metrics.checkForFailures(
-        [res.request.url],
-        res.timings.duration,
-        requestName,
-        [
-          {
-            check: `${exp}`,
-            expect: false
-          }
-        ]
+          [res.request.url],
+          res.timings.duration,
+          requestName,
+          [
+            {
+              check: `${exp}`,
+              expect: false
+            }
+          ]
       );
     }
   }
@@ -111,9 +111,9 @@ export function departureFavorites(
 
 // Same departures are returned for favorite departures and 'ordinary' quay departures
 export function departureFavoritesVsQuayDepartures(
-  testData: departureFavoritesTestDataType,
-  startDate: string,
-  limit: number = 7
+    testData: departureFavoritesTestDataType,
+    startDate: string,
+    limit: number = 7
 ) {
   const requestName = 'v2_departureFavoritesVsQuayDepartures';
   // Use only 1 favorite
@@ -127,7 +127,7 @@ export function departureFavoritesVsQuayDepartures(
 
   // Get departures to assert favorite results
   const urlDep = `${conf.host()}/bff/v2/departures/quay-departures?id=${
-    testScenario.favorites[0].quayId
+      testScenario.favorites[0].quayId
   }&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
   const resDep = http.post(urlDep, '{}', {
     tags: { name: requestName },
@@ -147,46 +147,46 @@ export function departureFavoritesVsQuayDepartures(
 
     // Assert: same service journeys and  aimed dep time as /quay-departures:
     const serviceJourneyFavorites = jsonFav.data[0].quays
-      .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
-      .group[0].departures.map(dep => dep.serviceJourneyId);
+        .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
+        .group[0].departures.map(dep => dep.serviceJourneyId);
     const serviceJourneyDepartures = jsonDep.quay.estimatedCalls.map(
-      call => call.serviceJourney!.id
+        call => call.serviceJourney!.id
     );
     const aimedTimeFavorites = jsonFav.data[0].quays
-      .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
-      .group[0].departures.map(dep => dep.aimedTime);
+        .filter(quay => quay.quay.id === testScenario.favorites[0].quayId)[0]
+        .group[0].departures.map(dep => dep.aimedTime);
     const aimedTimeDepartures = jsonDep.quay.estimatedCalls.map(
-      call => call.aimedDepartureTime
+        call => call.aimedDepartureTime
     );
     expects.push(
-      {
-        check: 'favorite departures should have the same service journeys',
-        expect: isEqual(serviceJourneyFavorites, serviceJourneyDepartures)
-      },
-      {
-        check: 'favorite departures should have the same aimed time',
-        expect: isEqual(aimedTimeFavorites, aimedTimeDepartures)
-      }
+        {
+          check: 'favorite departures should have the same service journeys',
+          expect: isEqual(serviceJourneyFavorites, serviceJourneyDepartures)
+        },
+        {
+          check: 'favorite departures should have the same aimed time',
+          expect: isEqual(aimedTimeFavorites, aimedTimeDepartures)
+        }
     );
 
     metrics.checkForFailures(
-      [resFav.request.url, resDep.request.url],
-      resFav.timings.duration + resDep.timings.duration,
-      requestName,
-      expects
+        [resFav.request.url, resDep.request.url],
+        resFav.timings.duration + resDep.timings.duration,
+        requestName,
+        expects
     );
   } catch (exp) {
     //throw exp
     metrics.checkForFailures(
-      [resFav.request.url, resDep.request.url],
-      resFav.timings.duration + resDep.timings.duration,
-      requestName,
-      [
-        {
-          check: `${exp}`,
-          expect: false
-        }
-      ]
+        [resFav.request.url, resDep.request.url],
+        resFav.timings.duration + resDep.timings.duration,
+        requestName,
+        [
+          {
+            check: `${exp}`,
+            expect: false
+          }
+        ]
     );
   }
 }

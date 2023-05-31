@@ -17,24 +17,31 @@ export function realtimeScenario(searchDate: string): void {
   realtime(quayId, searchTime);
 
   // Realtime with cache
-  realtime(quayId, searchTime, false);
+  //TODO: Should be 'false' when cache is working (https://github.com/AtB-AS/kundevendt/issues/4131)
+  realtime(quayId, searchTime, true);
+
+  // Realtime with short timeRange
+  searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
+  realtime(quayId, searchTime, false, 1);
 
   // Realtime with quayId AND corresponding lineId
   searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
   realtimeWithLineId(quayId, lineId, searchTime);
 
   // Realtime with quayId AND not corresponding lineId
-  realtimeWithLineId(quayId, lineId, searchTime, false);
+  //TODO: Should be 'false' when cache is working (https://github.com/AtB-AS/kundevendt/issues/4131)
+  realtimeWithLineId(quayId, lineId, searchTime, true);
 }
 
 export function realtime(
   quayId: string,
   searchTime: string,
   hasResults: boolean = true,
+  timeRange: number = 86400,
   limit: number = 10
 ) {
   const requestName = 'v2_realtime';
-  const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=${limit}`;
+  const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&timeRange=${timeRange}&limit=${limit}`;
 
   const res = http.get(url, {
     tags: { name: requestName },

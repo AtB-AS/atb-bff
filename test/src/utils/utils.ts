@@ -113,6 +113,14 @@ export const getNextFriday = (): string => {
   return today.toISOString().split('T')[0];
 };
 
+// Return current time
+export const getCurrentTime = (extraHours: number = 0): string => {
+  const today = new Date();
+  today.setHours(today.getHours() + extraHours);
+
+  return today.toISOString();
+};
+
 // Utility function to get the json response with correct casting
 export const jCheck = (
   response: RefinedResponse<ResponseType>,

@@ -548,14 +548,14 @@ export function singleTrip(
 
         // Note: The JSON-response is "randomly" ordered for each request. Pick out some test parameters.
         const tripsTest = [
-          jsonTripsSingle.expectedStartTime,
+          jsonTripsSingle.legs[0].aimedStartTime,
           jsonTripsSingle.duration,
           jsonTripsSingle.walkDistance,
           jsonTripsSingle.legs.length,
           jsonTripsSingle.compressedQuery
         ];
         const singleTest = [
-          jsonSingle.expectedStartTime,
+          jsonSingle.legs[0].aimedStartTime,
           jsonSingle.duration,
           jsonSingle.walkDistance,
           jsonSingle.legs.length,
