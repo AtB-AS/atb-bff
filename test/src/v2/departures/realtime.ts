@@ -17,8 +17,7 @@ export function realtimeScenario(searchDate: string): void {
   realtime(quayId, searchTime);
 
   // Realtime with cache
-  //TODO: Should be 'false' when cache is working (https://github.com/AtB-AS/kundevendt/issues/4131)
-  realtime(quayId, searchTime, true);
+  realtime(quayId, searchTime, false);
 
   // Realtime with short timeRange
   searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
@@ -29,8 +28,7 @@ export function realtimeScenario(searchDate: string): void {
   realtimeWithLineId(quayId, lineId, searchTime);
 
   // Realtime with quayId AND not corresponding lineId
-  //TODO: Should be 'false' when cache is working (https://github.com/AtB-AS/kundevendt/issues/4131)
-  realtimeWithLineId(quayId, lineId, searchTime, true);
+  realtimeWithLineId(quayId, lineId, searchTime, false);
 }
 
 export function realtime(
