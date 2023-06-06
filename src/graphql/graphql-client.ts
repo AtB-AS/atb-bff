@@ -45,8 +45,8 @@ const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
 function createClient(url: string) {
+  const cache = new InMemoryCache();
   return function (headers: Request<ReqRefDefaults>) {
-    const cache = new InMemoryCache();
     const httpLink = new HttpLink({
       uri: url,
 
