@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 import { Boom } from '@hapi/boom';
 import { createServer, initializePlugins } from './server';
 import enturClient from './service/impl/entur';
@@ -45,7 +46,7 @@ process.on('unhandledRejection', err => {
     server.route({
       method: '*',
       path: '/{any*}',
-      handler: (request, h) =>
+      handler: () =>
         new Boom('The requested resource was not found.', { statusCode: 404 })
     });
 

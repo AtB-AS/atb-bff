@@ -11,7 +11,7 @@ export const getVehiclesRequest = {
     lat: Joi.number().required(),
     lon: Joi.number().required(),
     range: Joi.number().optional(),
-    operators: Joi.array().items(Joi.string()).optional().single(),
+    operators: Joi.array().items(Joi.string()).optional().single()
   })
 };
 export const getVehicleRequest = {

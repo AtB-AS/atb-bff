@@ -1,3 +1,4 @@
+// eslint-disable-next-line unused-imports/no-unused-imports
 import { Request } from '@hapi/hapi';
 
 export interface Logger {

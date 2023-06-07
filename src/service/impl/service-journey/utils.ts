@@ -60,7 +60,7 @@ export function mapToMapLegs(
   };
 }
 
-function findIndex<T>(
+function findIndex(
   array: Array<PolylinePair>,
   quayCoords: PolylinePair
 ): number {

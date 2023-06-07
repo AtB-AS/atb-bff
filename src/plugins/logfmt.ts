@@ -51,7 +51,7 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
       };
     };
     server.decorate('request', 'logfmt', logger, { apply: true });
-    server.ext('onPreHandler', (request, h, err) => {
+    server.ext('onPreHandler', (request, h) => {
       request.logfmt.with(flatten(request.query));
 
       if (request.payload && typeof request.payload !== 'string') {
@@ -59,7 +59,7 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
       }
       return h.continue;
     });
-    server.ext('onPreResponse', (request, h, err) => {
+    server.ext('onPreResponse', (request, h) => {
       if (request.response instanceof Boom) {
         request.logfmt.with({ error: request.response.message });
       }

@@ -9,8 +9,7 @@ import {
   ServiceJourney,
   TransportMode,
   TransportSubmode,
-  TripPattern,
-  FlexibleLineType
+  TripPattern
 } from '@entur/sdk';
 import { TripPattern as TripPattern_v2 } from '../../../types/trips';
 import { TripsQuery } from './journey-gql/trip.graphql-gen';

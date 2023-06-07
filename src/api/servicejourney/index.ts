@@ -55,7 +55,7 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
           }
         }
       },
-      handler: async (request, h) => {
+      handler: async request => {
         const { id } = request.params;
         const query = request.query as unknown as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo_v2(id, query);
@@ -70,7 +70,7 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         validate: getServiceJourneyMapDataRequest,
         description: 'Get departures for Service Journey'
       },
-      handler: async (request, h) => {
+      handler: async request => {
         const { id } = request.params;
         const query = request.query as unknown as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo_v2(id, query);

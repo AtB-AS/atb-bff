@@ -1,7 +1,7 @@
 import fetch, { RequestInfo, RequestInit } from 'node-fetch';
 import Agent from 'agentkeepalive';
 import pThrottle from 'p-throttle';
-import { ENROLLMENT_BASEURL, ENTUR_BASEURL } from '../../config/env';
+import { ENROLLMENT_BASEURL } from '../../config/env';
 import { Result } from '@badrap/result';
 import { APIError } from '../types';
 import { IEnrollmentService } from '../../service/interface';
