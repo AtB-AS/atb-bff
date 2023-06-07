@@ -50,7 +50,7 @@ export const createServer = (opts: ServerOptions) => {
     routes: {
       cors: true,
       validate: {
-        failAction: async (_request: any, _h: any, err: any) => err
+        failAction: async (request, h, err) => err
       }
     }
   });
