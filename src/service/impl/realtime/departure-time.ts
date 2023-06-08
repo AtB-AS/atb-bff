@@ -1,22 +1,22 @@
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {
   DepartureRealtimeData,
   DepartureRealtimeQuery,
-  DeparturesRealtimeData
+  DeparturesRealtimeData,
 } from '../../types';
 import {
   EstimatedCallFragment,
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
-  GetDepartureRealtimeQueryVariables
+  GetDepartureRealtimeQueryVariables,
 } from './journey-gql/departure-time.graphql-gen';
-import { ReqRefDefaults, Request } from '@hapi/hapi';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 export const createVariables = (
-  query: DepartureRealtimeQuery
+  query: DepartureRealtimeQuery,
 ): GetDepartureRealtimeQueryVariables => ({
   ...query,
-  timeRange: query.timeRange ?? 86400
+  timeRange: query.timeRange ?? 86400,
 });
 
 /**
@@ -29,7 +29,7 @@ export const createVariables = (
  */
 export async function populateRealtimeCacheIfNotThere(
   inputQuery: DepartureRealtimeQuery,
-  headers: Request<ReqRefDefaults>
+  headers: Request<ReqRefDefaults>,
 ) {
   try {
     const variables = createVariables(inputQuery);
@@ -45,13 +45,13 @@ export async function populateRealtimeCacheIfNotThere(
       variables,
       // With fetch policy set to `cache-first`, apollo client will return data
       // from the cache, or fetch new data and populate the cache.
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'cache-first',
     });
   } catch (e) {}
 }
 
 type PreviousDepartureTimeLookupService = {
-  [serviceJourneyId: string]: { time: string; realtime: boolean };
+  [serviceJourneyId: string]: {time: string; realtime: boolean};
 };
 type PreviousDepartureTimeLookup = {
   [quayId: string]: PreviousDepartureTimeLookupService;
@@ -59,14 +59,14 @@ type PreviousDepartureTimeLookup = {
 
 export function mapToDepartureRealtime(
   input: GetDepartureRealtimeQuery,
-  previousResultLookup?: PreviousDepartureTimeLookup
+  previousResultLookup?: PreviousDepartureTimeLookup,
 ): DeparturesRealtimeData {
   let obj: DeparturesRealtimeData = {};
   for (let quay of input.quays) {
     if (!quay) continue;
     const departures = mapDeparture(
       quay.estimatedCalls,
-      previousResultLookup?.[quay.id]
+      previousResultLookup?.[quay.id],
     );
 
     // Don't include if the result is empty. Save data and easier to see if there are updates.
@@ -76,7 +76,7 @@ export function mapToDepartureRealtime(
 
     obj[quay.id] = {
       quayId: quay.id,
-      departures
+      departures,
     };
   }
   return obj;
@@ -84,7 +84,7 @@ export function mapToDepartureRealtime(
 
 function mapDeparture(
   input: EstimatedCallFragment[],
-  previousResultLookup?: PreviousDepartureTimeLookupService
+  previousResultLookup?: PreviousDepartureTimeLookupService,
 ) {
   let obj: DepartureRealtimeData['departures'] = {};
   for (let departure of input) {
@@ -104,8 +104,8 @@ function mapDeparture(
       serviceJourneyId,
       timeData: {
         realtime: departure.realtime ?? false,
-        expectedDepartureTime: departure.expectedDepartureTime
-      }
+        expectedDepartureTime: departure.expectedDepartureTime,
+      },
     };
   }
   return obj;
@@ -113,7 +113,7 @@ function mapDeparture(
 
 export function getPreviousExpectedFromCache(
   variables: GetDepartureRealtimeQueryVariables,
-  headers: Request<ReqRefDefaults>
+  headers: Request<ReqRefDefaults>,
 ) {
   try {
     const result = journeyPlannerClient(headers).readQuery<
@@ -121,7 +121,7 @@ export function getPreviousExpectedFromCache(
       GetDepartureRealtimeQueryVariables
     >({
       query: GetDepartureRealtimeDocument,
-      variables
+      variables,
     });
     if (!result) return undefined;
 
@@ -141,7 +141,7 @@ function mapToPreviousResultsHash(input: GetDepartureRealtimeQuery) {
       const serviceJourneyId = departure.serviceJourney!.id;
       previousExpectedDepartureTimeLookup[quayId][serviceJourneyId] = {
         time: departure.expectedDepartureTime,
-        realtime: departure.realtime ?? false
+        realtime: departure.realtime ?? false,
       };
     }
   }

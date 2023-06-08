@@ -1,7 +1,4 @@
-import {
-  filterStopPlaceFavorites,
-  filterFavoriteDepartures
-} from '../favorites';
+import {filterStopPlaceFavorites, filterFavoriteDepartures} from '../favorites';
 
 const favoriteWithoutLineName = [
   {
@@ -14,8 +11,8 @@ const favoriteWithoutLineName = [
     quayId: 'NSR:Quay:644',
     quayName: 'Lilleby stasjon',
     quayPublicCode: '1',
-    stopId: 'NSR:StopPlace:388'
-  }
+    stopId: 'NSR:StopPlace:388',
+  },
 ];
 const favoriteWithLineName = [
   {
@@ -28,8 +25,8 @@ const favoriteWithLineName = [
     quayId: 'NSR:Quay:644',
     quayName: 'Lilleby stasjon',
     quayPublicCode: '1',
-    stopId: 'NSR:StopPlace:388'
-  }
+    stopId: 'NSR:StopPlace:388',
+  },
 ];
 
 const favoriteUnrelated = [
@@ -43,8 +40,8 @@ const favoriteUnrelated = [
     quayId: 'NSR:Quay:999',
     quayName: 'Gokk stasjon',
     quayPublicCode: '1',
-    stopId: 'NSR:StopPlace:999'
-  }
+    stopId: 'NSR:StopPlace:999',
+  },
 ];
 
 describe('filter favorites from departure queries', () => {
@@ -52,7 +49,7 @@ describe('filter favorites from departure queries', () => {
     const input = require('./fixture-quay-departures.json');
     const expectedOutput = require('./fixture-quay-departures-filtered-26.json');
     expect(
-      filterFavoriteDepartures(input, favoriteWithoutLineName)
+      filterFavoriteDepartures(input, favoriteWithoutLineName),
     ).toMatchObject(expectedOutput);
   });
 
@@ -60,7 +57,7 @@ describe('filter favorites from departure queries', () => {
     const input = require('./fixture-quay-departures.json');
     const expectedOutput = require('./fixture-quay-departures-filtered-26-steinkjer.json');
     expect(filterFavoriteDepartures(input, favoriteWithLineName)).toMatchObject(
-      expectedOutput
+      expectedOutput,
     );
   });
 
@@ -68,7 +65,7 @@ describe('filter favorites from departure queries', () => {
     const input = require('./fixture-quay-departures.json');
     const expectedOutput = require('./fixture-quay-departures-filtered-none.json');
     expect(filterFavoriteDepartures(input, favoriteUnrelated)).toMatchObject(
-      expectedOutput
+      expectedOutput,
     );
   });
 
@@ -76,7 +73,7 @@ describe('filter favorites from departure queries', () => {
     const input = require('./fixture-stopplace-departures.json');
     const expectedOutput = require('./fixture-stopplace-departures-filtered-26.json');
     expect(
-      filterStopPlaceFavorites(input, favoriteWithoutLineName)
+      filterStopPlaceFavorites(input, favoriteWithoutLineName),
     ).toMatchObject(expectedOutput);
   });
 
@@ -84,7 +81,7 @@ describe('filter favorites from departure queries', () => {
     const input = require('./fixture-stopplace-departures.json');
     const expectedOutput = require('./fixture-stopplace-departures-filtered-26-steinkjer.json');
     expect(filterStopPlaceFavorites(input, favoriteWithLineName)).toMatchObject(
-      expectedOutput
+      expectedOutput,
     );
   });
 
@@ -92,7 +89,7 @@ describe('filter favorites from departure queries', () => {
     const input = require('./fixture-stopplace-departures.json');
     const expectedOutput = require('./fixture-stopplace-departures-filtered-none.json');
     expect(filterStopPlaceFavorites(input, favoriteUnrelated)).toMatchObject(
-      expectedOutput
+      expectedOutput,
     );
   });
 });

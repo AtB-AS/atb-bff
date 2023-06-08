@@ -4,6 +4,6 @@ export const getQuaysCoordinatesRequest = {
   payload: Joi.object({
     ids: Joi.array()
       .single()
-      .items(Joi.string().options({ stripUnknown: true }).required())
-  })
+      .items(Joi.string().options({stripUnknown: true}).required()),
+  }),
 };

@@ -1,44 +1,44 @@
-import { IVehiclesService } from '../../interface';
-import { Result } from '@badrap/result';
-import { APIError, GetServiceJourneyVehicles } from '../../types';
+import {IVehiclesService} from '../../interface';
+import {Result} from '@badrap/result';
+import {APIError, GetServiceJourneyVehicles} from '../../types';
 import {
   vehiclesClient,
-  vehiclesSubscriptionClient
+  vehiclesSubscriptionClient,
 } from '../../../graphql/graphql-client';
 import {
   GetServiceJourneyVehicleDocument,
   GetServiceJourneyVehicleQuery,
-  GetServiceJourneyVehicleQueryVariables
+  GetServiceJourneyVehicleQueryVariables,
 } from './vehicles-gql/vehicles.graphql-gen';
 import {
   ServiceJourneyDocument,
-  ServiceJourneySubscription
+  ServiceJourneySubscription,
 } from './vehicles-gql/service-journey-subscription.graphql-gen';
 
 export default (): IVehiclesService => ({
   async getServiceJourneyVehicles(query, headers) {
     try {
-      const results = query.serviceJourneyIds.map(id => {
+      const results = query.serviceJourneyIds.map((id) => {
         return vehiclesClient(headers).query<
           GetServiceJourneyVehicleQuery,
           GetServiceJourneyVehicleQueryVariables
         >({
           query: GetServiceJourneyVehicleDocument,
           variables: {
-            serviceJourneyId: id
-          }
+            serviceJourneyId: id,
+          },
         });
       });
 
       const result = await Promise.all(results);
 
-      const errors = result.find(res => res.errors);
+      const errors = result.find((res) => res.errors);
       if (errors) {
         return Result.err(new APIError(errors));
       }
 
       const vehiclesData = result
-        .flatMap(v => v.data.vehicles)
+        .flatMap((v) => v.data.vehicles)
         .filter(Boolean) as GetServiceJourneyVehicles;
 
       return Result.ok(vehiclesData);
@@ -51,17 +51,17 @@ export default (): IVehiclesService => ({
       .subscribe({
         query: ServiceJourneyDocument,
         fetchPolicy: 'no-cache',
-        variables: query
+        variables: query,
       })
       .subscribe({
-        next: value => {
+        next: (value) => {
           const data = value.data as ServiceJourneySubscription;
           const vehicle = data.vehicles?.find(
-            v => v.serviceJourney?.id === query.serviceJourneyId
+            (v) => v.serviceJourney?.id === query.serviceJourneyId,
           );
           if (!vehicle) return;
           ws.send(JSON.stringify(vehicle));
-        }
+        },
       });
-  }
+  },
 });

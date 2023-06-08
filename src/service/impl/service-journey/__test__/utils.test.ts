@@ -1,9 +1,9 @@
 import polyline from '@mapbox/polyline';
 import {
   TransportMode,
-  TransportSubmode
+  TransportSubmode,
 } from '../../../../graphql/journey/journeyplanner-types_v3';
-import { mapToMapLegs } from '../utils';
+import {mapToMapLegs} from '../utils';
 
 const exampleQuay: [number, number] = [63.37024, 10.37406];
 const exampleEndQuay: [number, number] = [63.37037, 10.38039];
@@ -18,7 +18,7 @@ const fixtureLines: [number, number][] = [
   [63.37032, 10.37989],
   exampleEndQuay,
   [63.37044, 10.38093],
-  [63.37056, 10.38154]
+  [63.37056, 10.38154],
 ];
 
 describe('mapToMapLegs', () => {
@@ -28,14 +28,14 @@ describe('mapToMapLegs', () => {
       serviceJourney: {
         pointsOnLink: {
           length: fixtureLines.length,
-          points: polyline.encode(fixtureLines)
+          points: polyline.encode(fixtureLines),
         },
         line: {
           transportMode: TransportMode.Bus,
-          transportSubmode: TransportSubmode.LocalBus
-        }
+          transportSubmode: TransportSubmode.LocalBus,
+        },
       },
-      fromQuay: { latitude: exampleQuay[0], longitude: exampleQuay[1] }
+      fromQuay: {latitude: exampleQuay[0], longitude: exampleQuay[1]},
     });
 
     expect(result.mapLegs.length).toEqual(2);
@@ -64,15 +64,15 @@ describe('mapToMapLegs', () => {
       serviceJourney: {
         pointsOnLink: {
           length: fixtureLines.length,
-          points: polyline.encode(fixtureLines)
+          points: polyline.encode(fixtureLines),
         },
         line: {
           transportMode: TransportMode.Bus,
-          transportSubmode: TransportSubmode.LocalBus
-        }
+          transportSubmode: TransportSubmode.LocalBus,
+        },
       },
-      fromQuay: { latitude: exampleQuay[0], longitude: exampleQuay[1] },
-      toQuay: { latitude: exampleEndQuay[0], longitude: exampleEndQuay[1] }
+      fromQuay: {latitude: exampleQuay[0], longitude: exampleQuay[1]},
+      toQuay: {latitude: exampleEndQuay[0], longitude: exampleEndQuay[1]},
     });
 
     expect(result.mapLegs.length).toEqual(3);

@@ -1,23 +1,20 @@
 import {
   TripsDocument,
   TripsQuery,
-  TripsQueryVariables
+  TripsQueryVariables,
 } from './journey-gql/trip.graphql-gen';
-import { Result } from '@badrap/result';
-import { APIError } from '../../types';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { ReqRefDefaults, Request } from '@hapi/hapi';
+import {Result} from '@badrap/result';
+import {APIError} from '../../types';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 import * as Boom from '@hapi/boom';
-import {
-  extractServiceJourneyIds,
-  generateSingleTripQueryString
-} from './utils';
+import {extractServiceJourneyIds, generateSingleTripQueryString} from './utils';
 import * as Trips from '../../../types/trips';
 
 export async function getTrips(
   query: TripsQueryVariables,
-  headers: Request<ReqRefDefaults>
+  headers: Request<ReqRefDefaults>,
 ): Promise<Result<TripsQuery, APIError>> {
   try {
     const result = await journeyPlannerClient(headers).query<
@@ -25,7 +22,7 @@ export async function getTrips(
       TripsQueryVariables
     >({
       query: TripsDocument,
-      variables: query
+      variables: query,
     });
 
     if (result.errors) {
@@ -39,21 +36,21 @@ export async function getTrips(
 
 export async function getSingleTrip(
   query: Trips.TripsQueryWithJourneyIds,
-  headers: Request<ReqRefDefaults>
+  headers: Request<ReqRefDefaults>,
 ): Promise<Result<Trips.TripPattern, Boom.Boom>> {
   const results = await journeyPlannerClient(headers).query<
     TripsQuery,
     TripsQueryVariables
   >({
     query: TripsDocument,
-    variables: query.query
+    variables: query.query,
   });
 
   if (results.errors) {
     return Result.err(Boom.internal('Error fetching data', results.errors));
   }
 
-  const singleTripPattern = results.data.trip?.tripPatterns.find(trip => {
+  const singleTripPattern = results.data.trip?.tripPatterns.find((trip) => {
     const journeyIds = extractServiceJourneyIds(trip);
     if (journeyIds.length != query.journeyIds.length) return false; // Fast comparison
     return (
@@ -66,30 +63,30 @@ export async function getSingleTrip(
       ...singleTripPattern,
       compressedQuery: generateSingleTripQueryString(
         singleTripPattern,
-        query.query
-      )
+        query.query,
+      ),
     });
   } else {
     return Result.err(
       Boom.resourceGone(
-        'Trip not found or is no longer available. (No matching trips)'
-      )
+        'Trip not found or is no longer available. (No matching trips)',
+      ),
     );
   }
 }
 
 function mapTripsData(
   results: TripsQuery,
-  queryVariables: TripsQueryVariables
+  queryVariables: TripsQueryVariables,
 ): TripsQuery {
   return {
     ...results,
     trip: {
       ...results.trip,
-      tripPatterns: results.trip.tripPatterns.map(pattern => ({
+      tripPatterns: results.trip.tripPatterns.map((pattern) => ({
         ...pattern,
-        compressedQuery: generateSingleTripQueryString(pattern, queryVariables)
-      }))
-    }
+        compressedQuery: generateSingleTripQueryString(pattern, queryVariables),
+      })),
+    },
   };
 }

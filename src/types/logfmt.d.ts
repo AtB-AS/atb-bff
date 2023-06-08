@@ -1,5 +1,5 @@
 // eslint-disable-next-line unused-imports/no-unused-imports
-import { Request } from '@hapi/hapi';
+import {Request} from '@hapi/hapi';
 
 export interface Logger {
   with: (obj: object) => void;

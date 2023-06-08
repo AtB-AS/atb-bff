@@ -1,19 +1,19 @@
 import polyline from '@mapbox/polyline';
 import haversineDistance from 'haversine-distance';
-import { Coordinates, MapLeg, ServiceJourneyMapInfoData } from '../../types';
+import {Coordinates, MapLeg, ServiceJourneyMapInfoData} from '../../types';
 import {
   MapInfoWithFromAndToQuayV2Query,
-  MapInfoWithFromQuayV2Query
+  MapInfoWithFromQuayV2Query,
 } from './journey-gql/service-journey-map.graphql-gen';
 
 type PolylinePair = [lat: number, lng: number];
 
 export function mapToMapLegs(
-  data: MapInfoWithFromQuayV2Query & MapInfoWithFromAndToQuayV2Query
+  data: MapInfoWithFromQuayV2Query & MapInfoWithFromAndToQuayV2Query,
 ): ServiceJourneyMapInfoData {
   const baseItem = {
     mode: data.serviceJourney?.line.transportMode,
-    transportSubmode: data.serviceJourney?.line.transportSubmode
+    transportSubmode: data.serviceJourney?.line.transportSubmode,
   };
   const fromQuayCoordinates: PolylinePair | undefined = data.fromQuay
     ? [data.fromQuay.latitude ?? 0, data.fromQuay.longitude ?? 0]
@@ -23,7 +23,7 @@ export function mapToMapLegs(
     : undefined;
 
   const pointsCoords: PolylinePair[] = polyline.decode(
-    data.serviceJourney?.pointsOnLink?.points ?? ''
+    data.serviceJourney?.pointsOnLink?.points ?? '',
   );
 
   const mainStartIndex = fromQuayCoordinates
@@ -43,43 +43,43 @@ export function mapToMapLegs(
       faded,
       pointsOnLink: {
         length: item.length,
-        points: polyline.encode(item)
-      }
+        points: polyline.encode(item),
+      },
     } as MapLeg);
 
   const mapLegs: MapLeg[] = [
     toMapLeg(beforeLegCoords, true),
     toMapLeg(mainLegCoords, false),
-    toMapLeg(afterLegCoords, true)
-  ].filter(leg => (leg.pointsOnLink.length || 0) > 1);
+    toMapLeg(afterLegCoords, true),
+  ].filter((leg) => (leg.pointsOnLink.length || 0) > 1);
 
   return {
     start: polypairToCoordinates(pointsCoords[0]),
     stop: polypairToCoordinates(pointsCoords[pointsCoords.length - 1]),
-    mapLegs
+    mapLegs,
   };
 }
 
 function findIndex(
   array: Array<PolylinePair>,
-  quayCoords: PolylinePair
+  quayCoords: PolylinePair,
 ): number {
   return array.reduce(
     (closest, t, index) => {
       const distance = haversineDistance(t, quayCoords);
-      return distance < closest.distance ? { index, distance } : closest;
+      return distance < closest.distance ? {index, distance} : closest;
     },
-    { index: -1, distance: 100 }
+    {index: -1, distance: 100},
   ).index;
 }
 
 function polypairToCoordinates(
-  position?: PolylinePair
+  position?: PolylinePair,
 ): Coordinates | undefined {
   if (!position) return position;
   const [latitude, longitude] = position;
   return {
     latitude,
-    longitude
+    longitude,
   };
 }

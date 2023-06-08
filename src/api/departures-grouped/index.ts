@@ -1,14 +1,14 @@
 import Hapi from '@hapi/hapi';
-import { IDeparturesGroupedService } from '../../service/interface';
+import {IDeparturesGroupedService} from '../../service/interface';
 import {
   DepartureGroupsPayload,
   DepartureGroupsQuery,
   DepartureFavoritesPayload,
-  DepartureFavoritesQuery
+  DepartureFavoritesQuery,
 } from '../../service/types';
 import {
   getDeparturesCursoredRequest,
-  getDepartureFavoritesCursoredRequest
+  getDepartureFavoritesCursoredRequest,
 } from './schema';
 
 export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => {
@@ -18,7 +18,7 @@ export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => 
     options: {
       tags: ['api', 'stops', 'departures'],
       validate: getDeparturesCursoredRequest,
-      description: 'Get departures grouped on lines from feature location'
+      description: 'Get departures grouped on lines from feature location',
     },
     handler: async (request, h) => {
       const location = request.payload as unknown as DepartureGroupsPayload;
@@ -26,7 +26,7 @@ export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => 
       return (
         await service.getDeparturesGrouped(location, query, h.request)
       ).unwrap();
-    }
+    },
   });
   server.route({
     method: 'POST',
@@ -34,7 +34,7 @@ export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => 
     options: {
       tags: ['api', 'stops', 'departures'],
       validate: getDepartureFavoritesCursoredRequest,
-      description: 'Get departures grouped on lines from feature location'
+      description: 'Get departures grouped on lines from feature location',
     },
     handler: async (request, h) => {
       const location = request.payload as unknown as DepartureFavoritesPayload;
@@ -43,6 +43,6 @@ export default (server: Hapi.Server) => (service: IDeparturesGroupedService) => 
       return (
         await service.getDeparturesFavorites(location, query, h.request)
       ).unwrap();
-    }
+    },
   });
 };

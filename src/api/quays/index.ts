@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
-import { getQuaysCoordinatesRequest } from './schema';
-import { QuaysCoordinatesPayload } from '../../service/types';
-import { IQuayService } from '../../service/interface';
+import {getQuaysCoordinatesRequest} from './schema';
+import {QuaysCoordinatesPayload} from '../../service/types';
+import {IQuayService} from '../../service/interface';
 
 export default (server: Hapi.Server) => (service: IQuayService) => {
   server.route({
@@ -10,12 +10,12 @@ export default (server: Hapi.Server) => (service: IQuayService) => {
     options: {
       tags: ['api', 'quays', 'coordinates'],
       validate: getQuaysCoordinatesRequest,
-      description: 'Get quays coordinates'
+      description: 'Get quays coordinates',
     },
     handler: async (request, h) => {
       const payload = request.payload as unknown as QuaysCoordinatesPayload;
 
       return (await service.getQuaysCoordinates(payload, h.request)).unwrap();
-    }
+    },
   });
 };

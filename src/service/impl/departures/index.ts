@@ -1,32 +1,32 @@
-import { Result } from '@badrap/result';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { IDeparturesService } from '../../interface';
-import { APIError } from '../../types';
+import {Result} from '@badrap/result';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
+import {IDeparturesService} from '../../interface';
+import {APIError} from '../../types';
 import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,
-  StopPlaceQuayDeparturesQueryVariables
+  StopPlaceQuayDeparturesQueryVariables,
 } from './journey-gql/stop-departures.graphql-gen';
 import {
   NearestStopPlacesDocument,
   NearestStopPlacesQuery,
-  NearestStopPlacesQueryVariables
+  NearestStopPlacesQueryVariables,
 } from './journey-gql/stops-nearest.graphql-gen';
 import {
   StopsDetailsDocument,
   StopsDetailsQuery,
-  StopsDetailsQueryVariables
+  StopsDetailsQueryVariables,
 } from './journey-gql/stops-details.graphql-gen';
 import {
   filterStopPlaceFavorites,
-  filterFavoriteDepartures
+  filterFavoriteDepartures,
 } from './utils/favorites';
 import * as Boom from '@hapi/boom';
-import { populateRealtimeCacheIfNotThere } from '../realtime/departure-time';
+import {populateRealtimeCacheIfNotThere} from '../realtime/departure-time';
 import {
   DeparturesDocument,
   DeparturesQuery,
-  DeparturesQueryVariables
+  DeparturesQueryVariables,
 } from './journey-gql/departures.graphql-gen';
 
 export default (): IDeparturesService => {
@@ -37,15 +37,15 @@ export default (): IDeparturesService => {
         numberOfDepartures = 1000,
         startTime,
         timeRange = 86400, // 24 hours
-        limitPerLine
+        limitPerLine,
       },
       payload,
-      headers
+      headers,
     ) {
       const favorites = payload?.favorites;
       const quayIds = typeof ids === 'string' ? [ids] : ids;
       try {
-        const lineIds = favorites?.map(f => f.lineId);
+        const lineIds = favorites?.map((f) => f.lineId);
 
         /**
          * If favorites are provided, get more departures per quay from journey
@@ -55,11 +55,11 @@ export default (): IDeparturesService => {
         const limit = favorites
           ? {
               limitPerLine: limitPerLine ?? numberOfDepartures,
-              numberOfDepartures: Math.min(numberOfDepartures * 10, 1000)
+              numberOfDepartures: Math.min(numberOfDepartures * 10, 1000),
             }
           : {
               limitPerLine,
-              numberOfDepartures
+              numberOfDepartures,
             };
 
         // Fire and forget population of cache. Not critial if it fails.
@@ -70,9 +70,9 @@ export default (): IDeparturesService => {
             lineIds,
             limit: limit.numberOfDepartures,
             limitPerLine: limit.limitPerLine,
-            timeRange
+            timeRange,
           },
-          headers
+          headers,
         );
 
         const result = await journeyPlannerClient(headers).query<
@@ -85,8 +85,8 @@ export default (): IDeparturesService => {
             startTime,
             timeRange,
             filterByLineIds: lineIds,
-            ...limit
-          }
+            ...limit,
+          },
         });
 
         if (result.errors) {
@@ -101,8 +101,8 @@ export default (): IDeparturesService => {
       }
     },
     async getStopPlacesByPosition(
-      { latitude, longitude, distance = 1000, count = 10, after },
-      headers
+      {latitude, longitude, distance = 1000, count = 10, after},
+      headers,
     ) {
       try {
         const result = await journeyPlannerClient(headers).query<
@@ -115,8 +115,8 @@ export default (): IDeparturesService => {
             longitude,
             distance,
             after,
-            count
-          }
+            count,
+          },
         });
 
         if (result.errors) {
@@ -129,7 +129,7 @@ export default (): IDeparturesService => {
       }
     },
 
-    async getStopsDetails({ ids }, headers) {
+    async getStopsDetails({ids}, headers) {
       try {
         const result = await journeyPlannerClient(headers).query<
           StopsDetailsQuery,
@@ -137,8 +137,8 @@ export default (): IDeparturesService => {
         >({
           query: StopsDetailsDocument,
           variables: {
-            ids
-          }
+            ids,
+          },
         });
 
         if (result.errors) {
@@ -147,8 +147,8 @@ export default (): IDeparturesService => {
         if (!result.data.stopPlaces.filter(Boolean).length) {
           return Result.err(
             Boom.resourceGone(
-              'Stop place not found or no longer available. (No matching stop places)'
-            )
+              'Stop place not found or no longer available. (No matching stop places)',
+            ),
           );
         }
         return Result.ok(result.data);
@@ -157,9 +157,9 @@ export default (): IDeparturesService => {
       }
     },
     async getStopQuayDepartures(
-      { id, numberOfDepartures = 10, startTime, timeRange, limitPerLine },
+      {id, numberOfDepartures = 10, startTime, timeRange, limitPerLine},
       headers,
-      payload
+      payload,
     ) {
       const favorites = payload?.favorites;
       try {
@@ -171,13 +171,13 @@ export default (): IDeparturesService => {
         const limit = favorites
           ? {
               limitPerLine: limitPerLine ?? numberOfDepartures,
-              numberOfDepartures: numberOfDepartures * 10
+              numberOfDepartures: numberOfDepartures * 10,
             }
           : {
               limitPerLine,
-              numberOfDepartures
+              numberOfDepartures,
             };
-        const lineIds = favorites?.map(f => f.lineId);
+        const lineIds = favorites?.map((f) => f.lineId);
 
         const result = await journeyPlannerClient(headers).query<
           StopPlaceQuayDeparturesQuery,
@@ -189,11 +189,11 @@ export default (): IDeparturesService => {
             startTime,
             timeRange,
             filterByLineIds: lineIds,
-            ...limit
-          }
+            ...limit,
+          },
         });
 
-        const quayIds = result.data.stopPlace?.quays?.map(q => q.id);
+        const quayIds = result.data.stopPlace?.quays?.map((q) => q.id);
         if (quayIds) {
           // Fire and forget population of cache. Not critial if it fails.
           populateRealtimeCacheIfNotThere(
@@ -203,9 +203,9 @@ export default (): IDeparturesService => {
               lineIds,
               limit: limit.numberOfDepartures,
               limitPerLine: limit.limitPerLine,
-              timeRange
+              timeRange,
             },
-            headers
+            headers,
           );
         }
 
@@ -216,14 +216,14 @@ export default (): IDeparturesService => {
         const data = filterStopPlaceFavorites(
           result.data,
           favorites,
-          numberOfDepartures
+          numberOfDepartures,
         );
 
         return Result.ok(data);
       } catch (error) {
         return Result.err(new APIError(error));
       }
-    }
+    },
   };
 
   return api;

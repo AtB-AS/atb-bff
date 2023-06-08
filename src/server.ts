@@ -12,7 +12,7 @@ import atbHeaders from './plugins/atb-headers';
 import url from 'url';
 import Redis from '@hapi/catbox-redis';
 import Memory from '@hapi/catbox-memory';
-import { REDIS_HOST, REDIS_PORT } from './config/env';
+import {REDIS_HOST, REDIS_PORT} from './config/env';
 import HAPIPluginWebsocket from 'hapi-plugin-websocket';
 
 interface ServerOptions {
@@ -35,48 +35,48 @@ export const createServer = (opts: ServerOptions) => {
               options: {
                 host: REDIS_HOST,
                 port: REDIS_PORT,
-                partition: 'bff'
-              }
-            }
+                partition: 'bff',
+              },
+            },
           }
         : {
             name: 'memory',
             provider: {
               constructor: Memory,
-              options: {}
-            }
-          }
+              options: {},
+            },
+          },
     ],
     routes: {
       cors: true,
       validate: {
-        failAction: async (request, h, err) => err
-      }
-    }
+        failAction: async (request, h, err) => err,
+      },
+    },
   });
 };
 
 export const initializePlugins = async (server: hapi.Server) => {
   await server.register({
-    plugin: atbHeaders
+    plugin: atbHeaders,
   });
   await server.register({
     plugin: logFmtPlugin,
     options: {
       json: true,
       stream: process.env.NODE_ENV === 'test' ? undefined : process.stdout,
-      defaultFields: request => ({
+      defaultFields: (request) => ({
         time: new Date(request.info.received).toISOString(),
         method: request.method.toUpperCase(),
-        url: url.format(request.url, { search: false }),
+        url: url.format(request.url, {search: false}),
         requestId: request.requestId,
         installId: request.installId,
         appVersion: request.appVersion,
         correlationId: request.correlationId,
         customerAccountId: request.customerAccountId,
-        message: 'handle request'
-      })
-    }
+        message: 'handle request',
+      }),
+    },
   });
 
   await server.register([hapiVision, hapiInert, hapiPulse]);
@@ -85,8 +85,8 @@ export const initializePlugins = async (server: hapi.Server) => {
     options: {
       validVersions: [1],
       defaultVersion: 1,
-      vendorName: 'bff-oneclick-planner'
-    }
+      vendorName: 'bff-oneclick-planner',
+    },
   });
   await server.register({
     plugin: hapiSwagger,
@@ -94,9 +94,9 @@ export const initializePlugins = async (server: hapi.Server) => {
       info: {
         title: 'API Documentation',
         description: 'Description goes here',
-        version: '1.0.0'
-      }
-    }
+        version: '1.0.0',
+      },
+    },
   });
 
   await server.register(HAPIPluginWebsocket);

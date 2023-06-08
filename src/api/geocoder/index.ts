@@ -1,11 +1,11 @@
 import Hapi from '@hapi/hapi';
 import qs from 'querystring';
 
-import { IGeocoderService } from '../../service/interface';
-import { getFeaturesRequest, getFeaturesReverseRequest } from './schema';
-import { FeaturesQuery, ReverseFeaturesQuery } from '../../service/types';
-import { DEFAULT_CACHE_TTL } from '../../config/cache';
-import { EXTERNAL_API_TIMEOUT } from '../../config/external';
+import {IGeocoderService} from '../../service/interface';
+import {getFeaturesRequest, getFeaturesReverseRequest} from './schema';
+import {FeaturesQuery, ReverseFeaturesQuery} from '../../service/types';
+import {DEFAULT_CACHE_TTL} from '../../config/cache';
+import {EXTERNAL_API_TIMEOUT} from '../../config/external';
 
 export default (server: Hapi.Server) => (service: IGeocoderService) => {
   const getFeatures = async (q: FeaturesQuery) =>
@@ -17,15 +17,15 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
     generateKey: (q: FeaturesQuery) => qs.stringify(q),
     cache: {
       expiresIn: DEFAULT_CACHE_TTL,
-      generateTimeout: EXTERNAL_API_TIMEOUT
-    }
+      generateTimeout: EXTERNAL_API_TIMEOUT,
+    },
   });
   server.method('reverse', getFeaturesReverse, {
     generateKey: (q: ReverseFeaturesQuery) => qs.stringify(q),
     cache: {
       expiresIn: DEFAULT_CACHE_TTL,
-      generateTimeout: EXTERNAL_API_TIMEOUT
-    }
+      generateTimeout: EXTERNAL_API_TIMEOUT,
+    },
   });
 
   server.route({
@@ -35,17 +35,17 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
       description: 'Find features matching query',
       tags: ['api', 'geocoder'],
       validate: {
-        query: getFeaturesRequest
+        query: getFeaturesRequest,
       },
       cache: {
         expiresIn: DEFAULT_CACHE_TTL,
-        privacy: 'public'
-      }
+        privacy: 'public',
+      },
     },
-    handler: async request => {
+    handler: async (request) => {
       const query = request.query as unknown as FeaturesQuery;
       return server.methods.feature(query);
-    }
+    },
   });
   server.route({
     method: 'GET',
@@ -57,12 +57,12 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
       validate: getFeaturesReverseRequest,
       cache: {
         expiresIn: DEFAULT_CACHE_TTL,
-        privacy: 'public'
-      }
+        privacy: 'public',
+      },
     },
-    handler: async request => {
+    handler: async (request) => {
       const query = request.query as unknown as ReverseFeaturesQuery;
       return server.methods.reverse(query);
-    }
+    },
   });
 };

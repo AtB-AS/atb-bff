@@ -1,14 +1,14 @@
-import { EstimatedCall } from '../../../../graphql/journey/journeyplanner-types_v3';
-import { FavoriteDeparture } from '../../../types';
-import { DeparturesQuery } from '../journey-gql/departures.graphql-gen';
-import { StopPlaceQuayDeparturesQuery } from '../journey-gql/stop-departures.graphql-gen';
+import {EstimatedCall} from '../../../../graphql/journey/journeyplanner-types_v3';
+import {FavoriteDeparture} from '../../../types';
+import {DeparturesQuery} from '../journey-gql/departures.graphql-gen';
+import {StopPlaceQuayDeparturesQuery} from '../journey-gql/stop-departures.graphql-gen';
 
 export function filterFavoriteDepartures(
   result?: DeparturesQuery,
-  favorites?: FavoriteDeparture[]
+  favorites?: FavoriteDeparture[],
 ): DeparturesQuery {
   const quays = result?.quays;
-  if (!quays) return { quays: [] };
+  if (!quays) return {quays: []};
 
   /**
    * Returns whether a departure is a favorite, but if no favorites are
@@ -18,22 +18,22 @@ export function filterFavoriteDepartures(
   const isFavorite = (item: EstimatedCall) =>
     !favorites ||
     favorites.some(
-      f =>
+      (f) =>
         (!f.lineName || item.destinationDisplay?.frontText === f.lineName) &&
         item.serviceJourney?.line.id === f.lineId &&
-        item.quay?.id === f.quayId
+        item.quay?.id === f.quayId,
     );
 
   return {
     ...result,
-    quays: quays.map(quay => {
+    quays: quays.map((quay) => {
       return {
         ...quay,
-        estimatedCalls: quay.estimatedCalls.filter(estimatedCall =>
-          isFavorite(estimatedCall as EstimatedCall)
-        )
+        estimatedCalls: quay.estimatedCalls.filter((estimatedCall) =>
+          isFavorite(estimatedCall as EstimatedCall),
+        ),
       };
-    })
+    }),
   };
 }
 
@@ -43,7 +43,7 @@ export function filterFavoriteDepartures(
 export function filterStopPlaceFavorites(
   result?: StopPlaceQuayDeparturesQuery,
   favorites?: FavoriteDeparture[],
-  limit?: number
+  limit?: number,
 ): StopPlaceQuayDeparturesQuery {
   const stopPlace = result?.stopPlace;
   if (!stopPlace) return {};
@@ -55,19 +55,19 @@ export function filterStopPlaceFavorites(
   const isFavorite = (item: EstimatedCall) =>
     !favorites ||
     favorites.some(
-      f =>
+      (f) =>
         (!f.lineName || item.destinationDisplay?.frontText === f.lineName) &&
         item.serviceJourney?.line.id === f.lineId &&
         stopPlace.id === f.stopId &&
-        (!f.quayId || item.quay?.id === f.quayId)
+        (!f.quayId || item.quay?.id === f.quayId),
     );
 
-  const filteredQuays = stopPlace.quays?.map(quay => {
+  const filteredQuays = stopPlace.quays?.map((quay) => {
     return {
       ...quay,
       estimatedCalls: quay.estimatedCalls
-        .filter(estimatedCall => isFavorite(estimatedCall as EstimatedCall))
-        .slice(0, limit)
+        .filter((estimatedCall) => isFavorite(estimatedCall as EstimatedCall))
+        .slice(0, limit),
     };
   });
 
@@ -75,7 +75,7 @@ export function filterStopPlaceFavorites(
     ...result,
     stopPlace: {
       ...stopPlace,
-      quays: filteredQuays
-    }
+      quays: filteredQuays,
+    },
   };
 }

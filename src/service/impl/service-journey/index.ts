@@ -1,33 +1,33 @@
-import { Result } from '@badrap/result';
-import { formatISO } from 'date-fns';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { IServiceJourneyService_v2 } from '../../interface';
-import { APIError, ServiceJourneyMapInfoQuery } from '../../types';
-import { mapToMapLegs } from './utils';
+import {Result} from '@badrap/result';
+import {formatISO} from 'date-fns';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
+import {IServiceJourneyService_v2} from '../../interface';
+import {APIError, ServiceJourneyMapInfoQuery} from '../../types';
+import {mapToMapLegs} from './utils';
 import {
   getMapInfoWithFromAndToQuay,
-  getMapInfoWithFromQuay
+  getMapInfoWithFromQuay,
 } from './serviceJourney';
 import {
   ServiceJourneyEstimatedCallFragment,
   ServiceJourneyDeparturesDocument,
   ServiceJourneyDeparturesQuery,
-  ServiceJourneyDeparturesQueryVariables
+  ServiceJourneyDeparturesQueryVariables,
 } from './journey-gql/service-journey-departures.graphql-gen';
 import {
   ServiceJourneyWithEstimatedCallsDocument,
   ServiceJourneyWithEstimatedCallsQuery,
-  ServiceJourneyWithEstimatedCallsQueryVariables
+  ServiceJourneyWithEstimatedCallsQueryVariables,
 } from './journey-gql/service-journey-with-estimated-calls.graphql-gen';
-import { ServiceJourneyWithEstCallsFragment } from '../fragments/journey-gql/service-journey.graphql-gen';
-import { ReqRefDefaults, Request } from '@hapi/hapi';
+import {ServiceJourneyWithEstCallsFragment} from '../fragments/journey-gql/service-journey.graphql-gen';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
   return {
     async getServiceJourneyMapInfo(
       serviceJourneyId: string,
       query: ServiceJourneyMapInfoQuery,
-      headers: Request<ReqRefDefaults>
+      headers: Request<ReqRefDefaults>,
     ) {
       try {
         const result = query.toQuayId
@@ -35,12 +35,12 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
               serviceJourneyId,
               query.fromQuayId,
               query.toQuayId,
-              headers
+              headers,
             )
           : await getMapInfoWithFromQuay(
               serviceJourneyId,
               query.fromQuayId,
-              headers
+              headers,
             );
 
         if (result.errors) {
@@ -51,10 +51,10 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         return Result.err(new APIError(error));
       }
     },
-    async getDeparturesForServiceJourneyV2(id, { date }, headers) {
+    async getDeparturesForServiceJourneyV2(id, {date}, headers) {
       try {
         const serviceDate = date
-          ? formatISO(date, { representation: 'date' })
+          ? formatISO(date, {representation: 'date'})
           : undefined;
 
         const result = await journeyPlannerClient(headers).query<
@@ -62,7 +62,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
           ServiceJourneyDeparturesQueryVariables
         >({
           query: ServiceJourneyDeparturesDocument,
-          variables: { id, date: serviceDate }
+          variables: {id, date: serviceDate},
         });
 
         if (result.error) {
@@ -71,16 +71,16 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
 
         const estimatedCalls = result.data.serviceJourney?.estimatedCalls;
         return Result.ok(
-          estimatedCalls as ServiceJourneyEstimatedCallFragment[]
+          estimatedCalls as ServiceJourneyEstimatedCallFragment[],
         );
       } catch (error: any) {
         return Result.err(new APIError(error));
       }
     },
-    async getServiceJourneyWithEstimatedCallsV2(id, { date }, headers) {
+    async getServiceJourneyWithEstimatedCallsV2(id, {date}, headers) {
       try {
         const serviceDate = date
-          ? formatISO(date, { representation: 'date' })
+          ? formatISO(date, {representation: 'date'})
           : undefined;
 
         const result = await journeyPlannerClient(headers).query<
@@ -88,7 +88,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
           ServiceJourneyWithEstimatedCallsQueryVariables
         >({
           query: ServiceJourneyWithEstimatedCallsDocument,
-          variables: { id, date: serviceDate }
+          variables: {id, date: serviceDate},
         });
 
         if (result.error) {
@@ -100,6 +100,6 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
       } catch (error: any) {
         return Result.err(new APIError(error));
       }
-    }
+    },
   };
 }

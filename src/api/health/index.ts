@@ -6,13 +6,13 @@ export default (server: Hapi.Server) => {
     path: '/bff/health',
     handler: () => {
       return 'OK';
-    }
+    },
   });
   server.route({
     method: 'GET',
     path: '/ws/health',
     handler: () => {
       return 'OK';
-    }
+    },
   });
 };

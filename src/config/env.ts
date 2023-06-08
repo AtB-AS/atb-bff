@@ -1,4 +1,4 @@
-import { getEnv } from '../utils/getenv';
+import {getEnv} from '../utils/getenv';
 
 export const TICKET_INVITE_KEY: string | undefined =
   process.env.TICKET_INVITE_KEY;
@@ -23,7 +23,7 @@ export const VIPPS_CLIENT_SECRET = process.env.VIPPS_CLIENT_SECRET;
 const getServiceUrl = (
   prefix: string,
   serviceKey: string,
-  required: boolean = false
+  required: boolean = false,
 ): string => {
   const host = getServiceHost(serviceKey);
   const port = getServicePort(serviceKey);
@@ -31,7 +31,7 @@ const getServiceUrl = (
   if (host === '' || port === '') {
     if (required) {
       console.error(
-        `failed to read environment variables for required service: ${serviceKey}`
+        `failed to read environment variables for required service: ${serviceKey}`,
       );
       process.exit(-1);
     } else {
@@ -53,7 +53,7 @@ const getServicePort = (serviceKey: string): string => {
 export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'http://',
   'ENROLLMENT',
-  getEnv() === 'prod'
+  getEnv() === 'prod',
 );
 export const REDIS_HOST: string = getServiceHost('REDIS');
 export const REDIS_PORT: string = getServicePort('REDIS');

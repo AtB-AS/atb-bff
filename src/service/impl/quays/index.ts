@@ -1,19 +1,19 @@
-import { Result } from '@badrap/result';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { IQuayService } from '../../interface';
-import { APIError, QuaysCoordinatesPayload } from '../../types';
+import {Result} from '@badrap/result';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
+import {IQuayService} from '../../interface';
+import {APIError, QuaysCoordinatesPayload} from '../../types';
 import {
   GetQuaysCoordinatesQuery,
   GetQuaysCoordinatesDocument,
-  GetQuaysCoordinatesQueryVariables
+  GetQuaysCoordinatesQueryVariables,
 } from './journey-gql/quays-coordinates.graphql-gen';
-import { ReqRefDefaults, Request } from '@hapi/hapi';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 export default (): IQuayService => {
   const api: IQuayService = {
     async getQuaysCoordinates(
       payload: QuaysCoordinatesPayload,
-      headers: Request<ReqRefDefaults>
+      headers: Request<ReqRefDefaults>,
     ): Promise<Result<GetQuaysCoordinatesQuery, APIError>> {
       const result = await journeyPlannerClient(headers).query<
         GetQuaysCoordinatesQuery,
@@ -21,8 +21,8 @@ export default (): IQuayService => {
       >({
         query: GetQuaysCoordinatesDocument,
         variables: {
-          ids: payload.ids
-        }
+          ids: payload.ids,
+        },
       });
 
       if (result.errors) {
@@ -34,7 +34,7 @@ export default (): IQuayService => {
       } catch (error) {
         return Result.err(new APIError(error));
       }
-    }
+    },
   };
 
   return api;
