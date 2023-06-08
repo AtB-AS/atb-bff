@@ -1,5 +1,5 @@
 declare module 'hapi-pulse' {
-  import { Plugin } from '@hapi/hapi';
+  import {Plugin} from '@hapi/hapi';
   interface Logger {
     error(message: string): void;
   }
@@ -21,7 +21,7 @@ declare module 'hapi-pulse' {
 }
 
 declare module 'hapi-api-version' {
-  import { Plugin } from '@hapi/hapi';
+  import {Plugin} from '@hapi/hapi';
 
   namespace HapiApiVersion {
     interface Options {

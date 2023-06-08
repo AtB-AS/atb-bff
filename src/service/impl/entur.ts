@@ -1,20 +1,20 @@
 import createService from '@entur/sdk';
-import fetch, { RequestInfo, RequestInit } from 'node-fetch';
-import { HttpsAgent as Agent } from 'agentkeepalive';
+import fetch, {RequestInfo, RequestInit} from 'node-fetch';
+import {HttpsAgent as Agent} from 'agentkeepalive';
 import pThrottle from 'p-throttle';
-import { ET_CLIENT_NAME, ENTUR_BASEURL } from '../../config/env';
+import {ET_CLIENT_NAME, ENTUR_BASEURL} from '../../config/env';
 
 // The actual spike limit set in ApiGee is 120/s, do 100/s to be safe.
 const RATE_LIMIT_N = 10;
 const RATE_LIMIT_RES_MS = 100;
 
 const agent = new Agent({
-  keepAlive: true
+  keepAlive: true,
 });
 
 const throttle = pThrottle({
   limit: RATE_LIMIT_N,
-  interval: RATE_LIMIT_RES_MS
+  interval: RATE_LIMIT_RES_MS,
 });
 
 export type EnturServiceAPI = ReturnType<typeof createService>;
@@ -28,15 +28,15 @@ const service = () => {
       ? {
           journeyPlanner: `${ENTUR_BASEURL}/journey-planner/v2`,
           geocoder: `${ENTUR_BASEURL}/geocoder/v1`,
-          nsr: `${ENTUR_BASEURL}/stop-places/v1`
+          nsr: `${ENTUR_BASEURL}/stop-places/v1`,
         }
       : undefined,
     fetch: throttle((url: RequestInfo, init?: RequestInit | undefined) => {
       return fetch(url, {
         agent,
-        ...init
+        ...init,
       });
-    })
+    }),
   });
 };
 
@@ -49,15 +49,15 @@ export const enturClient_v3 = () => {
       ? {
           journeyPlanner: `${ENTUR_BASEURL}/journey-planner/v3`,
           geocoder: `${ENTUR_BASEURL}/geocoder/v1`,
-          nsr: `${ENTUR_BASEURL}/stop-places/v1`
+          nsr: `${ENTUR_BASEURL}/stop-places/v1`,
         }
       : undefined,
     fetch: throttle((url: RequestInfo, init?: RequestInit | undefined) => {
       return fetch(url, {
         agent,
-        ...init
+        ...init,
       });
-    })
+    }),
   });
 };
 

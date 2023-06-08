@@ -10,18 +10,17 @@ import {
   TransportMode,
   TransportSubmode,
   TripPattern,
-  FlexibleLineType
 } from '@entur/sdk';
-import { TripPattern as TripPattern_v2 } from '../../../types/trips';
-import { TripsQuery } from './journey-gql/trip.graphql-gen';
+import {TripPattern as TripPattern_v2} from '../../../types/trips';
+import {TripsQuery} from './journey-gql/trip.graphql-gen';
 
 export function mapQueryToLegacyTripPatterns(trips: TripsQuery): TripPattern[] {
   const tripPatterns = trips.trip.tripPatterns;
-  return tripPatterns.map(trip => mapToLegacyTripPattern(trip));
+  return tripPatterns.map((trip) => mapToLegacyTripPattern(trip));
 }
 
 function mapToLegacyTripPattern(trip: TripPattern_v2): TripPattern {
-  const legs = trip.legs.map(leg => mapToLegacyLeg(leg));
+  const legs = trip.legs.map((leg) => mapToLegacyLeg(leg));
   return {
     ...trip,
     distance: trip.walkDistance || 0,
@@ -30,7 +29,7 @@ function mapToLegacyTripPattern(trip: TripPattern_v2): TripPattern {
     startTime: trip.expectedStartTime,
     duration: trip.duration || 0,
     legs: legs,
-    walkDistance: trip.walkDistance || 0
+    walkDistance: trip.walkDistance || 0,
   };
 }
 
@@ -39,15 +38,15 @@ function mapToLegacyLeg(leg: Leg_v2): Leg {
   const fromEstimatedCall = mapToLegacyEstimatedCall(
     leg.fromEstimatedCall,
     leg.serviceJourney,
-    leg.line?.name || ''
+    leg.line?.name || '',
   );
   const intermediateEstimatedCalls = leg.intermediateEstimatedCalls
-    .map(iec =>
+    .map((iec) =>
       mapToLegacyIntermediateEstimatedCall(
         iec,
         leg.serviceJourney,
-        leg.line?.name || ''
-      )
+        leg.line?.name || '',
+      ),
     )
     .filter(Boolean) as EstimatedCall[];
 
@@ -66,11 +65,11 @@ function mapToLegacyLeg(leg: Leg_v2): Leg {
     pointsOnLink: mapToPointsOnLink(leg.pointsOnLink),
     // Casting to allow servicejourney to be null
     serviceJourney: mapToLegacyServiceJourney(
-      leg.serviceJourney
+      leg.serviceJourney,
     ) as ServiceJourney,
     situations: [],
     bookingArrangements: undefined,
-    transportSubmode: mapToLegacySubMode(leg.transportSubmode)
+    transportSubmode: mapToLegacySubMode(leg.transportSubmode),
   };
 }
 
@@ -79,7 +78,7 @@ function mapToPointsOnLink(points: PointsOnLink_v2): PointsOnLink | undefined {
   if (!points || !points.points || !points.length) return;
   return {
     length: points.length,
-    points: points.points
+    points: points.points,
   };
 }
 
@@ -87,7 +86,7 @@ type EstimatedCall_v2 = Leg_v2['fromEstimatedCall'];
 function mapToLegacyEstimatedCall(
   estimatedCall: EstimatedCall_v2,
   serviceJourney: ServiceJourney_v2,
-  frontText: string
+  frontText: string,
 ): EstimatedCall | undefined {
   if (!estimatedCall) return;
 
@@ -105,10 +104,10 @@ function mapToLegacyEstimatedCall(
     // Casting to allow servicejourney to be null
     serviceJourney: mapToLegacyServiceJourney(serviceJourney) as ServiceJourney,
     destinationDisplay: {
-      frontText: frontText
+      frontText: frontText,
     },
     notices: [],
-    quay: undefined
+    quay: undefined,
   };
 }
 
@@ -116,7 +115,7 @@ type IntermediateEstimatedCall_v2 = Leg_v2['intermediateEstimatedCalls'][0];
 function mapToLegacyIntermediateEstimatedCall(
   estimatedCall: IntermediateEstimatedCall_v2,
   serviceJourney: ServiceJourney_v2,
-  frontText: string
+  frontText: string,
 ): EstimatedCall | undefined {
   if (!estimatedCall) return;
 
@@ -136,9 +135,9 @@ function mapToLegacyIntermediateEstimatedCall(
     // Casting to allow servicejourney to be null
     serviceJourney: mapToLegacyServiceJourney(serviceJourney) as ServiceJourney,
     destinationDisplay: {
-      frontText: frontText
+      frontText: frontText,
     },
-    notices: []
+    notices: [],
   };
 }
 
@@ -147,7 +146,7 @@ function mapToLegacyPlace(place: Place_v2): Place {
   return {
     ...place,
     name: place.name || '',
-    quay: mapToLegacyQuay(place.quay)
+    quay: mapToLegacyQuay(place.quay),
   };
 }
 
@@ -161,7 +160,7 @@ function mapToLegacyLine(line: Line_v2): Line | undefined {
     transportSubmode: TransportSubmode.LOCAL_BUS, // Not used in app
     name: line.name || '',
     notices: [],
-    publicCode: line.publicCode || ''
+    publicCode: line.publicCode || '',
   };
 }
 
@@ -177,7 +176,7 @@ type TransportSubmode_v2 = Leg_v2['transportSubmode'];
 function mapToLegacySubMode(submode: TransportSubmode_v2): TransportSubmode {
   if (
     Object.values(TransportSubmode).includes(
-      submode as unknown as TransportSubmode
+      submode as unknown as TransportSubmode,
     )
   ) {
     return submode as unknown as TransportSubmode;
@@ -187,14 +186,14 @@ function mapToLegacySubMode(submode: TransportSubmode_v2): TransportSubmode {
 
 type ServiceJourney_v2 = Leg_v2['serviceJourney'];
 function mapToLegacyServiceJourney(
-  serviceJourney: ServiceJourney_v2
+  serviceJourney: ServiceJourney_v2,
 ): ServiceJourney | null {
   if (!serviceJourney?.id) return null;
   return {
     ...serviceJourney,
     id: serviceJourney?.id || '',
     journeyPattern: undefined,
-    notices: []
+    notices: [],
   };
 }
 
@@ -214,7 +213,7 @@ function mapToLegacyQuay(quay?: Quay_v2): Quay | undefined {
       id: '',
       name: stopPlace?.name || '',
       latitude: stopPlace?.latitude,
-      longitude: stopPlace?.longitude
-    }
+      longitude: stopPlace?.longitude,
+    },
   };
 }

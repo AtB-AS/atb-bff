@@ -1,13 +1,13 @@
 import Hapi from '@hapi/hapi';
-import { EnrollmentQuery } from '../../service/types';
-import { postEnrollmentGroupRequest } from './schema';
+import {EnrollmentQuery} from '../../service/types';
+import {postEnrollmentGroupRequest} from './schema';
 import * as Boom from '@hapi/boom';
 import {
   PERIOD_TICKET_INVITE_KEY,
   TICKET_INVITE_KEY,
-  FLEX_TICKET_INVITE_KEY
+  FLEX_TICKET_INVITE_KEY,
 } from '../../config/env';
-import { IEnrollmentService } from '../../service/interface';
+import {IEnrollmentService} from '../../service/interface';
 
 export default (server: Hapi.Server) => (service: IEnrollmentService) => {
   server.route({
@@ -16,9 +16,9 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
     options: {
       description: 'Enroll in beta groups with invite key',
       tags: ['api', 'enrollment'],
-      validate: postEnrollmentGroupRequest
+      validate: postEnrollmentGroupRequest,
     },
-    handler: async (request, h) => {
+    handler: async (request) => {
       const query = request.query as unknown as EnrollmentQuery;
       const customerAccountId =
         request.headers['entur-customer-account-id'] || '';
@@ -56,7 +56,7 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
       const response = await service.enroll(
         customerAccountId,
         enrollmentId,
-        query.inviteKey
+        query.inviteKey,
       );
       const analyticsGroups = ['ticketing_group'];
 
@@ -68,7 +68,7 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
 
       analyticsGroups.push(payload.analytics_group);
 
-      return { status: 'ok', groups: analyticsGroups };
-    }
+      return {status: 'ok', groups: analyticsGroups};
+    },
   });
 };

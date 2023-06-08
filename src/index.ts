@@ -1,5 +1,6 @@
-import { Boom } from '@hapi/boom';
-import { createServer, initializePlugins } from './server';
+/* eslint no-console: 0 */
+import {Boom} from '@hapi/boom';
+import {createServer, initializePlugins} from './server';
 import enturClient from './service/impl/entur';
 
 import geocoderService from './service/impl/geocoder';
@@ -23,11 +24,11 @@ import quayRoutes from './api/quays';
 import mobilityRoutes from './api/mobility';
 import vehiclesRoutes from './api/vehicles';
 
-import { serviceJourneyRoutes_v2 } from './api/servicejourney';
-import { serviceJourneyService_v2 } from './service/impl/service-journey';
+import {serviceJourneyRoutes_v2} from './api/servicejourney';
+import {serviceJourneyService_v2} from './service/impl/service-journey';
 import vippsLoginRoutes from './api/vipps-login';
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.error(err);
   process.exit(-1);
 });
@@ -38,15 +39,15 @@ process.on('unhandledRejection', err => {
 
     const port = process.env['PORT'] || '8080';
     const server = createServer({
-      port: port
+      port: port,
     });
     const enturService = enturClient();
     await initializePlugins(server);
     server.route({
       method: '*',
       path: '/{any*}',
-      handler: (request, h) =>
-        new Boom('The requested resource was not found.', { statusCode: 404 })
+      handler: () =>
+        new Boom('The requested resource was not found.', {statusCode: 404}),
     });
 
     healthRoutes(server);
@@ -70,7 +71,7 @@ process.on('unhandledRejection', err => {
     console.info('✅ Server started at http://localhost:' + port);
   } catch (error: any) {
     console.error(
-      `failed to initialize server: ${error?.message}, terminating process.`
+      `failed to initialize server: ${error?.message}, terminating process.`,
     );
     console.error(error?.stack);
     process.exit(-1);

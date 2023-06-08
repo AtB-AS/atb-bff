@@ -1,12 +1,12 @@
-import { ReqRefDefaults, Request } from '@hapi/hapi';
-import { Result } from '@badrap/result';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { CursoredData, generateCursorData } from '../../cursored';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {Result} from '@badrap/result';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
+import {CursoredData, generateCursorData} from '../../cursored';
 import {
   APIError,
   Coordinates,
   DepartureGroupsQuery,
-  FavoriteDeparture
+  FavoriteDeparture,
 } from '../../types';
 import {
   GroupsByIdDocument,
@@ -14,14 +14,14 @@ import {
   GroupsByIdQueryVariables,
   QuayIdInStopsDocument,
   QuayIdInStopsQuery,
-  QuayIdInStopsQueryVariables
+  QuayIdInStopsQueryVariables,
 } from './journey-gql/departure-group.graphql-gen';
 import {
   GroupsByNearestDocument,
   GroupsByNearestQuery,
-  GroupsByNearestQueryVariables
+  GroupsByNearestQueryVariables,
 } from './journey-gql/departure-group-by-nearest.graphql-gen';
-import mapQueryToGroups, { StopPlaceGroup } from './utils/grouping';
+import mapQueryToGroups, {StopPlaceGroup} from './utils/grouping';
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;
 
@@ -30,7 +30,7 @@ export async function getDeparturesGroupedNearest(
   distance: number = 1000,
   options: DepartureGroupsQuery,
   headers: Request<ReqRefDefaults>,
-  favorites?: FavoriteDeparture[]
+  favorites?: FavoriteDeparture[],
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   let favoriteQuayIds: string[] | undefined = undefined;
   if (favorites?.length) {
@@ -40,11 +40,11 @@ export async function getDeparturesGroupedNearest(
     >({
       query: QuayIdInStopsDocument,
       variables: {
-        stopIds: favorites.map(f => f.stopId)
+        stopIds: favorites.map((f) => f.stopId),
       },
       // With fetch policy set to `cache-first`, apollo client will return data
       // from the cache, or fetch new data and populate the cache.
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'cache-first',
     });
 
     if (quayIdsResult.errors) {
@@ -52,7 +52,7 @@ export async function getDeparturesGroupedNearest(
     }
 
     favoriteQuayIds = quayIdsResult.data.stopPlaces
-      .flatMap(s => s.quays?.map(q => q.id))
+      .flatMap((s) => s.quays?.map((q) => q.id))
       .filter(Boolean) as string[];
   }
 
@@ -79,12 +79,12 @@ export async function getDeparturesGroupedNearest(
     // This limits number of stop places.
     pageSize: options.pageSize,
 
-    filterByLineIds: favorites?.map(f => f.lineId),
+    filterByLineIds: favorites?.map((f) => f.lineId),
     filterInput: favoriteQuayIds
       ? {
-          quays: favoriteQuayIds
+          quays: favoriteQuayIds,
         }
-      : undefined
+      : undefined,
   };
 
   const result = await journeyPlannerClient(headers).query<
@@ -92,7 +92,7 @@ export async function getDeparturesGroupedNearest(
     GroupsByNearestQueryVariables
   >({
     query: GroupsByNearestDocument,
-    variables
+    variables,
   });
 
   if (result.errors) {
@@ -101,10 +101,10 @@ export async function getDeparturesGroupedNearest(
 
   try {
     const edges = result.data.nearest?.edges ?? [];
-    const stopPlaces = edges.map(i => i.node?.place);
+    const stopPlaces = edges.map((i) => i.node?.place);
     const data = mapQueryToGroups(
       stopPlaces as GroupsByIdQuery['stopPlaces'],
-      favorites
+      favorites,
     );
 
     const pageInfo = result.data.nearest?.pageInfo;
@@ -113,10 +113,10 @@ export async function getDeparturesGroupedNearest(
         data,
         {
           hasNextPage: pageInfo?.hasNextPage ?? false,
-          nextCursor: pageInfo?.endCursor
+          nextCursor: pageInfo?.endCursor,
         },
-        options
-      )
+        options,
+      ),
     );
   } catch (error) {
     return Result.err(new APIError(error));
@@ -127,7 +127,7 @@ export async function getDeparturesGrouped(
   id: string[] | string,
   options: DepartureGroupsQuery,
   headers: Request<ReqRefDefaults>,
-  favorites?: FavoriteDeparture[]
+  favorites?: FavoriteDeparture[],
 ): Promise<Result<DepartureGroupMetadata, APIError>> {
   let ids = Array.isArray(id) ? id : [id];
 
@@ -137,7 +137,7 @@ export async function getDeparturesGrouped(
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,
     totalLimit: options.limitPerLine * 10,
-    filterByLineIds: favorites?.map(f => f.lineId)
+    filterByLineIds: favorites?.map((f) => f.lineId),
   };
 
   const result = await journeyPlannerClient(headers).query<
@@ -145,7 +145,7 @@ export async function getDeparturesGrouped(
     GroupsByIdQueryVariables
   >({
     query: GroupsByIdDocument,
-    variables
+    variables,
   });
 
   if (result.errors) {
@@ -154,7 +154,7 @@ export async function getDeparturesGrouped(
 
   try {
     const data = mapQueryToGroups(result.data.stopPlaces, favorites);
-    return Result.ok(generateCursorData(data, { hasNextPage: false }, options));
+    return Result.ok(generateCursorData(data, {hasNextPage: false}, options));
   } catch (error) {
     return Result.err(new APIError(error));
   }

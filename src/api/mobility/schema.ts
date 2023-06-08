@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { FormFactor } from '../../graphql/mobility/mobility-types_v2';
+import {FormFactor} from '../../graphql/mobility/mobility-types_v2';
 
 export const getVehiclesRequest = {
   query: Joi.object({
@@ -12,12 +12,12 @@ export const getVehiclesRequest = {
     lon: Joi.number().required(),
     range: Joi.number().optional(),
     operators: Joi.array().items(Joi.string()).optional().single(),
-  })
+  }),
 };
 export const getVehicleRequest = {
   query: Joi.object({
-    ids: Joi.array().items(Joi.string()).required().single()
-  })
+    ids: Joi.array().items(Joi.string()).required().single(),
+  }),
 };
 
 export const getStationsRequest = {
@@ -30,11 +30,11 @@ export const getStationsRequest = {
     lat: Joi.number().required(),
     lon: Joi.number().required(),
     range: Joi.number().optional().default(500),
-    operators: Joi.array().items(Joi.string()).optional().single()
-  })
+    operators: Joi.array().items(Joi.string()).optional().single(),
+  }),
 };
 export const getCarStationRequest = {
   query: Joi.object({
-    ids: Joi.array().items(Joi.string()).required().single()
-  })
+    ids: Joi.array().items(Joi.string()).required().single(),
+  }),
 };

@@ -1,8 +1,8 @@
-import Hapi, { Server } from '@hapi/hapi';
+import Hapi, {Server} from '@hapi/hapi';
 import logfmt from 'logfmt';
 import * as stream from 'stream';
-import { Logger } from '../types/logfmt';
-import { Boom } from '@hapi/boom';
+import {Logger} from '../types/logfmt';
+import {Boom} from '@hapi/boom';
 
 interface LogFmtOptions {
   json: boolean;
@@ -13,13 +13,13 @@ interface LogFmtOptions {
 const discardLogger = new stream.Writable({
   write(chunk, encoding, callback) {
     setImmediate(callback);
-  }
+  },
 });
 
 const flatten = (
   obj: object,
   prefix: string = '',
-  res: Record<string, any> = {}
+  res: Record<string, any> = {},
 ) =>
   Object.entries(obj).reduce((r, [key, val]) => {
     const k = `${prefix}${key}`;
@@ -47,11 +47,11 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
           if (options.json) l.stringify = JSON.stringify;
           l.log({}, options.stream);
         },
-        with: obj => (l = l.namespace(obj))
+        with: (obj) => (l = l.namespace(obj)),
       };
     };
-    server.decorate('request', 'logfmt', logger, { apply: true });
-    server.ext('onPreHandler', (request, h, err) => {
+    server.decorate('request', 'logfmt', logger, {apply: true});
+    server.ext('onPreHandler', (request, h) => {
       request.logfmt.with(flatten(request.query));
 
       if (request.payload && typeof request.payload !== 'string') {
@@ -59,26 +59,26 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
       }
       return h.continue;
     });
-    server.ext('onPreResponse', (request, h, err) => {
+    server.ext('onPreResponse', (request, h) => {
       if (request.response instanceof Boom) {
-        request.logfmt.with({ error: request.response.message });
+        request.logfmt.with({error: request.response.message});
       }
       return h.continue;
     });
-    server.events.on('response', request => {
+    server.events.on('response', (request) => {
       if (request.raw.res && request.raw.res.statusCode) {
         const statusCode = request.raw.res.statusCode;
-        request.logfmt.with({ code: statusCode.toString() });
+        request.logfmt.with({code: statusCode.toString()});
         if (statusCode >= 400) {
-          request.logfmt.with({ severity: 'ERROR' });
+          request.logfmt.with({severity: 'ERROR'});
         } else {
-          request.logfmt.with({ severity: 'INFO' });
+          request.logfmt.with({severity: 'INFO'});
         }
       }
       request.logfmt.log();
     });
   },
-  name: 'logfmt'
+  name: 'logfmt',
 };
 
 export default plugin;

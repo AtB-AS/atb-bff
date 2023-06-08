@@ -1,10 +1,10 @@
 import Hapi from '@hapi/hapi';
-import { IVehiclesService } from '../../service/interface';
-import { ServiceJourneyVehicleQueryVariables } from '../../service/types';
-import { getUrlParam } from '../../utils/getUrlParam';
+import {IVehiclesService} from '../../service/interface';
+import {ServiceJourneyVehicleQueryVariables} from '../../service/types';
+import {getUrlParam} from '../../utils/getUrlParam';
 import {
   getVehiclesRequest,
-  postServiceJourneySubscriptionRequest
+  postServiceJourneySubscriptionRequest,
 } from './schema';
 
 export default (server: Hapi.Server) => (service: IVehiclesService) => {
@@ -14,7 +14,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
     options: {
       tags: ['api', 'vehicle', 'coordinates'],
       validate: getVehiclesRequest,
-      description: 'Get vehicle information for a list of service journeys'
+      description: 'Get vehicle information for a list of service journeys',
     },
     handler: async (request, h) => {
       const payload =
@@ -23,7 +23,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
       return (
         await service.getServiceJourneyVehicles(payload, h.request)
       ).unwrap();
-    }
+    },
   });
   server.route({
     method: 'POST',
@@ -36,7 +36,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
       plugins: {
         websocket: {
           only: true,
-          connect: ({ ctx, ws, req }) => {
+          connect: ({ctx, ws, req}) => {
             if (!req.url) {
               ws.close(1011);
               return;
@@ -49,21 +49,21 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
             }
 
             ctx.client = service.createServiceJourneySubscription(
-              { serviceJourneyId },
-              ws
+              {serviceJourneyId},
+              ws,
             );
           },
-          disconnect: ({ ctx }) => {
+          disconnect: ({ctx}) => {
             if (ctx.client) {
               ctx.client.unsubscribe();
               ctx.client = null;
             } else {
               console.error('WebSocket error: Failed to unsubscribe');
             }
-          }
-        }
-      }
+          },
+        },
+      },
     },
-    handler: () => ''
+    handler: () => '',
   });
 };

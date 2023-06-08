@@ -1,31 +1,32 @@
-import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache';
+/* eslint no-console: 0 */
+import {InMemoryCache, NormalizedCacheObject} from '@apollo/client/cache';
 import {
   ApolloClient,
   DefaultOptions,
   HttpLink,
-  ApolloLink
+  ApolloLink,
 } from '@apollo/client/core';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { onError } from '@apollo/client/link/error';
+import {WebSocketLink} from '@apollo/client/link/ws';
+import {onError} from '@apollo/client/link/error';
 import fetch from 'node-fetch';
 import {
   ENTUR_BASEURL,
   ENTUR_WEBSOCKET_BASEURL,
-  ET_CLIENT_NAME
+  ET_CLIENT_NAME,
 } from '../config/env';
 import WebSocket from 'ws';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { ReqRefDefaults, Request } from '@hapi/hapi';
+import {SubscriptionClient} from 'subscriptions-transport-ws';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
-    errorPolicy: 'ignore'
+    errorPolicy: 'ignore',
   },
   query: {
     fetchPolicy: 'no-cache',
-    errorPolicy: 'all'
-  }
+    errorPolicy: 'all',
+  },
 };
 
 const urlJourneyPlanner = ENTUR_BASEURL
@@ -57,14 +58,14 @@ function createClient(url: string) {
 
       headers: {
         'ET-Client-Name': ET_CLIENT_NAME,
-        'X-Correlation-Id': headers['correlationId']
-      }
+        'X-Correlation-Id': headers['correlationId'],
+      },
     });
-    const errorLink = onError(error =>
-      console.log('Apollo Error:', JSON.stringify(error))
+    const errorLink = onError((error) =>
+      console.log('Apollo Error:', JSON.stringify(error)),
     );
     const loggingLink = new ApolloLink((operation, forward) => {
-      return forward(operation).map(response => {
+      return forward(operation).map((response) => {
         const context = operation.getContext();
         const url = context.response.url;
 
@@ -96,7 +97,7 @@ function createClient(url: string) {
             correlationId: headers['correlationId'],
             requestId: headers['requestId'],
             installId: headers['installId'],
-            appVersion: headers['appVersion']
+            appVersion: headers['appVersion'],
           };
           console.log(JSON.stringify(log));
         }
@@ -108,14 +109,14 @@ function createClient(url: string) {
     return new ApolloClient({
       link,
       cache,
-      defaultOptions
+      defaultOptions,
     });
   };
 }
 
 function createWebSocketClient(url: string) {
   const cache = new InMemoryCache({
-    addTypename: false
+    addTypename: false,
   });
 
   const wsLink = new WebSocketLink(
@@ -123,21 +124,21 @@ function createWebSocketClient(url: string) {
       url,
       {
         reconnect: true,
-        lazy: true
+        lazy: true,
       },
-      WebSocket
-    )
+      WebSocket,
+    ),
   );
 
-  const errorLink = onError(error =>
-    console.log('Apollo Error:', JSON.stringify(error))
+  const errorLink = onError((error) =>
+    console.log('Apollo Error:', JSON.stringify(error)),
   );
   const link = ApolloLink.from([errorLink, wsLink]);
 
   return new ApolloClient({
     link,
     cache,
-    defaultOptions
+    defaultOptions,
   });
 }
 

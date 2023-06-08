@@ -3,12 +3,12 @@ import sortBy from 'lodash.sortby';
 import {
   ReportType,
   TransportMode,
-  TransportSubmode
+  TransportSubmode,
 } from '../../../../graphql/journey/journeyplanner-types_v3';
-import { FavoriteDeparture } from '../../../types';
-import { GroupsByIdQuery } from '../journey-gql/departure-group.graphql-gen';
+import {FavoriteDeparture} from '../../../types';
+import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
 
-type Notice = { text?: string };
+type Notice = {text?: string};
 type Situation = {
   situationNumber?: string;
   reportType?: ReportType;
@@ -28,7 +28,7 @@ type Situation = {
     startTime?: any;
     endTime?: any;
   };
-  infoLinks?: Array<{ uri?: string; label?: string }>;
+  infoLinks?: Array<{uri?: string; label?: string}>;
 };
 
 type DepartureLineInfo = {
@@ -91,7 +91,7 @@ function toKey(lineId?: string, frontText?: String) {
 
 export default function mapQueryToGroups(
   stopPlaces?: GroupsByIdQuery['stopPlaces'],
-  favorites?: FavoriteDeparture[]
+  favorites?: FavoriteDeparture[],
 ): StopPlaceGroup[] {
   if (!stopPlaces) {
     return [];
@@ -100,29 +100,29 @@ export default function mapQueryToGroups(
   const isFavorite = (item: DepartureLineInfo, stopId: string) =>
     !favorites ||
     favorites.some(
-      f =>
+      (f) =>
         (!f.lineName || item.lineName === f.lineName) &&
         item.lineId === f.lineId &&
         stopId === f.stopId &&
-        (!f.quayId || item.quayId === f.quayId)
+        (!f.quayId || item.quayId === f.quayId),
     );
 
   return stopPlaces.filter(Boolean).map(function (stopPlace) {
-    const { quays, ...stopPlaceInfo } = stopPlace;
+    const {quays, ...stopPlaceInfo} = stopPlace;
     const quayGroups =
       quays?.map(function (quay) {
-        const { times, estimatedCalls, ...quayInfo } = quay;
-        const groups = groupBy(times, item =>
+        const {times, estimatedCalls, ...quayInfo} = quay;
+        const groups = groupBy(times, (item) =>
           toKey(
             item.serviceJourney?.line.id,
-            item.destinationDisplay?.frontText
-          )
+            item.destinationDisplay?.frontText,
+          ),
         );
-        const lineInfoGroups = groupBy(estimatedCalls, item =>
+        const lineInfoGroups = groupBy(estimatedCalls, (item) =>
           toKey(
             item.serviceJourney?.line.id,
-            item.destinationDisplay?.frontText
-          )
+            item.destinationDisplay?.frontText,
+          ),
         );
 
         let lines: QuayGroup['group'] = [];
@@ -141,7 +141,7 @@ export default function mapQueryToGroups(
               lineInfoEntry.serviceJourney?.line.transportSubmode,
             quayId: quay.id,
             notices: (lineInfoEntry.notices as Notice[]) ?? [],
-            lineId: lineInfoEntry.serviceJourney?.line.id ?? ''
+            lineId: lineInfoEntry.serviceJourney?.line.id ?? '',
           };
 
           if (!isFavorite(lineInfo, stopPlaceInfo.id)) {
@@ -157,28 +157,28 @@ export default function mapQueryToGroups(
               situations: time.situations,
               serviceJourneyId: time.serviceJourney?.id,
               serviceDate: time.date,
-              cancellation: time.cancellation
+              cancellation: time.cancellation,
             };
           });
 
           lines.push({
             lineInfo,
-            departures
+            departures,
           });
         }
 
         return {
           quay: quayInfo,
-          group: lines
+          group: lines,
         };
       }) ?? [];
 
     return {
       stopPlace: stopPlaceInfo,
       quays: sortBy(quayGroups, [
-        group => sortByNumberIfPossible(group.quay.publicCode),
-        group => group.quay.id
-      ])
+        (group) => sortByNumberIfPossible(group.quay.publicCode),
+        (group) => group.quay.id,
+      ]),
     };
   });
 }

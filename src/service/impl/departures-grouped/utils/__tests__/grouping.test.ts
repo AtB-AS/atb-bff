@@ -4,8 +4,8 @@ const favorites = [
   {
     stopId: 'NSR:StopPlace:43153',
     lineName: 'Trondheim S',
-    lineId: 'ATB:Line:200109141544126_24_200109141539610'
-  }
+    lineId: 'ATB:Line:200109141544126_24_200109141539610',
+  },
 ];
 
 describe('service stops -> departure group utils', () => {

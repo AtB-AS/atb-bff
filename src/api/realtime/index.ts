@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
-import { IRealtimeService } from '../../service/interface';
-import { DepartureRealtimeQuery } from '../../service/types';
-import { getDepartureRealtime } from './schema';
+import {IRealtimeService} from '../../service/interface';
+import {DepartureRealtimeQuery} from '../../service/types';
+import {getDepartureRealtime} from './schema';
 
 export default (server: Hapi.Server) => (service: IRealtimeService) => {
   server.route({
@@ -14,14 +14,14 @@ export default (server: Hapi.Server) => (service: IRealtimeService) => {
         'Get updated realtime information of all lines and quays passed as data',
       plugins: {
         'hapi-swagger': {
-          deprecated: true
-        }
-      }
+          deprecated: true,
+        },
+      },
     },
     handler: async (request, h) => {
       const query = request.query as unknown as DepartureRealtimeQuery;
       return (await service.getDepartureRealtime(query, h.request)).unwrap();
-    }
+    },
   });
   server.route({
     method: 'GET',
@@ -29,11 +29,11 @@ export default (server: Hapi.Server) => (service: IRealtimeService) => {
     options: {
       tags: ['api', 'quays', 'departures', 'realtime'],
       validate: getDepartureRealtime,
-      description: 'Get updated realtime information for the given quays'
+      description: 'Get updated realtime information for the given quays',
     },
     handler: async (request, h) => {
       const query = request.query as unknown as DepartureRealtimeQuery;
       return (await service.getDepartureRealtime(query, h.request)).unwrap();
-    }
+    },
   });
 };

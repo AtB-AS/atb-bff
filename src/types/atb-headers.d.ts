@@ -1,4 +1,5 @@
-import { Request } from '@hapi/hapi';
+// eslint-disable-next-line unused-imports/no-unused-imports
+import {Request} from '@hapi/hapi';
 
 declare module '@hapi/hapi' {
   interface Request {

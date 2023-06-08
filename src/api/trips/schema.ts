@@ -7,16 +7,16 @@ export const postTripsRequest = {
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
         latitude: Joi.number(),
-        longitude: Joi.number()
-      })
+        longitude: Joi.number(),
+      }),
     }).required(),
     to: Joi.object({
       place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
         latitude: Joi.number(),
-        longitude: Joi.number()
-      })
+        longitude: Joi.number(),
+      }),
     }).required(),
     arriveBy: Joi.bool().required(),
     when: Joi.date(),
@@ -32,17 +32,17 @@ export const postTripsRequest = {
       transportModes: Joi.array().items(
         Joi.object({
           transportMode: Joi.string(),
-          transportSubModes: Joi.array().items(Joi.string())
-        })
-      )
-    }).optional()
-  })
+          transportSubModes: Joi.array().items(Joi.string()),
+        }),
+      ),
+    }).optional(),
+  }),
 };
 
 export const postEncodedSingleTripRequest = {
   payload: Joi.object({
-    compressedQuery: Joi.string().required()
-  }).required()
+    compressedQuery: Joi.string().required(),
+  }).required(),
 };
 
 export const postSingleTripRequest = {
@@ -53,21 +53,21 @@ export const postSingleTripRequest = {
         name: Joi.string().default('UNKNOWN'),
         coordinates: Joi.object({
           latitude: Joi.number(),
-          longitude: Joi.number()
-        })
+          longitude: Joi.number(),
+        }),
       }).required(),
       to: Joi.object({
         place: Joi.string().optional(),
         name: Joi.string().default('UNKNOWN'),
         coordinates: Joi.object({
           latitude: Joi.number(),
-          longitude: Joi.number()
-        })
+          longitude: Joi.number(),
+        }),
       }).required(),
-      when: Joi.date()
+      when: Joi.date(),
     }),
-    journeyIds: Joi.array().items(Joi.string()).default([]).single()
-  })
+    journeyIds: Joi.array().items(Joi.string()).default([]).single(),
+  }),
 };
 
 export const postJourneyRequest = {
@@ -77,16 +77,16 @@ export const postJourneyRequest = {
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
         latitude: Joi.number(),
-        longitude: Joi.number()
-      })
+        longitude: Joi.number(),
+      }),
     }).required(),
     to: Joi.object({
       place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
         latitude: Joi.number(),
-        longitude: Joi.number()
-      })
+        longitude: Joi.number(),
+      }),
     }).required(),
     searchDate: Joi.date(),
     arriveBy: Joi.bool().default(false),
@@ -103,6 +103,6 @@ export const postJourneyRequest = {
     maxTransferWalkDistance: Joi.number().default(2000),
     // Higher number = lower rating for walking. Default by entur is 4
     walkReluctance: Joi.number().default(5),
-    wheelchairAccessible: Joi.bool().default(false)
-  }).options({ abortEarly: false })
+    wheelchairAccessible: Joi.bool().default(false),
+  }).options({abortEarly: false}),
 };

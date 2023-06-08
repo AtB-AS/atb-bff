@@ -1,16 +1,16 @@
-import { Result } from '@badrap/result';
-import { journeyPlannerClient } from '../../../graphql/graphql-client';
-import { IRealtimeService } from '../../interface';
-import { APIError, DepartureRealtimeQuery } from '../../types';
+import {Result} from '@badrap/result';
+import {journeyPlannerClient} from '../../../graphql/graphql-client';
+import {IRealtimeService} from '../../interface';
+import {APIError, DepartureRealtimeQuery} from '../../types';
 import {
   createVariables,
   getPreviousExpectedFromCache,
-  mapToDepartureRealtime
+  mapToDepartureRealtime,
 } from './departure-time';
 import {
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
-  GetDepartureRealtimeQueryVariables
+  GetDepartureRealtimeQueryVariables,
 } from './journey-gql/departure-time.graphql-gen';
 
 export default (): IRealtimeService => {
@@ -27,7 +27,7 @@ export default (): IRealtimeService => {
           variables,
           // With fetch policy set to `network-only`, apollo client will always
           // fetch and return new data, then update the cache afterwards.
-          fetchPolicy: 'network-only'
+          fetchPolicy: 'network-only',
         });
 
         if (result.errors) {
@@ -38,7 +38,7 @@ export default (): IRealtimeService => {
       } catch (error) {
         return Result.err(new APIError(error));
       }
-    }
+    },
   };
 
   return api;

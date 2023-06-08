@@ -1,14 +1,14 @@
 import Joi from 'joi';
-import { TripsQueryVariables } from './journey-gql/trip.graphql-gen';
+import {TripsQueryVariables} from './journey-gql/trip.graphql-gen';
 import {
   TripPattern as TripPattern_v3,
-  TripsQueryWithJourneyIds
+  TripsQueryWithJourneyIds,
 } from '../../../types/trips';
 import {
   compressToEncodedURIComponent,
-  decompressFromEncodedURIComponent
+  decompressFromEncodedURIComponent,
 } from 'lz-string';
-import { addSeconds, parseISO } from 'date-fns';
+import {addSeconds, parseISO} from 'date-fns';
 
 const START_TIME_PADDING = 60; // time in seconds
 
@@ -22,7 +22,7 @@ const START_TIME_PADDING = 60; // time in seconds
  */
 export function generateSingleTripQueryString(
   trip: TripPattern_v3,
-  queryVariables: TripsQueryVariables
+  queryVariables: TripsQueryVariables,
 ) {
   // extract journeyIds for all legs
   const journeyIds = extractServiceJourneyIds(trip);
@@ -36,7 +36,7 @@ export function generateSingleTripQueryString(
     waitReluctance,
     walkReluctance,
     walkSpeed,
-    modes
+    modes,
   } = queryVariables;
   const arriveBy = false;
   const singleTripQuery: TripsQueryVariables = {
@@ -48,12 +48,12 @@ export function generateSingleTripQueryString(
     walkReluctance,
     walkSpeed,
     arriveBy,
-    modes
+    modes,
   };
 
   // encode to string
   return compressToEncodedURIComponent(
-    JSON.stringify({ query: singleTripQuery, journeyIds })
+    JSON.stringify({query: singleTripQuery, journeyIds}),
   );
 }
 
@@ -70,7 +70,7 @@ function getPaddedStartTime(time: string): string {
  */
 export function parseTripQueryString(
   compressedQueryString: string,
-  queryValidator: Joi.ObjectSchema
+  queryValidator: Joi.ObjectSchema,
 ): TripsQueryWithJourneyIds {
   const queryString = decompressFromEncodedURIComponent(compressedQueryString);
   if (!queryString) {
@@ -81,7 +81,7 @@ export function parseTripQueryString(
 
   return {
     query: queryFields.query,
-    journeyIds: queryFields.journeyIds
+    journeyIds: queryFields.journeyIds,
   };
 }
 
@@ -93,10 +93,10 @@ export function parseTripQueryString(
  */
 export function extractServiceJourneyIds(trip: TripPattern_v3) {
   return trip.legs
-    .map(leg => {
+    .map((leg) => {
       return leg.serviceJourney?.id ?? null;
     })
-    .filter(jId => {
+    .filter((jId) => {
       return !!jId;
     });
 }

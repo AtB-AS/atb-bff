@@ -1,4 +1,4 @@
-import { stringify } from 'querystring';
+import {stringify} from 'querystring';
 
 type NextCursorData = {
   nextCursor?: string;
@@ -8,7 +8,7 @@ type NextCursorData = {
 export type CursoredData<T> = {
   data: T;
   metadata:
-    | { hasNextPage: false }
+    | {hasNextPage: false}
     | {
         hasNextPage: true;
         nextCursor: string;
@@ -26,28 +26,28 @@ export type CursoredQuery<T> = CursorInput & T;
 export function generateCursorData<T>(
   data: T,
   nextCursorData?: NextCursorData,
-  query?: CursoredQuery<unknown>
+  query?: CursoredQuery<unknown>,
 ): CursoredData<T> {
   const metadata: CursoredData<T>['metadata'] = !nextCursorData?.hasNextPage
     ? {
-        hasNextPage: false
+        hasNextPage: false,
       }
     : {
         hasNextPage: true,
         nextCursor: nextCursorData.nextCursor!,
         nextUrlParams: stringifyWithDate({
           ...query,
-          cursor: nextCursorData.nextCursor!
-        })
+          cursor: nextCursorData.nextCursor!,
+        }),
       };
 
   return {
     data,
-    metadata
+    metadata,
   };
 }
 
-function stringifyWithDate(obj: { [key: string]: any }): string {
+function stringifyWithDate(obj: {[key: string]: any}): string {
   for (const key in obj) {
     const item = obj[key];
     if (isDate(item)) {

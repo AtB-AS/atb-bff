@@ -1,11 +1,11 @@
-import { ITrips_v2 } from '../../interface';
+import {ITrips_v2} from '../../interface';
 
-import { Result } from '@badrap/result';
-import { TripsQueryWithJourneyIds } from '../../../types/trips';
-import { APIError } from '../../types';
-import { mapQueryToLegacyTripPatterns } from './converters';
-import { getSingleTrip, getTrips } from './trips';
-import { ReqRefDefaults, Request } from '@hapi/hapi';
+import {Result} from '@badrap/result';
+import {TripsQueryWithJourneyIds} from '../../../types/trips';
+import {APIError} from '../../types';
+import {mapQueryToLegacyTripPatterns} from './converters';
+import {getSingleTrip, getTrips} from './trips';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 export default (): ITrips_v2 => {
   const api: ITrips_v2 = {
@@ -15,7 +15,7 @@ export default (): ITrips_v2 => {
 
     async getSingleTrip(
       queryWithIds: TripsQueryWithJourneyIds,
-      headers: Request<ReqRefDefaults>
+      headers: Request<ReqRefDefaults>,
     ) {
       return getSingleTrip(queryWithIds, headers);
     },
@@ -26,9 +26,9 @@ export default (): ITrips_v2 => {
             from: query.from,
             to: query.to,
             arriveBy: query.arriveBy,
-            when: query.searchDate
+            when: query.searchDate,
           },
-          headers
+          headers,
         );
 
         if (trips.isErr) {
@@ -41,7 +41,7 @@ export default (): ITrips_v2 => {
       } catch (error) {
         return Result.err(new APIError(error));
       }
-    }
+    },
   };
 
   return api;

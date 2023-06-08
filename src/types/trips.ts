@@ -1,6 +1,6 @@
 import {
   TripsQuery,
-  TripsQueryVariables
+  TripsQueryVariables,
 } from '../service/impl/trips/journey-gql/trip.graphql-gen';
 
 export type TripPattern = Required<TripsQuery>['trip']['tripPatterns'][0] & {

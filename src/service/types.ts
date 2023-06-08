@@ -1,11 +1,15 @@
-import { Location, QueryMode } from "@entur/sdk";
-import { boomify } from "@hapi/boom";
-import { FetchError } from "node-fetch";
-import { Mode, PointsOnLink, TransportSubmode } from "../graphql/journey/journeyplanner-types_v3";
-import { FormFactor } from "../graphql/mobility/mobility-types_v2";
-import { CursoredQuery } from "./cursored";
-import { GetServiceJourneyVehicleQuery } from "./impl/vehicles/vehicles-gql/vehicles.graphql-gen";
-import * as Types from "../graphql/vehicles/vehicles-types_v1";
+import {Location, QueryMode} from '@entur/sdk';
+import {boomify} from '@hapi/boom';
+import {FetchError} from 'node-fetch';
+import {
+  Mode,
+  PointsOnLink,
+  TransportSubmode,
+} from '../graphql/journey/journeyplanner-types_v3';
+import {FormFactor} from '../graphql/mobility/mobility-types_v2';
+import {CursoredQuery} from './cursored';
+import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
+import * as Types from '../graphql/vehicles/vehicles-types_v1';
 
 export interface Coordinates {
   latitude: number;
@@ -56,7 +60,7 @@ export type DepartureGroupsPayload = {
   location:
     | {
         layer: 'address';
-        coordinates: { longitude: number; latitude: number };
+        coordinates: {longitude: number; latitude: number};
       }
     | {
         layer: 'venue';
@@ -142,7 +146,7 @@ export type RealtimeData = {
 
 export type DepartureRealtimeData = {
   quayId: string;
-  departures: { [serviceJourneyId: string]: RealtimeData };
+  departures: {[serviceJourneyId: string]: RealtimeData};
 };
 
 export type DeparturesRealtimeData = {
@@ -172,30 +176,30 @@ export type ServiceJourneyVehicles = Array<{
   lastUpdated?: any;
   bearing?: number;
   mode?: Types.VehicleModeEnumeration;
-  location?: { latitude: number; longitude: number };
-  serviceJourney?: { id: string };
+  location?: {latitude: number; longitude: number};
+  serviceJourney?: {id: string};
 }>;
 
 export type VehicleQuery = {
-  ids: string | string[]
+  ids: string | string[];
 };
 
 export type VehiclesQuery = {
-  lat: number,
-  lon: number,
-  range: number,
-  formFactors?: FormFactor | FormFactor[]
+  lat: number;
+  lon: number;
+  range: number;
+  formFactors?: FormFactor | FormFactor[];
 };
 
 export type StationsQuery = {
-  lat: number,
-  lon: number,
-  range: number,
-  availableFormFactors?: FormFactor | FormFactor[]
-}
+  lat: number;
+  lon: number;
+  range: number;
+  availableFormFactors?: FormFactor | FormFactor[];
+};
 
-export type CarStationQuery = { ids: string[] }
-export type BikeStationQuery = { ids: string[] }
+export type CarStationQuery = {ids: string[]};
+export type BikeStationQuery = {ids: string[]};
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];
@@ -227,7 +231,7 @@ export class APIError extends Error {
     }
     return boomify(this, {
       statusCode: this.statusCode,
-      message: error.message
+      message: error.message,
     });
   }
 }

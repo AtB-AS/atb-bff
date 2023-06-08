@@ -1,9 +1,9 @@
-import { IDeparturesGroupedService } from '../../interface';
+import {IDeparturesGroupedService} from '../../interface';
 import {
   getDeparturesGrouped,
-  getDeparturesGroupedNearest
+  getDeparturesGroupedNearest,
 } from './departure-group';
-import { getDepartureFavorites } from './departure-favorites';
+import {getDepartureFavorites} from './departure-favorites';
 
 export default (): IDeparturesGroupedService => {
   const api: IDeparturesGroupedService = {
@@ -13,19 +13,19 @@ export default (): IDeparturesGroupedService => {
             payload.location.id,
             query,
             headers,
-            payload.favorites
+            payload.favorites,
           )
         : getDeparturesGroupedNearest(
             payload.location.coordinates,
             1000,
             query,
             headers,
-            payload.favorites
+            payload.favorites,
           );
     },
     async getDeparturesFavorites(payload, query, headers) {
       return getDepartureFavorites(query, headers, payload.favorites);
-    }
+    },
   };
 
   return api;
