@@ -7,6 +7,7 @@ import { randomNumberInclusiveInInterval } from '../utils/utils';
 import {
   departureFavorites,
   departureFavoritesVsQuayDepartures,
+  departures,
   quayDepartures,
   quayDeparturesPOSTandGET,
   quayDeparturesVsStopDepartures,
@@ -49,6 +50,8 @@ export const departuresScenario = (searchDate: string): void => {
   quayDeparturesPOSTandGET('NSR:Quay:73576', searchDate);
   departureFavorites(departureFavoritesTestData, searchDate);
   realtimeScenario(searchDate);
+  departures(['NSR:Quay:73576'], searchDate);
+  departures(['NSR:Quay:73576', 'NSR:Quay:71184'], searchDate);
 
   // Combinations
   quayDeparturesVsStopDepartures('NSR:StopPlace:42912', searchDate);
@@ -76,7 +79,8 @@ export const serviceJourneyScenario = (searchDate: string): void => {
 export const mobilityScenario = (): void => {
   // Requests
   vehicles(200);
-  stations(250);
+  stations('BICYCLE', 250);
+  stations('CAR', 500);
 
   vehicleByIdScenario();
   stationByIdScenario();

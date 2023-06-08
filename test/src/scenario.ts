@@ -12,6 +12,7 @@ import {
   journeyScenarioV1,
   serviceJourneyScenarioV1
 } from './v1/v1Scenario';
+import { stationByIdScenario } from './v2/mobility/scenario';
 
 //Scenarios
 export const scn = (usecase: string): void => {
@@ -43,7 +44,7 @@ const bff = (): void => {
 
 //Test
 const test = (): void => {
-  mobilityScenario();
+  stationByIdScenario();
 };
 
 //Performance test

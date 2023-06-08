@@ -8,13 +8,16 @@ import {
 import { randomNumber } from '../../utils/utils';
 import { StationInfoType } from '../types/mobility';
 
-export function stations(range: number = 250): StationInfoType | undefined {
+// CAR har flere vehicleTypesAvailable tilgjengelig så kan ikke bare ta første
+export function stations(
+  stationType: 'BICYCLE' | 'CAR',
+  range: number = 250
+): StationInfoType | undefined {
   const requestName = `v2_stations_${range}`;
-  const formFactor = 'BICYCLE';
   // coordinates around Trondheim city center
   const lat = `63.4304571134${randomNumber(1000, true)}`;
   const lon = `10.39810091257${randomNumber(1000, true)}`;
-  const url = `${conf.host()}/bff/v2/mobility/stations?availableFormFactors=${formFactor}&lat=${lat}&lon=${lon}&range=${range}`;
+  const url = `${conf.host()}/bff/v2/mobility/stations?availableFormFactors=${stationType}&lat=${lat}&lon=${lon}&range=${range}`;
 
   const res = http.get(url, {
     tags: { name: requestName },
@@ -34,9 +37,11 @@ export function stations(range: number = 250): StationInfoType | undefined {
 
     if (numberOfStations != 0) {
       // Station to return - returning the first
+      let countPerStation = 0;
+      stations[0].vehicleTypesAvailable!.map(v => (countPerStation += v.count));
       returnStation = {
         id: stations[0].id,
-        count: stations[0].vehicleTypesAvailable![0].count,
+        count: countPerStation,
         formFactor: stations[0].vehicleTypesAvailable![0].vehicleType.formFactor
       };
       expects.push(
@@ -45,18 +50,22 @@ export function stations(range: number = 250): StationInfoType | undefined {
           expect: stations.filter(s => s!.id).length === numberOfStations
         },
         {
+          check: 'should have correct id',
+          expect:
+            stations.filter(
+              s =>
+                s!.id.split(':')[0].length === 3 &&
+                s!.id.split(':')[1] === 'Station' &&
+                parseInt(s!.id.split(':')[2]) > 0
+            ).length === numberOfStations
+        },
+        {
           check: 'stations have latitude',
           expect: stations.filter(s => s!.lat).length === numberOfStations
         },
         {
           check: 'stations have longitude',
           expect: stations.filter(s => s!.lon).length === numberOfStations
-        },
-        {
-          check: 'number of bikes is >= 0',
-          expect:
-            stations.filter(s => s.vehicleTypesAvailable![0].count >= 0)
-              .length === numberOfStations
         }
       );
     }
@@ -90,7 +99,8 @@ export function stations(range: number = 250): StationInfoType | undefined {
 // Get one station
 export function station(stationInfo: StationInfoType) {
   const requestName = `v2_station`;
-  const url = `${conf.host()}/bff/v2/mobility/station/bike?ids=${
+  const urlParam = stationInfo!.formFactor === 'BICYCLE' ? 'bike' : 'car';
+  const url = `${conf.host()}/bff/v2/mobility/station/${urlParam}?ids=${
     stationInfo!.id
   }`;
 
@@ -103,6 +113,9 @@ export function station(stationInfo: StationInfoType) {
     const json = res.json() as Query;
     const stations = json.stations! as Station[];
     const station = stations[0];
+    const numPricingPlans = station.pricingPlans.length;
+    let countPerStation = 0;
+    station.vehicleTypesAvailable!.map(v => (countPerStation += v.count));
 
     const expects: ExpectsType = [
       { check: 'should have status 200', expect: res.status === 200 }
@@ -124,16 +137,16 @@ export function station(stationInfo: StationInfoType) {
           stationInfo!.formFactor
       },
       {
-        check: 'number of available bikes is correct',
-        expect: station.vehicleTypesAvailable![0].count === stationInfo!.count
+        check: 'number of available vehicles is correct',
+        expect: countPerStation === stationInfo!.count
       },
       {
-        check: 'number of available docks is >= 0',
-        expect: station.numDocksAvailable! >= 0
-      },
-      {
-        check: 'vehicles have a price',
-        expect: station.pricingPlans[0].price >= 0
+        check: 'vehicles should have price',
+        //expect: station.pricingPlans[0].price >= 0
+        expect:
+          station.pricingPlans.map(
+            p => p.price && p.perMinPricing && p.perKmPricing
+          ).length === numPricingPlans
       },
       {
         check: 'an app link to the operator exists',
@@ -148,6 +161,14 @@ export function station(stationInfo: StationInfoType) {
           station.rentalUris?.ios?.length! > 0
       }
     );
+
+    // Only for bikes
+    if (stationInfo!.formFactor === 'BICYCLE') {
+      expects.push({
+        check: 'number of available docks is >= 0',
+        expect: station.numDocksAvailable! >= 0
+      });
+    }
 
     metrics.checkForFailures(
       [res.request.url],

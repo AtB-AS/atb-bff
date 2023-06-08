@@ -19,6 +19,10 @@ export function realtimeScenario(searchDate: string): void {
   // Realtime with cache
   realtime(quayId, searchTime, false);
 
+  // Realtime with short timeRange
+  searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
+  realtime(quayId, searchTime, false, 1);
+
   // Realtime with quayId AND corresponding lineId
   searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
   realtimeWithLineId(quayId, lineId, searchTime);
@@ -31,10 +35,11 @@ export function realtime(
   quayId: string,
   searchTime: string,
   hasResults: boolean = true,
+  timeRange: number = 86400,
   limit: number = 10
 ) {
   const requestName = 'v2_realtime';
-  const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=${limit}`;
+  const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&timeRange=${timeRange}&limit=${limit}`;
 
   const res = http.get(url, {
     tags: { name: requestName },

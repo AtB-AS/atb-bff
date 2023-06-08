@@ -17,12 +17,17 @@ export function vehicleByIdScenario(): void {
 
 // Get vehicles and ask for a specific vehicle
 export function stationByIdScenario(): void {
-  let stationInfo: StationInfoType = stations(250);
+  let stationInfo: StationInfoType = stations('BICYCLE', 250);
   if (stationInfo !== undefined) {
     station(stationInfo);
   }
 
-  stationInfo = stations(400);
+  stationInfo = stations('BICYCLE', 400);
+  if (stationInfo !== undefined) {
+    station(stationInfo);
+  }
+
+  stationInfo = stations('CAR', 500);
   if (stationInfo !== undefined) {
     station(stationInfo);
   }
