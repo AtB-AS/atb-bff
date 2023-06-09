@@ -561,6 +561,18 @@ export function singleTrip(
           jsonSingle.legs.length,
           jsonSingle.compressedQuery
         ];
+        // Have been issues where trip search is not equal to its single trip. Log when it happens
+        if (!isEqual(tripsTest, singleTest)) {
+          console.log(
+            `*** ERROR tripsTest_${counter}: ${tripsTest.toString()}`
+          );
+          console.log(
+            `*** ERROR singleTest_${counter}: ${singleTest.toString()}`
+          );
+          console.log(
+            `*** Trip request body: ${JSON.stringify(testData.query)}`
+          );
+        }
 
         expects.push(
           {

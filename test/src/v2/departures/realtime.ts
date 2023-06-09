@@ -7,6 +7,7 @@ import {
   randomNumber
 } from '../../utils/utils';
 import { QuayDeparturesType, RealtimeResponseType } from '../types';
+import { sleep } from 'k6';
 
 export function realtimeScenario(searchDate: string): void {
   const quayId = 'NSR:Quay:73576';
@@ -81,10 +82,23 @@ export function realtime(
         }
       );
     } else {
-      expects.push({
-        check: 'should have empty results',
-        expect: res.body === '{}'
+      // Re-send. Sometimes immediate requests don't hit the cache
+      sleep(2);
+      const resV2 = http.get(url, {
+        tags: { name: requestName },
+        headers: bffHeadersGet
       });
+
+      expects.push(
+        {
+          check: 'should have status 200',
+          expect: resV2.status === 200
+        },
+        {
+          check: 'should have empty results',
+          expect: resV2.body === '{}'
+        }
+      );
     }
     metrics.checkForFailures(
       [res.request.url],
@@ -167,10 +181,23 @@ export function realtimeWithLineId(
         }
       );
     } else {
-      expects.push({
-        check: 'should have empty results',
-        expect: res.body === '{}'
+      // Re-send. Sometimes immediate requests don't hit the cache
+      sleep(2);
+      const resV2 = http.get(url, {
+        tags: { name: requestName },
+        headers: bffHeadersGet
       });
+
+      expects.push(
+        {
+          check: 'should have status 200',
+          expect: resV2.status === 200
+        },
+        {
+          check: 'should have empty results',
+          expect: resV2.body === '{}'
+        }
+      );
     }
     metrics.checkForFailures(
       [res.request.url],
