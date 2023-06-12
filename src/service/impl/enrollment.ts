@@ -3,7 +3,7 @@ import Agent from 'agentkeepalive';
 import pThrottle from 'p-throttle';
 import {ENROLLMENT_BASEURL} from '../../config/env';
 import {Result} from '@badrap/result';
-import {APIError} from '../types';
+import {APIError} from '../../utils/api-error';
 import {IEnrollmentService} from '../../service/interface';
 
 // No real rate limit internally, but might as well limit it to prevent explosions.

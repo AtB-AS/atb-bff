@@ -41,7 +41,6 @@ import {
   TripsQueryVariables,
 } from './impl/trips/journey-gql/trip.graphql-gen';
 import {
-  APIError,
   BikeStationQuery,
   CarStationQuery,
   DepartureFavoritesPayload,
@@ -66,6 +65,7 @@ import {
   VehicleQuery,
   VehiclesQuery,
 } from './types';
+import {APIError} from '../utils/api-error';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;

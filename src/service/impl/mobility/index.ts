@@ -1,6 +1,6 @@
 import {GetVehiclesListQuery, IMobilityService} from '../../interface';
 import {Result} from '@badrap/result';
-import {APIError} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {mobilityClient} from '../../../graphql/graphql-client';
 import {
   GetBikeStationDocument,

@@ -4,7 +4,7 @@ import {
   TripsQueryVariables,
 } from './journey-gql/trip.graphql-gen';
 import {Result} from '@badrap/result';
-import {APIError} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 

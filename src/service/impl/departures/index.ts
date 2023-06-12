@@ -1,7 +1,7 @@
 import {Result} from '@badrap/result';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {IDeparturesService} from '../../interface';
-import {APIError} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {
   StopPlaceQuayDeparturesDocument,
   StopPlaceQuayDeparturesQuery,

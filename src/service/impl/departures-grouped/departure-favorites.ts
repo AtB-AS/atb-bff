@@ -2,7 +2,8 @@ import {Result} from '@badrap/result';
 import union from 'lodash.union';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {CursoredData, generateCursorData} from '../../cursored';
-import {APIError, DepartureGroupsQuery, FavoriteDeparture} from '../../types';
+import {DepartureGroupsQuery, FavoriteDeparture} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {populateRealtimeCacheIfNotThere} from '../realtime/departure-time';
 import {
   GroupsByIdDocument,
