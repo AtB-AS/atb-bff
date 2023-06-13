@@ -1,15 +1,17 @@
 import {Location, QueryMode} from '@entur/sdk';
 import {boomify} from '@hapi/boom';
-import {FetchError} from 'node-fetch';
+import {FetchError, Response} from 'node-fetch';
 import {
   Mode,
   PointsOnLink,
   TransportSubmode,
 } from '../graphql/journey/journeyplanner-types_v3';
 import {FormFactor} from '../graphql/mobility/mobility-types_v2';
+import * as Types from '../graphql/vehicles/vehicles-types_v1';
 import {CursoredQuery} from './cursored';
 import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
-import * as Types from '../graphql/vehicles/vehicles-types_v1';
+
+const STATUS_CODES_TO_FORWARD = [429];
 
 export interface Coordinates {
   latitude: number;
@@ -229,9 +231,24 @@ export class APIError extends Error {
           this.statusCode = 503;
       }
     }
+    const networkErrorResponse = getNetworkErrorResponse(error);
+    if (
+      networkErrorResponse &&
+      STATUS_CODES_TO_FORWARD.includes(networkErrorResponse.status)
+    ) {
+      this.message = networkErrorResponse.statusText;
+      this.statusCode = networkErrorResponse.status;
+    }
+
     return boomify(this, {
       statusCode: this.statusCode,
       message: error.message,
     });
+  }
+}
+
+function getNetworkErrorResponse(error: any): Response | undefined {
+  if (error?.networkError?.response instanceof Response) {
+    return error.networkError.response;
   }
 }
