@@ -1,6 +1,7 @@
 import {IVehiclesService} from '../../interface';
 import {Result} from '@badrap/result';
-import {APIError, GetServiceJourneyVehicles} from '../../types';
+import {GetServiceJourneyVehicles} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {
   vehiclesClient,
   vehiclesSubscriptionClient,

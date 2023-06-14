@@ -1,6 +1,6 @@
 import {Result} from '@badrap/result';
 import {IGeocoderService} from '../interface';
-import {APIError} from '../types';
+import {APIError} from '../../utils/api-error';
 import {EnturServiceAPI} from './entur';
 
 const FOCUS_WEIGHT = parseInt(process.env.GEOCODER_FOCUS_WEIGHT || '18');

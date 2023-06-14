@@ -2,7 +2,7 @@ import {ITrips_v2} from '../../interface';
 
 import {Result} from '@badrap/result';
 import {TripsQueryWithJourneyIds} from '../../../types/trips';
-import {APIError} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {mapQueryToLegacyTripPatterns} from './converters';
 import {getSingleTrip, getTrips} from './trips';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
