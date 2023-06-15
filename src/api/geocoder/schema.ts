@@ -4,12 +4,7 @@ export const getFeaturesRequest = Joi.object({
   query: Joi.string().required(),
   lon: Joi.number(),
   lat: Joi.number(),
-  layers: Joi.string().custom((val) => {
-    if (val && typeof val === 'string') {
-      return val.split(',');
-    }
-    return val;
-  }),
+  layers: Joi.array().items(Joi.string()).single(),
   multiModal: Joi.alt('parent', 'child', 'all').default('child'),
   tariff_zone_authorities: Joi.string(),
   'boundary.rect.min_lat': Joi.number(),
@@ -32,7 +27,7 @@ export const getFeaturesReverseRequest = {
   query: Joi.object({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
-    layers: Joi.string(),
+    layers: Joi.array().items(Joi.string()).single(),
     radius: Joi.number(),
     limit: Joi.number(),
   }),
