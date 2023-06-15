@@ -32,7 +32,12 @@ export const getFeaturesReverseRequest = {
   query: Joi.object({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
-    layers: Joi.string(),
+    layers: Joi.string().custom((val) => {
+      if (val && typeof val === 'string') {
+        return val.split(',');
+      }
+      return val;
+    }),
     radius: Joi.number(),
     limit: Joi.number(),
   }),
