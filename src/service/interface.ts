@@ -1,6 +1,6 @@
 import {Result} from '@badrap/result';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {Feature, TripPattern} from '@entur/sdk';
+import {TripPattern} from '@entur/sdk';
 import {Boom} from '@hapi/boom';
 import WebSocket from 'ws';
 import {Subscription} from 'zen-observable-ts';
@@ -66,13 +66,17 @@ import {
   VehiclesQuery,
 } from './types';
 import {APIError} from '../utils/api-error';
+import {Feature, Point} from 'geojson';
+import {Location} from '../types/geocoder';
 
 export interface IGeocoderService {
-  getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
+  getFeatures(
+    query: FeaturesQuery,
+  ): Promise<Result<Feature<Point, Location>[], APIError>>;
 
   getFeaturesReverse(
     query: ReverseFeaturesQuery,
-  ): Promise<Result<Feature[], APIError>>;
+  ): Promise<Result<Feature<Point, Location>[], APIError>>;
 }
 
 export interface IServiceJourneyService_v2 {

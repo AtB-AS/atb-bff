@@ -4,31 +4,17 @@ export const getFeaturesRequest = Joi.object({
   query: Joi.string().required(),
   lon: Joi.number(),
   lat: Joi.number(),
-  layers: Joi.array().items(Joi.string()).single(),
+  layers: Joi.array().items(Joi.alt('address', 'venue')).single(),
   multiModal: Joi.alt('parent', 'child', 'all').default('child'),
-  tariff_zone_authorities: Joi.string(),
-  'boundary.rect.min_lat': Joi.number(),
-  'boundary.rect.max_lat': Joi.number(),
-  'boundary.rect.min_lon': Joi.number(),
-  'boundary.rect.max_lon': Joi.number(),
-  country: Joi.string(),
-  sources: Joi.string(),
+  tariff_zone_authorities: Joi.array().items(Joi.string()).single(),
   limit: Joi.number(),
-})
-  .and('lat', 'lon')
-  .and(
-    'boundary.rect.min_lat',
-    'boundary.rect.max_lat',
-    'boundary.rect.min_lon',
-    'boundary.rect.max_lon',
-  );
+}).and('lat', 'lon');
 
 export const getFeaturesReverseRequest = {
   query: Joi.object({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
-    layers: Joi.array().items(Joi.string()).single(),
-    radius: Joi.number(),
+    layers: Joi.array().items(Joi.alt('address', 'venue')).single(),
     limit: Joi.number(),
   }),
 };

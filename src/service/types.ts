@@ -25,21 +25,10 @@ export type FeaturesQuery = {
   query: string;
   lat: number;
   lon: number;
-  'boundary.rect.min_lon'?: number;
-  'boundary.rect.max_lon'?: number;
-  'boundary.rect.min_lat'?: number;
-  'boundary.rect.max_lat'?: number;
-  'boundary.country'?: string;
-  sources?: string[];
-  layers?: string[];
-  tariff_zone_authorities?: string;
+  layers?: Array<'address' | 'venue'>;
+  tariff_zone_authorities?: string[];
   limit?: number;
-
   multiModal: 'parent' | 'child' | 'all';
-
-  'focus.weight'?: number;
-  'focus.function'?: 'linear' | 'exp';
-  'focus.scale'?: 'string';
 };
 
 export interface QuaysCoordinatesPayload {
@@ -49,9 +38,8 @@ export interface QuaysCoordinatesPayload {
 export type ReverseFeaturesQuery = {
   lat: number;
   lon: number;
-  radius?: number;
   limit?: number;
-  layers?: string[];
+  layers?: Array<'address' | 'venue'>;
 };
 
 export type DepartureGroupsPayload = {
