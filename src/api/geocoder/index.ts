@@ -1,4 +1,4 @@
-import Hapi from '@hapi/hapi';
+import Hapi, {ReqRefDefaults, Request} from '@hapi/hapi';
 import qs from 'querystring';
 
 import {IGeocoderService} from '../../service/interface';
@@ -8,10 +8,12 @@ import {DEFAULT_CACHE_TTL} from '../../config/cache';
 import {EXTERNAL_API_TIMEOUT} from '../../config/external';
 
 export default (server: Hapi.Server) => (service: IGeocoderService) => {
-  const getFeatures = async (q: FeaturesQuery) =>
-    (await service.getFeatures(q)).unwrap();
-  const getFeaturesReverse = async (q: ReverseFeaturesQuery) =>
-    (await service.getFeaturesReverse(q)).unwrap();
+  const getFeatures = async (q: FeaturesQuery, h: Request<ReqRefDefaults>) =>
+    (await service.getFeatures(q, h)).unwrap();
+  const getFeaturesReverse = async (
+    q: ReverseFeaturesQuery,
+    h: Request<ReqRefDefaults>,
+  ) => (await service.getFeaturesReverse(q, h)).unwrap();
 
   server.method('feature', getFeatures, {
     generateKey: (q: FeaturesQuery) => qs.stringify(q),
@@ -42,9 +44,9 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
         privacy: 'public',
       },
     },
-    handler: async (request) => {
+    handler: async (request, h) => {
       const query = request.query as unknown as FeaturesQuery;
-      return server.methods.feature(query);
+      return server.methods.feature(query, h.request);
     },
   });
   server.route({
@@ -60,9 +62,9 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
         privacy: 'public',
       },
     },
-    handler: async (request) => {
+    handler: async (request, h) => {
       const query = request.query as unknown as ReverseFeaturesQuery;
-      return server.methods.reverse(query);
+      return server.methods.reverse(query, h.request);
     },
   });
 };

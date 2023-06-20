@@ -17,6 +17,7 @@ import {
 import WebSocket from 'ws';
 import {SubscriptionClient} from 'subscriptions-transport-ws';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {logResponse} from '../utils/log';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -67,40 +68,16 @@ function createClient(url: string) {
     const loggingLink = new ApolloLink((operation, forward) => {
       return forward(operation).map((response) => {
         const context = operation.getContext();
-        const url = context.response.url;
 
-        const rateLimitUsed = context.response.headers.get('rate-limit-used');
-        const rateLimitAllowed =
-          context.response.headers.get('rate-limit-allowed');
+        logResponse({
+          operationName: operation.operationName,
+          message: 'graphql call',
+          url: context.response.url,
+          statusCode: context.response.status,
+          requestHeaders: headers,
+          responseHeaders: context.response.headers,
+        });
 
-        if (rateLimitUsed && rateLimitAllowed) {
-          let operationNameGroup;
-          if (url.includes('/mobility')) {
-            operationNameGroup = 'mobility';
-          } else if (url.includes('/journey-planner')) {
-            operationNameGroup =
-              operation.operationName == 'Trips'
-                ? 'planner-trip'
-                : 'planner-nontrip';
-          } else {
-            operationNameGroup = 'other';
-          }
-
-          const log = {
-            time: new Date(context.response.headers.get('date')).toISOString(),
-            message: 'graphql call',
-            url: url,
-            code: context.response.status,
-            rateLimitUsed: rateLimitUsed,
-            rateLimitAllowed: rateLimitAllowed,
-            rateLimitGroup: operationNameGroup,
-            correlationId: headers['correlationId'],
-            requestId: headers['requestId'],
-            installId: headers['installId'],
-            appVersion: headers['appVersion'],
-          };
-          console.log(JSON.stringify(log));
-        }
         return response;
       });
     });
