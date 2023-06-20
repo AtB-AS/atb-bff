@@ -37,7 +37,7 @@ export const get = async <T>(
     },
     baseUrl,
   );
-  return response.json() as T;
+  return (await response.json()) as T;
 };
 
 export const post = async <T>(
@@ -60,5 +60,5 @@ export const post = async <T>(
     },
     baseUrl,
   );
-  return response.json() as T;
+  return (await response.json()) as T;
 };
