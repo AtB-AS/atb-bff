@@ -1,7 +1,12 @@
 import fetch, {RequestInit, Response} from 'node-fetch';
 import {ENTUR_BASEURL, ET_CLIENT_NAME} from '../config/env';
+import {HttpsAgent as Agent} from 'agentkeepalive';
 
 const enturBaseUrl = ENTUR_BASEURL || 'https://api.entur.io';
+
+const agent = new Agent({
+  keepAlive: true,
+});
 
 const performFetch = async (
   url: string,
@@ -28,6 +33,7 @@ export const get = async <T>(
     {
       ...options,
       method: 'GET',
+      agent: agent,
     },
     baseUrl,
   );
@@ -50,6 +56,7 @@ export const post = async <T>(
       },
       method: 'POST',
       body: JSON.stringify(body),
+      agent: agent,
     },
     baseUrl,
   );
