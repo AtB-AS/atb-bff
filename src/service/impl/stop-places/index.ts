@@ -30,12 +30,17 @@ export default (): IStopPlacesService => {
       }
 
       try {
-        const uniqueHarbors = result.data.lines.filter(
-          (value, index, array) => {
-            return array.indexOf(value) === index;
-          },
-        );
-        return Result.ok({lines: uniqueHarbors});
+        const uniqueHarbors = result.data.lines
+          .map((line) => line.quays)
+          .flat()
+          .filter((i) => i != undefined)
+          .filter(
+            (element, index, array) =>
+              array.findIndex(
+                (el) => el?.stopPlace?.id === element?.stopPlace?.id,
+              ) === index,
+          );
+        return Result.ok({lines: [{quays: uniqueHarbors}]});
       } catch (error) {
         return Result.err(new APIError(error));
       }
