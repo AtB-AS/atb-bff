@@ -30,7 +30,12 @@ export default (): IStopPlacesService => {
       }
 
       try {
-        return Result.ok(result.data);
+        const uniqueHarbors = result.data.lines.filter(
+          (value, index, array) => {
+            return array.indexOf(value) === index;
+          },
+        );
+        return Result.ok({lines: uniqueHarbors});
       } catch (error) {
         return Result.err(new APIError(error));
       }
