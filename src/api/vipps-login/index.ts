@@ -9,6 +9,8 @@ import {
 import {VippsCustomTokenRequest} from '../../service/types';
 import {postVippsLoginRequest} from './schema';
 import {getOpenIdClientIssuer} from './openid-client-issuer';
+import {logResponse} from '../../utils/log-response';
+import {Timer} from '../../utils/timer';
 
 export default (server: Hapi.Server) => () => {
   const app = admin.initializeApp({

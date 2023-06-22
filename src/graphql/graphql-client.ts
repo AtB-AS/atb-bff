@@ -17,7 +17,8 @@ import {
 import WebSocket from 'ws';
 import {SubscriptionClient} from 'subscriptions-transport-ws';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {logResponse} from '../utils/log';
+import {logResponse} from '../utils/log-response';
+import {Timer} from '../utils/timer';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -66,8 +67,10 @@ function createClient(url: string) {
       console.log('Apollo Error:', JSON.stringify(error)),
     );
     const loggingLink = new ApolloLink((operation, forward) => {
+      operation.setContext({start: new Date()});
       return forward(operation).map((response) => {
         const context = operation.getContext();
+        const timer = new Timer(operation.getContext().start);
 
         logResponse({
           operationName: operation.operationName,
@@ -76,6 +79,7 @@ function createClient(url: string) {
           statusCode: context.response.status,
           requestHeaders: headers,
           responseHeaders: context.response.headers,
+          duration: timer.getElapsedMs(),
         });
 
         return response;

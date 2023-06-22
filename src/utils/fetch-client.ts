@@ -1,8 +1,9 @@
 import fetch, {RequestInit, Response} from 'node-fetch';
 import {ENTUR_BASEURL, ET_CLIENT_NAME} from '../config/env';
-import {logResponse} from './log';
+import {logResponse} from './log-response';
 import {HttpsAgent as Agent} from 'agentkeepalive';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {Timer} from './timer';
 
 const enturBaseUrl = ENTUR_BASEURL || 'https://api.entur.io';
 
@@ -16,6 +17,7 @@ const performFetch = async (
   init: RequestInit = {},
   baseUrl: string = enturBaseUrl,
 ): Promise<Response> => {
+  const timer = new Timer();
   const response = await fetch(`${baseUrl}${url}`, {
     ...init,
     headers: {
@@ -26,11 +28,13 @@ const performFetch = async (
   });
 
   logResponse({
-    message: init.method ?? 'unknown method',
+    message: 'http call',
+    method: init.method,
     url: response.url,
     statusCode: response.status,
     responseHeaders: response.headers,
     requestHeaders: headers,
+    duration: timer.getElapsedMs(),
   });
 
   return response;
