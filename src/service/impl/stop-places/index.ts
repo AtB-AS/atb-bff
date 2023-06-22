@@ -33,7 +33,6 @@ export default (): IStopPlacesService => {
         const uniqueHarbors = result.data.lines
           .map((line) => line.quays)
           .flat()
-          .filter((i) => i != undefined)
           .filter(
             (element, index, array) =>
               array.findIndex(
