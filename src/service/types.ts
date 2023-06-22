@@ -48,6 +48,14 @@ export interface QuaysCoordinatesPayload {
   ids: string[];
 }
 
+export interface HarborsQuery {
+  authorities: string[];
+}
+
+export interface StopPlaceQuery {
+  id: string;
+}
+
 export type ReverseFeaturesQuery = {
   lat: number;
   lon: number;

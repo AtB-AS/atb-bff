@@ -1,0 +1,14 @@
+query getStopPlace($id: String!) {
+  stopPlace(id: $id) {
+    quays {
+      journeyPatterns {
+        quays {
+          stopPlace {
+            name
+            id
+          }
+        }
+      }
+    }
+  }
+}

@@ -35,6 +35,16 @@ export type Location = {
   longitude: Scalars['Float'];
 };
 
+export enum OccupancyEnumeration {
+  FewSeatsAvailable = 'FEW_SEATS_AVAILABLE',
+  Full = 'FULL',
+  ManySeatsAvailable = 'MANY_SEATS_AVAILABLE',
+  NotAcceptingPassengers = 'NOT_ACCEPTING_PASSENGERS',
+  SeatsAvailable = 'SEATS_AVAILABLE',
+  StandingAvailable = 'STANDING_AVAILABLE',
+  Unknown = 'UNKNOWN'
+}
+
 export type Operator = {
   operatorRef: Scalars['String'];
 };
@@ -156,6 +166,7 @@ export type VehicleUpdate = {
   location?: Maybe<Location>;
   mode?: Maybe<VehicleModeEnumeration>;
   monitored?: Maybe<Scalars['Boolean']>;
+  occupancy?: Maybe<OccupancyEnumeration>;
   operator?: Maybe<Operator>;
   serviceJourney?: Maybe<ServiceJourney>;
   speed?: Maybe<Scalars['Float']>;
