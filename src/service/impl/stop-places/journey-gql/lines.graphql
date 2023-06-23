@@ -8,5 +8,6 @@ query getHarbors($authorities: [String]) {
         longitude
       }
     }
+    transportSubmode
   }
 }

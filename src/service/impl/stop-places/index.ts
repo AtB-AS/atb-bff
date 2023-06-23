@@ -12,6 +12,7 @@ import {
   GetStopPlaceQuery,
   GetStopPlaceQueryVariables,
 } from './journey-gql/stop-place.graphql-gen';
+import {TransportSubmode} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export default (): IStopPlacesService => {
   return {
@@ -31,6 +32,13 @@ export default (): IStopPlacesService => {
 
       try {
         const uniqueHarbors = result.data.lines
+          .filter((line) => {
+            return (
+              line.transportSubmode ===
+                TransportSubmode.HighSpeedPassengerService ||
+              line.transportSubmode === TransportSubmode.HighSpeedVehicleService
+            );
+          })
           .map((line) => line.quays)
           .flat()
           .filter((i) => i != undefined)
@@ -40,7 +48,8 @@ export default (): IStopPlacesService => {
                 (el) => el?.stopPlace?.id === element?.stopPlace?.id,
               ) === index,
           );
-        return Result.ok({lines: [{quays: uniqueHarbors}]});
+
+        return Result.ok(uniqueHarbors);
       } catch (error) {
         return Result.err(new APIError(error));
       }
@@ -52,15 +61,30 @@ export default (): IStopPlacesService => {
       >({
         query: GetStopPlaceDocument,
         variables: {
-          id: query.id,
+          id: query.fromHarborId,
         },
       });
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-
+      const uniqueHarbors = result.data.stopPlace?.quays
+        ?.map((line) => line.journeyPatterns)
+        .flat()
+        .filter((i) => i != undefined)
+        .map((journeyPattern) => journeyPattern.quays)
+        .flat()
+        .filter(
+          (element, index, array) =>
+            array.findIndex(
+              (el) => el?.stopPlace?.id === element?.stopPlace?.id,
+            ) === index,
+        );
+      if (!uniqueHarbors || !uniqueHarbors.length) {
+        return Result.err(new APIError(result.errors));
+      }
+      console.log(uniqueHarbors);
       try {
-        return Result.ok(result.data);
+        return Result.ok(uniqueHarbors);
       } catch (error) {
         return Result.err(new APIError(error));
       }

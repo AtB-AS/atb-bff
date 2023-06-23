@@ -52,7 +52,9 @@ import {
   DeparturesForServiceJourneyQuery,
   DeparturesPayload,
   DeparturesRealtimeData,
+  DestinationHarborsQuery,
   FeaturesQuery,
+  Harbors,
   HarborsQuery,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
@@ -63,13 +65,10 @@ import {
   ServiceJourneyVehicles,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
-  StopPlaceQuery,
   TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery,
 } from './types';
-import {GetHarborsQuery} from './impl/stop-places/journey-gql/lines.graphql-gen';
-import {GetStopPlaceQuery} from './impl/stop-places/journey-gql/stop-place.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(query: FeaturesQuery): Promise<Result<Feature[], APIError>>;
@@ -164,11 +163,11 @@ export interface IStopPlacesService {
   getHarbors(
     query: HarborsQuery,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<GetHarborsQuery, APIError>>;
+  ): Promise<Result<Harbors, APIError>>;
   getStopPlace(
-    query: StopPlaceQuery,
+    query: DestinationHarborsQuery,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<GetStopPlaceQuery, APIError>>;
+  ): Promise<Result<Harbors, APIError>>;
 }
 
 export interface IEnrollmentService {

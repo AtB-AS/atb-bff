@@ -7,7 +7,7 @@ export type GetHarborsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetHarborsQuery = { lines: Array<{ quays: Array<{ stopPlace?: { name: string, id: string, latitude?: number, longitude?: number } }> }> };
+export type GetHarborsQuery = { lines: Array<{ transportSubmode?: Types.TransportSubmode, quays: Array<{ stopPlace?: { name: string, id: string, latitude?: number, longitude?: number } }> }> };
 
 
 export const GetHarborsDocument = gql`
@@ -21,6 +21,7 @@ export const GetHarborsDocument = gql`
         longitude
       }
     }
+    transportSubmode
   }
 }
     `;

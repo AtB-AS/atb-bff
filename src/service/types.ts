@@ -52,9 +52,13 @@ export interface HarborsQuery {
   authorities: string[];
 }
 
-export interface StopPlaceQuery {
-  id: string;
+export interface DestinationHarborsQuery {
+  fromHarborId: string;
 }
+
+export type Harbors = Array<{
+  stopPlace?: {name: string; id: string; latitude?: number; longitude?: number};
+}>;
 
 export type ReverseFeaturesQuery = {
   lat: number;
