@@ -25,8 +25,8 @@ export const logResponse = ({
   operationName,
   customerAccountId,
 }: LogResponseParams) => {
-  const rateLimitUsed = responseHeaders.get('rate-limit-used');
-  const rateLimitAllowed = responseHeaders.get('rate-limit-allowed');
+  const rateLimitUsed = responseHeaders?.get('rate-limit-used');
+  const rateLimitAllowed = responseHeaders?.get('rate-limit-allowed');
 
   let operationNameGroup = 'other';
   if (url) {
@@ -45,9 +45,13 @@ export const logResponse = ({
     severity = 'ERROR';
   }
 
+  const time = responseHeaders
+    ? new Date(responseHeaders?.get('date')).toISOString()
+    : new Date().toISOString();
+
   const log = {
     severity: severity,
-    time: new Date(responseHeaders.get('date')).toISOString(),
+    time: time,
     message: message,
     correlationId: requestHeaders['correlationId'],
     method: method,
