@@ -59,7 +59,30 @@ export default (): IStopPlacesService => {
       }
 
       try {
-        return Result.ok(result.data);
+        const uniqueHarbors = result.data.stopPlace?.quays
+          ?.map((quay) => quay.journeyPatterns.map((jp) => jp.quays).flat())
+          .flat()
+          .filter(
+            (element, index, array) =>
+              element.stopPlace?.id !== query.id &&
+              array.findIndex(
+                (el) => el?.stopPlace?.id === element?.stopPlace?.id,
+              ) === index,
+          );
+
+        return Result.ok({
+          stopPlace: {
+            quays: [
+              {
+                journeyPatterns: [
+                  {
+                    quays: uniqueHarbors ?? [],
+                  },
+                ],
+              },
+            ],
+          },
+        });
       } catch (error) {
         return Result.err(new APIError(error));
       }

@@ -7,5 +7,5 @@ export const getHarborsRequest = {
 };
 
 export const getStopPlacesRequest = {
-  query: Joi.object({codespace: Joi.string().required()}),
+  query: Joi.object({id: Joi.string().required()}),
 };
