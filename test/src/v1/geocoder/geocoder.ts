@@ -1,19 +1,19 @@
 import http from 'k6/http';
-import { conf, ExpectsType, metrics } from '../../config/configuration';
-import { bffHeadersGet } from '../../utils/headers';
+import {conf, ExpectsType, metrics} from '../../config/configuration';
+import {bffHeadersGet} from '../../utils/headers';
 import {
   GeocoderFeatureResponseType,
   GeocoderReverseResponseType,
-  geocoderTestDataType
+  geocoderTestDataType,
 } from '../types';
 
 export function geocoderFeatures(
   testData: geocoderTestDataType,
-  limit: number = 10
+  limit: number = 10,
 ) {
   for (let test of testData.scenarios) {
     const requestName = `v1_geocoderFeatures_${testData.scenarios.indexOf(
-      test
+      test,
     )}`;
     const latitude = test.query.latitude;
     const longitude = test.query.longitude;
@@ -21,12 +21,12 @@ export function geocoderFeatures(
     const url = `${conf.host()}/bff/v1/geocoder/features?lat=${latitude}&limit=${limit}&lon=${longitude}&query=${searchString}`;
 
     const res = http.get(url, {
-      tags: { name: requestName },
-      headers: bffHeadersGet
+      tags: {name: requestName},
+      headers: bffHeadersGet,
     });
 
     const expects: ExpectsType = [
-      { check: 'should have status 200', expect: res.status === 200 }
+      {check: 'should have status 200', expect: res.status === 200},
     ];
 
     try {
@@ -38,22 +38,23 @@ export function geocoderFeatures(
           {
             check: `should include "${expResult.id}"`,
             expect: json
-              .map(feature => feature.properties.id)
-              .includes(expResult.id)
+              .map((feature) => feature.properties.id)
+              .includes(expResult.id),
           },
           {
             check: `should have correct name for "${expResult.id}"`,
             expect:
-              json.filter(feature => feature.properties.id === expResult.id)[0]
-                .properties.name === expResult.name
+              json.filter(
+                (feature) => feature.properties.id === expResult.id,
+              )[0].properties.name === expResult.name,
           },
           {
             check: `should include category "${expResult.category}" for "${expResult.id}"`,
             expect: json
-              .filter(feature => feature.properties.id === expResult.id)[0]
+              .filter((feature) => feature.properties.id === expResult.id)[0]
               .properties.category.flat()
-              .includes(expResult.category)
-          }
+              .includes(expResult.category),
+          },
         );
       }
 
@@ -61,7 +62,7 @@ export function geocoderFeatures(
       if (test.moreResults) {
         expects.push({
           check: `should have more hits than ${test.expectedResults.length}`,
-          expect: json.length > test.expectedResults.length
+          expect: json.length > test.expectedResults.length,
         });
       }
 
@@ -69,7 +70,7 @@ export function geocoderFeatures(
         [res.request.url],
         res.timings.duration,
         requestName,
-        expects
+        expects,
       );
     } catch (exp) {
       //throw exp
@@ -80,33 +81,30 @@ export function geocoderFeatures(
         [
           {
             check: `${exp}`,
-            expect: false
-          }
-        ]
+            expect: false,
+          },
+        ],
       );
     }
   }
 }
 
-export function geocoderReverse(
-  testData: geocoderTestDataType,
-  radius: number = 1000
-) {
+export function geocoderReverse(testData: geocoderTestDataType) {
   for (let test of testData.scenarios) {
     const requestName = `v1_geocoderReverse_${testData.scenarios.indexOf(
-      test
+      test,
     )}`;
     const latitude = test.query.latitude;
     const longitude = test.query.longitude;
-    const url = `${conf.host()}/bff/v1/geocoder/reverse?lat=${latitude}&lon=${longitude}&radius=${radius}`;
+    const url = `${conf.host()}/bff/v1/geocoder/reverse?lat=${latitude}&lon=${longitude}`;
 
     const res = http.get(url, {
-      tags: { name: requestName },
-      headers: bffHeadersGet
+      tags: {name: requestName},
+      headers: bffHeadersGet,
     });
 
     const expects: ExpectsType = [
-      { check: 'should have status 200', expect: res.status === 200 }
+      {check: 'should have status 200', expect: res.status === 200},
     ];
 
     try {
@@ -118,22 +116,23 @@ export function geocoderReverse(
           {
             check: `should include "${expResult.id}"`,
             expect: json
-              .map(feature => feature.properties.id)
-              .includes(expResult.id)
+              .map((feature) => feature.properties.id)
+              .includes(expResult.id),
           },
           {
             check: `should have correct name for "${expResult.id}"`,
             expect:
-              json.filter(feature => feature.properties.id === expResult.id)[0]
-                .properties.name === expResult.name
+              json.filter(
+                (feature) => feature.properties.id === expResult.id,
+              )[0].properties.name === expResult.name,
           },
           {
             check: `should include category "${expResult.category}" for "${expResult.id}"`,
             expect: json
-              .filter(feature => feature.properties.id === expResult.id)[0]
+              .filter((feature) => feature.properties.id === expResult.id)[0]
               .properties.category.flat()
-              .includes(expResult.category)
-          }
+              .includes(expResult.category),
+          },
         );
       }
 
@@ -141,7 +140,7 @@ export function geocoderReverse(
       if (test.moreResults) {
         expects.push({
           check: `should have more hits than ${test.expectedResults.length}`,
-          expect: json.length > test.expectedResults.length
+          expect: json.length > test.expectedResults.length,
         });
       }
 
@@ -149,7 +148,7 @@ export function geocoderReverse(
         [res.request.url],
         res.timings.duration,
         requestName,
-        expects
+        expects,
       );
     } catch (exp) {
       //throw exp
@@ -160,9 +159,9 @@ export function geocoderReverse(
         [
           {
             check: `${exp}`,
-            expect: false
-          }
-        ]
+            expect: false,
+          },
+        ],
       );
     }
   }

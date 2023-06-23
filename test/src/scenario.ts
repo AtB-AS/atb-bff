@@ -3,16 +3,16 @@ import {
   departuresScenarioPerformance,
   serviceJourneyScenario,
   tripsScenario,
-  mobilityScenario
+  mobilityScenario,
 } from './v2/v2Scenario';
-import { getNextFriday } from './utils/utils';
+import {getNextFriday} from './utils/utils';
 import {
   departuresScenarioV1,
   geocoderScenarioV1,
   journeyScenarioV1,
-  serviceJourneyScenarioV1
+  serviceJourneyScenarioV1,
 } from './v1/v1Scenario';
-import { stationByIdScenario } from './v2/mobility/scenario';
+import {stationByIdScenario} from './v2/mobility/scenario';
 
 //Scenarios
 export const scn = (usecase: string): void => {

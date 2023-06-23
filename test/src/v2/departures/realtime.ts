@@ -1,13 +1,13 @@
 import http from 'k6/http';
-import { conf, ExpectsType, metrics } from '../../config/configuration';
-import { bffHeadersGet, bffHeadersPost } from '../../utils/headers';
+import {conf, ExpectsType, metrics} from '../../config/configuration';
+import {bffHeadersGet, bffHeadersPost} from '../../utils/headers';
 import {
   departsAfterExpectedStartTime,
   isEqual,
-  randomNumber
+  randomNumber,
 } from '../../utils/utils';
-import { QuayDeparturesType, RealtimeResponseType } from '../types';
-import { sleep } from 'k6';
+import {QuayDeparturesType, RealtimeResponseType} from '../types';
+import {sleep} from 'k6';
 
 export function realtimeScenario(searchDate: string): void {
   const quayId = 'NSR:Quay:73576';
@@ -37,21 +37,21 @@ export function realtime(
   searchTime: string,
   hasResults: boolean = true,
   timeRange: number = 86400,
-  limit: number = 10
+  limit: number = 10,
 ) {
   const requestName = 'v2_realtime';
   const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&timeRange=${timeRange}&limit=${limit}`;
 
-  const res = http.get(url, {
-    tags: { name: requestName },
-    headers: bffHeadersGet
+  let res = http.get(url, {
+    tags: {name: requestName},
+    headers: bffHeadersGet,
   });
 
   const expects: ExpectsType = [
     {
       check: 'should have status 200',
-      expect: res.status === 200
-    }
+      expect: res.status === 200,
+    },
   ];
 
   try {
@@ -63,48 +63,53 @@ export function realtime(
       const serviceJourneys = Object.keys(json[quayId].departures);
       for (let journey of serviceJourneys) {
         depTimes.push(
-          json[quayId].departures[journey].timeData.expectedDepartureTime
+          json[quayId].departures[journey].timeData.expectedDepartureTime,
         );
       }
 
       expects.push(
         {
           check: 'should have correct quayId',
-          expect: json[quayId].quayId === quayId
+          expect: json[quayId].quayId === quayId,
         },
         {
           check: `should have ${limit} departures`,
-          expect: Object.keys(json[quayId].departures).length === limit
+          expect: Object.keys(json[quayId].departures).length === limit,
         },
         {
           check: 'should have departure times after start time',
-          expect: departsAfterExpectedStartTime(depTimes, searchTime)
-        }
+          expect: departsAfterExpectedStartTime(depTimes, searchTime),
+        },
       );
     } else {
       // Re-send. Sometimes immediate requests don't hit the cache
-      sleep(2);
-      const resV2 = http.get(url, {
-        tags: { name: requestName },
-        headers: bffHeadersGet
-      });
+      const maxRetries = 3;
+      let currentRetry = 0;
+      while (res.body !== '{}' && currentRetry < maxRetries) {
+        sleep(2);
+        res = http.get(url, {
+          tags: {name: requestName},
+          headers: bffHeadersGet,
+        });
+        currentRetry += 1;
+      }
 
       expects.push(
         {
           check: 'should have status 200',
-          expect: resV2.status === 200
+          expect: res.status === 200,
         },
         {
           check: 'should have empty results',
-          expect: resV2.body === '{}'
-        }
+          expect: res.body === '{}',
+        },
       );
     }
     metrics.checkForFailures(
       [res.request.url],
       res.timings.duration,
       requestName,
-      expects
+      expects,
     );
   } catch (exp) {
     //throw exp
@@ -115,9 +120,9 @@ export function realtime(
       [
         {
           check: `${exp}`,
-          expect: false
-        }
-      ]
+          expect: false,
+        },
+      ],
     );
   }
 }
@@ -127,22 +132,22 @@ export function realtimeWithLineId(
   lineId: string,
   searchTime: string,
   hasResults: boolean = true,
-  limit: number = 10
+  limit: number = 10,
 ) {
   const requestName = 'v2_realtimeWithLineId';
   const lineNumber = lineId.split('_')[1];
   const url = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&lineIds=${lineId}&startTime=${searchTime}&limit=${limit}`;
 
-  const res = http.get(url, {
-    tags: { name: requestName },
-    headers: bffHeadersGet
+  let res = http.get(url, {
+    tags: {name: requestName},
+    headers: bffHeadersGet,
   });
 
   const expects: ExpectsType = [
     {
       check: 'should have status 200',
-      expect: res.status === 200
-    }
+      expect: res.status === 200,
+    },
   ];
 
   try {
@@ -155,7 +160,7 @@ export function realtimeWithLineId(
       const serviceJourneys = Object.keys(json[quayId].departures);
       for (let journey of serviceJourneys) {
         depTimes.push(
-          json[quayId].departures[journey].timeData.expectedDepartureTime
+          json[quayId].departures[journey].timeData.expectedDepartureTime,
         );
         lineIds.push(journey.split('_')[0]);
       }
@@ -163,47 +168,52 @@ export function realtimeWithLineId(
       expects.push(
         {
           check: 'should have correct quayId',
-          expect: json[quayId].quayId === quayId
+          expect: json[quayId].quayId === quayId,
         },
         {
           check: `should only have departures with lineId ${lineId}`,
           expect:
-            lineIds.filter(id => id !== `ATB:ServiceJourney:${lineNumber}`)
-              .length === 0
+            lineIds.filter((id) => id !== `ATB:ServiceJourney:${lineNumber}`)
+              .length === 0,
         },
         {
           check: `should have ${limit} departures`,
-          expect: Object.keys(json[quayId].departures).length === limit
+          expect: Object.keys(json[quayId].departures).length === limit,
         },
         {
           check: 'should have departure times after start time',
-          expect: departsAfterExpectedStartTime(depTimes, searchTime)
-        }
+          expect: departsAfterExpectedStartTime(depTimes, searchTime),
+        },
       );
     } else {
       // Re-send. Sometimes immediate requests don't hit the cache
-      sleep(2);
-      const resV2 = http.get(url, {
-        tags: { name: requestName },
-        headers: bffHeadersGet
-      });
+      const maxRetries = 3;
+      let currentRetry = 0;
+      while (res.body !== '{}' && currentRetry < maxRetries) {
+        sleep(2);
+        res = http.get(url, {
+          tags: {name: requestName},
+          headers: bffHeadersGet,
+        });
+        currentRetry += 1;
+      }
 
       expects.push(
         {
           check: 'should have status 200',
-          expect: resV2.status === 200
+          expect: res.status === 200,
         },
         {
           check: 'should have empty results',
-          expect: resV2.body === '{}'
-        }
+          expect: res.body === '{}',
+        },
       );
     }
     metrics.checkForFailures(
       [res.request.url],
       res.timings.duration,
       requestName,
-      expects
+      expects,
     );
   } catch (exp) {
     //throw exp
@@ -214,9 +224,9 @@ export function realtimeWithLineId(
       [
         {
           check: `${exp}`,
-          expect: false
-        }
-      ]
+          expect: false,
+        },
+      ],
     );
   }
 }
@@ -227,12 +237,12 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
   let searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;
   const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${searchTime}&timeRange=86400`;
   const resQD = http.post(urlQD, '{}', {
-    tags: { name: requestName },
-    headers: bffHeadersPost
+    tags: {name: requestName},
+    headers: bffHeadersPost,
   });
 
   const expects: ExpectsType = [
-    { check: 'should have status 200', expect: resQD.status === 200 }
+    {check: 'should have status 200', expect: resQD.status === 200},
   ];
 
   try {
@@ -242,8 +252,8 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
     searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;
     const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=10`;
     const resR = http.get(urlR, {
-      tags: { name: requestName },
-      headers: bffHeadersGet
+      tags: {name: requestName},
+      headers: bffHeadersGet,
     });
     const jsonR = resR.json() as RealtimeResponseType;
     // Get departure times
@@ -251,36 +261,36 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
     const serviceJourneys = Object.keys(jsonR[quayId].departures);
     for (let journey of serviceJourneys) {
       depTimes.push(
-        jsonR[quayId].departures[journey].timeData.expectedDepartureTime
+        jsonR[quayId].departures[journey].timeData.expectedDepartureTime,
       );
     }
 
     expects.push(
-      { check: 'should have status 200', expect: resR.status === 200 },
+      {check: 'should have status 200', expect: resR.status === 200},
       {
         check: 'should return correct realtime departure times',
         expect: isEqual(
           jsonQD
-            .quay!.estimatedCalls.map(call => call.expectedDepartureTime)
+            .quay!.estimatedCalls.map((call) => call.expectedDepartureTime)
             .sort(),
-          depTimes.sort()
-        )
+          depTimes.sort(),
+        ),
       },
       {
         check: 'should return correct service journeys',
         expect: isEqual(
           jsonQD
-            .quay!.estimatedCalls.map(call => call.serviceJourney!.id)
+            .quay!.estimatedCalls.map((call) => call.serviceJourney!.id)
             .sort(),
-          Object.keys(jsonR[quayId].departures).sort()
-        )
-      }
+          Object.keys(jsonR[quayId].departures).sort(),
+        ),
+      },
     );
     metrics.checkForFailures(
       [resQD.request.url, resR.request.url],
       resQD.timings.duration + resR.timings.duration,
       requestName,
-      expects
+      expects,
     );
   } catch (exp) {
     //throw exp
@@ -291,9 +301,9 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
       [
         {
           check: `${exp}`,
-          expect: false
-        }
-      ]
+          expect: false,
+        },
+      ],
     );
   }
 }
