@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
 import {IStopPlacesService} from '../../service/interface';
 import {getHarborsRequest, getStopPlacesRequest} from './schema';
-import {DestinationHarborsQuery, HarborsQuery} from '../../service/types';
+import {DestinationHarborsQuery, HarborsQuery, StopPlaceQuery} from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   server.route({
@@ -14,21 +14,19 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as HarborsQuery;
-      console.log(query);
       return (await service.getHarbors(query, h.request)).unwrap();
     },
   });
   server.route({
     method: 'GET',
-    path: '/bff/v1/stop-place',
+    path: '/bff/v1/harbor/connections',
     options: {
-      tags: ['api', 'stops'],
+      tags: ['api', 'stop', 'connections'],
       validate: getStopPlacesRequest,
-      description: 'Get stop places',
+      description: 'Get stop place connections',
     },
     handler: async (request, h) => {
       const query = request.query as unknown as DestinationHarborsQuery;
-      console.log(query);
       return (await service.getStopPlace(query, h.request)).unwrap();
     },
   });

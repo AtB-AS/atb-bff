@@ -41,14 +41,12 @@ export default (): IStopPlacesService => {
           })
           .map((line) => line.quays)
           .flat()
-          .filter((i) => i != undefined)
           .filter(
             (element, index, array) =>
               array.findIndex(
                 (el) => el?.stopPlace?.id === element?.stopPlace?.id,
               ) === index,
           );
-
         return Result.ok(uniqueHarbors);
       } catch (error) {
         return Result.err(new APIError(error));
@@ -69,9 +67,7 @@ export default (): IStopPlacesService => {
       }
       const uniqueHarbors = result.data.stopPlace?.quays
         ?.map((line) => line.journeyPatterns)
-        .flat()
-        .filter((i) => i != undefined)
-        .map((journeyPattern) => journeyPattern.quays)
+       .map((journeyPattern) => journeyPattern.quays)
         .flat()
         .filter(
           (element, index, array) =>
