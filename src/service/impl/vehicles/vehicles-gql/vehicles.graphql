@@ -10,5 +10,6 @@ query getServiceJourneyVehicle($serviceJourneyId: String!) {
     serviceJourney {
       id
     }
+    vehicleStatus
   }
 }

@@ -368,9 +368,9 @@ export type Interchange = {
   ToServiceJourney?: Maybe<ServiceJourney>;
   fromServiceJourney?: Maybe<ServiceJourney>;
   guaranteed?: Maybe<Scalars['Boolean']>;
-  /** Maximum time after scheduled departure time the connecting transport is guarantied to wait for the delayed trip. [NOT RESPECTED DURING ROUTING, JUST PASSED THROUGH] */
+  /** Maximum time after scheduled departure time the connecting transport is guaranteed to wait for the delayed trip. [NOT RESPECTED DURING ROUTING, JUST PASSED THROUGH] */
   maximumWaitTime?: Maybe<Scalars['Int']>;
-  /** The transfer priority is used to decide where a transfer should happen, at the highest prioritized location. If the guarantied flag is set it take precedence priority. A guarantied ALLOWED transfer is preferred over a PREFERRED none-guarantied transfer. */
+  /** The transfer priority is used to decide where a transfer should happen, at the highest prioritized location. If the guaranteed flag is set it take precedence priority. A guaranteed ALLOWED transfer is preferred over a PREFERRED none-guaranteed transfer. */
   priority?: Maybe<InterchangePriority>;
   staySeated?: Maybe<Scalars['Boolean']>;
   toServiceJourney?: Maybe<ServiceJourney>;
@@ -607,6 +607,7 @@ export enum Mode {
   Monorail = 'monorail',
   Rail = 'rail',
   Scooter = 'scooter',
+  Taxi = 'taxi',
   Tram = 'tram',
   Trolleybus = 'trolleybus',
   Water = 'water'
@@ -1125,6 +1126,7 @@ export type QueryTypeTripArgs = {
   itineraryFilters?: InputMaybe<ItineraryFilters>;
   locale?: InputMaybe<Locale>;
   maxAccessEgressDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
+  maxDirectDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
   maximumAdditionalTransfers?: InputMaybe<Scalars['Int']>;
   maximumTransfers?: InputMaybe<Scalars['Int']>;
   modes?: InputMaybe<Modes>;
@@ -1235,8 +1237,6 @@ export enum RoutingErrorCode {
   OutsideBounds = 'outsideBounds',
   /** The date specified is outside the range of data currently loaded into the system */
   OutsideServicePeriod = 'outsideServicePeriod',
-  /** The routing request timed out. */
-  ProcessingTimeout = 'processingTimeout',
   /** An unknown error happened during the search. The details have been logged to the server logs */
   SystemError = 'systemError',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
@@ -1627,6 +1627,7 @@ export enum TransportMode {
   Metro = 'metro',
   Monorail = 'monorail',
   Rail = 'rail',
+  Taxi = 'taxi',
   Tram = 'tram',
   Trolleybus = 'trolleybus',
   Unknown = 'unknown',
