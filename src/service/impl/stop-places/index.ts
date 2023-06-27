@@ -1,7 +1,6 @@
 import {IStopPlacesService} from '../../interface';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {Result} from '@badrap/result';
-import {APIError} from '../../types';
 import {
   GetStopPlaceConnectionsDocument,
   GetStopPlaceConnectionsQuery,
@@ -13,6 +12,7 @@ import {
   GetStopPlacesQueryVariables,
 } from './journey-gql/stop-places.graphql-gen';
 import {isDefined, onlyUniquesBasedOnField} from './utils';
+import {APIError} from '../../../utils/api-error';
 
 export default (): IStopPlacesService => {
   return {
