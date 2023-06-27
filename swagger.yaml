@@ -594,6 +594,57 @@ paths:
           schema:
             type: string
           description: Successful
+  /bff/v2/stop-places:
+    get:
+      summary: Get stop places by authority and modes
+      operationId: getBffV2StopPlaces
+      parameters:
+        - type: array
+          default: []
+          items:
+            type: string
+          collectionFormat: multi
+          name: authorities
+          in: query
+          required: true
+        - type: array
+          default: [ ]
+          items:
+            type: string
+          collectionFormat: multi
+          name: transportModes
+          in: query
+        - type: array
+          default: [ ]
+          items:
+            type: string
+          collectionFormat: multi
+          name: transportSubmodes
+          in: query
+
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
+  /bff/v2/stop-places/connections:
+    get:
+      summary: Get stop with connecting lines from from-harbor
+      operationId: getBffV2StopPlacesConnections
+      parameters:
+        - type: string
+          name: fromHarborId
+          in: query
+          required: true
+      tags:
+        - bff
+      responses:
+        default:
+          schema:
+            type: string
+          description: Successful
   /bff/v2/trips:
     post:
       summary: Get trips between stops

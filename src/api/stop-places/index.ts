@@ -6,7 +6,7 @@ import {StopPlaceConnectionsQuery, StopPlacesQuery} from '../../service/types';
 export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   server.route({
     method: 'GET',
-    path: '/bff/v1/stop-places',
+    path: '/bff/v2/stop-places',
     options: {
       tags: ['api', 'stops'],
       validate: getStopPlacesRequest,
@@ -19,7 +19,7 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   });
   server.route({
     method: 'GET',
-    path: '/bff/v1/stop-places/connections',
+    path: '/bff/v2/stop-places/connections',
     options: {
       tags: ['api', 'stop', 'connections'],
       validate: getStopPlaceConnectionsRequest,
