@@ -3,11 +3,11 @@ import {Result} from '@badrap/result';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {CursoredData, generateCursorData} from '../../cursored';
 import {
-  APIError,
   Coordinates,
   DepartureGroupsQuery,
   FavoriteDeparture,
 } from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {
   GroupsByIdDocument,
   GroupsByIdQuery,

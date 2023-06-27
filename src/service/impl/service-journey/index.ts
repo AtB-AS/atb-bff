@@ -2,12 +2,13 @@ import {Result} from '@badrap/result';
 import {formatISO} from 'date-fns';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {IServiceJourneyService_v2} from '../../interface';
-import {APIError, ServiceJourneyMapInfoQuery} from '../../types';
+import {ServiceJourneyMapInfoQuery} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {mapToMapLegs} from './utils';
 import {
   getMapInfoWithFromAndToQuay,
   getMapInfoWithFromQuay,
-} from './serviceJourney';
+} from './service-journey';
 import {
   ServiceJourneyEstimatedCallFragment,
   ServiceJourneyDeparturesDocument,

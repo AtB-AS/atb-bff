@@ -1,7 +1,8 @@
 import {Result} from '@badrap/result';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {IRealtimeService} from '../../interface';
-import {APIError, DepartureRealtimeQuery} from '../../types';
+import {DepartureRealtimeQuery} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {
   createVariables,
   getPreviousExpectedFromCache,

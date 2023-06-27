@@ -1,7 +1,6 @@
 /* eslint no-console: 0 */
 import {Boom} from '@hapi/boom';
 import {createServer, initializePlugins} from './server';
-import enturClient from './service/impl/entur';
 
 import geocoderService from './service/impl/geocoder';
 import departuresGroupedService from './service/impl/departures-grouped';
@@ -43,7 +42,6 @@ process.on('unhandledRejection', (err) => {
     const server = createServer({
       port: port,
     });
-    const enturService = enturClient();
     await initializePlugins(server);
     server.route({
       method: '*',
@@ -54,7 +52,7 @@ process.on('unhandledRejection', (err) => {
 
     healthRoutes(server);
     departuresGroupedRoutes(server)(departuresGroupedService());
-    geocoderRoutes(server)(geocoderService(enturService));
+    geocoderRoutes(server)(geocoderService());
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());
     mobilityRoutes(server)(mobilityService());

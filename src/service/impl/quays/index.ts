@@ -1,7 +1,8 @@
 import {Result} from '@badrap/result';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {IQuayService} from '../../interface';
-import {APIError, QuaysCoordinatesPayload} from '../../types';
+import {QuaysCoordinatesPayload} from '../../types';
+import {APIError} from '../../../utils/api-error';
 import {
   GetQuaysCoordinatesQuery,
   GetQuaysCoordinatesDocument,

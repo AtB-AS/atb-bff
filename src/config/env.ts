@@ -1,4 +1,4 @@
-import {getEnv} from '../utils/getenv';
+import {getEnv} from '../utils/get-env';
 
 export const TICKET_INVITE_KEY: string | undefined =
   process.env.TICKET_INVITE_KEY;
