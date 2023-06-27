@@ -4,6 +4,7 @@ import {FetchError} from 'node-fetch';
 import {
   Mode,
   PointsOnLink,
+  TransportMode,
   TransportSubmode,
 } from '../graphql/journey/journeyplanner-types_v3';
 import {FormFactor} from '../graphql/mobility/mobility-types_v2';
@@ -48,16 +49,21 @@ export interface QuaysCoordinatesPayload {
   ids: string[];
 }
 
-export interface HarborsQuery {
+export interface StopPlacesQuery {
   authorities: string[];
+  transportModes?: TransportMode[];
+  transportSubmodes?: TransportSubmode[];
 }
 
-export interface DestinationHarborsQuery {
+export interface StopPlaceConnectionsQuery {
   fromHarborId: string;
 }
 
-export type Harbors = Array<{
-  stopPlace?: {name: string; id: string; latitude?: number; longitude?: number};
+export type StopPlaces = Array<{
+  name: string;
+  id: string;
+  latitude?: number;
+  longitude?: number;
 }>;
 
 export type ReverseFeaturesQuery = {

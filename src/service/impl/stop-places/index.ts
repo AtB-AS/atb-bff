@@ -3,61 +3,57 @@ import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {Result} from '@badrap/result';
 import {APIError} from '../../types';
 import {
-  GetHarborsDocument,
-  GetHarborsQuery,
-  GetHarborsQueryVariables,
-} from './journey-gql/lines.graphql-gen';
+  GetStopPlaceConnectionsDocument,
+  GetStopPlaceConnectionsQuery,
+  GetStopPlaceConnectionsQueryVariables,
+} from './journey-gql/stop-place-connections.graphql-gen';
 import {
-  GetStopPlaceDocument,
-  GetStopPlaceQuery,
-  GetStopPlaceQueryVariables,
-} from './journey-gql/stop-place.graphql-gen';
-import {TransportSubmode} from '../../../graphql/journey/journeyplanner-types_v3';
+  GetStopPlacesDocument,
+  GetStopPlacesQuery,
+  GetStopPlacesQueryVariables,
+} from './journey-gql/stop-places.graphql-gen';
+import {isDefined, onlyUniquesBasedOnField} from './utils';
 
 export default (): IStopPlacesService => {
   return {
-    async getHarbors(query, headers) {
+    async getStopPlaces(query, headers) {
       const result = await journeyPlannerClient(headers).query<
-        GetHarborsQuery,
-        GetHarborsQueryVariables
+        GetStopPlacesQuery,
+        GetStopPlacesQueryVariables
       >({
-        query: GetHarborsDocument,
+        query: GetStopPlacesDocument,
         variables: {
           authorities: query.authorities,
+          transportModes: query.transportModes,
         },
       });
+
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
 
       try {
         const uniqueHarbors = result.data.lines
-          .filter((line) => {
-            return (
-              line.transportSubmode ===
-                TransportSubmode.HighSpeedPassengerService ||
-              line.transportSubmode === TransportSubmode.HighSpeedVehicleService
-            );
-          })
-          .map((line) => line.quays)
-          .flat()
-          .filter(
-            (element, index, array) =>
-              array.findIndex(
-                (el) => el?.stopPlace?.id === element?.stopPlace?.id,
-              ) === index,
-          );
+          .filter((line) =>
+            query.transportSubmodes?.find(
+              (subMode) => subMode === line.transportSubmode,
+            ),
+          )
+          .flatMap((line) => line.quays)
+          .map((quay) => quay.stopPlace)
+          .filter(isDefined)
+          .filter(onlyUniquesBasedOnField('id'));
         return Result.ok(uniqueHarbors);
       } catch (error) {
         return Result.err(new APIError(error));
       }
     },
-    async getStopPlace(query, headers) {
+    async getStopPlaceConnections(query, headers) {
       const result = await journeyPlannerClient(headers).query<
-        GetStopPlaceQuery,
-        GetStopPlaceQueryVariables
+        GetStopPlaceConnectionsQuery,
+        GetStopPlaceConnectionsQueryVariables
       >({
-        query: GetStopPlaceDocument,
+        query: GetStopPlaceConnectionsDocument,
         variables: {
           id: query.fromHarborId,
         },
@@ -66,19 +62,14 @@ export default (): IStopPlacesService => {
         return Result.err(new APIError(result.errors));
       }
       const uniqueHarbors = result.data.stopPlace?.quays
-        ?.map((line) => line.journeyPatterns)
-       .map((journeyPattern) => journeyPattern.quays)
-        .flat()
-        .filter(
-          (element, index, array) =>
-            array.findIndex(
-              (el) => el?.stopPlace?.id === element?.stopPlace?.id,
-            ) === index,
-        );
+        ?.flatMap((quay) => quay.journeyPatterns)
+        .flatMap((journeyPattern) => journeyPattern.quays)
+        .map((quay) => quay.stopPlace)
+        .filter(isDefined)
+        .filter(onlyUniquesBasedOnField('id'));
       if (!uniqueHarbors || !uniqueHarbors.length) {
         return Result.err(new APIError(result.errors));
       }
-      console.log(uniqueHarbors);
       try {
         return Result.ok(uniqueHarbors);
       } catch (error) {

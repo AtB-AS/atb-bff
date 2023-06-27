@@ -1,11 +1,15 @@
 import Joi from 'joi';
 
-export const getHarborsRequest = {
+export const getStopPlacesRequest = {
   query: Joi.object({
     authorities: Joi.array().single().items(Joi.string()).required(),
+    transportModes: Joi.array().single().items(Joi.string()),
+    transportSubmodes: Joi.array().single().items(Joi.string()),
   }),
 };
 
-export const getStopPlacesRequest = {
-  query: Joi.object({fromHarborId: Joi.string().required()}),
+export const getStopPlaceConnectionsRequest = {
+  query: Joi.object({
+    fromHarborId: Joi.string().required(),
+  }),
 };

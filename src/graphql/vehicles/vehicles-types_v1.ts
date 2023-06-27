@@ -150,6 +150,15 @@ export enum VehicleModeEnumeration {
   Tram = 'TRAM'
 }
 
+export enum VehicleStatusEnumeration {
+  Assigned = 'ASSIGNED',
+  AtOrigin = 'AT_ORIGIN',
+  Cancelled = 'CANCELLED',
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS',
+  OffRoute = 'OFF_ROUTE'
+}
+
 export type VehicleUpdate = {
   bearing?: Maybe<Scalars['Float']>;
   codespace?: Maybe<Codespace>;
@@ -160,6 +169,8 @@ export type VehicleUpdate = {
   expirationEpochSecond?: Maybe<Scalars['Float']>;
   /** @deprecated Use 'bearing''. */
   heading?: Maybe<Scalars['Float']>;
+  /** Whether the vehicle is affected by traffic jams or other circumstances which may lead to further delays. If `null`, current status is unknown. */
+  inCongestion?: Maybe<Scalars['Boolean']>;
   lastUpdated?: Maybe<Scalars['DateTime']>;
   lastUpdatedEpochSecond?: Maybe<Scalars['Float']>;
   line?: Maybe<Line>;
@@ -173,4 +184,6 @@ export type VehicleUpdate = {
   vehicleId?: Maybe<Scalars['String']>;
   /** @deprecated Use 'vehicleId'. */
   vehicleRef?: Maybe<Scalars['String']>;
+  /** Reported status of the vehicle */
+  vehicleStatus?: Maybe<VehicleStatusEnumeration>;
 };

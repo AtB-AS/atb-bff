@@ -52,10 +52,7 @@ import {
   DeparturesForServiceJourneyQuery,
   DeparturesPayload,
   DeparturesRealtimeData,
-  DestinationHarborsQuery,
   FeaturesQuery,
-  Harbors,
-  HarborsQuery,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
   ServiceJourneyMapInfoData,
@@ -65,6 +62,9 @@ import {
   ServiceJourneyVehicles,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
+  StopPlaceConnectionsQuery,
+  StopPlaces,
+  StopPlacesQuery,
   TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery,
@@ -160,14 +160,14 @@ export interface IQuayService {
 }
 
 export interface IStopPlacesService {
-  getHarbors(
-    query: HarborsQuery,
+  getStopPlaces(
+    query: StopPlacesQuery,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<Harbors, APIError>>;
-  getStopPlace(
-    query: DestinationHarborsQuery,
+  ): Promise<Result<StopPlaces, APIError>>;
+  getStopPlaceConnections(
+    query: StopPlaceConnectionsQuery,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<Harbors, APIError>>;
+  ): Promise<Result<StopPlaces, APIError>>;
 }
 
 export interface IEnrollmentService {
