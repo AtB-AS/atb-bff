@@ -131,10 +131,7 @@ export const timeIsEqual = (
   const time1D = new Date(time1);
   const time2D = new Date(time2);
 
-  return !(
-    time1D.getTime() - time2D.getTime() > allowedMillisMargin ||
-    time2D.getTime() - time1D.getTime() > allowedMillisMargin
-  );
+  return !(Math.abs(time1D.getTime() - time2D.getTime()) > allowedMillisMargin);
 };
 
 // Utility function to get the json response with correct casting
