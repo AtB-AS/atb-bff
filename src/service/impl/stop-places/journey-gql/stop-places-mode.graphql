@@ -1,4 +1,4 @@
-query getStopPlaces($authorities: [String], $transportModes: [TransportMode]) {
+query getStopPlacesByMode($authorities: [String], $transportModes: [TransportMode]) {
   lines(authorities: $authorities, transportModes: $transportModes) {
     quays {
       stopPlace {

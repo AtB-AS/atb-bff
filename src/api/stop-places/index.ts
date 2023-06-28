@@ -4,7 +4,10 @@ import {
   getStopPlaceConnectionsRequest,
   getStopPlacesByModeRequest,
 } from './schema';
-import {StopPlaceConnectionsQuery, StopPlacesQuery} from '../../service/types';
+import {
+  StopPlaceConnectionsQuery,
+  StopPlacesByModeQuery,
+} from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   server.route({
@@ -16,7 +19,7 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
       description: 'Get stop places by mode',
     },
     handler: async (request, h) => {
-      const query = request.query as unknown as StopPlacesQuery;
+      const query = request.query as unknown as StopPlacesByModeQuery;
       return (await service.getStopPlacesByMode(query, h.request)).unwrap();
     },
   });

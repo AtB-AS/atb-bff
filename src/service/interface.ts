@@ -63,7 +63,7 @@ import {
   StationsQuery,
   StopPlaceConnectionsQuery,
   StopPlaces,
-  StopPlacesQuery,
+  StopPlacesByModeQuery,
   TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery,
@@ -165,7 +165,7 @@ export interface IQuayService {
 
 export interface IStopPlacesService {
   getStopPlacesByMode(
-    query: StopPlacesQuery,
+    query: StopPlacesByModeQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<StopPlaces, APIError>>;
   getStopPlaceConnections(

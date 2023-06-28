@@ -36,9 +36,9 @@ export interface QuaysCoordinatesPayload {
   ids: string[];
 }
 
-export interface StopPlacesQuery {
+export interface StopPlacesByModeQuery {
   authorities: string[];
-  transportModes?: TransportMode[];
+  transportModes: TransportMode[];
   transportSubmodes?: TransportSubmode[];
 }
 

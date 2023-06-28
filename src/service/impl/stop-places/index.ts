@@ -6,22 +6,22 @@ import {
   GetStopPlaceConnectionsQuery,
   GetStopPlaceConnectionsQueryVariables,
 } from './journey-gql/stop-place-connections.graphql-gen';
-import {
-  GetStopPlacesDocument,
-  GetStopPlacesQuery,
-  GetStopPlacesQueryVariables,
-} from './journey-gql/stop-places.graphql-gen';
 import {isDefined, onlyUniquesBasedOnField} from './utils';
 import {APIError} from '../../../utils/api-error';
+import {
+  GetStopPlacesByModeDocument,
+  GetStopPlacesByModeQuery,
+  GetStopPlacesByModeQueryVariables,
+} from './journey-gql/stop-places-mode.graphql-gen';
 
 export default (): IStopPlacesService => {
   return {
     async getStopPlacesByMode(query, headers) {
       const result = await journeyPlannerClient(headers).query<
-        GetStopPlacesQuery,
-        GetStopPlacesQueryVariables
+        GetStopPlacesByModeQuery,
+        GetStopPlacesByModeQueryVariables
       >({
-        query: GetStopPlacesDocument,
+        query: GetStopPlacesByModeDocument,
         variables: {
           authorities: query.authorities,
           transportModes: query.transportModes,
