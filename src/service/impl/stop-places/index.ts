@@ -69,15 +69,15 @@ export default (): IStopPlacesService => {
       }
       const journeyPatternsWithMatchingAuthority = result.data.stopPlace.quays
         .flatMap((quay) => quay.journeyPatterns)
-        .filter((jp) => filterAuthorities(jp, query));
+        .filter((jp) => filterAuthorities(jp, query.authorities));
 
       const reachableQuays = journeyPatternsWithMatchingAuthority.flatMap(
-        (jp) => filterPreviousStops(jp.quays, query),
+        (jp) => getReachableQuays(jp.quays, query),
       );
 
-      const stopPlaces = reachableQuays.map((quay) => quay.stopPlace);
+      const reachableStopPlaces = reachableQuays.map((quay) => quay.stopPlace);
 
-      const uniqueStopPlaces = stopPlaces
+      const uniqueStopPlaces = reachableStopPlaces
         .filter(isDefined)
         .filter(onlyUniquesBasedOnField('id'));
 
@@ -92,15 +92,15 @@ export default (): IStopPlacesService => {
 
 function filterAuthorities(
   journeyPattern: JourneyPatternsFragment,
-  query: StopPlaceConnectionsQuery,
+  authorities: string[],
 ) {
-  const matchingAuthority = query.authorities.find(
+  const matchingAuthority = authorities.find(
     (authority) => journeyPattern.line.authority?.id === authority,
   );
   return !!matchingAuthority;
 }
 
-function filterPreviousStops(
+function getReachableQuays(
   quays: QuayFragment[],
   query: StopPlaceConnectionsQuery,
 ) {
