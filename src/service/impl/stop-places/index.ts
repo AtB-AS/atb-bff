@@ -33,7 +33,7 @@ export default (): IStopPlacesService => {
       }
 
       try {
-        const uniqueHarbors = result.data.lines
+        const uniqueStopPlaces = result.data.lines
           .filter((line) =>
             query.transportSubmodes?.find(
               (subMode) => subMode === line.transportSubmode,
@@ -43,7 +43,7 @@ export default (): IStopPlacesService => {
           .map((quay) => quay.stopPlace)
           .filter(isDefined)
           .filter(onlyUniquesBasedOnField('id'));
-        return Result.ok(uniqueHarbors);
+        return Result.ok(uniqueStopPlaces);
       } catch (error) {
         return Result.err(new APIError(error));
       }
@@ -61,17 +61,17 @@ export default (): IStopPlacesService => {
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-      const uniqueHarbors = result.data.stopPlace?.quays
+      const uniqueStopPlaces = result.data.stopPlace?.quays
         ?.flatMap((quay) => quay.journeyPatterns)
         .flatMap((journeyPattern) => journeyPattern.quays)
         .map((quay) => quay.stopPlace)
         .filter(isDefined)
         .filter(onlyUniquesBasedOnField('id'));
-      if (!uniqueHarbors || !uniqueHarbors.length) {
+      if (!uniqueStopPlaces || !uniqueStopPlaces.length) {
         return Result.err(new APIError(result.errors));
       }
       try {
-        return Result.ok(uniqueHarbors);
+        return Result.ok(uniqueStopPlaces);
       } catch (error) {
         return Result.err(new APIError(error));
       }

@@ -631,11 +631,11 @@ paths:
           description: Successful
   /bff/v2/stop-places/connections:
     get:
-      summary: Get stop with connecting lines from from-harbor
+      summary: Get stop with connecting lines from from-stop-place
       operationId: getBffV2StopPlacesConnections
       parameters:
         - type: string
-          name: fromHarborId
+          name: fromStopPlaceId
           in: query
           required: true
       tags:

@@ -10,6 +10,6 @@ export const getStopPlacesRequest = {
 
 export const getStopPlaceConnectionsRequest = {
   query: Joi.object({
-    fromHarborId: Joi.string().required(),
+    fromStopPlaceId: Joi.string().required(),
   }),
 };
