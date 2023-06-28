@@ -68,19 +68,17 @@ export default (): IStopPlacesService => {
         return Result.ok([]);
       }
       const journeyPatternsWithMatchingAuthority = result.data.stopPlace.quays
-        ?.flatMap((quay) => quay.journeyPatterns)
+        .flatMap((quay) => quay.journeyPatterns)
         .filter((jp) => filterAuthorities(jp, query));
 
-      const reachableQuays = journeyPatternsWithMatchingAuthority?.flatMap(
+      const reachableQuays = journeyPatternsWithMatchingAuthority.flatMap(
         (jp) => filterPreviousStops(jp.quays, query),
       );
 
-      const stopPlaces = reachableQuays
-        ?.filter(isDefined)
-        .map((quay) => quay.stopPlace);
+      const stopPlaces = reachableQuays.map((quay) => quay.stopPlace);
 
       const uniqueStopPlaces = stopPlaces
-        ?.filter(isDefined)
+        .filter(isDefined)
         .filter(onlyUniquesBasedOnField('id'));
 
       try {
