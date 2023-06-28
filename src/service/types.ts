@@ -43,6 +43,7 @@ export interface StopPlacesByModeQuery {
 }
 
 export interface StopPlaceConnectionsQuery {
+  authorities: string[];
   fromStopPlaceId: string;
 }
 

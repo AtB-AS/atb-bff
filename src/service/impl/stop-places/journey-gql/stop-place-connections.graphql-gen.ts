@@ -2,13 +2,13 @@ import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { StopPlaceFragmentDoc } from '../../fragments/journey-gql/stop-places.graphql-gen';
+import { JourneyPatternsFragmentDoc } from '../../fragments/journey-gql/journey-pattern.graphql-gen';
 export type GetStopPlaceConnectionsQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
 }>;
 
 
-export type GetStopPlaceConnectionsQuery = { stopPlace?: { quays?: Array<{ journeyPatterns: Array<{ quays: Array<{ stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } }> }> }> } };
+export type GetStopPlaceConnectionsQuery = { stopPlace?: { quays?: Array<{ journeyPatterns: Array<{ quays: Array<{ id: string, name: string, publicCode?: string, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number }, tariffZones: Array<{ id: string, name?: string }> }>, line: { authority?: { id: string } } }> }> } };
 
 
 export const GetStopPlaceConnectionsDocument = gql`
@@ -16,16 +16,12 @@ export const GetStopPlaceConnectionsDocument = gql`
   stopPlace(id: $id) {
     quays {
       journeyPatterns {
-        quays {
-          stopPlace {
-            ...stopPlace
-          }
-        }
+        ...journeyPatterns
       }
     }
   }
 }
-    ${StopPlaceFragmentDoc}`;
+    ${JourneyPatternsFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

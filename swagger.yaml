@@ -635,6 +635,14 @@ paths:
       summary: Get stop with connecting lines from from-stop-place
       operationId: getBffV2StopPlacesConnections
       parameters:
+        - type: array
+          default: [ ]
+          items:
+            type: string
+          collectionFormat: multi
+          name: authorities
+          in: query
+          required: true
         - type: string
           name: fromStopPlaceId
           in: query

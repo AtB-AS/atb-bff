@@ -13,6 +13,9 @@ import {
   GetStopPlacesByModeQuery,
   GetStopPlacesByModeQueryVariables,
 } from './journey-gql/stop-places-mode.graphql-gen';
+import {StopPlaceConnectionsQuery} from '../../types';
+import {QuayFragment} from '../fragments/journey-gql/quays.graphql-gen';
+import {JourneyPatternsFragment} from '../fragments/journey-gql/journey-pattern.graphql-gen';
 
 export default (): IStopPlacesService => {
   return {
@@ -61,20 +64,50 @@ export default (): IStopPlacesService => {
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-      const uniqueStopPlaces = result.data.stopPlace?.quays
-        ?.flatMap((quay) => quay.journeyPatterns)
-        .flatMap((journeyPattern) => journeyPattern.quays)
-        .map((quay) => quay.stopPlace)
-        .filter(isDefined)
-        .filter(onlyUniquesBasedOnField('id'));
-      if (!uniqueStopPlaces || !uniqueStopPlaces.length) {
-        return Result.err(new APIError(result.errors));
+      if (!result.data.stopPlace?.quays) {
+        return Result.ok([]);
       }
+      const journeyPatternsWithMatchingAuthority = result.data.stopPlace.quays
+        ?.flatMap((quay) => quay.journeyPatterns)
+        .filter((jp) => filterAuthorities(jp, query));
+
+      const reachableQuays = journeyPatternsWithMatchingAuthority?.flatMap(
+        (jp) => filterPreviousStops(jp.quays, query),
+      );
+
+      const stopPlaces = reachableQuays
+        ?.filter(isDefined)
+        .map((quay) => quay.stopPlace);
+
+      const uniqueStopPlaces = stopPlaces
+        ?.filter(isDefined)
+        .filter(onlyUniquesBasedOnField('id'));
+
       try {
-        return Result.ok(uniqueStopPlaces);
+        return Result.ok(uniqueStopPlaces ?? []);
       } catch (error) {
         return Result.err(new APIError(error));
       }
     },
   };
 };
+
+function filterAuthorities(
+  journeyPattern: JourneyPatternsFragment,
+  query: StopPlaceConnectionsQuery,
+) {
+  const matchingAuthority = query.authorities.find(
+    (authority) => journeyPattern.line.authority?.id === authority,
+  );
+  return !!matchingAuthority;
+}
+
+function filterPreviousStops(
+  quays: QuayFragment[],
+  query: StopPlaceConnectionsQuery,
+) {
+  const index = quays.findIndex(
+    (quay) => quay.stopPlace?.id === query.fromStopPlaceId,
+  );
+  return quays.slice(index + 1);
+}

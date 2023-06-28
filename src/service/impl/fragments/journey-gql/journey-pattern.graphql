@@ -1,0 +1,10 @@
+fragment journeyPatterns on JourneyPattern{
+        quays {
+          ...quay
+        }
+        line {
+          authority {
+            id
+          }
+        }
+      }

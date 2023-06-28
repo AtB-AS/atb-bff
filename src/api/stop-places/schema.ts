@@ -10,6 +10,7 @@ export const getStopPlacesByModeRequest = {
 
 export const getStopPlaceConnectionsRequest = {
   query: Joi.object({
+    authorities: Joi.array().single().items(Joi.string()).required(),
     fromStopPlaceId: Joi.string().required(),
   }),
 };
