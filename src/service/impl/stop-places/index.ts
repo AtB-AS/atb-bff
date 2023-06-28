@@ -55,7 +55,7 @@ export default (): IStopPlacesService => {
       >({
         query: GetStopPlaceConnectionsDocument,
         variables: {
-          id: query.fromHarborId,
+          id: query.fromStopPlaceId,
         },
       });
       if (result.errors) {

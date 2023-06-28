@@ -43,7 +43,7 @@ export interface StopPlacesQuery {
 }
 
 export interface StopPlaceConnectionsQuery {
-  fromHarborId: string;
+  fromStopPlaceId: string;
 }
 
 export type StopPlaces = Array<{

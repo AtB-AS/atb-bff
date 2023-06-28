@@ -231,6 +231,18 @@ export enum DirectionType {
   Unknown = 'unknown'
 }
 
+/** Individual step of an elevation profile. */
+export type ElevationProfileStep = {
+  /** The horizontal distance from the start of the step, in meters. */
+  distance?: Maybe<Scalars['Float']>;
+  /**
+   * The elevation at this distance, in meters above sea level. It is negative if the
+   * location is below sea level.
+   *
+   */
+  elevation?: Maybe<Scalars['Float']>;
+};
+
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
   /** Actual time of arrival at quay. Updated from real time information if available. */
@@ -476,6 +488,13 @@ export type Leg = {
   distance: Scalars['Float'];
   /** The leg's duration in seconds */
   duration: Scalars['Long'];
+  /**
+   * The leg's elevation profile. All elevation values, including the first one, are in meters
+   * above sea level. The elevation is negative for places below sea level. The profile
+   * includes both the start and end coordinate.
+   *
+   */
+  elevationProfile: Array<Maybe<ElevationProfileStep>>;
   /** The expected, realtime adjusted date and time this leg ends. */
   expectedEndTime: Scalars['DateTime'];
   /** The expected, realtime adjusted date and time this leg starts. */
@@ -691,6 +710,13 @@ export type PathGuidance = {
   bogusName?: Maybe<Scalars['Boolean']>;
   /** The distance in meters that this step takes. */
   distance?: Maybe<Scalars['Float']>;
+  /**
+   * The step's elevation profile. All elevation values, including the first one, are in meters
+   * above sea level. The elevation is negative for places below sea level. The profile
+   * includes both the start and end coordinate.
+   *
+   */
+  elevationProfile: Array<Maybe<ElevationProfileStep>>;
   /** When exiting a highway or traffic circle, the exit name/number. */
   exit?: Maybe<Scalars['String']>;
   /** The absolute direction of this step. */
@@ -858,7 +884,7 @@ export type QuayEstimatedCallsArgs = {
 
 /** A place such as platform, stance, or quayside where passengers have access to PT vehicles. */
 export type QuayNameArgs = {
-  lang?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']>;
 };
 
 export type QuayAtDistance = {
@@ -1502,7 +1528,7 @@ export type StopPlaceEstimatedCallsArgs = {
 
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlaceNameArgs = {
-  lang?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']>;
 };
 
 
