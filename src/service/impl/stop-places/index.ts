@@ -13,7 +13,6 @@ import {
   GetStopPlacesByModeQuery,
   GetStopPlacesByModeQueryVariables,
 } from './journey-gql/stop-places-mode.graphql-gen';
-import {StopPlaceConnectionsQuery} from '../../types';
 import {QuayFragment} from '../fragments/journey-gql/quays.graphql-gen';
 import {JourneyPatternsFragment} from '../fragments/journey-gql/journey-pattern.graphql-gen';
 
@@ -72,7 +71,7 @@ export default (): IStopPlacesService => {
         .filter((jp) => filterAuthorities(jp, query.authorities));
 
       const reachableQuays = journeyPatternsWithMatchingAuthority.flatMap(
-        (jp) => getReachableQuays(jp.quays, query),
+        (jp) => getReachableQuays(jp.quays, query.fromStopPlaceId),
       );
 
       const reachableStopPlaces = reachableQuays.map((quay) => quay.stopPlace);
@@ -100,12 +99,9 @@ function filterAuthorities(
   return !!matchingAuthority;
 }
 
-function getReachableQuays(
-  quays: QuayFragment[],
-  query: StopPlaceConnectionsQuery,
-) {
+function getReachableQuays(quays: QuayFragment[], fromStopPlaceId: string) {
   const index = quays.findIndex(
-    (quay) => quay.stopPlace?.id === query.fromStopPlaceId,
+    (quay) => quay.stopPlace?.id === fromStopPlaceId,
   );
   return quays.slice(index + 1);
 }
