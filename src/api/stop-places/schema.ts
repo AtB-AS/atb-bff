@@ -1,9 +1,9 @@
 import Joi from 'joi';
 
-export const getStopPlacesRequest = {
+export const getStopPlacesByModeRequest = {
   query: Joi.object({
     authorities: Joi.array().single().items(Joi.string()).required(),
-    transportModes: Joi.array().single().items(Joi.string()),
+    transportModes: Joi.array().single().items(Joi.string()).required(),
     transportSubmodes: Joi.array().single().items(Joi.string()),
   }),
 };

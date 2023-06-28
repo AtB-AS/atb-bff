@@ -16,7 +16,7 @@ import {APIError} from '../../../utils/api-error';
 
 export default (): IStopPlacesService => {
   return {
-    async getStopPlaces(query, headers) {
+    async getStopPlacesByMode(query, headers) {
       const result = await journeyPlannerClient(headers).query<
         GetStopPlacesQuery,
         GetStopPlacesQueryVariables

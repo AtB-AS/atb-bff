@@ -1,20 +1,23 @@
 import Hapi from '@hapi/hapi';
 import {IStopPlacesService} from '../../service/interface';
-import {getStopPlaceConnectionsRequest, getStopPlacesRequest} from './schema';
+import {
+  getStopPlaceConnectionsRequest,
+  getStopPlacesByModeRequest,
+} from './schema';
 import {StopPlaceConnectionsQuery, StopPlacesQuery} from '../../service/types';
 
 export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   server.route({
     method: 'GET',
-    path: '/bff/v2/stop-places',
+    path: '/bff/v2/stop-places/mode',
     options: {
       tags: ['api', 'stops'],
-      validate: getStopPlacesRequest,
-      description: 'Get stop places',
+      validate: getStopPlacesByModeRequest,
+      description: 'Get stop places by mode',
     },
     handler: async (request, h) => {
       const query = request.query as unknown as StopPlacesQuery;
-      return (await service.getStopPlaces(query, h.request)).unwrap();
+      return (await service.getStopPlacesByMode(query, h.request)).unwrap();
     },
   });
   server.route({

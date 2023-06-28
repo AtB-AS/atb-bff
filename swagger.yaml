@@ -594,7 +594,7 @@ paths:
           schema:
             type: string
           description: Successful
-  /bff/v2/stop-places:
+  /bff/v2/stop-places/mode:
     get:
       summary: Get stop places by authority and modes
       operationId: getBffV2StopPlaces
@@ -614,6 +614,7 @@ paths:
           collectionFormat: multi
           name: transportModes
           in: query
+          required: true
         - type: array
           default: [ ]
           items:

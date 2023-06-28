@@ -164,7 +164,7 @@ export interface IQuayService {
 }
 
 export interface IStopPlacesService {
-  getStopPlaces(
+  getStopPlacesByMode(
     query: StopPlacesQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<StopPlaces, APIError>>;
