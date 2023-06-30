@@ -127,6 +127,7 @@ export type RealtimeData = {
   timeData: {
     realtime: boolean;
     expectedDepartureTime: string;
+    aimedDepartureTime: string;
   };
 };
 
