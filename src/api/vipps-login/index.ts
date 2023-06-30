@@ -34,6 +34,7 @@ export default (server: Hapi.Server) => () => {
     method: 'GET',
     path: '/bff/login/vipps/authorization-url',
     options: {
+      tags: ['api', 'authentication', 'vipps'],
       description: 'Get Vipps authorisation url',
     },
     handler: async (request) => {
@@ -49,6 +50,7 @@ export default (server: Hapi.Server) => () => {
     method: 'POST',
     path: '/bff/login/vipps/user-custom-token',
     options: {
+      tags: ['api', 'authentication', 'vipps'],
       description: 'Get Vipps user custom token',
       validate: postVippsLoginRequest,
     },
