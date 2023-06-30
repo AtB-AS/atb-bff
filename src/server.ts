@@ -92,9 +92,8 @@ export const initializePlugins = async (server: hapi.Server) => {
     plugin: hapiSwagger,
     options: {
       info: {
-        title: 'API Documentation',
-        description: 'Description goes here',
-        version: '1.0.0',
+        title: 'BFF API Documentation',
+        description: '[AtB-AS/atb-bff](https://github.com/AtB-AS/atb-bff)',
       },
     },
   });
