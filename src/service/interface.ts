@@ -75,10 +75,12 @@ import {Location} from '../types/geocoder';
 export interface IGeocoderService {
   getFeatures(
     query: FeaturesQuery,
+    headers: Request<ReqRefDefaults>,
   ): Promise<Result<Feature<Point, Location>[], APIError>>;
 
   getFeaturesReverse(
     query: ReverseFeaturesQuery,
+    headers: Request<ReqRefDefaults>,
   ): Promise<Result<Feature<Point, Location>[], APIError>>;
 }
 

@@ -2,12 +2,12 @@
 Utility functions
  */
 
-import { RefinedResponse, ResponseType } from 'k6/http';
-import { JSONArray, JSONObject } from 'k6';
+import {RefinedResponse, ResponseType} from 'k6/http';
+import {JSONArray, JSONObject} from 'k6';
 
 export const randomNumber = (
   max: number,
-  zeroPaddings: boolean = false
+  zeroPaddings: boolean = false,
 ): string => {
   let rand = Math.floor(Math.random() * max);
   if (rand === max) {
@@ -29,14 +29,14 @@ export const randomNumber = (
 
 export const useNoDecimals = (
   floatValue: number,
-  noDecimals: number
+  noDecimals: number,
 ): number => {
   return Math.floor(floatValue * 10 ** noDecimals) / 10 ** noDecimals;
 };
 
 export const randomNumberInclusiveInInterval = (
   min: number,
-  max: number
+  max: number,
 ): number => {
   let rand = Math.floor(Math.random() * (max - min));
   rand = rand + min;
@@ -51,7 +51,7 @@ export const isEqual = (array1: any[], array2: any[]): boolean => {
 // Check if an array with times are sorted ASC
 export const timeArrayIsSorted = (
   timeArray: string[],
-  sorting: string = 'ASC'
+  sorting: string = 'ASC',
 ): boolean => {
   let currDate = '1900-01-01T00:00:00+02:00';
   switch (sorting) {
@@ -81,7 +81,7 @@ export const timeArrayIsSorted = (
 // Check that alle dates are after/equal to given time
 export const departsAfterExpectedStartTime = (
   expStartTimes: string[],
-  startTime: string
+  startTime: string,
 ): boolean => {
   for (let expTime of expStartTimes) {
     if (Date.parse(startTime) > Date.parse(expTime as string)) {
@@ -94,7 +94,7 @@ export const departsAfterExpectedStartTime = (
 // Check that alle dates are after/equal to given time
 export const arrivesBeforeExpectedEndTime = (
   expEndTimes: string[],
-  startTime: string
+  startTime: string,
 ): boolean => {
   for (let expTime of expEndTimes) {
     if (Date.parse(startTime) < Date.parse(expTime as string)) {
@@ -121,10 +121,23 @@ export const getCurrentTime = (extraHours: number = 0): string => {
   return today.toISOString();
 };
 
+// Checks if two dates are equal with an allowed margin (sec)
+export const timeIsEqual = (
+  time1: string,
+  time2: string,
+  allowedSecMargin: number = 0,
+): boolean => {
+  const allowedMillisMargin = allowedSecMargin * 1000;
+  const time1D = new Date(time1);
+  const time2D = new Date(time2);
+
+  return !(Math.abs(time1D.getTime() - time2D.getTime()) > allowedMillisMargin);
+};
+
 // Utility function to get the json response with correct casting
 export const jCheck = (
   response: RefinedResponse<ResponseType>,
-  jsonSelector: string
+  jsonSelector: string,
 ): null | boolean | number | string | JSONArray | JSONObject => {
   const jsonResult = response.json(jsonSelector);
   const jsonResultType = typeof jsonResult;

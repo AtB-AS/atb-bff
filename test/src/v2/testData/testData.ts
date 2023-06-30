@@ -3,9 +3,9 @@ import {
   serviceJourneyTestDataType,
   stopsDetailsTestDataType,
   stopsNearestTestDataType,
-  tripsTestDataType
+  tripsTestDataType,
 } from '../types';
-import { filteredTripsTestDataType } from '../types/testData';
+import {filteredTripsTestDataType} from '../types/testData';
 
 export const stopsNearestTestData: stopsNearestTestDataType = {
   scenarios: [
@@ -13,30 +13,30 @@ export const stopsNearestTestData: stopsNearestTestDataType = {
       query: {
         lon: '10.314600011575415',
         lat: '63.287662848427736',
-        distance: 400
+        distance: 400,
       },
       expectedResult: {
-        stopPlaces: ['NSR:StopPlace:42912']
-      }
+        stopPlaces: ['NSR:StopPlace:42912'],
+      },
     },
     {
       query: {
         lon: '10.314600011575415',
         lat: '63.287662848427736',
-        distance: 500
+        distance: 500,
       },
       expectedResult: {
-        stopPlaces: ['NSR:StopPlace:42912', 'NSR:StopPlace:41942']
-      }
-    }
-  ]
+        stopPlaces: ['NSR:StopPlace:42912', 'NSR:StopPlace:41942'],
+      },
+    },
+  ],
 };
 
 export const stopsDetailsTestData: stopsDetailsTestDataType = {
   scenarios: [
     {
       query: {
-        stopPlaceIds: ['NSR:StopPlace:42912']
+        stopPlaceIds: ['NSR:StopPlace:42912'],
       },
       expectedResults: [
         {
@@ -47,21 +47,21 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
               id: 'NSR:Quay:73575',
               name: 'Loddgårdstrøa',
               publicCode: null,
-              description: null
+              description: null,
             },
             {
               id: 'NSR:Quay:73576',
               name: 'Loddgårdstrøa',
               publicCode: null,
-              description: null
-            }
-          ]
-        }
-      ]
+              description: null,
+            },
+          ],
+        },
+      ],
     },
     {
       query: {
-        stopPlaceIds: ['NSR:StopPlace:42912', 'NSR:StopPlace:41613']
+        stopPlaceIds: ['NSR:StopPlace:42912', 'NSR:StopPlace:41613'],
       },
       expectedResults: [
         {
@@ -72,15 +72,15 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
               id: 'NSR:Quay:73575',
               name: 'Loddgårdstrøa',
               publicCode: null,
-              description: null
+              description: null,
             },
             {
               id: 'NSR:Quay:73576',
               name: 'Loddgårdstrøa',
               publicCode: null,
-              description: null
-            }
-          ]
+              description: null,
+            },
+          ],
         },
         {
           stopPlaceId: 'NSR:StopPlace:41613',
@@ -90,43 +90,29 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
               id: 'NSR:Quay:71181',
               name: 'Prinsens gate',
               publicCode: 'P2',
-              description: 'ved AtB Kundesenter'
+              description: 'ved AtB Kundesenter',
             },
             {
               id: 'NSR:Quay:71184',
               name: 'Prinsens gate',
               publicCode: 'P1',
-              description: 'ved Bunnpris'
+              description: 'ved Bunnpris',
             },
             {
               id: 'NSR:Quay:107493',
               name: 'Prinsens gate',
               publicCode: 'P3',
-              description: null
-            }
-          ]
-        }
-      ]
-    }
-  ]
+              description: null,
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 export const departureFavoritesTestData: departureFavoritesTestDataType = {
   scenarios: [
-    {
-      favorites: [
-        {
-          lineId: 'ATB:Line:2_2',
-          quayId: 'NSR:Quay:73152',
-          quayName: 'Ladeveien',
-          stopId: 'NSR:StopPlace:42686',
-          lineNumber: '2',
-          lineName: 'Strindheim via Lade',
-          lineTransportationMode: 'bus',
-          lineTransportationSubMode: 'localBus'
-        }
-      ]
-    },
     {
       favorites: [
         {
@@ -137,9 +123,9 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
           lineNumber: '82',
           lineName: 'Hesttrøa',
           lineTransportationMode: 'bus',
-          lineTransportationSubMode: 'localBus'
-        }
-      ]
+          lineTransportationSubMode: 'localBus',
+        },
+      ],
     },
     {
       favorites: [
@@ -152,7 +138,7 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
           lineName: 'Hesttrøa',
           lineTransportationMode: 'bus',
           lineTransportationSubMode: 'localBus',
-          quayPublicCode: ''
+          quayPublicCode: '',
         },
         {
           lineId: 'ATB:Line:2_82',
@@ -163,11 +149,11 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
           lineName: 'Melhus',
           lineTransportationMode: 'bus',
           lineTransportationSubMode: 'localBus',
-          quayPublicCode: ''
-        }
-      ]
-    }
-  ]
+          quayPublicCode: '',
+        },
+      ],
+    },
+  ],
 };
 
 // Search from a service journey's start to end
@@ -179,23 +165,23 @@ export const serviceJourneyTestData: serviceJourneyTestDataType = {
           name: 'Melhus skysstasjon',
           coordinates: {
             latitude: 63.284753,
-            longitude: 10.277964
+            longitude: 10.277964,
           },
-          place: 'NSR:StopPlace:42547'
+          place: 'NSR:StopPlace:42547',
         },
         from: {
           name: 'Hesttrøa',
           coordinates: {
             latitude: 63.294611,
-            longitude: 10.332289
+            longitude: 10.332289,
           },
-          place: 'NSR:StopPlace:41699'
+          place: 'NSR:StopPlace:41699',
         },
         when: '',
-        arriveBy: false
-      }
-    }
-  ]
+        arriveBy: false,
+      },
+    },
+  ],
 };
 
 export const filteredTripsTestData: filteredTripsTestDataType = {
@@ -203,17 +189,17 @@ export const filteredTripsTestData: filteredTripsTestDataType = {
     name: 'Trondheim lufthavn',
     coordinates: {
       latitude: 63.454052,
-      longitude: 10.917269
+      longitude: 10.917269,
     },
-    place: 'NSR:StopPlace:44286'
+    place: 'NSR:StopPlace:44286',
   },
   from: {
     name: 'Trondheim S',
     coordinates: {
       latitude: 63.436107,
-      longitude: 10.40108
+      longitude: 10.40108,
     },
-    place: 'NSR:StopPlace:41742'
+    place: 'NSR:StopPlace:41742',
   },
   when: '',
   arriveBy: false,
@@ -221,8 +207,8 @@ export const filteredTripsTestData: filteredTripsTestDataType = {
     accessMode: 'foot',
     directMode: 'foot',
     egressMode: 'foot',
-    transportModes: []
-  }
+    transportModes: [],
+  },
 };
 
 export const tripsTestData: tripsTestDataType = {
@@ -233,29 +219,29 @@ export const tripsTestData: tripsTestDataType = {
           name: 'Studentersamfundet',
           coordinates: {
             latitude: 63.422568,
-            longitude: 10.394852
+            longitude: 10.394852,
           },
-          place: 'NSR:StopPlace:42660'
+          place: 'NSR:StopPlace:42660',
         },
         from: {
           name: 'Prinsens gate',
           coordinates: {
             latitude: 63.431034,
-            longitude: 10.392007
+            longitude: 10.392007,
           },
-          place: 'NSR:StopPlace:41613'
+          place: 'NSR:StopPlace:41613',
         },
         when: '',
-        arriveBy: false
+        arriveBy: false,
       },
       expectedResult: {
         legModes: [
-          { pattern: 0, modes: ['foot'] },
-          { pattern: 1, modes: ['bus'] },
-          { pattern: 2, modes: ['bus'] }
+          {pattern: 0, modes: ['foot']},
+          {pattern: 1, modes: ['bus']},
+          {pattern: 2, modes: ['bus']},
         ],
-        minimumTripPatterns: 4
-      }
+        minimumTripPatterns: 4,
+      },
     },
     {
       query: {
@@ -263,27 +249,27 @@ export const tripsTestData: tripsTestDataType = {
           name: 'Eddaparken',
           coordinates: {
             latitude: 63.422287048884975,
-            longitude: 10.394009646391378
-          }
+            longitude: 10.394009646391378,
+          },
         },
         from: {
           name: 'Trondheim Torg',
           coordinates: {
             latitude: 63.42987338669995,
-            longitude: 10.393239260988398
-          }
+            longitude: 10.393239260988398,
+          },
         },
         when: '',
-        arriveBy: false
+        arriveBy: false,
       },
       expectedResult: {
         legModes: [
-          { pattern: 0, modes: ['foot'] },
-          { pattern: 1, modes: ['foot', 'bus', 'foot'] },
-          { pattern: 2, modes: ['foot', 'bus', 'foot'] }
+          {pattern: 0, modes: ['foot']},
+          {pattern: 1, modes: ['foot', 'bus', 'foot']},
+          {pattern: 2, modes: ['foot', 'bus', 'foot']},
         ],
-        minimumTripPatterns: 4
-      }
+        minimumTripPatterns: 4,
+      },
     },
     {
       query: {
@@ -291,23 +277,23 @@ export const tripsTestData: tripsTestDataType = {
           name: 'Skansen',
           coordinates: {
             latitude: 63.43060811850891,
-            longitude: 10.376745476594767
-          }
+            longitude: 10.376745476594767,
+          },
         },
         to: {
           name: 'Melhus',
           coordinates: {
             latitude: 63.284594,
-            longitude: 10.27745
-          }
+            longitude: 10.27745,
+          },
         },
         when: '',
-        arriveBy: false
+        arriveBy: false,
       },
       expectedResult: {
         legModes: null,
-        minimumTripPatterns: 2
-      }
-    }
-  ]
+        minimumTripPatterns: 2,
+      },
+    },
+  ],
 };
