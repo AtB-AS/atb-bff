@@ -105,6 +105,7 @@ function mapDeparture(
       timeData: {
         realtime: departure.realtime ?? false,
         expectedDepartureTime: departure.expectedDepartureTime,
+        aimedDepartureTime: departure.aimedDepartureTime,
       },
     };
   }
