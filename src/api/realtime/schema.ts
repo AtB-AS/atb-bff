@@ -1,7 +1,8 @@
 import Joi from 'joi';
+import {DepartureRealtimeQuery} from '../../service/types';
 
 export const getDepartureRealtime = {
-  query: Joi.object({
+  query: Joi.object<DepartureRealtimeQuery>({
     quayIds: Joi.array().items(Joi.string()).default([]).single(),
     startTime: Joi.date(),
     limit: Joi.number().default(5),

@@ -1,6 +1,7 @@
 import Joi from 'joi';
+import {FeaturesQuery, ReverseFeaturesQuery} from '../../service/types';
 
-export const getFeaturesRequest = Joi.object({
+export const getFeaturesRequest = Joi.object<FeaturesQuery>({
   query: Joi.string().required(),
   lon: Joi.number(),
   lat: Joi.number(),
@@ -11,7 +12,7 @@ export const getFeaturesRequest = Joi.object({
 }).and('lat', 'lon');
 
 export const getFeaturesReverseRequest = {
-  query: Joi.object({
+  query: Joi.object<ReverseFeaturesQuery>({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
     layers: Joi.array().items(Joi.alt('address', 'venue')).single(),

@@ -2,7 +2,7 @@ import {Result} from '@badrap/result';
 import union from 'lodash.union';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {CursoredData, generateCursorData} from '../../cursored';
-import {DepartureGroupsQuery, FavoriteDeparture} from '../../types';
+import {DepartureFavoritesQuery, FavoriteDeparture} from '../../types';
 import {APIError} from '../../../utils/api-error';
 import {populateRealtimeCacheIfNotThere} from '../realtime/departure-time';
 import {
@@ -16,7 +16,7 @@ import {ReqRefDefaults, Request} from '@hapi/hapi';
 export type DepartureFavoritesMetadata = CursoredData<StopPlaceGroup[]>;
 
 export async function getDepartureFavorites(
-  options: DepartureGroupsQuery,
+  options: DepartureFavoritesQuery,
   headers: Request<ReqRefDefaults>,
   favorites?: FavoriteDeparture[],
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {

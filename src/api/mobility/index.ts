@@ -12,6 +12,7 @@ import {
   getStationsRequest,
   getVehicleRequest,
   getCarStationRequest,
+  getBikeStationRequest,
 } from './schema';
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
@@ -78,7 +79,7 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     path: '/bff/v2/mobility/station/bike',
     options: {
       tags: ['api', 'mobility', 'station', 'bike'],
-      validate: getCarStationRequest,
+      validate: getBikeStationRequest,
       description: 'Get details about a single bike station',
     },
     handler: async (request, h) => {
