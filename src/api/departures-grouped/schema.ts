@@ -1,8 +1,14 @@
 import Joi from 'joi';
-import {DepartureGroupsQuery} from '../../service/types';
+import {
+  DepartureFavoritesPayload,
+  DepartureFavoritesQuery,
+  DepartureGroupsPayload,
+  DepartureGroupsQuery,
+  FavoriteDeparture,
+} from '../../service/types';
 
 export const getDeparturesCursoredRequest = {
-  payload: Joi.object({
+  payload: Joi.object<DepartureGroupsPayload>({
     location: Joi.alt([
       Joi.object({
         layer: 'venue',
@@ -21,7 +27,7 @@ export const getDeparturesCursoredRequest = {
     favorites: Joi.array()
       .single()
       .items(
-        Joi.object({
+        Joi.object<FavoriteDeparture>({
           stopId: Joi.string().required(),
           lineName: Joi.string(),
           lineId: Joi.string().required(),
@@ -40,11 +46,11 @@ export const getDeparturesCursoredRequest = {
 };
 
 export const getDepartureFavoritesCursoredRequest = {
-  payload: Joi.object({
+  payload: Joi.object<DepartureFavoritesPayload>({
     favorites: Joi.array()
       .single()
       .items(
-        Joi.object({
+        Joi.object<FavoriteDeparture>({
           stopId: Joi.string().required(),
           lineName: Joi.string(),
           lineId: Joi.string().required(),
@@ -54,7 +60,7 @@ export const getDepartureFavoritesCursoredRequest = {
           .required(),
       ),
   }),
-  query: Joi.object({
+  query: Joi.object<DepartureFavoritesQuery>({
     limitPerLine: Joi.number().default(5),
     startTime: Joi.date().default(() => new Date()),
     includeCancelledTrips: Joi.boolean(),

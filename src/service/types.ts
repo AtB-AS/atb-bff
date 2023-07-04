@@ -68,6 +68,7 @@ export type DepartureFavoritesPayload = {
 export type DepartureFavoritesQuery = CursoredQuery<{
   startTime: Date;
   limitPerLine: number;
+  includeCancelledTrips: boolean;
 }>;
 
 export type DepartureRealtimeQuery = {
@@ -101,6 +102,7 @@ export interface TripPatternsQuery {
   to: Location;
   searchDate?: Date;
   arriveBy: boolean;
+  minimumTransferTime?: number;
   limit: number;
   maxTransferWalkDistance: number; // Meters. Defaults to 2000 in Entur
   maxPreTransitWalkDistance: number; // Meters. Defaults to alot in Entur
@@ -176,6 +178,7 @@ export type VehiclesQuery = {
   lon: number;
   range: number;
   formFactors?: FormFactor | FormFactor[];
+  operators?: string[];
 };
 
 export type StationsQuery = {
@@ -183,6 +186,7 @@ export type StationsQuery = {
   lon: number;
   range: number;
   availableFormFactors?: FormFactor | FormFactor[];
+  operators?: string[];
 };
 
 export type CarStationQuery = {ids: string[]};
