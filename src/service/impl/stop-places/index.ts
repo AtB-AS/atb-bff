@@ -15,6 +15,10 @@ import {
 } from './journey-gql/stop-places-mode.graphql-gen';
 import {QuayFragment} from '../fragments/journey-gql/quays.graphql-gen';
 import {JourneyPatternsFragment} from '../fragments/journey-gql/journey-pattern.graphql-gen';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export default (): IStopPlacesService => {
   return {
@@ -37,8 +41,10 @@ export default (): IStopPlacesService => {
       try {
         const uniqueStopPlaces = result.data.lines
           .filter((line) =>
-            query.transportSubmodes?.find(
-              (subMode) => subMode === line.transportSubmode,
+            filterTransportModes(
+              {submodes: query.transportSubmodes},
+              undefined,
+              line.transportSubmode,
             ),
           )
           .flatMap((line) => line.quays)
@@ -68,7 +74,14 @@ export default (): IStopPlacesService => {
       }
       const journeyPatternsWithMatchingAuthority = result.data.stopPlace.quays
         .flatMap((quay) => quay.journeyPatterns)
-        .filter((jp) => filterAuthorities(jp, query.authorities));
+        .filter((jp) => filterAuthorities(jp, query.authorities))
+        .filter((jp) =>
+          filterTransportModes(
+            {modes: query.transportModes, submodes: query.transportSubmodes},
+            jp.line.transportMode,
+            jp.line.transportSubmode,
+          ),
+        );
 
       const reachableQuays = journeyPatternsWithMatchingAuthority.flatMap(
         (jp) => getReachableQuays(jp.quays, query.fromStopPlaceId),
@@ -93,10 +106,26 @@ function filterAuthorities(
   journeyPattern: JourneyPatternsFragment,
   authorities: string[],
 ) {
-  const matchingAuthority = authorities.find(
+  return authorities.some(
     (authority) => journeyPattern.line.authority?.id === authority,
   );
-  return !!matchingAuthority;
+}
+
+function filterTransportModes(
+  filter: {
+    modes?: TransportMode[];
+    submodes?: TransportSubmode[];
+  },
+  mode?: TransportMode,
+  submode?: TransportSubmode,
+) {
+  const isOneOfModes = filter.modes
+    ? filter.modes.some((m) => mode === m)
+    : true;
+  const isOneOfSubmodes = filter.submodes
+    ? filter.submodes.some((sm) => submode === sm)
+    : true;
+  return isOneOfModes && isOneOfSubmodes;
 }
 
 function getReachableQuays(quays: QuayFragment[], fromStopPlaceId: string) {

@@ -8,7 +8,7 @@ export type GetStopPlaceConnectionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetStopPlaceConnectionsQuery = { stopPlace?: { quays?: Array<{ journeyPatterns: Array<{ quays: Array<{ id: string, name: string, publicCode?: string, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number }, tariffZones: Array<{ id: string, name?: string }> }>, line: { authority?: { id: string } } }> }> } };
+export type GetStopPlaceConnectionsQuery = { stopPlace?: { quays?: Array<{ journeyPatterns: Array<{ quays: Array<{ id: string, name: string, publicCode?: string, stopPlace?: { id: string, name: string, latitude?: number, longitude?: number }, tariffZones: Array<{ id: string, name?: string }> }>, line: { transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, authority?: { id: string } } }> }> } };
 
 
 export const GetStopPlaceConnectionsDocument = gql`

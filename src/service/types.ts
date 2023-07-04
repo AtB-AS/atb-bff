@@ -45,6 +45,8 @@ export interface StopPlacesByModeQuery {
 export interface StopPlaceConnectionsQuery {
   authorities: string[];
   fromStopPlaceId: string;
+  transportModes?: TransportMode[];
+  transportSubmodes?: TransportSubmode[];
 }
 
 export type StopPlaces = Array<{

@@ -3,6 +3,8 @@ fragment journeyPatterns on JourneyPattern{
           ...quay
         }
         line {
+          transportMode
+          transportSubmode
           authority {
             id
           }
