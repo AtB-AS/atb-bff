@@ -1,0 +1,9 @@
+query getStopPlaceConnections($id: String!) {
+  stopPlace(id: $id) {
+    quays {
+      journeyPatterns {
+        ...journeyPatterns
+      }
+    }
+  }
+}

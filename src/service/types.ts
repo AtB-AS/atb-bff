@@ -2,6 +2,7 @@ import {Location, QueryMode} from '@entur/sdk';
 import {
   Mode,
   PointsOnLink,
+  TransportMode,
   TransportSubmode,
 } from '../graphql/journey/journeyplanner-types_v3';
 import {FormFactor} from '../graphql/mobility/mobility-types_v2';
@@ -34,6 +35,26 @@ export type FeaturesQuery = {
 export interface QuaysCoordinatesPayload {
   ids: string[];
 }
+
+export interface StopPlacesByModeQuery {
+  authorities: string[];
+  transportModes: TransportMode[];
+  transportSubmodes?: TransportSubmode[];
+}
+
+export interface StopPlaceConnectionsQuery {
+  authorities: string[];
+  fromStopPlaceId: string;
+  transportModes?: TransportMode[];
+  transportSubmodes?: TransportSubmode[];
+}
+
+export type StopPlaces = Array<{
+  name: string;
+  id: string;
+  latitude?: number;
+  longitude?: number;
+}>;
 
 export type ReverseFeaturesQuery = {
   lat: number;

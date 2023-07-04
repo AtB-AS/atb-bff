@@ -61,6 +61,9 @@ import {
   ServiceJourneyVehicles,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
+  StopPlaceConnectionsQuery,
+  StopPlaces,
+  StopPlacesByModeQuery,
   TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery,
@@ -160,6 +163,17 @@ export interface IQuayService {
     payload: QuaysCoordinatesPayload,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<GetQuaysCoordinatesQuery, APIError>>;
+}
+
+export interface IStopPlacesService {
+  getStopPlacesByMode(
+    query: StopPlacesByModeQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<StopPlaces, APIError>>;
+  getStopPlaceConnections(
+    query: StopPlaceConnectionsQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<StopPlaces, APIError>>;
 }
 
 export interface IEnrollmentService {
