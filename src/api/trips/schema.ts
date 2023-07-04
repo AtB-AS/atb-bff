@@ -2,7 +2,10 @@ import Joi from 'joi';
 import {Location, Modes} from '../../graphql/journey/journeyplanner-types_v3';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 import {TripPatternsQuery} from '../../service/types';
-import {CompressedSingleTripQuery} from '../../types/trips';
+import {
+  CompressedSingleTripQuery,
+  TripsQueryWithJourneyIds,
+} from '../../types/trips';
 
 export const postTripsRequest = {
   payload: Joi.object<TripsQueryVariables>({
@@ -50,9 +53,9 @@ export const postEncodedSingleTripRequest = {
 };
 
 export const postSingleTripRequest = {
-  payload: Joi.object({
+  payload: Joi.object<TripsQueryWithJourneyIds>({
     query: Joi.object({
-      from: Joi.object({
+      from: Joi.object<Location>({
         place: Joi.string().optional(),
         name: Joi.string().default('UNKNOWN'),
         coordinates: Joi.object({
@@ -60,7 +63,7 @@ export const postSingleTripRequest = {
           longitude: Joi.number(),
         }),
       }).required(),
-      to: Joi.object({
+      to: Joi.object<Location>({
         place: Joi.string().optional(),
         name: Joi.string().default('UNKNOWN'),
         coordinates: Joi.object({
@@ -76,7 +79,7 @@ export const postSingleTripRequest = {
 
 export const postJourneyRequest = {
   payload: Joi.object<TripPatternsQuery>({
-    from: Joi.object({
+    from: Joi.object<Location>({
       place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
@@ -84,7 +87,7 @@ export const postJourneyRequest = {
         longitude: Joi.number(),
       }),
     }).required(),
-    to: Joi.object({
+    to: Joi.object<Location>({
       place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
       coordinates: Joi.object({
