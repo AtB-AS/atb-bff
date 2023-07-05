@@ -6,11 +6,34 @@ import {APIError} from '../../../utils/api-error';
 import {mapQueryToLegacyTripPatterns} from './converters';
 import {getSingleTrip, getTrips} from './trips';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {TripsQueryVariables} from './journey-gql/trip.graphql-gen';
+import {StreetMode} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export default (): ITrips_v2 => {
   const api: ITrips_v2 = {
     async getTrips(query, headers: Request<ReqRefDefaults>) {
       return getTrips(query, headers);
+    },
+
+    async getDirectTrips(query, headers) {
+      const queries = query.modes.map((mode) => toTripsQuery(query, mode, 1));
+      return Promise.all(
+        queries.map((query) =>
+          getTrips(query, headers).then((result) => ({
+            mode: query.modes.directMode,
+            result,
+          })),
+        ),
+      ).then((allTrips) => {
+        if (allTrips.some((t) => t.result.isErr))
+          return Result.err(new Error('Something is foobar'));
+        return Result.ok(
+          allTrips.map((t) => ({
+            mode: t.mode,
+            trip: t.result.unwrap().trip,
+          })),
+        );
+      });
     },
 
     async getSingleTrip(
@@ -46,3 +69,15 @@ export default (): ITrips_v2 => {
 
   return api;
 };
+
+const toTripsQuery = (
+  query: TripsQueryVariables,
+  mode: StreetMode,
+  numTripPatterns: number,
+) => ({
+  ...query,
+  modes: {
+    directMode: mode,
+  },
+  numTripPatterns,
+});

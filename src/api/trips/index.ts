@@ -3,6 +3,7 @@ import {ITrips_v2} from '../../service/interface';
 import {TripPatternsQuery} from '../../service/types';
 import {
   CompressedSingleTripQuery,
+  DirectTripsQueryVariables,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
 import {parseTripQueryString} from '../../service/impl/trips/utils';
@@ -11,6 +12,7 @@ import {
   postSingleTripRequest,
   postTripsRequest,
   postJourneyRequest,
+  postDirectTripsRequest,
 } from './schema';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 
@@ -23,7 +25,6 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       description: 'Get trips between stops',
       validate: postTripsRequest,
     },
-
     handler: async (request, h) => {
       const query = request.payload as unknown as TripsQueryVariables;
       const result = await service.getTrips(query, h.request);
@@ -31,6 +32,22 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       return unwrapped;
     },
   });
+
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/trips/direct',
+    options: {
+      tags: ['api', 'trips'],
+      description: 'Get non-transit trips between stops',
+      validate: postDirectTripsRequest,
+    },
+    handler: async (request, h) => {
+      const query = request.payload as unknown as DirectTripsQueryVariables;
+      const result = await service.getDirectTrips(query, h.request);
+      return result.unwrap();
+    },
+  });
+
   server.route({
     method: 'POST',
     path: '/bff/v2/singleTrip',

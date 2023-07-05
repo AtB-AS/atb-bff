@@ -46,6 +46,32 @@ export const postTripsRequest = {
   }),
 };
 
+export const postDirectTripsRequest = {
+  payload: Joi.object({
+    from: Joi.object({
+      place: Joi.string().optional(),
+      name: Joi.string().default('UNKNOWN'),
+      coordinates: Joi.object({
+        latitude: Joi.number(),
+        longitude: Joi.number()
+      })
+    }).required(),
+    to: Joi.object({
+      place: Joi.string().optional(),
+      name: Joi.string().default('UNKNOWN'),
+      coordinates: Joi.object({
+        latitude: Joi.number(),
+        longitude: Joi.number()
+      })
+    }).required(),
+    arriveBy: Joi.bool().required(),
+    when: Joi.date(),
+    walkReluctance: Joi.number(),
+    walkSpeed: Joi.number(),
+    modes: Joi.array().items(Joi.string()).default(['foot', 'bicycle'])
+  })
+};
+
 export const postEncodedSingleTripRequest = {
   payload: Joi.object<CompressedSingleTripQuery>({
     compressedQuery: Joi.string().required(),
