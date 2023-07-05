@@ -71,7 +71,10 @@ import {
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
 import {Location} from '../types/geocoder';
-import {DirectTripsQuery, DirectTripsQueryVariables} from '../types/trips';
+import {
+  NonTransitTripsQuery,
+  NonTransitTripsQueryVariables,
+} from '../types/trips';
 
 export interface IGeocoderService {
   getFeatures(
@@ -108,10 +111,10 @@ export interface ITrips_v2 {
     query: TripsQueryVariables,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<TripsQuery, APIError>>;
-  getDirectTrips(
-    query: DirectTripsQueryVariables,
+  getNonTransitTrips(
+    query: NonTransitTripsQueryVariables,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<DirectTripsQuery[], APIError>>;
+  ): Promise<Result<NonTransitTripsQuery[], APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds,
     headers: Request<ReqRefDefaults>,

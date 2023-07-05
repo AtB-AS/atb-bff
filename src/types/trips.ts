@@ -18,11 +18,11 @@ export type CompressedSingleTripQuery = {
   compressedQuery: string;
 };
 
-export type DirectTripsQueryVariables = TripsQueryVariables & {
+export type NonTransitTripsQueryVariables = TripsQueryVariables & {
   modes: StreetMode[];
 };
 
-export type DirectTripsQuery = {
+export type NonTransitTripsQuery = {
   mode: StreetMode;
   trip: TripFragment;
 };

@@ -15,7 +15,7 @@ export default (): ITrips_v2 => {
       return getTrips(query, headers);
     },
 
-    async getDirectTrips(query, headers) {
+    async getNonTransitTrips(query, headers) {
       const queries = query.modes.map((mode) => toTripsQuery(query, mode, 1));
       return Promise.all(
         queries.map((query) =>

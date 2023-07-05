@@ -3,7 +3,7 @@ import {ITrips_v2} from '../../service/interface';
 import {TripPatternsQuery} from '../../service/types';
 import {
   CompressedSingleTripQuery,
-  DirectTripsQueryVariables,
+  NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
 import {parseTripQueryString} from '../../service/impl/trips/utils';
@@ -12,7 +12,7 @@ import {
   postSingleTripRequest,
   postTripsRequest,
   postJourneyRequest,
-  postDirectTripsRequest,
+  postNonTransitTripsRequest,
 } from './schema';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 
@@ -35,15 +35,15 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
 
   server.route({
     method: 'POST',
-    path: '/bff/v2/trips/direct',
+    path: '/bff/v2/trips/non-transit',
     options: {
       tags: ['api', 'trips'],
       description: 'Get non-transit trips between stops',
-      validate: postDirectTripsRequest,
+      validate: postNonTransitTripsRequest,
     },
     handler: async (request, h) => {
-      const query = request.payload as unknown as DirectTripsQueryVariables;
-      const result = await service.getDirectTrips(query, h.request);
+      const query = request.payload as unknown as NonTransitTripsQueryVariables;
+      const result = await service.getNonTransitTrips(query, h.request);
       return result.unwrap();
     },
   });
