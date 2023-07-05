@@ -28,10 +28,13 @@ export default (): ITrips_v2 => {
         if (allTrips.some((t) => t.result.isErr))
           return Result.err(new Error('Something is foobar'));
         return Result.ok(
-          allTrips.map((t) => ({
-            mode: t.mode,
-            trip: t.result.unwrap().trip,
-          })),
+          allTrips.map((t) => {
+            const res = t.result.unwrap();
+            return {
+              mode: t.mode,
+              trip: res.trip.tripPatterns.length ? res.trip : undefined,
+            };
+          }),
         );
       });
     },

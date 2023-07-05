@@ -24,5 +24,5 @@ export type NonTransitTripsQueryVariables = TripsQueryVariables & {
 
 export type NonTransitTripsQuery = {
   mode: StreetMode;
-  trip: TripFragment;
+  trip: TripFragment | undefined;
 };
