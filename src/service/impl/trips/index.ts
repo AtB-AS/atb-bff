@@ -77,10 +77,18 @@ const toTripsQuery = (
   query: TripsQueryVariables,
   mode: StreetMode,
   numTripPatterns: number,
-) => ({
-  ...query,
-  modes: {
-    directMode: mode,
-  },
-  numTripPatterns,
-});
+) => {
+  // Skip 'place' in from/to query, as including place sometimes causes
+  // bus and other transports to be included in the result.
+  const {place: _, ...from} = query.from;
+  const {place: __, ...to} = query.to;
+  return {
+    ...query,
+    from,
+    to,
+    modes: {
+      directMode: mode,
+    },
+    numTripPatterns,
+  };
+};
