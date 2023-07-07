@@ -16,11 +16,13 @@ export default (): ITrips_v2 => {
     },
 
     async getNonTransitTrips(query, headers) {
-      const queries = query.modes.map((mode) => toTripsQuery(query, mode, 1));
+      const modeSpecificQueries = query.modes.map((mode) =>
+        toTripsQuery(query, mode, 1),
+      );
       return Promise.all(
-        queries.map((query) =>
-          getTrips(query, headers).then((result) => ({
-            mode: query.modes.directMode,
+        modeSpecificQueries.map((modeQuery) =>
+          getTrips(modeQuery, headers).then((result) => ({
+            mode: modeQuery.modes.directMode,
             result,
           })),
         ),

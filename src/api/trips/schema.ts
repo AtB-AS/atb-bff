@@ -4,6 +4,7 @@ import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.gra
 import {TripPatternsQuery} from '../../service/types';
 import {
   CompressedSingleTripQuery,
+  NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
 
@@ -47,7 +48,7 @@ export const postTripsRequest = {
 };
 
 export const postNonTransitTripsRequest = {
-  payload: Joi.object({
+  payload: Joi.object<NonTransitTripsQueryVariables>({
     from: Joi.object({
       place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
