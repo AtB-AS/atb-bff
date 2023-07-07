@@ -26,7 +26,9 @@ export default (): ITrips_v2 => {
         ),
       ).then((allTrips) => {
         if (allTrips.some((t) => t.result.isErr))
-          return Result.err(new Error('Something is foobar'));
+          return Result.err(
+            new Error('One or more non-transit trip queries failed'),
+          );
         return Result.ok(
           allTrips.map((t) => {
             const res = t.result.unwrap();
