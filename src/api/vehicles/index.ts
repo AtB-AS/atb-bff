@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi';
 import {IVehiclesService} from '../../service/interface';
 import {ServiceJourneyVehicleQueryVariables} from '../../service/types';
 import {getUrlParam} from '../../utils/get-url-param';
+import WebSocket from 'ws';
 import {
   getVehiclesRequest,
   postServiceJourneySubscriptionRequest,
