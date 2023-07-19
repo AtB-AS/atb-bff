@@ -36,13 +36,17 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
           only: true,
           connect: ({ ctx, ws, req }) => {
             if (!req.url) {
-              ws.close(1011);
+              if (ws.readyState == WebSocket.OPEN) {
+                ws.close(1011);
+              }
               return;
             }
 
             const serviceJourneyId = getUrlParam(req.url, 'serviceJourneyId');
             if (!serviceJourneyId) {
-              ws.close(1002, 'Missing parameter `serviceJourneyId`');
+              if (ws.readyState == WebSocket.OPEN) {
+                ws.close(1002, 'Missing parameter `serviceJourneyId`');
+              }
               return;
             }
 
