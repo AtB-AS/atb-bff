@@ -65,6 +65,9 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
               console.error('WebSocket error: Failed to unsubscribe');
             }
           },
+          error: ({ctx}, error) => {
+            console.log(`WebSocket error: ${error}`);
+          },
         },
       },
     },
