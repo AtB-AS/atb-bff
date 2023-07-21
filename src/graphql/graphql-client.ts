@@ -125,7 +125,7 @@ function createWebSocketClient(url: string) {
       {
         reconnect: true,
         lazy: true,
-        minTimeout: 10000,
+        minTimeout: 30000,
       },
       WebSocket,
     ),
