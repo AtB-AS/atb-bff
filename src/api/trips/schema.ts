@@ -67,9 +67,8 @@ export const postNonTransitTripsRequest = {
     }).required(),
     arriveBy: Joi.bool().required(),
     when: Joi.date(),
-    walkReluctance: Joi.number(),
     walkSpeed: Joi.number(),
-    modes: Joi.array().items(Joi.string()).default(['foot', 'bicycle']),
+    directModes: Joi.array().items(Joi.string()).default(['foot', 'bicycle']),
   }),
 };
 

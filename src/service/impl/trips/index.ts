@@ -4,9 +4,9 @@ import {Result} from '@badrap/result';
 import {TripsQueryWithJourneyIds} from '../../../types/trips';
 import {APIError} from '../../../utils/api-error';
 import {mapQueryToLegacyTripPatterns} from './converters';
-import {getSingleTrip, getTrips} from './trips';
+import {getSingleTrip, getTrips, getTripsNonTransit} from './trips';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {TripsQueryVariables} from './journey-gql/trip.graphql-gen';
+import {TripsNonTransitQueryVariables} from './journey-gql/trip.graphql-gen';
 import {StreetMode} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export default (): ITrips_v2 => {
@@ -16,31 +16,12 @@ export default (): ITrips_v2 => {
     },
 
     async getNonTransitTrips(query, headers) {
-      const modeSpecificQueries = query.modes.map((mode) =>
-        toTripsQuery(query, mode, 1),
-      );
-      return Promise.all(
-        modeSpecificQueries.map((modeQuery) =>
-          getTrips(modeQuery, headers).then((result) => ({
-            mode: modeQuery.modes.directMode,
-            result,
-          })),
-        ),
-      ).then((allTrips) => {
-        if (allTrips.some((t) => t.result.isErr))
-          return Result.err(
-            new Error('One or more non-transit trip queries failed'),
-          );
-        return Result.ok(
-          allTrips.map((t) => {
-            const res = t.result.unwrap();
-            return {
-              mode: t.mode,
-              trip: res.trip.tripPatterns.length ? res.trip : undefined,
-            };
-          }),
-        );
-      });
+      const gqlQueryVariables: TripsNonTransitQueryVariables = {
+        ...query,
+        includeFoot: query.directModes.includes(StreetMode.Foot),
+        includeBicycle: query.directModes.includes(StreetMode.Bicycle),
+      };
+      return getTripsNonTransit(gqlQueryVariables, headers);
     },
 
     async getSingleTrip(
@@ -75,24 +56,4 @@ export default (): ITrips_v2 => {
   };
 
   return api;
-};
-
-const toTripsQuery = (
-  query: TripsQueryVariables,
-  mode: StreetMode,
-  numTripPatterns: number,
-) => {
-  // Skip 'place' in from/to query, as including place sometimes causes
-  // bus and other transports to be included in the result.
-  const {place: _, ...from} = query.from;
-  const {place: __, ...to} = query.to;
-  return {
-    ...query,
-    from,
-    to,
-    modes: {
-      directMode: mode,
-    },
-    numTripPatterns,
-  };
 };
