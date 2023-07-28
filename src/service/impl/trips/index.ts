@@ -4,13 +4,24 @@ import {Result} from '@badrap/result';
 import {TripsQueryWithJourneyIds} from '../../../types/trips';
 import {APIError} from '../../../utils/api-error';
 import {mapQueryToLegacyTripPatterns} from './converters';
-import {getSingleTrip, getTrips} from './trips';
+import {getSingleTrip, getTrips, getTripsNonTransit} from './trips';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {TripsNonTransitQueryVariables} from './journey-gql/trip.graphql-gen';
+import {StreetMode} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export default (): ITrips_v2 => {
   const api: ITrips_v2 = {
     async getTrips(query, headers: Request<ReqRefDefaults>) {
       return getTrips(query, headers);
+    },
+
+    async getNonTransitTrips(query, headers) {
+      const gqlQueryVariables: TripsNonTransitQueryVariables = {
+        ...query,
+        includeFoot: query.directModes.includes(StreetMode.Foot),
+        includeBicycle: query.directModes.includes(StreetMode.Bicycle),
+      };
+      return getTripsNonTransit(gqlQueryVariables, headers);
     },
 
     async getSingleTrip(

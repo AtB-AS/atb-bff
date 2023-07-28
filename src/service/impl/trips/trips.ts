@@ -1,5 +1,8 @@
 import {
   TripsDocument,
+  TripsNonTransitDocument,
+  TripsNonTransitQuery,
+  TripsNonTransitQueryVariables,
   TripsQuery,
   TripsQueryVariables,
 } from './journey-gql/trip.graphql-gen';
@@ -11,6 +14,7 @@ import {ReqRefDefaults, Request} from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import {extractServiceJourneyIds, generateSingleTripQueryString} from './utils';
 import * as Trips from '../../../types/trips';
+import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 
 export async function getTrips(
   query: TripsQueryVariables,
@@ -29,6 +33,31 @@ export async function getTrips(
       return Result.err(new APIError(result.errors));
     }
     return Result.ok(mapTripsData(result.data, query));
+  } catch (error) {
+    return Result.err(new APIError(error));
+  }
+}
+export async function getTripsNonTransit(
+  query: TripsNonTransitQueryVariables,
+  headers: Request<ReqRefDefaults>,
+): Promise<Result<TripPatternFragment[], APIError>> {
+  try {
+    const result = await journeyPlannerClient(headers).query<
+      TripsNonTransitQuery,
+      TripsNonTransitQueryVariables
+    >({
+      query: TripsNonTransitDocument,
+      variables: query,
+    });
+
+    if (result.errors) {
+      return Result.err(new APIError(result.errors));
+    }
+
+    const tripPatterns = Object.values(result.data).flatMap(
+      (trip) => trip.tripPatterns,
+    );
+    return Result.ok(tripPatterns);
   } catch (error) {
     return Result.err(new APIError(error));
   }

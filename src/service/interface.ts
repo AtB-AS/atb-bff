@@ -71,6 +71,8 @@ import {
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
 import {Location} from '../types/geocoder';
+import {NonTransitTripsQueryVariables} from '../types/trips';
+import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(
@@ -107,6 +109,10 @@ export interface ITrips_v2 {
     query: TripsQueryVariables,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<TripsQuery, APIError>>;
+  getNonTransitTrips(
+    query: NonTransitTripsQueryVariables,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<TripPatternFragment[], APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds,
     headers: Request<ReqRefDefaults>,

@@ -4,6 +4,7 @@ import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.gra
 import {TripPatternsQuery} from '../../service/types';
 import {
   CompressedSingleTripQuery,
+  NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
 
@@ -43,6 +44,31 @@ export const postTripsRequest = {
         }),
       ),
     }).optional(),
+  }),
+};
+
+export const postNonTransitTripsRequest = {
+  payload: Joi.object<NonTransitTripsQueryVariables>({
+    from: Joi.object({
+      place: Joi.string().optional(),
+      name: Joi.string().default('UNKNOWN'),
+      coordinates: Joi.object({
+        latitude: Joi.number(),
+        longitude: Joi.number(),
+      }),
+    }).required(),
+    to: Joi.object({
+      place: Joi.string().optional(),
+      name: Joi.string().default('UNKNOWN'),
+      coordinates: Joi.object({
+        latitude: Joi.number(),
+        longitude: Joi.number(),
+      }),
+    }).required(),
+    arriveBy: Joi.bool().required(),
+    when: Joi.date(),
+    walkSpeed: Joi.number(),
+    directModes: Joi.array().items(Joi.string()).default(['foot', 'bicycle']),
   }),
 };
 

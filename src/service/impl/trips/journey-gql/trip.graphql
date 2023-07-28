@@ -1,4 +1,4 @@
-query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes) {
+query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int) {
   trip(
     from: $from
     to: $to
@@ -10,158 +10,37 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
     walkReluctance: $walkReluctance
     walkSpeed: $walkSpeed
     modes: $modes
+    numTripPatterns: $numTripPatterns
   ) {
-    nextPageCursor
-    previousPageCursor
-    metadata {
-      nextDateTime
-      prevDateTime
-      searchWindowUsed
+  ...trip
+  }
+}
+
+query TripsNonTransit($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $walkSpeed: Float, $includeFoot: Boolean!, $includeBicycle: Boolean!) {
+  footTrip:trip (
+    from: $from
+    to: $to
+    dateTime: $when
+    arriveBy: $arriveBy
+    walkSpeed: $walkSpeed
+    modes: {
+      directMode: foot,
+      transportModes: []
     }
-    tripPatterns {
-      expectedStartTime
-      expectedEndTime
-      duration
-      walkDistance
-      legs {
-        mode
-        distance
-        duration
-        aimedStartTime
-        aimedEndTime
-        expectedEndTime
-        expectedStartTime
-        realtime
-        line {
-          id
-          name
-          transportSubmode
-          publicCode
-          flexibleLineType
-          notices {
-            ...notice
-          }
-        }
-        fromEstimatedCall {
-          aimedDepartureTime
-          expectedDepartureTime
-          destinationDisplay {
-            frontText
-          }
-          quay {
-            publicCode
-            name
-          }
-          notices {
-            ...notice
-          }
-        }
-        situations {
-          ...situation
-        }
-        fromPlace {
-          name
-          longitude
-          latitude
-          quay {
-            id
-            publicCode
-            name
-            longitude
-            latitude
-            stopPlace {
-              id
-              longitude
-              latitude
-              name
-            }
-            situations {
-              ...situation
-            }
-            tariffZones {
-              ...tariffZone
-            }
-          }
-        }
-        toPlace {
-          name
-          longitude
-          latitude
-          quay {
-            id
-            publicCode
-            name
-            longitude
-            latitude
-            stopPlace {
-              id
-              longitude
-              latitude
-              name
-            }
-            situations {
-              ...situation
-            }
-            tariffZones {
-              ...tariffZone
-            }
-          }
-        }
-        serviceJourney {
-          id
-          notices {
-            ...notice
-          }
-          journeyPattern {
-            notices {
-              ...notice
-            }
-          }
-        }
-        interchangeTo {
-          toServiceJourney {
-            id
-          }
-          guaranteed
-        }
-        pointsOnLink {
-          points
-          length
-        }
-        intermediateEstimatedCalls {
-          quay {
-            name
-            id
-          }
-          date
-        }
-        authority {
-          id
-        }
-        transportSubmode
-        serviceJourneyEstimatedCalls {
-          actualDepartureTime
-          realtime
-          aimedDepartureTime
-          expectedDepartureTime
-          quay {
-            name
-          }
-          predictionInaccurate
-        }
-        bookingArrangements {
-          ...bookingArrangement
-        }
-        datedServiceJourney {
-          estimatedCalls {
-            actualDepartureTime
-            quay {
-              name
-            }
-            predictionInaccurate
-          }
-        }
-      }
+  ) @include(if:$includeFoot) {
+  ...trip
+  }
+  bicycleTrip:trip(
+    from: $from
+    to: $to
+    dateTime: $when
+    arriveBy: $arriveBy
+    walkSpeed: $walkSpeed
+    modes: {
+      directMode: bicycle,
+      transportModes: []
     }
+  ) @include(if:$includeBicycle) {
+  ...trip
   }
 }
