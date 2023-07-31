@@ -20,6 +20,7 @@ export default (): ITrips_v2 => {
         ...query,
         includeFoot: query.directModes.includes(StreetMode.Foot),
         includeBicycle: query.directModes.includes(StreetMode.Bicycle),
+        includeBikeRental: query.directModes.includes(StreetMode.BikeRental),
       };
       return getTripsNonTransit(gqlQueryVariables, headers);
     },

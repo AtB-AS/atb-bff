@@ -16,7 +16,7 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
   }
 }
 
-query TripsNonTransit($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $walkSpeed: Float, $includeFoot: Boolean!, $includeBicycle: Boolean!) {
+query TripsNonTransit($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $walkSpeed: Float, $includeFoot: Boolean!, $includeBicycle: Boolean!, $includeBikeRental: Boolean!) {
   footTrip:trip (
     from: $from
     to: $to
@@ -29,6 +29,19 @@ query TripsNonTransit($from: Location!, $to: Location!, $arriveBy: Boolean!, $wh
     }
   ) @include(if:$includeFoot) {
   ...trip
+  }
+  bikeRentalTrip:trip(
+    from: $from
+    to: $to
+    dateTime: $when
+    arriveBy: $arriveBy
+    walkSpeed: $walkSpeed
+    modes: {
+      directMode: bike_rental,
+      transportModes: []
+    }
+  ) @include(if:$includeBikeRental) {
+    ...trip
   }
   bicycleTrip:trip(
     from: $from
