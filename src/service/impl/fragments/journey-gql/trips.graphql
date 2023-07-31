@@ -154,5 +154,6 @@ fragment tripPattern on TripPattern {
                 predictionInaccurate
             }
         }
+        rentedBike
     }
 }
