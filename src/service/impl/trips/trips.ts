@@ -15,6 +15,7 @@ import * as Boom from '@hapi/boom';
 import {extractServiceJourneyIds, generateSingleTripQueryString} from './utils';
 import * as Trips from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
+import {Mode} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export async function getTrips(
   query: TripsQueryVariables,
@@ -37,6 +38,7 @@ export async function getTrips(
     return Result.err(new APIError(error));
   }
 }
+
 export async function getTripsNonTransit(
   query: TripsNonTransitQueryVariables,
   headers: Request<ReqRefDefaults>,
@@ -52,6 +54,13 @@ export async function getTripsNonTransit(
 
     if (result.errors) {
       return Result.err(new APIError(result.errors));
+    }
+
+    // Due to an Entur bug (?) trip suggestions for rental bike sometimes contain only foot legs.
+    // This typically happens for short journeys in areas without rental bikes.
+    if (bikeRentalContainsOnlyFootLegs(result.data)) {
+      // Remove bike rental suggestion with only foot legs from result.
+      result.data = {...result.data, bikeRentalTrip: {tripPatterns: []}};
     }
 
     const tripPatterns = Object.values(result.data).flatMap(
@@ -118,4 +127,13 @@ function mapTripsData(
       })),
     },
   };
+}
+
+function bikeRentalContainsOnlyFootLegs(data: TripsNonTransitQuery) {
+  return (
+    data.bikeRentalTrip &&
+    data.bikeRentalTrip.tripPatterns.every((t) =>
+      t.legs.every((l) => l.mode === Mode.Foot),
+    )
+  );
 }
