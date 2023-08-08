@@ -132,5 +132,9 @@ function getReachableQuays(quays: QuayFragment[], fromStopPlaceId: string) {
   const index = quays.findIndex(
     (quay) => quay.stopPlace?.id === fromStopPlaceId,
   );
-  return quays.slice(index + 1);
+  const reachableQuaysOnLine = quays.slice(index + 1);
+  const reachableQuaysOnLineWithoutFromStopPlace = reachableQuaysOnLine.filter(
+    (quay) => quay.stopPlace?.id !== fromStopPlaceId,
+  );
+  return reachableQuaysOnLineWithoutFromStopPlace;
 }
