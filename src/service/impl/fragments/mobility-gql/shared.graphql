@@ -73,13 +73,14 @@ fragment system on System {
     }
 }
 
-fragment vehicleRange on VehicleType {
+fragment vehicleTypeBasic on VehicleType {
     maxRangeMeters
+    formFactor
 }
 fragment vehicleType on VehicleType {
-    ...vehicleRange
+    ...vehicleTypeBasic
     id
-    formFactor
+    propulsionType
     name {
         ...translatedString
     }

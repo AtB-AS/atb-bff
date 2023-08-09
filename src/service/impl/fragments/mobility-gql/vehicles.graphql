@@ -6,7 +6,7 @@ fragment vehicleBasic on Vehicle {
     currentFuelPercent
     currentRangeMeters
     vehicleType {
-        ...vehicleRange
+        ...vehicleTypeBasic
     }
 }
 
@@ -15,9 +15,6 @@ fragment vehicleExtended on Vehicle {
     isReserved
     isDisabled
     availableUntil
-    vehicleType {
-        ...vehicleType
-    }
     pricingPlan {
         ...pricingPlan
     }
@@ -26,5 +23,8 @@ fragment vehicleExtended on Vehicle {
     }
     rentalUris {
         ...rentalUris
+    }
+    vehicleType {
+        ...vehicleType
     }
 }

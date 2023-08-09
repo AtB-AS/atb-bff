@@ -1,4 +1,4 @@
-import {GetVehiclesListQuery, IMobilityService} from '../../interface';
+import {IMobilityService} from '../../interface';
 import {Result} from '@badrap/result';
 import {APIError} from '../../../utils/api-error';
 import {mobilityClient} from '../../../graphql/graphql-client';
@@ -39,16 +39,6 @@ const calculateFuelPercent = <T extends GetVehicleQuery | GetVehiclesQuery>(
   })),
 });
 
-const stripProps = (data: GetVehiclesQuery): GetVehiclesListQuery => ({
-  ...data,
-  vehicles: data.vehicles?.map((v) => ({
-    id: v.id,
-    lat: v.lat,
-    lon: v.lon,
-    currentFuelPercent: v.currentFuelPercent,
-  })),
-});
-
 export default (): IMobilityService => ({
   async getVehicles(query, headers) {
     try {
@@ -62,7 +52,7 @@ export default (): IMobilityService => ({
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-      return Result.ok(stripProps(calculateFuelPercent(result.data)));
+      return Result.ok(calculateFuelPercent(result.data));
     } catch (error) {
       return Result.err(new APIError(error));
     }

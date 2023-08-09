@@ -1,13 +1,13 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { VehicleRangeFragment, VehicleTypeFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
+import { VehicleTypeBasicFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment, VehicleTypeFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { VehicleRangeFragmentDoc, VehicleTypeFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
-export type VehicleBasicFragment = { id: string, lat: number, lon: number, currentFuelPercent?: number, currentRangeMeters: number, vehicleType: VehicleRangeFragment };
+import { VehicleTypeBasicFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc, VehicleTypeFragmentDoc } from './shared.graphql-gen';
+export type VehicleBasicFragment = { id: string, lat: number, lon: number, currentFuelPercent?: number, currentRangeMeters: number, vehicleType: VehicleTypeBasicFragment };
 
 export type VehicleExtendedFragment = (
-  { isReserved: boolean, isDisabled: boolean, availableUntil?: string, vehicleType: VehicleTypeFragment, pricingPlan: PricingPlanFragment, system: SystemFragment, rentalUris?: RentalUrisFragment }
+  { isReserved: boolean, isDisabled: boolean, availableUntil?: string, pricingPlan: PricingPlanFragment, system: SystemFragment, rentalUris?: RentalUrisFragment, vehicleType: VehicleTypeFragment }
   & VehicleBasicFragment
 );
 
@@ -19,19 +19,16 @@ export const VehicleBasicFragmentDoc = gql`
   currentFuelPercent
   currentRangeMeters
   vehicleType {
-    ...vehicleRange
+    ...vehicleTypeBasic
   }
 }
-    ${VehicleRangeFragmentDoc}`;
+    ${VehicleTypeBasicFragmentDoc}`;
 export const VehicleExtendedFragmentDoc = gql`
     fragment vehicleExtended on Vehicle {
   ...vehicleBasic
   isReserved
   isDisabled
   availableUntil
-  vehicleType {
-    ...vehicleType
-  }
   pricingPlan {
     ...pricingPlan
   }
@@ -41,12 +38,15 @@ export const VehicleExtendedFragmentDoc = gql`
   rentalUris {
     ...rentalUris
   }
+  vehicleType {
+    ...vehicleType
+  }
 }
     ${VehicleBasicFragmentDoc}
-${VehicleTypeFragmentDoc}
 ${PricingPlanFragmentDoc}
 ${SystemFragmentDoc}
-${RentalUrisFragmentDoc}`;
+${RentalUrisFragmentDoc}
+${VehicleTypeFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

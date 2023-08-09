@@ -22,11 +22,11 @@ export type BrandAssetsFragment = { brandImageUrl: string, brandImageUrlDark?: s
 
 export type SystemFragment = { operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment };
 
-export type VehicleRangeFragment = { maxRangeMeters?: number };
+export type VehicleTypeBasicFragment = { maxRangeMeters?: number, formFactor: Types.FormFactor };
 
 export type VehicleTypeFragment = (
-  { id: string, formFactor: Types.FormFactor, name?: TranslatedStringFragment }
-  & VehicleRangeFragment
+  { id: string, propulsionType: Types.PropulsionType, name?: TranslatedStringFragment }
+  & VehicleTypeBasicFragment
 );
 
 export const PricingSegmentFragmentDoc = gql`
@@ -117,21 +117,22 @@ export const SystemFragmentDoc = gql`
 ${TranslatedStringFragmentDoc}
 ${BrandAssetsFragmentDoc}
 ${RentalAppsFragmentDoc}`;
-export const VehicleRangeFragmentDoc = gql`
-    fragment vehicleRange on VehicleType {
+export const VehicleTypeBasicFragmentDoc = gql`
+    fragment vehicleTypeBasic on VehicleType {
   maxRangeMeters
+  formFactor
 }
     `;
 export const VehicleTypeFragmentDoc = gql`
     fragment vehicleType on VehicleType {
-  ...vehicleRange
+  ...vehicleTypeBasic
   id
-  formFactor
+  propulsionType
   name {
     ...translatedString
   }
 }
-    ${VehicleRangeFragmentDoc}
+    ${VehicleTypeBasicFragmentDoc}
 ${TranslatedStringFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
