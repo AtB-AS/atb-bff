@@ -3,6 +3,22 @@ query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormF
         ...vehicleBasic
     }
 }
+query getVehicles_v2(
+    $lat: Float!,
+    $lon: Float!,
+    $range: Int!,
+    $includeBicycles: Boolean!
+    $bicycleOperators: [String],
+    $includeScooters: Boolean!
+    $scooterOperators: [String],
+) {
+    bicycles:vehicles(lat: $lat, lon: $lon, range: $range, formFactors: BICYCLE, operators: $bicycleOperators) @include (if:$includeBicycles) {
+        ...vehicleBasic
+    }
+    scooters:vehicles(lat: $lat, lon: $lon, range: $range, formFactors: SCOOTER, operators: $scooterOperators) @include (if:$includeScooters) {
+        ...vehicleBasic
+    }
+}
 
 query getVehicle($ids: [String!]) {
     vehicles(ids: $ids) {

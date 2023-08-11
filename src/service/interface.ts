@@ -28,10 +28,12 @@ import {VehicleBasicFragment} from './impl/fragments/mobility-gql/vehicles.graph
 import {
   GetBikeStationQuery,
   GetCarStationQuery,
+  GetStations_V2Query,
   GetStationsQuery,
 } from './impl/mobility/mobility-gql/stations.graphql-gen';
 import {
   GetVehicleQuery,
+  GetVehicles_V2Query,
   GetVehiclesQuery,
 } from './impl/mobility/mobility-gql/vehicles.graphql-gen';
 import {GetQuaysCoordinatesQuery} from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
@@ -61,12 +63,14 @@ import {
   ServiceJourneyVehicles,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery,
+  StationsQuery_v2,
   StopPlaceConnectionsQuery,
   StopPlaces,
   StopPlacesByModeQuery,
   TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery,
+  VehiclesQuery_v2,
 } from './types';
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
@@ -214,6 +218,10 @@ export interface IMobilityService {
     query: VehiclesQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<GetVehiclesListQuery, APIError>>;
+  getVehicles_v2(
+    query: VehiclesQuery_v2,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<GetVehicles_V2Query, APIError>>;
   getVehicle(
     query: VehicleQuery,
     headers: Request<ReqRefDefaults>,
@@ -222,6 +230,10 @@ export interface IMobilityService {
     query: StationsQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<GetStationsQuery, APIError>>;
+  getStations_v2(
+    query: StationsQuery_v2,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<GetStations_V2Query, APIError>>;
   getCarStation(
     query: CarStationQuery,
     headers: Request<ReqRefDefaults>,

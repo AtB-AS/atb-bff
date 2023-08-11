@@ -202,12 +202,32 @@ export type VehiclesQuery = {
   operators?: string[];
 };
 
+export type VehiclesQuery_v2 = {
+  lat: number;
+  lon: number;
+  range: number;
+  includeScooters: boolean;
+  scooterOperators?: string[];
+  includeBicycles: boolean;
+  bicycleOperators?: string[];
+};
+
 export type StationsQuery = {
   lat: number;
   lon: number;
   range: number;
   availableFormFactors?: FormFactor | FormFactor[];
   operators?: string[];
+};
+
+export type StationsQuery_v2 = {
+  lat: number;
+  lon: number;
+  range: number;
+  includeBicycles: boolean;
+  bicycleOperators?: string[];
+  includeCars: boolean;
+  carOperators?: string[];
 };
 
 export type CarStationQuery = {ids: string[]};

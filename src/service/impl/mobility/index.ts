@@ -9,6 +9,9 @@ import {
   GetCarStationDocument,
   GetCarStationQuery,
   GetCarStationQueryVariables,
+  GetStations_V2Document,
+  GetStations_V2Query,
+  GetStations_V2QueryVariables,
   GetStationsDocument,
   GetStationsQuery,
   GetStationsQueryVariables,
@@ -17,27 +20,17 @@ import {
   GetVehicleDocument,
   GetVehicleQuery,
   GetVehicleQueryVariables,
+  GetVehicles_V2Document,
+  GetVehicles_V2Query,
+  GetVehicles_V2QueryVariables,
   GetVehiclesDocument,
   GetVehiclesQuery,
   GetVehiclesQueryVariables,
 } from './mobility-gql/vehicles.graphql-gen';
-
-const calculateFuelPercent = <T extends GetVehicleQuery | GetVehiclesQuery>(
-  data: T,
-): T => ({
-  ...data,
-  vehicles: data?.vehicles?.map((vehicle) => ({
-    ...vehicle,
-    currentFuelPercent: vehicle.currentFuelPercent
-      ? vehicle.currentFuelPercent
-      : vehicle.vehicleType.maxRangeMeters
-      ? Math.floor(
-          (vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) *
-            100,
-        )
-      : undefined,
-  })),
-});
+import {
+  VehicleBasicFragment,
+  VehicleExtendedFragment,
+} from '../fragments/mobility-gql/vehicles.graphql-gen';
 
 export default (): IMobilityService => ({
   async getVehicles(query, headers) {
@@ -52,7 +45,25 @@ export default (): IMobilityService => ({
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-      return Result.ok(calculateFuelPercent(result.data));
+      return Result.ok(addFuelPercentageToVehicles(result.data));
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async getVehicles_v2(query, headers) {
+    try {
+      const result = await mobilityClient(headers).query<
+        GetVehicles_V2Query,
+        GetVehicles_V2QueryVariables
+      >({
+        query: GetVehicles_V2Document,
+        variables: query,
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(addFuelPercentageToVehicles_v2(result.data));
     } catch (error) {
       return Result.err(new APIError(error));
     }
@@ -70,7 +81,7 @@ export default (): IMobilityService => ({
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
-      return Result.ok(calculateFuelPercent(result.data));
+      return Result.ok(addFuelPercentageToVehicles(result.data));
     } catch (error) {
       return Result.err(new APIError(error));
     }
@@ -83,6 +94,24 @@ export default (): IMobilityService => ({
         GetStationsQueryVariables
       >({
         query: GetStationsDocument,
+        variables: query,
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async getStations_v2(query, headers) {
+    try {
+      const result = await mobilityClient(headers).query<
+        GetStations_V2Query,
+        GetStations_V2QueryVariables
+      >({
+        query: GetStations_V2Document,
         variables: query,
       });
       if (result.errors) {
@@ -129,4 +158,36 @@ export default (): IMobilityService => ({
       return Result.err(new APIError(error));
     }
   },
+});
+
+const calculateFuelPercent = <
+  T extends VehicleBasicFragment | VehicleExtendedFragment,
+>(
+  vehicle: T,
+): T => ({
+  ...vehicle,
+  currentFuelPercent: vehicle.currentFuelPercent
+    ? vehicle.currentFuelPercent
+    : vehicle.vehicleType.maxRangeMeters
+    ? Math.floor(
+        (vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) * 100,
+      )
+    : undefined,
+});
+
+const addFuelPercentageToVehicles = <
+  T extends GetVehicleQuery | GetVehiclesQuery,
+>(
+  data: T,
+): T => ({
+  ...data,
+  vehicles: data?.vehicles?.map(calculateFuelPercent),
+});
+
+const addFuelPercentageToVehicles_v2 = (
+  data: GetVehicles_V2Query,
+): GetVehicles_V2Query => ({
+  ...data,
+  scooters: data.scooters?.map(calculateFuelPercent),
+  bicycles: data.bicycles?.map(calculateFuelPercent),
 });

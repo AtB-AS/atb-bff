@@ -4,8 +4,10 @@ import {
   BikeStationQuery,
   CarStationQuery,
   StationsQuery,
+  StationsQuery_v2,
   VehicleQuery,
   VehiclesQuery,
+  VehiclesQuery_v2,
 } from '../../service/types';
 
 export const getVehiclesRequest = {
@@ -21,6 +23,19 @@ export const getVehiclesRequest = {
     operators: Joi.array().items(Joi.string()).optional().single(),
   }),
 };
+
+export const getVehiclesRequest_v2 = {
+  query: Joi.object<VehiclesQuery_v2>({
+    lat: Joi.number().required(),
+    lon: Joi.number().required(),
+    range: Joi.number().optional(),
+    includeBicycles: Joi.boolean().required(),
+    bicycleOperators: Joi.array().items(Joi.string()).optional().single(),
+    includeScooters: Joi.boolean().required(),
+    scooterOperators: Joi.array().items(Joi.string()).optional().single(),
+  }),
+};
+
 export const getVehicleRequest = {
   query: Joi.object<VehicleQuery>({
     ids: Joi.array().items(Joi.string()).required().single(),
@@ -40,6 +55,19 @@ export const getStationsRequest = {
     operators: Joi.array().items(Joi.string()).optional().single(),
   }),
 };
+
+export const getStationsRequest_v2 = {
+  query: Joi.object<StationsQuery_v2>({
+    lat: Joi.number().required(),
+    lon: Joi.number().required(),
+    range: Joi.number().optional(),
+    includeBicycles: Joi.boolean().required(),
+    bicycleOperators: Joi.array().items(Joi.string()).optional().single(),
+    includeCars: Joi.boolean().required(),
+    carOperators: Joi.array().items(Joi.string()).optional().single(),
+  }),
+};
+
 export const getCarStationRequest = {
   query: Joi.object<CarStationQuery>({
     ids: Joi.array().items(Joi.string()).required().single(),
