@@ -1263,6 +1263,8 @@ export enum RoutingErrorCode {
   OutsideBounds = 'outsideBounds',
   /** The date specified is outside the range of data currently loaded into the system */
   OutsideServicePeriod = 'outsideServicePeriod',
+  /** An unknown error happened during the search. The details have been logged to the server logs */
+  SystemError = 'systemError',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
   WalkingBetterThanTransit = 'walkingBetterThanTransit'
 }
@@ -1900,8 +1902,6 @@ export type TripPattern = {
    * @deprecated Replaced with expectedStartTime
    */
   startTime?: Maybe<Scalars['DateTime']>;
-  /** How far the user has to walk, bike and/or drive in meters. It includes all street(none transit) modes. */
-  streetDistance?: Maybe<Scalars['Float']>;
   /** Get all system notices. */
   systemNotices: Array<SystemNotice>;
   /** A cost calculated to favor transfer with higher priority. This field is meant for debugging only. */
@@ -1910,7 +1910,7 @@ export type TripPattern = {
   waitTimeOptimizedCost?: Maybe<Scalars['Int']>;
   /** How much time is spent waiting for transit to arrive, in seconds. */
   waitingTime?: Maybe<Scalars['Long']>;
-  /** @deprecated Replaced by `streetDistance`. */
+  /** How far the user has to walk, in meters. */
   walkDistance?: Maybe<Scalars['Float']>;
   /** How much time is spent walking, in seconds. */
   walkTime?: Maybe<Scalars['Long']>;
