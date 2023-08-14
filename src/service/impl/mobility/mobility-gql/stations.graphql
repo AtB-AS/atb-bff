@@ -4,6 +4,23 @@ query getStations($lat: Float!, $lon: Float!, $range: Int!, $availableFormFactor
     }
 }
 
+query getStations_v2(
+    $lat: Float!,
+    $lon: Float!,
+    $range: Int!,
+    $includeBicycles: Boolean!
+    $bicycleOperators: [String],
+    $includeCars: Boolean!
+    $carOperators: [String],
+) {
+    bicycles:stations(lat: $lat, lon: $lon, range: $range, availableFormFactors: BICYCLE, operators: $bicycleOperators) @include(if:$includeBicycles) {
+        ...stationBasic
+    }
+    cars:stations(lat: $lat, lon: $lon, range: $range, availableFormFactors: CAR, operators: $carOperators) @include(if:$includeCars) {
+        ...stationBasic
+    }
+}
+
 query getCarStation($ids: [String!]) {
     stations(ids: $ids) {
         ...carStation
