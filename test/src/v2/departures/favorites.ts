@@ -119,7 +119,7 @@ export function departureFavoritesVsQuayDepartures(
   // Use only 1 favorite
   const testScenario = { favorites: [testData.scenarios[0].favorites[0]] };
 
-  const urlFav = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limit}`;
+  const urlFav = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T16:00:00.000Z&limitPerLine=${limit}`;
   const resFav = http.post(urlFav, JSON.stringify(testScenario), {
     tags: { name: requestName },
     headers: bffHeadersPost
@@ -128,7 +128,7 @@ export function departureFavoritesVsQuayDepartures(
   // Get departures to assert favorite results
   const urlDep = `${conf.host()}/bff/v2/departures/quay-departures?id=${
     testScenario.favorites[0].quayId
-  }&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+  }&numberOfDepartures=${limit}&startTime=${startDate}T16:00:00.000Z&timeRange=86400`;
   const resDep = http.post(urlDep, '{}', {
     tags: { name: requestName },
     headers: bffHeadersPost
@@ -158,6 +158,7 @@ export function departureFavoritesVsQuayDepartures(
     const aimedTimeDepartures = jsonDep.quay.estimatedCalls.map(
       call => call.aimedDepartureTime
     );
+
     expects.push(
       {
         check: 'favorite departures should have the same service journeys',
