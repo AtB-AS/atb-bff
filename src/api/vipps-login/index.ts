@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin';
 import applicationDefault = admin.credential.applicationDefault;
 import {
   PROJECT_ID,
+  VIPPS_BASE64_SA,
   VIPPS_CLIENT_ID,
   VIPPS_CLIENT_SECRET,
 } from '../../config/env';
@@ -14,7 +15,9 @@ import {Timer} from '../../utils/timer';
 
 export default (server: Hapi.Server) => () => {
   const app = admin.initializeApp({
-    credential: applicationDefault(),
+    credential: VIPPS_BASE64_SA
+      ? admin.credential.cert(VIPPS_BASE64_SA)
+      : applicationDefault(),
     projectId: PROJECT_ID,
   });
 

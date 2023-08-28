@@ -16,6 +16,7 @@ export const PROJECT_ID = process.env.PROJECT_ID;
 export const VIPPS_BASE_URL = process.env.VIPPS_BASE_URL;
 export const VIPPS_CLIENT_ID = process.env.VIPPS_CLIENT_ID;
 export const VIPPS_CLIENT_SECRET = process.env.VIPPS_CLIENT_SECRET;
+export const VIPPS_BASE64_SA = process.env.VIPPS_BASE64_SA;
 
 /**
  * Return a URL to the given service. `serviceKey` should be uppercased.
