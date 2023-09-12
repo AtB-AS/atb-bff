@@ -97,6 +97,9 @@ export type QueryVehiclesArgs = {
 };
 
 export type ServiceJourney = {
+  /** Date as provided when realtime-updates are referenced by ServiceJourneyId + Date */
+  date?: Maybe<Scalars['String']>;
+  /** ID that defines this journey */
   id: Scalars['String'];
   /** @deprecated Experimental - should not be used with subscription */
   pointsOnLink?: Maybe<PointsOnLink>;
@@ -164,6 +167,8 @@ export type VehicleUpdate = {
   codespace?: Maybe<Codespace>;
   /** The current delay in seconds - negative delay means ahead of schedule */
   delay?: Maybe<Scalars['Float']>;
+  destinationName?: Maybe<Scalars['String']>;
+  destinationRef?: Maybe<Scalars['String']>;
   direction?: Maybe<Scalars['String']>;
   expiration?: Maybe<Scalars['DateTime']>;
   expirationEpochSecond?: Maybe<Scalars['Float']>;
@@ -179,6 +184,8 @@ export type VehicleUpdate = {
   monitored?: Maybe<Scalars['Boolean']>;
   occupancy?: Maybe<OccupancyEnumeration>;
   operator?: Maybe<Operator>;
+  originName?: Maybe<Scalars['String']>;
+  originRef?: Maybe<Scalars['String']>;
   serviceJourney?: Maybe<ServiceJourney>;
   speed?: Maybe<Scalars['Float']>;
   vehicleId?: Maybe<Scalars['String']>;
