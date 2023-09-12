@@ -7,6 +7,7 @@ fragment estimatedCallWithQuay on EstimatedCall {
   date
   destinationDisplay {
     frontText
+    via
   }
   expectedDepartureTime
   expectedArrivalTime
