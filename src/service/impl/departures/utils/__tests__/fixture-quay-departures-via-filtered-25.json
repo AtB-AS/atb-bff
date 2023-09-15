@@ -1,0 +1,91 @@
+{
+   "quays": [
+      {
+         "id": "NSR:Quay:71184",
+         "description": "ved Bunnpris",
+         "publicCode": "P1",
+         "name": "Prinsens gate",
+         "estimatedCalls": [
+            {
+               "date": "2023-09-14",
+               "expectedDepartureTime": "2023-09-14T10:03:09+02:00",
+               "aimedDepartureTime": "2023-09-14T10:02:00+02:00",
+               "realtime": true,
+               "cancellation": false,
+               "quay": {
+                  "id": "NSR:Quay:71184"
+               },
+               "destinationDisplay": {
+                  "frontText": "Vikåsen",
+                  "via": ["Singsaker"]
+               },
+               "serviceJourney": {
+                  "id": "ATB:ServiceJourney:25_230306097862797_43",
+                  "line": {
+                     "id": "ATB:Line:2_25",
+                     "description": null,
+                     "publicCode": "25",
+                     "transportMode": "bus",
+                     "transportSubmode": "localBus",
+                     "notices": []
+                  },
+                  "journeyPattern": {
+                     "notices": []
+                  },
+                  "notices": []
+               },
+               "situations": [],
+               "notices": []
+            },
+            {
+               "date": "2023-09-14",
+               "expectedDepartureTime": "2023-09-14T10:12:23+02:00",
+               "aimedDepartureTime": "2023-09-14T10:12:00+02:00",
+               "realtime": true,
+               "cancellation": false,
+               "quay": {
+                  "id": "NSR:Quay:71184"
+               },
+               "destinationDisplay": {
+                  "frontText": "Vikåsen",
+                  "via": ["Singsaker"]
+               },
+               "serviceJourney": {
+                  "id": "ATB:ServiceJourney:25_230306097862798_45",
+                  "line": {
+                     "id": "ATB:Line:2_25",
+                     "description": null,
+                     "publicCode": "25",
+                     "transportMode": "bus",
+                     "transportSubmode": "localBus",
+                     "notices": []
+                  },
+                  "journeyPattern": {
+                     "notices": []
+                  },
+                  "notices": []
+               },
+               "situations": [],
+               "notices": []
+            }
+         ],
+         "situations": []
+      },
+      {
+         "id": "NSR:Quay:71181",
+         "description": "ved AtB Kundesenter",
+         "publicCode": "P2",
+         "name": "Prinsens gate",
+         "estimatedCalls": [],
+         "situations": []
+      },
+      {
+         "id": "NSR:Quay:107493",
+         "description": null,
+         "publicCode": "P3",
+         "name": "Prinsens gate",
+         "estimatedCalls": [],
+         "situations": []
+      }
+   ]
+}

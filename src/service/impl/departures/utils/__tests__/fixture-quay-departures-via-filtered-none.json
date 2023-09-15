@@ -1,0 +1,28 @@
+{
+    "quays": [
+       {
+          "id": "NSR:Quay:71184",
+          "description": "ved Bunnpris",
+          "publicCode": "P1",
+          "name": "Prinsens gate",
+          "estimatedCalls": [],
+          "situations": []
+       },
+       {
+          "id": "NSR:Quay:71181",
+          "description": "ved AtB Kundesenter",
+          "publicCode": "P2",
+          "name": "Prinsens gate",
+          "estimatedCalls": [],
+          "situations": []
+       },
+       {
+          "id": "NSR:Quay:107493",
+          "description": null,
+          "publicCode": "P3",
+          "name": "Prinsens gate",
+          "estimatedCalls": [],
+          "situations": []
+       }
+    ]
+ }

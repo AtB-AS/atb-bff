@@ -1,0 +1,788 @@
+{
+    "quays": [
+       {
+          "id": "NSR:Quay:71184",
+          "description": "ved Bunnpris",
+          "publicCode": "P1",
+          "name": "Prinsens gate",
+          "estimatedCalls": [
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:03:09+02:00",
+                "aimedDepartureTime": "2023-09-14T10:02:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Vikåsen",
+                   "via": ["Singsaker"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:25_230306097862797_43",
+                   "line": {
+                      "id": "ATB:Line:2_25",
+                      "description": null,
+                      "publicCode": "25",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:05:19+02:00",
+                "aimedDepartureTime": "2023-09-14T10:02:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Trondheim Spektrum",
+                   "via": []
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:12_230306097866809_44",
+                   "line": {
+                      "id": "ATB:Line:2_12",
+                      "description": null,
+                      "publicCode": "12",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:06:51+02:00",
+                "aimedDepartureTime": "2023-09-14T10:03:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Ratesvingen",
+                   "via": []
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:10_230306097865233_40",
+                   "line": {
+                      "id": "ATB:Line:2_10",
+                      "description": null,
+                      "publicCode": "10",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [
+                   {
+                      "id": "UHRTaXR1YXRpb25FbGVtZW50OkFUQjpTaXR1YXRpb25OdW1iZXI6OTM1Nw",
+                      "situationNumber": "ATB:SituationNumber:9357",
+                      "summary": [
+                         {
+                            "language": "no",
+                            "value": "Klæbuveien stenges fra 11.09"
+                         },
+                         {
+                            "language": "en",
+                            "value": "Klæbuveien closed from 11.09"
+                         }
+                      ],
+                      "description": [
+                         {
+                            "language": "no",
+                            "value": "Klæbuveien stenges fom. mandag 11. september i ca. ett års tid. Buss linje 10, 24 og 103 vil kjøre via Bratsbergvegen og holdeplassene Sorgenfri til Nygård blir ikke betjent i perioden. "
+                         },
+                         {
+                            "language": "en",
+                            "value": "Klæbuveien is closed from Monday 11.sept for about one year. Bus route 10, 24 and 103 will drive via Bratsbergvegen, thus stop places Sorgenfri to Nygård will not be serviced in this time period."
+                         }
+                      ],
+                      "reportType": "general",
+                      "advice": [
+                         {
+                            "language": "no",
+                            "value": ""
+                         },
+                         {
+                            "language": "en",
+                            "value": ""
+                         }
+                      ],
+                      "infoLinks": [
+                         {
+                            "uri": "https://atb.no/driftsavvik/buss-og-trikk/#881693473287032ef8fa0b6829dc864b8d4f3f24b44b",
+                            "label": "www.atb.no/avvik"
+                         }
+                      ],
+                      "validityPeriod": {
+                         "startTime": "2023-08-31T11:11:00+02:00",
+                         "endTime": "2023-09-18T11:11:00+02:00"
+                      }
+                   }
+                ],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:07:14+02:00",
+                "aimedDepartureTime": "2023-09-14T10:07:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Sjetnmarka",
+                   "via": ["Kroppanm.-Okstad"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:24_230905203955763_71",
+                   "line": {
+                      "id": "ATB:Line:2_24",
+                      "description": null,
+                      "publicCode": "24",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [
+                   {
+                      "id": "UHRTaXR1YXRpb25FbGVtZW50OkFUQjpTaXR1YXRpb25OdW1iZXI6OTM1Nw",
+                      "situationNumber": "ATB:SituationNumber:9357",
+                      "summary": [
+                         {
+                            "language": "no",
+                            "value": "Klæbuveien stenges fra 11.09"
+                         },
+                         {
+                            "language": "en",
+                            "value": "Klæbuveien closed from 11.09"
+                         }
+                      ],
+                      "description": [
+                         {
+                            "language": "no",
+                            "value": "Klæbuveien stenges fom. mandag 11. september i ca. ett års tid. Buss linje 10, 24 og 103 vil kjøre via Bratsbergvegen og holdeplassene Sorgenfri til Nygård blir ikke betjent i perioden. "
+                         },
+                         {
+                            "language": "en",
+                            "value": "Klæbuveien is closed from Monday 11.sept for about one year. Bus route 10, 24 and 103 will drive via Bratsbergvegen, thus stop places Sorgenfri to Nygård will not be serviced in this time period."
+                         }
+                      ],
+                      "reportType": "general",
+                      "advice": [
+                         {
+                            "language": "no",
+                            "value": ""
+                         },
+                         {
+                            "language": "en",
+                            "value": ""
+                         }
+                      ],
+                      "infoLinks": [
+                         {
+                            "uri": "https://atb.no/driftsavvik/buss-og-trikk/#881693473287032ef8fa0b6829dc864b8d4f3f24b44b",
+                            "label": "www.atb.no/avvik"
+                         }
+                      ],
+                      "validityPeriod": {
+                         "startTime": "2023-08-31T11:11:00+02:00",
+                         "endTime": "2023-09-18T11:11:00+02:00"
+                      }
+                   }
+                ],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:07:51+02:00",
+                "aimedDepartureTime": "2023-09-14T10:07:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Kattem",
+                   "via": ["Tiller-Heimdal"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:1_230306129465191_70",
+                   "line": {
+                      "id": "ATB:Line:2_1",
+                      "description": null,
+                      "publicCode": "1",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:11:57+02:00",
+                "aimedDepartureTime": "2023-09-14T10:10:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Vestlia",
+                   "via": ["Othilienborg"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:22_230306097862451_73",
+                   "line": {
+                      "id": "ATB:Line:2_22",
+                      "description": null,
+                      "publicCode": "22",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:12:00+02:00",
+                "aimedDepartureTime": "2023-09-14T10:12:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Marienborg",
+                   "via": []
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:12_230306097866732_46",
+                   "line": {
+                      "id": "ATB:Line:2_12",
+                      "description": null,
+                      "publicCode": "12",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:12:23+02:00",
+                "aimedDepartureTime": "2023-09-14T10:12:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Vikåsen",
+                   "via": ["Singsaker"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:25_230306097862798_45",
+                   "line": {
+                      "id": "ATB:Line:2_25",
+                      "description": null,
+                      "publicCode": "25",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:13:39+02:00",
+                "aimedDepartureTime": "2023-09-14T10:13:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Brekkåsen",
+                   "via": ["Tillerterm.-Melhus"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:71_230306097870169_27",
+                   "line": {
+                      "id": "ATB:Line:2_71",
+                      "description": null,
+                      "publicCode": "71",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:13:44+02:00",
+                "aimedDepartureTime": "2023-09-14T10:12:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71184"
+                },
+                "destinationDisplay": {
+                   "frontText": "Lund",
+                   "via": ["Kolstad-Heimdal"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:2_230306129775962_60",
+                   "line": {
+                      "id": "ATB:Line:2_2",
+                      "description": null,
+                      "publicCode": "2",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             }
+          ],
+          "situations": []
+       },
+       {
+          "id": "NSR:Quay:71181",
+          "description": "ved AtB Kundesenter",
+          "publicCode": "P2",
+          "name": "Prinsens gate",
+          "estimatedCalls": [
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:05:17+02:00",
+                "aimedDepartureTime": "2023-09-14T10:04:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Dragvoll",
+                   "via": ["Strindheim"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:12_230306097866932_45",
+                   "line": {
+                      "id": "ATB:Line:2_12",
+                      "description": null,
+                      "publicCode": "12",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:05:41+02:00",
+                "aimedDepartureTime": "2023-09-14T10:03:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Hurtigbåtterminalen",
+                   "via": []
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:25_230306097862615_48",
+                   "line": {
+                      "id": "ATB:Line:2_25",
+                      "description": null,
+                      "publicCode": "25",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:07:54+02:00",
+                "aimedDepartureTime": "2023-09-14T10:04:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Ranheim",
+                   "via": ["Strindheim"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:1_230306129461947_69",
+                   "line": {
+                      "id": "ATB:Line:2_1",
+                      "description": null,
+                      "publicCode": "1",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:09:28+02:00",
+                "aimedDepartureTime": "2023-09-14T10:08:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Strindheim",
+                   "via": ["Lade"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:2_230306129697107_61",
+                   "line": {
+                      "id": "ATB:Line:2_2",
+                      "description": null,
+                      "publicCode": "2",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:11:33+02:00",
+                "aimedDepartureTime": "2023-09-14T10:10:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Fortuna/Sæterb.",
+                   "via": ["Strindheim"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:10_230306097865405_41",
+                   "line": {
+                      "id": "ATB:Line:2_10",
+                      "description": null,
+                      "publicCode": "10",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [
+                   {
+                      "id": "UHRTaXR1YXRpb25FbGVtZW50OkFUQjpTaXR1YXRpb25OdW1iZXI6OTM1Nw",
+                      "situationNumber": "ATB:SituationNumber:9357",
+                      "summary": [
+                         {
+                            "language": "no",
+                            "value": "Klæbuveien stenges fra 11.09"
+                         },
+                         {
+                            "language": "en",
+                            "value": "Klæbuveien closed from 11.09"
+                         }
+                      ],
+                      "description": [
+                         {
+                            "language": "no",
+                            "value": "Klæbuveien stenges fom. mandag 11. september i ca. ett års tid. Buss linje 10, 24 og 103 vil kjøre via Bratsbergvegen og holdeplassene Sorgenfri til Nygård blir ikke betjent i perioden. "
+                         },
+                         {
+                            "language": "en",
+                            "value": "Klæbuveien is closed from Monday 11.sept for about one year. Bus route 10, 24 and 103 will drive via Bratsbergvegen, thus stop places Sorgenfri to Nygård will not be serviced in this time period."
+                         }
+                      ],
+                      "reportType": "general",
+                      "advice": [
+                         {
+                            "language": "no",
+                            "value": ""
+                         },
+                         {
+                            "language": "en",
+                            "value": ""
+                         }
+                      ],
+                      "infoLinks": [
+                         {
+                            "uri": "https://atb.no/driftsavvik/buss-og-trikk/#881693473287032ef8fa0b6829dc864b8d4f3f24b44b",
+                            "label": "www.atb.no/avvik"
+                         }
+                      ],
+                      "validityPeriod": {
+                         "startTime": "2023-08-31T11:11:00+02:00",
+                         "endTime": "2023-09-18T11:11:00+02:00"
+                      }
+                   }
+                ],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:12:51+02:00",
+                "aimedDepartureTime": "2023-09-14T10:12:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Grillstad",
+                   "via": ["Ladeham.-Strindh."]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:20_230306097869096_31",
+                   "line": {
+                      "id": "ATB:Line:2_20",
+                      "description": null,
+                      "publicCode": "20",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:14:02+02:00",
+                "aimedDepartureTime": "2023-09-14T10:14:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Dragvoll",
+                   "via": ["Strindheim"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:12_230306097866933_47",
+                   "line": {
+                      "id": "ATB:Line:2_12",
+                      "description": null,
+                      "publicCode": "12",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:16:00+02:00",
+                "aimedDepartureTime": "2023-09-14T10:11:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Hurtigbåtterminalen",
+                   "via": []
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:25_230306097862616_50",
+                   "line": {
+                      "id": "ATB:Line:2_25",
+                      "description": null,
+                      "publicCode": "25",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:16:10+02:00",
+                "aimedDepartureTime": "2023-09-14T10:14:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Ranheim",
+                   "via": ["Strindheim"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:1_230306129461965_71",
+                   "line": {
+                      "id": "ATB:Line:2_1",
+                      "description": null,
+                      "publicCode": "1",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             },
+             {
+                "date": "2023-09-14",
+                "expectedDepartureTime": "2023-09-14T10:19:04+02:00",
+                "aimedDepartureTime": "2023-09-14T10:18:00+02:00",
+                "realtime": true,
+                "cancellation": false,
+                "quay": {
+                   "id": "NSR:Quay:71181"
+                },
+                "destinationDisplay": {
+                   "frontText": "Tyholt",
+                   "via": ["Persaunet"]
+                },
+                "serviceJourney": {
+                   "id": "ATB:ServiceJourney:22_230306097862294_78",
+                   "line": {
+                      "id": "ATB:Line:2_22",
+                      "description": null,
+                      "publicCode": "22",
+                      "transportMode": "bus",
+                      "transportSubmode": "localBus",
+                      "notices": []
+                   },
+                   "journeyPattern": {
+                      "notices": []
+                   },
+                   "notices": []
+                },
+                "situations": [],
+                "notices": []
+             }
+          ],
+          "situations": []
+       },
+       {
+          "id": "NSR:Quay:107493",
+          "description": null,
+          "publicCode": "P3",
+          "name": "Prinsens gate",
+          "estimatedCalls": [],
+          "situations": []
+       }
+    ]
+ }
