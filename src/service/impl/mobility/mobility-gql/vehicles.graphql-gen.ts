@@ -64,7 +64,7 @@ export const GetVehicles_V2Document = gql`
     lat: $lat
     lon: $lon
     range: $range
-    formFactors: SCOOTER
+    formFactors: [SCOOTER, SCOOTER_STANDING]
     operators: $scooterOperators
   ) @include(if: $includeScooters) {
     ...vehicleBasic
