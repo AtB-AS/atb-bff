@@ -1,5 +1,6 @@
 import {Location, QueryMode} from '@entur/sdk';
 import {
+  DestinationDisplay,
   Mode,
   PointsOnLink,
   TransportMode,
@@ -17,7 +18,8 @@ export interface Coordinates {
 
 export type FavoriteDeparture = {
   stopId: string;
-  lineName?: string;
+  lineName?: string; // kept for backward compatibility
+  destinationDisplay?: DestinationDisplay;
   lineId: string;
   quayId?: string;
 };

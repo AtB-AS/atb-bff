@@ -13,11 +13,20 @@ import {
 } from '@entur/sdk';
 import {TripPattern as TripPattern_v2} from '../../../types/trips';
 import {TripsQuery} from './journey-gql/trip.graphql-gen';
+import {DestinationDisplay} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export function mapQueryToLegacyTripPatterns(trips: TripsQuery): TripPattern[] {
   const tripPatterns = trips.trip.tripPatterns;
   return tripPatterns.map((trip) => mapToLegacyTripPattern(trip));
 }
+
+export function mapToLegacyLineName(
+  destinationDisplay: DestinationDisplay | undefined,
+): string {
+  const frontText = destinationDisplay?.frontText || '';
+  const viaPlaces = destinationDisplay?.via?.join(', ') || [];
+  return frontText + (viaPlaces.length > 0 ? ' via ' + viaPlaces : '');
+} // move to close utils
 
 function mapToLegacyTripPattern(trip: TripPattern_v2): TripPattern {
   const legs = trip.legs.map((leg) => mapToLegacyLeg(leg));
