@@ -8,6 +8,7 @@ import {
   FavoriteDeparture,
   QuayDeparturesQueryVariables,
 } from '../../service/types';
+import {DestinationDisplay} from '../../graphql/journey/journeyplanner-types_v3';
 
 export const getStopsNearestRequest = {
   query: Joi.object<NearestStopPlacesQueryVariables>({
@@ -64,7 +65,11 @@ export const postDeparturesRequest = {
       .items(
         Joi.object<FavoriteDeparture>({
           stopId: Joi.string().required(),
-          lineName: Joi.string(),
+          lineName: Joi.string(), // kept for backward compatibility
+          destinationDisplay: Joi.object<DestinationDisplay>({
+            frontText: Joi.string(),
+            via: Joi.array().items(Joi.string()).optional().single(),
+          }),
           lineId: Joi.string().required(),
           quayId: Joi.string(),
         }).options({stripUnknown: true}),
