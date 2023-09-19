@@ -8,6 +8,7 @@ import {
   VehicleQuery,
   VehiclesQuery,
   VehiclesQuery_v2,
+  ViolationsReportingInitQuery,
 } from '../../service/types';
 import {
   getVehiclesRequest,
@@ -17,6 +18,7 @@ import {
   getBikeStationRequest,
   getVehiclesRequest_v2,
   getStationsRequest_v2,
+  violationsReportingInitRequest,
 } from './schema';
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
@@ -119,6 +121,21 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       const payload = request.query as unknown as BikeStationQuery;
 
       return (await service.getBikeStation(payload, h.request)).unwrap();
+    },
+  });
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/violations-reporting/init',
+    options: {
+      tags: ['api', ' mobility', 'violations'],
+      validate: violationsReportingInitRequest,
+      description: 'Initialize the violations reporting process',
+    },
+    handler: async (request, h) => {
+      const payload = request.query as unknown as ViolationsReportingInitQuery;
+      return (
+        await service.initViolationsReporting(payload, h.request)
+      ).unwrap();
     },
   });
 };

@@ -244,3 +244,13 @@ export type VippsCustomTokenRequest = {
   state: string;
   nonce: string;
 };
+
+export type ViolationsReportingInitQuery = {
+  lng: string;
+  lat: string;
+};
+
+export type ViolationsReportingInitQueryResult = {
+  providers: {id: number; name: string}[];
+  violations: {id: number; code: string}[];
+};

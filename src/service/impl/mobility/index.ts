@@ -31,6 +31,17 @@ import {
   VehicleBasicFragment,
   VehicleExtendedFragment,
 } from '../fragments/mobility-gql/vehicles.graphql-gen';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {get} from '../../../utils/fetch-client';
+import {NIVEL_BASEURL} from '../../../config/env';
+import {
+  ViolationsReportingInitQuery,
+  ViolationsReportingInitQueryResult,
+} from '../../types';
+import {violationsReportingInitQueryResultSchema} from './schema';
+
+const nivelBaseUrl =
+  NIVEL_BASEURL || 'https://atb.stage.api.reporting.nivel.no';
 
 export default (): IMobilityService => ({
   async getVehicles(query, headers) {
@@ -157,6 +168,27 @@ export default (): IMobilityService => ({
     } catch (error) {
       return Result.err(new APIError(error));
     }
+  },
+
+  initViolationsReporting(
+    query: ViolationsReportingInitQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsReportingInitQueryResult, APIError>> {
+    const urlParams = new URLSearchParams(query).toString();
+    return get<ViolationsReportingInitQueryResult>(
+      `/atb/init?${urlParams}`,
+      headers,
+      {headers: {'x-api-key': headers.headers['x-api-key']}},
+      nivelBaseUrl,
+    )
+      .then((res) => {
+        const value = violationsReportingInitQueryResultSchema.validate(res, {
+          stripUnknown: true,
+        });
+        if (value.error) throw new Error(`Invalid response. ${value.error}`);
+        return Result.ok(value.value);
+      })
+      .catch(Result.err);
   },
 });
 
