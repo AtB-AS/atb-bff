@@ -1,5 +1,8 @@
 import Joi from 'joi';
-import {ViolationsReportingInitQueryResult} from '../../types';
+import {
+  ViolationsReportingInitQueryResult,
+  ViolationsVehicleLookupQueryResult,
+} from '../../types';
 
 export const violationsReportingInitQueryResultSchema =
   Joi.object<ViolationsReportingInitQueryResult>({
@@ -15,4 +18,10 @@ export const violationsReportingInitQueryResultSchema =
         code: Joi.string(),
       }),
     ),
+  });
+
+export const violationsVehicleLookupResultSchema =
+  Joi.object<ViolationsVehicleLookupQueryResult>({
+    provider_id: Joi.number(),
+    vehicle_id: Joi.string(),
   });

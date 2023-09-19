@@ -9,6 +9,7 @@ import {
   VehiclesQuery,
   VehiclesQuery_v2,
   ViolationsReportingInitQuery,
+  ViolationsVehicleLookupQuery,
 } from '../../service/types';
 import {
   getVehiclesRequest,
@@ -19,6 +20,7 @@ import {
   getVehiclesRequest_v2,
   getStationsRequest_v2,
   violationsReportingInitRequest,
+  violationsVehicleLookupRequest,
 } from './schema';
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
@@ -123,6 +125,10 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       return (await service.getBikeStation(payload, h.request)).unwrap();
     },
   });
+
+  /**
+   * Parking violations reporting
+   */
   server.route({
     method: 'GET',
     path: '/bff/v2/mobility/violations-reporting/init',
@@ -135,6 +141,22 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       const payload = request.query as unknown as ViolationsReportingInitQuery;
       return (
         await service.initViolationsReporting(payload, h.request)
+      ).unwrap();
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/violations-reporting/vehicle',
+    options: {
+      tags: ['api', ' mobility', 'violations', 'vehicle lookup'],
+      validate: violationsVehicleLookupRequest,
+      description: 'Looks up vehicle details from qr code contents',
+    },
+    handler: async (request, h) => {
+      const payload = request.query as unknown as ViolationsVehicleLookupQuery;
+      return (
+        await service.violationsVehicleLookup(payload, h.request)
       ).unwrap();
     },
   });

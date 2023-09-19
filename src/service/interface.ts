@@ -73,6 +73,8 @@ import {
   VehiclesQuery_v2,
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
+  ViolationsVehicleLookupQuery,
+  ViolationsVehicleLookupQueryResult,
 } from './types';
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
@@ -248,4 +250,8 @@ export interface IMobilityService {
     query: ViolationsReportingInitQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsReportingInitQueryResult, APIError>>;
+  violationsVehicleLookup(
+    query: ViolationsVehicleLookupQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsVehicleLookupQueryResult, APIError>>;
 }

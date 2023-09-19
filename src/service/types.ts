@@ -254,3 +254,12 @@ export type ViolationsReportingInitQueryResult = {
   providers: {id: number; name: string}[];
   violations: {id: number; code: string}[];
 };
+
+export type ViolationsVehicleLookupQuery = {
+  qr: string;
+};
+
+export type ViolationsVehicleLookupQueryResult = {
+  provider_id: number;
+  vehicle_id: string;
+};

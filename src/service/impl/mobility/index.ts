@@ -37,8 +37,13 @@ import {NIVEL_BASEURL} from '../../../config/env';
 import {
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
+  ViolationsVehicleLookupQuery,
+  ViolationsVehicleLookupQueryResult,
 } from '../../types';
-import {violationsReportingInitQueryResultSchema} from './schema';
+import {
+  violationsReportingInitQueryResultSchema,
+  violationsVehicleLookupResultSchema,
+} from './schema';
 
 const nivelBaseUrl =
   NIVEL_BASEURL || 'https://atb.stage.api.reporting.nivel.no';
@@ -188,6 +193,30 @@ export default (): IMobilityService => ({
           stripUnknown: true,
         },
       );
+      if (result.error) {
+        return Result.err(new APIError(`Invalid response. ${result.error}`));
+      }
+      return Result.ok(result.value);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async violationsVehicleLookup(
+    query: ViolationsVehicleLookupQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsVehicleLookupQueryResult, APIError>> {
+    try {
+      const urlParams = new URLSearchParams(query).toString();
+      const response = await get<ViolationsReportingInitQueryResult>(
+        `/atb/init?${urlParams}`,
+        headers,
+        {headers: {'x-api-key': headers.headers['x-api-key']}},
+        nivelBaseUrl,
+      );
+      const result = violationsVehicleLookupResultSchema.validate(response, {
+        stripUnknown: true,
+      });
       if (result.error) {
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
