@@ -170,25 +170,31 @@ export default (): IMobilityService => ({
     }
   },
 
-  initViolationsReporting(
+  async initViolationsReporting(
     query: ViolationsReportingInitQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsReportingInitQueryResult, APIError>> {
-    const urlParams = new URLSearchParams(query).toString();
-    return get<ViolationsReportingInitQueryResult>(
-      `/atb/init?${urlParams}`,
-      headers,
-      {headers: {'x-api-key': headers.headers['x-api-key']}},
-      nivelBaseUrl,
-    )
-      .then((res) => {
-        const value = violationsReportingInitQueryResultSchema.validate(res, {
+    try {
+      const urlParams = new URLSearchParams(query).toString();
+      const response = await get<ViolationsReportingInitQueryResult>(
+        `/atb/init?${urlParams}`,
+        headers,
+        {headers: {'x-api-key': headers.headers['x-api-key']}},
+        nivelBaseUrl,
+      );
+      const result = violationsReportingInitQueryResultSchema.validate(
+        response,
+        {
           stripUnknown: true,
-        });
-        if (value.error) throw new Error(`Invalid response. ${value.error}`);
-        return Result.ok(value.value);
-      })
-      .catch(Result.err);
+        },
+      );
+      if (result.error) {
+        return Result.err(new APIError(`Invalid response. ${result.error}`));
+      }
+      return Result.ok(result.value);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
   },
 });
 
