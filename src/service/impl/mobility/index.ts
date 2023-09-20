@@ -33,7 +33,7 @@ import {
 } from '../fragments/mobility-gql/vehicles.graphql-gen';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {get, post} from '../../../utils/fetch-client';
-import {NIVEL_BASEURL} from '../../../config/env';
+import {NIVEL_API_KEY, NIVEL_BASEURL} from '../../../config/env';
 import {
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
@@ -47,8 +47,8 @@ import {
   violationsVehicleLookupResultSchema,
 } from './schema';
 
-const nivelBaseUrl =
-  NIVEL_BASEURL || 'https://atb.stage.api.reporting.nivel.no';
+const nivelBaseUrl = NIVEL_BASEURL || '';
+const nivelApiKey = NIVEL_API_KEY || '';
 
 export default (): IMobilityService => ({
   async getVehicles(query, headers) {
@@ -186,7 +186,7 @@ export default (): IMobilityService => ({
       const response = await get<ViolationsReportingInitQueryResult>(
         `/atb/init?${urlParams}`,
         headers,
-        {headers: {'x-api-key': headers.headers['x-api-key']}},
+        {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
       const result = violationsReportingInitQueryResultSchema.validate(
@@ -213,7 +213,7 @@ export default (): IMobilityService => ({
       const response = await get<ViolationsReportingInitQueryResult>(
         `/atb/init?${urlParams}`,
         headers,
-        {headers: {'x-api-key': headers.headers['x-api-key']}},
+        {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
       const result = violationsVehicleLookupResultSchema.validate(response, {
@@ -237,7 +237,7 @@ export default (): IMobilityService => ({
         `/atb/report`,
         query,
         headers,
-        {headers: {'x-api-key': headers.headers['x-api-key']}},
+        {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
       // The Nivel API returns void. If we reach this point, the request is successful.
