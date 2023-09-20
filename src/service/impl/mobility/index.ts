@@ -32,11 +32,13 @@ import {
   VehicleExtendedFragment,
 } from '../fragments/mobility-gql/vehicles.graphql-gen';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {get} from '../../../utils/fetch-client';
+import {get, post} from '../../../utils/fetch-client';
 import {NIVEL_BASEURL} from '../../../config/env';
 import {
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
   ViolationsVehicleLookupQuery,
   ViolationsVehicleLookupQueryResult,
 } from '../../types';
@@ -221,6 +223,25 @@ export default (): IMobilityService => ({
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
       return Result.ok(result.value);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async sendViolationsReport(
+    query: ViolationsReportQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsReportQueryResult, APIError>> {
+    try {
+      await post<ViolationsReportQueryResult>(
+        `/atb/report`,
+        query,
+        headers,
+        {headers: {'x-api-key': headers.headers['x-api-key']}},
+        nivelBaseUrl,
+      );
+      // The Nivel API returns void. If we reach this point, the request is successful.
+      return Result.ok({status: 'OK'});
     } catch (error) {
       return Result.err(new APIError(error));
     }

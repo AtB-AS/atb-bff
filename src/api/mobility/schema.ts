@@ -9,6 +9,7 @@ import {
   VehiclesQuery,
   VehiclesQuery_v2,
   ViolationsReportingInitQuery,
+  ViolationsReportQuery,
   ViolationsVehicleLookupQuery,
 } from '../../service/types';
 
@@ -91,5 +92,18 @@ export const violationsReportingInitRequest = {
 export const violationsVehicleLookupRequest = {
   query: Joi.object<ViolationsVehicleLookupQuery>({
     qr: Joi.string(),
+  }),
+};
+export const violationsReportRequest = {
+  query: Joi.object<ViolationsReportQuery>({
+    providerId: Joi.number(),
+    longitude: Joi.number(),
+    latitude: Joi.number(),
+    image: Joi.string(),
+    imageType: Joi.string(),
+    qr: Joi.string(),
+    appId: Joi.string(),
+    violations: Joi.array().items(Joi.string()),
+    timestamp: Joi.date().iso(),
   }),
 };

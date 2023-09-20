@@ -73,6 +73,8 @@ import {
   VehiclesQuery_v2,
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
   ViolationsVehicleLookupQuery,
   ViolationsVehicleLookupQueryResult,
 } from './types';
@@ -254,4 +256,8 @@ export interface IMobilityService {
     query: ViolationsVehicleLookupQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsVehicleLookupQueryResult, APIError>>;
+  sendViolationsReport(
+    query: ViolationsReportQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsReportQueryResult, APIError>>;
 }
