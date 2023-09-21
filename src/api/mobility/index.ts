@@ -135,7 +135,7 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     method: 'GET',
     path: '/bff/v2/mobility/violations-reporting/init',
     options: {
-      tags: ['api', ' mobility', 'violations'],
+      tags: ['api', 'mobility', 'violations'],
       validate: violationsReportingInitRequest,
       description: 'Initialize the violations reporting process',
     },
@@ -151,7 +151,7 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     method: 'GET',
     path: '/bff/v2/mobility/violations-reporting/vehicle',
     options: {
-      tags: ['api', ' mobility', 'violations', 'vehicle lookup'],
+      tags: ['api', 'mobility', 'violations', 'vehicle lookup'],
       validate: violationsVehicleLookupRequest,
       description: 'Looks up vehicle details from qr code contents',
     },
