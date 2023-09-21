@@ -244,3 +244,38 @@ export type VippsCustomTokenRequest = {
   state: string;
   nonce: string;
 };
+
+export type ViolationsReportingInitQuery = {
+  lng: string;
+  lat: string;
+};
+
+export type ViolationsReportingInitQueryResult = {
+  providers: {id: number; name: string}[];
+  violations: {id: number; code: string}[];
+};
+
+export type ViolationsVehicleLookupQuery = {
+  qr: string;
+};
+
+export type ViolationsVehicleLookupQueryResult = {
+  provider_id: number;
+  vehicle_id: string;
+};
+
+export type ViolationsReportQuery = {
+  providerId: number;
+  longitude: number;
+  latitude: number;
+  image: string; //base64 encoded image blob
+  imageType: string; // e.g. 'png'
+  qr: string;
+  appId: number;
+  violations: string[];
+  timestamp: string;
+};
+
+export type ViolationsReportQueryResult = {
+  status: 'OK';
+};

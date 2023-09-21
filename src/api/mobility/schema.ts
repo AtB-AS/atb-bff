@@ -8,6 +8,9 @@ import {
   VehicleQuery,
   VehiclesQuery,
   VehiclesQuery_v2,
+  ViolationsReportingInitQuery,
+  ViolationsReportQuery,
+  ViolationsVehicleLookupQuery,
 } from '../../service/types';
 
 export const getVehiclesRequest = {
@@ -76,5 +79,31 @@ export const getCarStationRequest = {
 export const getBikeStationRequest = {
   query: Joi.object<BikeStationQuery>({
     ids: Joi.array().items(Joi.string()).required().single(),
+  }),
+};
+
+export const violationsReportingInitRequest = {
+  query: Joi.object<ViolationsReportingInitQuery>({
+    lat: Joi.number().required(),
+    lng: Joi.number().required(),
+  }),
+};
+
+export const violationsVehicleLookupRequest = {
+  query: Joi.object<ViolationsVehicleLookupQuery>({
+    qr: Joi.string(),
+  }),
+};
+export const violationsReportRequest = {
+  query: Joi.object<ViolationsReportQuery>({
+    providerId: Joi.number(),
+    longitude: Joi.number(),
+    latitude: Joi.number(),
+    image: Joi.string(),
+    imageType: Joi.string(),
+    qr: Joi.string(),
+    appId: Joi.string(),
+    violations: Joi.array().items(Joi.string()),
+    timestamp: Joi.date().iso(),
   }),
 };

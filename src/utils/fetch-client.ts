@@ -65,7 +65,7 @@ export const post = async <T>(
   headers: Request<ReqRefDefaults>,
   options: Omit<RequestInit, 'method' | 'agent' | 'body'> = {},
   baseUrl?: string,
-): Promise<T> => {
+): Promise<T | undefined> => {
   const response = await performFetch(
     url,
     headers,
@@ -81,5 +81,5 @@ export const post = async <T>(
     },
     baseUrl,
   );
-  return (await response.json()) as T;
+  return response.size > 0 ? ((await response.json()) as T) : undefined;
 };

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {getEnv} from '../utils/get-env';
 
 export const TICKET_INVITE_KEY: string | undefined =
@@ -16,7 +17,8 @@ export const PROJECT_ID = process.env.PROJECT_ID;
 export const VIPPS_BASE_URL = process.env.VIPPS_BASE_URL;
 export const VIPPS_CLIENT_ID = process.env.VIPPS_CLIENT_ID;
 export const VIPPS_CLIENT_SECRET = process.env.VIPPS_CLIENT_SECRET;
-
+export const NIVEL_BASEURL: string | undefined = process.env.NIVEL_BASEURL;
+export const NIVEL_API_KEY: string | undefined = process.env.NIVEL_API_KEY;
 /**
  * Return a URL to the given service. `serviceKey` should be uppercased.
  */
