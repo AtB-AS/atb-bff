@@ -167,7 +167,7 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
     method: 'POST',
     path: '/bff/v2/mobility/violations-reporting/report',
     options: {
-      tags: ['api', ' mobility', 'violations', 'report'],
+      tags: ['api', 'mobility', 'violations', 'report'],
       validate: violationsReportRequest,
       description: 'Report a parking violation',
     },
