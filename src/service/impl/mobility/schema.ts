@@ -10,12 +10,18 @@ export const violationsReportingInitQueryResultSchema =
       Joi.object({
         id: Joi.number(),
         name: Joi.string(),
+        image: Joi.object({
+          type: Joi.string(),
+          base64: Joi.string(),
+        }),
       }),
     ),
     violations: Joi.array().items(
       Joi.object({
         id: Joi.number(),
         code: Joi.string(),
+        icon: Joi.string(),
+        selectable: Joi.boolean(),
       }),
     ),
   });

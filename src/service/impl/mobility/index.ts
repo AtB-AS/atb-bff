@@ -198,7 +198,11 @@ export default (): IMobilityService => ({
       if (result.error) {
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
-      return Result.ok(result.value);
+      const retVal: ViolationsReportingInitQueryResult = {
+        ...result.value,
+        violations: result.value.violations.filter((v) => v.selectable),
+      };
+      return Result.ok(retVal);
     } catch (error) {
       return Result.err(new APIError(error));
     }
