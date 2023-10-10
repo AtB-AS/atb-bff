@@ -29,7 +29,7 @@ export default (): IGeocoderService => {
               lon: params.lon,
             },
             weight: FOCUS_WEIGHT,
-            scale: 200,
+            scale: '200km',
             function: 'exp',
           },
         };

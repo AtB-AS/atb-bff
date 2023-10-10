@@ -276,5 +276,5 @@ export interface Focus {
    *
    * @defaultValue 2500
    */
-  scale?: number;
+  scale?: `${number}km`;
 }
