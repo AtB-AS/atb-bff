@@ -215,7 +215,7 @@ export default (): IMobilityService => ({
     try {
       const urlParams = new URLSearchParams(query).toString();
       const response = await get<ViolationsReportingInitQueryResult>(
-        `/atb/init?${urlParams}`,
+        `/atb/vehicle?${urlParams}`,
         headers,
         {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
