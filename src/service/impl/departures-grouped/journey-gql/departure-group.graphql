@@ -41,6 +41,7 @@ query QuayIdInStops($stopIds: [String]!) {
 fragment group_estimatedCallFields on EstimatedCall {
   destinationDisplay {
     frontText
+    via
   }
   notices {
     ...notice
@@ -53,6 +54,7 @@ fragment group_estimatedCallFields on EstimatedCall {
 fragment group_times_estimatedCallFields on EstimatedCall {
   destinationDisplay {
     frontText
+    via
   }
   date
   expectedDepartureTime

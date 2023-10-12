@@ -1,12 +1,15 @@
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 import {
+  DestinationDisplay,
   ReportType,
   TransportMode,
   TransportSubmode,
 } from '../../../../graphql/journey/journeyplanner-types_v3';
 import {FavoriteDeparture} from '../../../types';
 import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
+import {destinationDisplaysAreEqual} from '../../departures/utils/favorites';
+import {mapToLegacyLineName} from '../../trips/converters';
 
 type Notice = {text?: string};
 type Situation = {
@@ -32,7 +35,9 @@ type Situation = {
 };
 
 type DepartureLineInfo = {
+  /** @deprecated Use destinationDisplay instead */
   lineName: string;
+  destinationDisplay: DestinationDisplay;
   lineNumber: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;
@@ -96,12 +101,15 @@ export default function mapQueryToGroups(
   if (!stopPlaces) {
     return [];
   }
-
   const isFavorite = (item: DepartureLineInfo, stopId: string) =>
     !favorites ||
     favorites.some(
       (f) =>
-        (!f.lineName || item.lineName === f.lineName) &&
+        (!f.destinationDisplay ||
+          destinationDisplaysAreEqual(
+            f.destinationDisplay,
+            item.destinationDisplay,
+          )) &&
         item.lineId === f.lineId &&
         stopId === f.stopId &&
         (!f.quayId || item.quayId === f.quayId),
@@ -134,7 +142,8 @@ export default function mapQueryToGroups(
           }
 
           const lineInfo: DepartureLineInfo = {
-            lineName: lineInfoEntry.destinationDisplay?.frontText ?? '',
+            lineName: mapToLegacyLineName(lineInfoEntry.destinationDisplay),
+            destinationDisplay: lineInfoEntry.destinationDisplay ?? {},
             lineNumber: lineInfoEntry.serviceJourney?.line.publicCode ?? '',
             transportMode: lineInfoEntry.serviceJourney?.line.transportMode,
             transportSubmode:

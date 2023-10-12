@@ -18,6 +18,7 @@ export interface Coordinates {
 
 export type FavoriteDeparture = {
   stopId: string;
+  /** @deprecated Use destinationDisplay instead */
   lineName?: string; // kept for backward compatibility
   destinationDisplay?: DestinationDisplay;
   lineId: string;

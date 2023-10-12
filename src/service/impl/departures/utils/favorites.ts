@@ -99,7 +99,8 @@ function favoriteDepartureMatchesEstimatedCall(
   );
 }
 
-function destinationDisplaysAreEqual(
+/* NB this is the same function as in the app. Keep in sync! */
+export function destinationDisplaysAreEqual(
   destinationDisplay1: DestinationDisplay | undefined,
   destinationDisplay2: DestinationDisplay | undefined,
 ) {
