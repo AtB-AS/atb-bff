@@ -2,8 +2,8 @@
 Scenarios for v2 requests
  */
 
-import { sleep } from 'k6';
-import { randomNumberInclusiveInInterval } from '../utils/utils';
+import {sleep} from 'k6';
+import {randomNumberInclusiveInInterval} from '../utils/utils';
 import {
   departureFavorites,
   departureFavoritesVsQuayDepartures,
@@ -16,28 +16,28 @@ import {
   stopDepartures,
   stopDeparturesPOSTandGET,
   stopsDetails,
-  stopsNearest
+  stopsNearest,
 } from './departures';
 import {
   stopsNearestTestData,
   stopsDetailsTestData,
   departureFavoritesTestData,
   tripsTestData,
-  serviceJourneyTestData
+  serviceJourneyTestData,
 } from './testData/testData';
 import {
   filteredTripsScenario,
   singleTrip,
   trips,
-  tripsWithCursor
+  tripsWithCursor,
 } from './trips';
 import {
   polyline,
   serviceJourneyDepartures,
-  serviceJourneyCalls
+  serviceJourneyCalls,
 } from './servicejourney';
-import { stations, vehicleByIdScenario, vehicles } from './mobility';
-import { stationByIdScenario } from './mobility/scenario';
+import {stations, vehicleByIdScenario, vehicles} from './mobility';
+import {stationByIdScenario} from './mobility/scenario';
 
 //Scenario with std pattern
 export const departuresScenario = (searchDate: string): void => {

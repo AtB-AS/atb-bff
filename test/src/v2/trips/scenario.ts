@@ -1,5 +1,5 @@
-import { filteredTrips } from './trips';
-import { tripsFilters } from '../testData/tripsFilters';
+import {filteredTrips} from './trips';
+import {tripsFilters} from '../testData/tripsFilters';
 
 export function filteredTripsScenario(searchDate: string): void {
   // Include all

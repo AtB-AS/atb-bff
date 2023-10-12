@@ -1,6 +1,6 @@
-import { vehicle, vehicles } from './vehicles';
-import { StationInfoType, VehicleInfoType } from '../types/mobility';
-import { station, stations } from './stations';
+import {vehicle, vehicles} from './vehicles';
+import {StationInfoType, VehicleInfoType} from '../types/mobility';
+import {station, stations} from './stations';
 
 // Get vehicles and ask for a specific vehicle
 export function vehicleByIdScenario(): void {
