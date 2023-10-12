@@ -95,15 +95,15 @@ export const violationsVehicleLookupRequest = {
   }),
 };
 export const violationsReportRequest = {
-  query: Joi.object<ViolationsReportQuery>({
-    providerId: Joi.number(),
-    longitude: Joi.number(),
-    latitude: Joi.number(),
+  payload: Joi.object<ViolationsReportQuery>({
+    providerId: Joi.number().required(),
+    longitude: Joi.number().required(),
+    latitude: Joi.number().required(),
     image: Joi.string(),
     imageType: Joi.string(),
     qr: Joi.string(),
     appId: Joi.string(),
-    violations: Joi.array().items(Joi.string()),
+    violations: Joi.array().items(Joi.string()).required(),
     timestamp: Joi.date().iso(),
   }),
 };

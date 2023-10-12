@@ -237,14 +237,15 @@ export default (): IMobilityService => ({
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsReportQueryResult, APIError>> {
     try {
-      await post<ViolationsReportQueryResult>(
+      const response = await post(
         `/atb/report`,
         query,
         headers,
         {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
-      // The Nivel API returns void. If we reach this point, the request is successful.
+      if (!response.ok)
+        return Result.err(new APIError(new Error(response.statusText)));
       return Result.ok({status: 'OK'});
     } catch (error) {
       return Result.err(new APIError(error));
