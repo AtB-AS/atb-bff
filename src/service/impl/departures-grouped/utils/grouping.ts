@@ -110,6 +110,7 @@ export default function mapQueryToGroups(
             f.destinationDisplay,
             item.destinationDisplay,
           )) &&
+        (!f.lineName || item.lineName === f.lineName) && // kept for backward compatibility
         item.lineId === f.lineId &&
         stopId === f.stopId &&
         (!f.quayId || item.quayId === f.quayId),

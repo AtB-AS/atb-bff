@@ -60,6 +60,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Sjetnmarka via Kroppanm.-Okstad",
               "lineNumber": "24",
@@ -123,6 +127,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "City Syd via Kroppanmarka",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanmarka",
               "lineNumber": "24",
@@ -186,6 +194,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Okstad via Kroppanmarka",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Okstad via Kroppanmarka",
               "lineNumber": "24",
@@ -209,6 +221,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "City Syd via Kroppanm.-Okstad",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanm.-Okstad",
               "lineNumber": "24",
@@ -286,6 +302,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Trondheim S",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Trondheim S",
               "lineNumber": "24",
@@ -375,6 +395,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Trondheim S",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Trondheim S",
               "lineNumber": "24",
@@ -452,6 +476,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Sjetnmarka via Kroppanm.-Okstad",
               "lineNumber": "24",
@@ -515,6 +543,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "City Syd via Kroppanmarka",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanmarka",
               "lineNumber": "24",
@@ -578,6 +610,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Okstad via Kroppanmarka",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Okstad via Kroppanmarka",
               "lineNumber": "24",
@@ -601,6 +637,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "City Syd via Kroppanm.-Okstad",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanm.-Okstad",
               "lineNumber": "24",
@@ -670,6 +710,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Klæbu",
+              },
               "lineId": "ATB:Line:200329232359196_73_200109141539610",
               "lineName": "Klæbu",
               "lineNumber": "73",
@@ -733,6 +777,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Ratesvingen",
+              },
               "lineId": "ATB:Line:200603081383720_10_200109141539610",
               "lineName": "Ratesvingen",
               "lineNumber": "10",
@@ -796,6 +844,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Rate",
+              },
               "lineId": "ATB:Line:200603081383720_10_200109141539610",
               "lineName": "Rate",
               "lineNumber": "10",
@@ -859,6 +911,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Spillebakken",
+              },
               "lineId": "ATB:Line:200329234095433_74_200109141539610",
               "lineName": "Spillebakken",
               "lineNumber": "74",
@@ -922,6 +978,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Flatjord",
+              },
               "lineId": "ATB:Line:200329234095433_74_200109141539610",
               "lineName": "Flatjord",
               "lineNumber": "74",
@@ -985,6 +1045,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Klæbu sentrum",
+              },
               "lineId": "ATB:Line:200329232359196_73_200109141539610",
               "lineName": "Klæbu sentrum",
               "lineNumber": "73",
@@ -1008,6 +1072,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sandmoen via Sluppen",
+              },
               "lineId": "ATB:Line:200109141544139_53_200109141539610",
               "lineName": "Sandmoen via Sluppen",
               "lineNumber": "53",
@@ -1031,6 +1099,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sandmoen via Sluppen-Tiller",
+              },
               "lineId": "ATB:Line:200109141544140_54_200109141539610",
               "lineName": "Sandmoen via Sluppen-Tiller",
               "lineNumber": "54",
@@ -1094,6 +1166,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sluppen",
+              },
               "lineId": "ATB:Line:200109141544150_79_200109141539610",
               "lineName": "Sluppen",
               "lineNumber": "79",
@@ -1117,6 +1193,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Klæbu - Sørborgen skole",
+              },
               "lineId": "ATB:Line:200329232359196_73_200109141539610",
               "lineName": "Klæbu - Sørborgen skole",
               "lineNumber": "73",
@@ -1194,6 +1274,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sæterbakken via sentrum",
+              },
               "lineId": "ATB:Line:200603081383720_10_200109141539610",
               "lineName": "Sæterbakken via sentrum",
               "lineNumber": "10",
@@ -1257,6 +1341,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Tempe",
+              },
               "lineId": "ATB:Line:200329234095433_74_200109141539610",
               "lineName": "Tempe",
               "lineNumber": "74",
@@ -1320,6 +1408,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Tempe",
+              },
               "lineId": "ATB:Line:200329232359196_73_200109141539610",
               "lineName": "Tempe",
               "lineNumber": "73",
@@ -1383,6 +1475,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Bratsbergvegen",
+              },
               "lineId": "ATB:Line:200329232359196_73_200109141539610",
               "lineName": "Bratsbergvegen",
               "lineNumber": "73",
@@ -1446,6 +1542,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Vikhammeråsen via Brattøra",
+              },
               "lineId": "ATB:Line:200109141544150_79_200109141539610",
               "lineName": "Vikhammeråsen via Brattøra",
               "lineNumber": "79",
@@ -1509,6 +1609,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Bratsbergvegen",
+              },
               "lineId": "ATB:Line:200329234095433_74_200109141539610",
               "lineName": "Bratsbergvegen",
               "lineNumber": "74",
@@ -1572,6 +1676,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Vikåsen via sentrum-Strindheim",
+              },
               "lineId": "ATB:Line:200603081383720_10_200109141539610",
               "lineName": "Vikåsen via sentrum-Strindheim",
               "lineNumber": "10",
@@ -1679,6 +1787,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Trondheim S",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Trondheim S",
               "lineNumber": "24",
@@ -1773,6 +1885,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "City Syd via Kroppanmarka",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanmarka",
               "lineNumber": "24",
@@ -1836,6 +1952,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Sjetnmarka via Kroppanm.-Okstad",
               "lineNumber": "24",
@@ -1899,6 +2019,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Okstad via Kroppanmarka",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Okstad via Kroppanmarka",
               "lineNumber": "24",
@@ -1922,6 +2046,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "City Syd via Kroppanm.-Okstad",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanm.-Okstad",
               "lineNumber": "24",
@@ -1999,6 +2127,10 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Trondheim S",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Trondheim S",
               "lineNumber": "24",
@@ -2106,6 +2238,121 @@ Array [
               },
             ],
             "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Trondheim S",
+              },
+              "lineId": "ATB:Line:200109141544126_24_200109141539610",
+              "lineName": "Trondheim S",
+              "lineNumber": "24",
+              "notices": Array [],
+              "quayId": "NSR:Quay:74013",
+              "transportMode": "bus",
+              "transportSubmode": "localBus",
+            },
+          },
+        ],
+        "quay": Object {
+          "__typename": "Quay",
+          "description": null,
+          "id": "NSR:Quay:74013",
+          "latitude": 63.40819,
+          "longitude": 10.403856,
+          "name": "Sorgenfri",
+          "publicCode": "",
+          "situations": Array [],
+        },
+      },
+    ],
+    "stopPlace": Object {
+      "__typename": "StopPlace",
+      "description": "",
+      "id": "NSR:StopPlace:43153",
+      "latitude": 63.407925,
+      "longitude": 10.403864,
+      "name": "Sorgenfri",
+    },
+  },
+]
+`;
+
+exports[`service stops -> departure group utils snapshot - should group data from venue with favorites with via data 1`] = `
+Array [
+  Object {
+    "quays": Array [
+      Object {
+        "group": Array [],
+        "quay": Object {
+          "__typename": "Quay",
+          "description": null,
+          "id": "NSR:Quay:74012",
+          "latitude": 63.40766,
+          "longitude": 10.403871,
+          "name": "Sorgenfri",
+          "publicCode": "",
+          "situations": Array [],
+        },
+      },
+      Object {
+        "group": Array [
+          Object {
+            "departures": Array [
+              Object {
+                "aimedTime": undefined,
+                "cancellation": undefined,
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141599832_78_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+              Object {
+                "aimedTime": undefined,
+                "cancellation": undefined,
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141599833_80_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+              Object {
+                "aimedTime": undefined,
+                "cancellation": undefined,
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141599834_82_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+              Object {
+                "aimedTime": undefined,
+                "cancellation": undefined,
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141599835_84_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+              Object {
+                "aimedTime": undefined,
+                "cancellation": undefined,
+                "predictionInaccurate": false,
+                "realtime": true,
+                "serviceDate": undefined,
+                "serviceJourneyId": "ATB:ServiceJourney:24_200109141599836_86_200109141539610",
+                "situations": Array [],
+                "time": undefined,
+              },
+            ],
+            "lineInfo": Object {
+              "destinationDisplay": Object {
+                "__typename": "DestinationDisplay",
+                "frontText": "Trondheim S",
+              },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Trondheim S",
               "lineNumber": "24",
