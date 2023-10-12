@@ -1,2 +1,2 @@
-export { departuresGrouped } from './departures';
-export { departuresRealtime } from './departures';
+export {departuresGrouped} from './departures';
+export {departuresRealtime} from './departures';

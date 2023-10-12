@@ -15,12 +15,15 @@ $  yarn webpack
 $  k6 run dist/k6.js --env [environment=[staging, prod] || host=https://...] [--http-debug || --http-debug="full"]
  */
 
-import { Options } from 'k6/options';
-import { conf } from './config/configuration';
-import { scn } from './scenario';
-import { createJUnitCheckOutput } from './utils/log';
+import {Options} from 'k6/options';
+import {conf} from './config/configuration';
+import {scn} from './scenario';
+import {createJUnitCheckOutput} from './utils/log';
 /* @ts-ignore */
-import { jUnit, textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
+import {
+  jUnit,
+  textSummary,
+} from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 
 //Settings for the simulation
 export let options: Options = {
@@ -29,7 +32,7 @@ export let options: Options = {
   iterations: conf.options()?.iterations,
   summaryTrendStats: conf.options().summaryTrendStats,
   thresholds: conf.options().thresholds,
-  stages: conf.options()?.stages
+  stages: conf.options()?.stages,
 };
 
 //Before the simulation starts
@@ -63,16 +66,16 @@ export const handleSummary = (data: object) => {
   //github actions
   if (conf.runFrom() === 'root') {
     return {
-      stdout: textSummary(data, { indent: ' ', enableColors: true }),
+      stdout: textSummary(data, {indent: ' ', enableColors: true}),
       'test/dist/results/junit_bff.xml': jUnit(data),
-      'test/dist/results/summary_bff.json': JSON.stringify(data)
+      'test/dist/results/summary_bff.json': JSON.stringify(data),
     };
   }
   //default: 'dist'
   return {
-    stdout: textSummary(data, { indent: ' ', enableColors: true }),
+    stdout: textSummary(data, {indent: ' ', enableColors: true}),
     'dist/results/junit_bff.xml': jUnit(data),
-    'dist/results/summary_bff.json': JSON.stringify(data)
+    'dist/results/summary_bff.json': JSON.stringify(data),
   };
 };
 

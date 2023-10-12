@@ -2,8 +2,8 @@
 Configuration that makes parameters from config file available
  */
 
-import { Counter } from 'k6/metrics';
-import { logResults } from '../utils/log';
+import {Counter} from 'k6/metrics';
+import {logResults} from '../utils/log';
 
 type ConfigType = {
   vus: number;
@@ -71,7 +71,7 @@ export const conf = {
       return false;
     }
     return this.options().junitCheckOutput;
-  }
+  },
 };
 
 //Make metrics available
@@ -87,16 +87,16 @@ export const metrics = {
     urls: string[],
     duration: number,
     requestName: string,
-    expectsArray: ExpectsType
+    expectsArray: ExpectsType,
   ): boolean {
     let failureArray: string[] = [];
     let passArray: string[] = [];
 
-    const expect = expectsArray.every(value => {
+    const expect = expectsArray.every((value) => {
       return value.expect;
     });
     if (!expect) {
-      expectsArray.filter(item => {
+      expectsArray.filter((item) => {
         if (!item.expect) {
           failureArray.push(item.check);
         }
@@ -111,11 +111,11 @@ export const metrics = {
       urls.join(', '),
       Math.round(duration * 1000) / 1000,
       failureArray,
-      passArray
+      passArray,
     );
 
     failureCount.add(!expect);
 
     return expect;
-  }
+  },
 };

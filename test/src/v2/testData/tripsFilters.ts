@@ -1,4 +1,4 @@
-import { transportModesType, tripsFiltersType } from '../types/trips';
+import {transportModesType, tripsFiltersType} from '../types/trips';
 
 const includeAll: transportModesType = [
   {
@@ -20,21 +20,21 @@ const includeAll: transportModesType = [
       'schoolBus',
       'shuttleBus',
       'sightseeingBus',
-      'specialNeedsBus'
-    ]
+      'specialNeedsBus',
+    ],
   },
   {
-    transportMode: 'coach'
+    transportMode: 'coach',
   },
   {
-    transportMode: 'tram'
+    transportMode: 'tram',
   },
   {
-    transportMode: 'rail'
+    transportMode: 'rail',
   },
   {
     transportMode: 'bus',
-    transportSubModes: ['railReplacementBus']
+    transportSubModes: ['railReplacementBus'],
   },
   {
     transportMode: 'water',
@@ -43,8 +43,8 @@ const includeAll: transportModesType = [
       'highSpeedVehicleService',
       'sightseeingService',
       'localPassengerFerry',
-      'internationalPassengerFerry'
-    ]
+      'internationalPassengerFerry',
+    ],
   },
   {
     transportMode: 'water',
@@ -52,34 +52,34 @@ const includeAll: transportModesType = [
       'highSpeedVehicleService',
       'internationalCarFerry',
       'localCarFerry',
-      'nationalCarFerry'
-    ]
+      'nationalCarFerry',
+    ],
   },
   {
     transportMode: 'bus',
-    transportSubModes: ['airportLinkBus']
+    transportSubModes: ['airportLinkBus'],
   },
   {
-    transportMode: 'metro'
+    transportMode: 'metro',
   },
   {
-    transportMode: 'air'
+    transportMode: 'air',
   },
   {
-    transportMode: 'cableway'
+    transportMode: 'cableway',
   },
   {
-    transportMode: 'funicular'
+    transportMode: 'funicular',
   },
   {
-    transportMode: 'monorail'
+    transportMode: 'monorail',
   },
   {
-    transportMode: 'lift'
+    transportMode: 'lift',
   },
   {
-    transportMode: 'trolleybus'
-  }
+    transportMode: 'trolleybus',
+  },
 ];
 
 const includeBus: transportModesType = [
@@ -102,27 +102,27 @@ const includeBus: transportModesType = [
       'schoolBus',
       'shuttleBus',
       'sightseeingBus',
-      'specialNeedsBus'
-    ]
-  }
+      'specialNeedsBus',
+    ],
+  },
 ];
 
 const includeRail: transportModesType = [
   {
-    transportMode: 'rail'
-  }
+    transportMode: 'rail',
+  },
 ];
 
 const includeAirportBus: transportModesType = [
   {
     transportMode: 'bus',
-    transportSubModes: ['airportLinkBus']
-  }
+    transportSubModes: ['airportLinkBus'],
+  },
 ];
 
 export const tripsFilters: tripsFiltersType = {
   all: includeAll,
   bus: includeBus,
   rail: includeRail,
-  airportBus: includeAirportBus
+  airportBus: includeAirportBus,
 };

@@ -1,2 +1,2 @@
-export { geocoderFeatures } from './geocoder';
-export { geocoderReverse } from './geocoder';
+export {geocoderFeatures} from './geocoder';
+export {geocoderReverse} from './geocoder';

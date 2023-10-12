@@ -2,19 +2,19 @@
 Scenarios for v1 requests
  */
 
-import { departuresGrouped, departuresRealtime } from './departures';
+import {departuresGrouped, departuresRealtime} from './departures';
 import {
   departuresGroupedTestData,
   geocoderFeaturesTestData,
   geocoderReverseTestData,
-  tripTestData
+  tripTestData,
 } from './testData/testData';
-import { serviceJourneyTestData } from '../v2/testData/testData';
-import { geocoderFeatures, geocoderReverse } from './geocoder';
-import { trip } from './journey';
+import {serviceJourneyTestData} from '../v2/testData/testData';
+import {geocoderFeatures, geocoderReverse} from './geocoder';
+import {trip} from './journey';
 import {
   serviceJourneyDepartures,
-  serviceJourneyPolyline
+  serviceJourneyPolyline,
 } from './servicejourney';
 
 //Scenario with std pattern

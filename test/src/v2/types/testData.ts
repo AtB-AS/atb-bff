@@ -1,4 +1,4 @@
-import { transportModesType } from './trips';
+import {transportModesType} from './trips';
 
 export type departureFavoritesTestDataType = {
   scenarios: Array<{

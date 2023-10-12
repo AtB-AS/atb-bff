@@ -4,6 +4,7 @@ import {bffHeadersPost} from '../../utils/headers';
 import {
   arrivesBeforeExpectedEndTime,
   departsAfterExpectedStartTime,
+  durationIsEqual,
   isEqual,
   timeArrayIsSorted,
   timeIsEqual,
@@ -551,13 +552,11 @@ export function singleTrip(
 
         // Note: The JSON-response is "randomly" ordered for each request. Pick out some test parameters.
         const tripsTest = [
-          jsonTripsSingle.duration,
           jsonTripsSingle.walkDistance,
           jsonTripsSingle.legs.length,
           jsonTripsSingle.legs.map((leg) => leg.mode),
         ];
         const singleTest = [
-          jsonSingle.duration,
           jsonSingle.walkDistance,
           jsonSingle.legs.length,
           jsonTripsSingle.legs.map((leg) => leg.mode),
@@ -583,6 +582,14 @@ export function singleTrip(
           {
             check: `single trip details should be equal to trips results details #${counter}`,
             expect: isEqual(tripsTest, singleTest),
+          },
+          {
+            check: `single trip duration should be equal to trips results duration #${counter}`,
+            expect: durationIsEqual(
+              jsonTripsSingle.duration,
+              jsonSingle.duration,
+              3,
+            ),
           },
           {
             check: `single trip start time should be equal to trips results start time #${counter}`,
