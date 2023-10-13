@@ -61,8 +61,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+                "frontText": "Sjetnmarka",
+                "via": Array [
+                  "Kroppanm.-Okstad",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Sjetnmarka via Kroppanm.-Okstad",
@@ -128,8 +130,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "City Syd via Kroppanmarka",
+                "frontText": "City Syd",
+                "via": Array [
+                  "Kroppanmarka",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanmarka",
@@ -195,8 +199,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Okstad via Kroppanmarka",
+                "frontText": "Okstad",
+                "via": Array [
+                  "Kroppanmarka",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Okstad via Kroppanmarka",
@@ -222,8 +228,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "City Syd via Kroppanm.-Okstad",
+                "frontText": "City Syd",
+                "via": Array [
+                  "Kroppanm.-Okstad",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanm.-Okstad",
@@ -477,8 +485,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+                "frontText": "Sjetnmarka",
+                "via": Array [
+                  "Kroppanm.-Okstad",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Sjetnmarka via Kroppanm.-Okstad",
@@ -544,8 +554,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "City Syd via Kroppanmarka",
+                "frontText": "City Syd",
+                "via": Array [
+                  "Kroppanmarka",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanmarka",
@@ -611,8 +623,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Okstad via Kroppanmarka",
+                "frontText": "Okstad",
+                "via": Array [
+                  "Kroppanmarka",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Okstad via Kroppanmarka",
@@ -638,8 +652,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "City Syd via Kroppanm.-Okstad",
+                "frontText": "City Syd",
+                "via": Array [
+                  "Kroppanm.-Okstad",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanm.-Okstad",
@@ -1073,8 +1089,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Sandmoen via Sluppen",
+                "frontText": "Sandmoen",
+                "via": Array [
+                  "Sluppen",
+                ],
               },
               "lineId": "ATB:Line:200109141544139_53_200109141539610",
               "lineName": "Sandmoen via Sluppen",
@@ -1100,8 +1118,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Sandmoen via Sluppen-Tiller",
+                "frontText": "Sandmoen",
+                "via": Array [
+                  "Sluppen-Tiller",
+                ],
               },
               "lineId": "ATB:Line:200109141544140_54_200109141539610",
               "lineName": "Sandmoen via Sluppen-Tiller",
@@ -1275,8 +1295,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Sæterbakken via sentrum",
+                "frontText": "Sæterbakken",
+                "via": Array [
+                  "sentrum",
+                ],
               },
               "lineId": "ATB:Line:200603081383720_10_200109141539610",
               "lineName": "Sæterbakken via sentrum",
@@ -1543,8 +1565,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Vikhammeråsen via Brattøra",
+                "frontText": "Vikhammeråsen",
+                "via": Array [
+                  "Brattøra",
+                ],
               },
               "lineId": "ATB:Line:200109141544150_79_200109141539610",
               "lineName": "Vikhammeråsen via Brattøra",
@@ -1677,8 +1701,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Vikåsen via sentrum-Strindheim",
+                "frontText": "Vikåsen",
+                "via": Array [
+                  "sentrum-Strindheim",
+                ],
               },
               "lineId": "ATB:Line:200603081383720_10_200109141539610",
               "lineName": "Vikåsen via sentrum-Strindheim",
@@ -1886,8 +1912,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "City Syd via Kroppanmarka",
+                "frontText": "City Syd",
+                "via": Array [
+                  "Kroppanmarka",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanmarka",
@@ -1953,8 +1981,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Sjetnmarka via Kroppanm.-Okstad",
+                "frontText": "Sjetnmarka",
+                "via": Array [
+                  "Kroppanm.-Okstad",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Sjetnmarka via Kroppanm.-Okstad",
@@ -2020,8 +2050,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "Okstad via Kroppanmarka",
+                "frontText": "Okstad",
+                "via": Array [
+                  "Kroppanmarka",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "Okstad via Kroppanmarka",
@@ -2047,8 +2079,10 @@ Array [
             ],
             "lineInfo": Object {
               "destinationDisplay": Object {
-                "__typename": "DestinationDisplay",
-                "frontText": "City Syd via Kroppanm.-Okstad",
+                "frontText": "City Syd",
+                "via": Array [
+                  "Kroppanm.-Okstad",
+                ],
               },
               "lineId": "ATB:Line:200109141544126_24_200109141539610",
               "lineName": "City Syd via Kroppanm.-Okstad",
