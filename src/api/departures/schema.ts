@@ -65,7 +65,9 @@ export const postDeparturesRequest = {
       .items(
         Joi.object<FavoriteDeparture>({
           stopId: Joi.string().required(),
-          lineName: Joi.string(), // kept for backward compatibility
+          lineName: Joi.string().description(
+            'deprecated - use destinationDisplay instead',
+          ), // kept for backward compatibility
           destinationDisplay: Joi.object<DestinationDisplay>({
             frontText: Joi.string(),
             via: Joi.array().items(Joi.string()).optional().single(),
