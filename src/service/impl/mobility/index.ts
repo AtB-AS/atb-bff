@@ -31,6 +31,24 @@ import {
   VehicleBasicFragment,
   VehicleExtendedFragment,
 } from '../fragments/mobility-gql/vehicles.graphql-gen';
+import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {get, post} from '../../../utils/fetch-client';
+import {NIVEL_API_KEY, NIVEL_BASEURL} from '../../../config/env';
+import {
+  ViolationsReportingInitQuery,
+  ViolationsReportingInitQueryResult,
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
+  ViolationsVehicleLookupQuery,
+  ViolationsVehicleLookupQueryResult,
+} from '../../types';
+import {
+  violationsReportingInitQueryResultSchema,
+  violationsVehicleLookupResultSchema,
+} from './schema';
+
+const nivelBaseUrl = NIVEL_BASEURL || '';
+const nivelApiKey = NIVEL_API_KEY || '';
 
 export default (): IMobilityService => ({
   async getVehicles(query, headers) {
@@ -154,6 +172,81 @@ export default (): IMobilityService => ({
         return Result.err(new APIError(result.errors));
       }
       return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async initViolationsReporting(
+    query: ViolationsReportingInitQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsReportingInitQueryResult, APIError>> {
+    try {
+      const urlParams = new URLSearchParams(query).toString();
+      const response = await get<ViolationsReportingInitQueryResult>(
+        `/atb/init?${urlParams}`,
+        headers,
+        {headers: {'x-api-key': nivelApiKey}},
+        nivelBaseUrl,
+      );
+      const result = violationsReportingInitQueryResultSchema.validate(
+        response,
+        {
+          stripUnknown: true,
+        },
+      );
+      if (result.error) {
+        return Result.err(new APIError(`Invalid response. ${result.error}`));
+      }
+      const retVal: ViolationsReportingInitQueryResult = {
+        ...result.value,
+        violations: result.value.violations.filter((v) => v.selectable),
+      };
+      return Result.ok(retVal);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async violationsVehicleLookup(
+    query: ViolationsVehicleLookupQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsVehicleLookupQueryResult, APIError>> {
+    try {
+      const urlParams = new URLSearchParams(query).toString();
+      const response = await get<ViolationsReportingInitQueryResult>(
+        `/atb/vehicle?${urlParams}`,
+        headers,
+        {headers: {'x-api-key': nivelApiKey}},
+        nivelBaseUrl,
+      );
+      const result = violationsVehicleLookupResultSchema.validate(response, {
+        stripUnknown: true,
+      });
+      if (result.error) {
+        return Result.err(new APIError(`Invalid response. ${result.error}`));
+      }
+      return Result.ok(result.value);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async sendViolationsReport(
+    query: ViolationsReportQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<ViolationsReportQueryResult, APIError>> {
+    try {
+      const response = await post(
+        `/atb/report`,
+        query,
+        headers,
+        {headers: {'x-api-key': nivelApiKey}},
+        nivelBaseUrl,
+      );
+      if (!response.ok)
+        return Result.err(new APIError(new Error(response.statusText)));
+      return Result.ok({status: 'OK'});
     } catch (error) {
       return Result.err(new APIError(error));
     }

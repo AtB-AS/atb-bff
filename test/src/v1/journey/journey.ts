@@ -1,16 +1,16 @@
 import http from 'k6/http';
-import { conf, ExpectsType, metrics } from '../../config/configuration';
-import { bffHeadersPost } from '../../utils/headers';
+import {conf, ExpectsType, metrics} from '../../config/configuration';
+import {bffHeadersPost} from '../../utils/headers';
 import {
   arrivesBeforeExpectedEndTime,
-  departsAfterExpectedStartTime
+  departsAfterExpectedStartTime,
 } from '../../utils/utils';
-import { tripTestDataType, TripsSimplifiedResponseType } from '../types';
+import {tripTestDataType, TripsSimplifiedResponseType} from '../types';
 
 export function trip(
   testData: tripTestDataType,
   searchDate: string,
-  arriveBy: boolean
+  arriveBy: boolean,
 ) {
   const searchTime = `${searchDate}T10:00:00.000Z`;
   for (let test of testData.scenarios) {
@@ -24,12 +24,12 @@ export function trip(
     test.query.arriveBy = arriveBy;
 
     const res = http.post(url, JSON.stringify(test.query), {
-      tags: { name: requestName },
-      headers: bffHeadersPost
+      tags: {name: requestName},
+      headers: bffHeadersPost,
     });
 
     const expects: ExpectsType = [
-      { check: 'should have status 200', expect: res.status === 200 }
+      {check: 'should have status 200', expect: res.status === 200},
     ];
 
     try {
@@ -40,17 +40,17 @@ export function trip(
         expects.push({
           check: 'should have expected end times before requested time',
           expect: arrivesBeforeExpectedEndTime(
-            tripsJson.map(trip => trip.expectedEndTime),
-            searchTime
-          )
+            tripsJson.map((trip) => trip.expectedEndTime),
+            searchTime,
+          ),
         });
       } else {
         expects.push({
           check: 'should have expected start times after requested time',
           expect: departsAfterExpectedStartTime(
-            tripsJson.map(trip => trip.expectedStartTime),
-            searchTime
-          )
+            tripsJson.map((trip) => trip.expectedStartTime),
+            searchTime,
+          ),
         });
       }
 
@@ -68,19 +68,19 @@ export function trip(
       expects.push(
         {
           check: 'should have correct from names',
-          expect: fromName.filter(e => e !== expFromName).length === 0
+          expect: fromName.filter((e) => e !== expFromName).length === 0,
         },
         {
           check: 'should have correct to names',
-          expect: toName.filter(e => e !== expToName).length === 0
-        }
+          expect: toName.filter((e) => e !== expToName).length === 0,
+        },
       );
 
       metrics.checkForFailures(
         [res.request.url],
         res.timings.duration,
         requestName,
-        expects
+        expects,
       );
     } catch (exp) {
       //throw exp
@@ -91,9 +91,9 @@ export function trip(
         [
           {
             check: `${exp}`,
-            expect: false
-          }
-        ]
+            expect: false,
+          },
+        ],
       );
     }
   }

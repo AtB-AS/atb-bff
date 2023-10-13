@@ -15,7 +15,7 @@ query getVehicles_v2(
     bicycles:vehicles(lat: $lat, lon: $lon, range: $range, formFactors: BICYCLE, operators: $bicycleOperators) @include (if:$includeBicycles) {
         ...vehicleBasic
     }
-    scooters:vehicles(lat: $lat, lon: $lon, range: $range, formFactors: SCOOTER, operators: $scooterOperators) @include (if:$includeScooters) {
+    scooters:vehicles(lat: $lat, lon: $lon, range: $range, formFactors: [SCOOTER, SCOOTER_STANDING], operators: $scooterOperators) @include (if:$includeScooters) {
         ...vehicleBasic
     }
 }

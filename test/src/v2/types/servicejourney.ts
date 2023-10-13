@@ -1,4 +1,4 @@
-import { ServiceJourneyEstimatedCallFragment } from '../../../../src/service/impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
+import {ServiceJourneyEstimatedCallFragment} from '../../../../src/service/impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
 import * as Types from '../../../../src/graphql/journey/journeyplanner-types_v3';
 
 export type PolylineSimplifiedResponseType = {
@@ -16,7 +16,7 @@ export type ServiceJourneyDeparturesResponseType = {
   value: Array<ServiceJourneyEstimatedCallFragment>;
 };
 
-type NoticesType = Array<{ id: string; text?: string }>;
+type NoticesType = Array<{id: string; text?: string}>;
 
 export type ServiceJourneyCallsResponseType = {
   value: {

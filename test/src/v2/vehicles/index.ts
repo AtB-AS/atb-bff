@@ -1,1 +1,1 @@
-export { serviceJourneys } from './servicejourney';
+export {serviceJourneys} from './servicejourney';

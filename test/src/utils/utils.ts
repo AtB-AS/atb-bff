@@ -134,6 +134,15 @@ export const timeIsEqual = (
   return !(Math.abs(time1D.getTime() - time2D.getTime()) > allowedMillisMargin);
 };
 
+// Checks if two ints are equal with an allowed margin (sec)
+export const durationIsEqual = (
+  time1: number,
+  time2: number,
+  allowedSecMargin: number = 0,
+): boolean => {
+  return !(Math.abs(time1 - time2) > allowedSecMargin);
+};
+
 // Utility function to get the json response with correct casting
 export const jCheck = (
   response: RefinedResponse<ResponseType>,

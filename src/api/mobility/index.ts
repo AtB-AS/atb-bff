@@ -8,6 +8,9 @@ import {
   VehicleQuery,
   VehiclesQuery,
   VehiclesQuery_v2,
+  ViolationsReportingInitQuery,
+  ViolationsReportQuery,
+  ViolationsVehicleLookupQuery,
 } from '../../service/types';
 import {
   getVehiclesRequest,
@@ -17,6 +20,9 @@ import {
   getBikeStationRequest,
   getVehiclesRequest_v2,
   getStationsRequest_v2,
+  violationsReportingInitRequest,
+  violationsVehicleLookupRequest,
+  violationsReportRequest,
 } from './schema';
 
 export default (server: Hapi.Server) => (service: IMobilityService) => {
@@ -119,6 +125,55 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       const payload = request.query as unknown as BikeStationQuery;
 
       return (await service.getBikeStation(payload, h.request)).unwrap();
+    },
+  });
+
+  /**
+   * Parking violations reporting
+   */
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/violations-reporting/init',
+    options: {
+      tags: ['api', 'mobility', 'violations'],
+      validate: violationsReportingInitRequest,
+      description: 'Initialize the violations reporting process',
+    },
+    handler: async (request, h) => {
+      const payload = request.query as unknown as ViolationsReportingInitQuery;
+      return (
+        await service.initViolationsReporting(payload, h.request)
+      ).unwrap();
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/violations-reporting/vehicle',
+    options: {
+      tags: ['api', 'mobility', 'violations', 'vehicle lookup'],
+      validate: violationsVehicleLookupRequest,
+      description: 'Looks up vehicle details from qr code contents',
+    },
+    handler: async (request, h) => {
+      const payload = request.query as unknown as ViolationsVehicleLookupQuery;
+      return (
+        await service.violationsVehicleLookup(payload, h.request)
+      ).unwrap();
+    },
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/bff/v2/mobility/violations-reporting/report',
+    options: {
+      tags: ['api', 'mobility', 'violations', 'report'],
+      validate: violationsReportRequest,
+      description: 'Report a parking violation',
+    },
+    handler: async (request, h) => {
+      const payload = request.payload as unknown as ViolationsReportQuery;
+      return (await service.sendViolationsReport(payload, h.request)).unwrap();
     },
   });
 };

@@ -32,7 +32,7 @@ export function logResults(
   url: string,
   delay: number,
   failureArray: string[],
-  passArray: string[]
+  passArray: string[],
 ) {
   // Print any errors
   logErrors(reqName, url, failureArray);
