@@ -9,7 +9,7 @@ import {
 import {FavoriteDeparture} from '../../../types';
 import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
 import {destinationDisplaysAreEqual} from '../../departures/utils/favorites';
-import {mapToLegacyLineName} from '../../trips/converters';
+import {mapToLegacyLineName} from '../../departures/utils/converters';
 
 type Notice = {text?: string};
 type Situation = {

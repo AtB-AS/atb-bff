@@ -3,9 +3,10 @@ import {
   EstimatedCall,
 } from '../../../../graphql/journey/journeyplanner-types_v3';
 import {FavoriteDeparture} from '../../../types';
-import {mapToLegacyLineName} from '../../trips/converters';
+
 import {DeparturesQuery} from '../journey-gql/departures.graphql-gen';
 import {StopPlaceQuayDeparturesQuery} from '../journey-gql/stop-departures.graphql-gen';
+import {mapToLegacyLineName} from './converters';
 
 export function filterFavoriteDepartures(
   result?: DeparturesQuery,
