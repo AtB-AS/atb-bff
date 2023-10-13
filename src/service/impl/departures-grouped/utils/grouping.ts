@@ -11,7 +11,6 @@ import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
 import {destinationDisplaysAreEqual} from '../../departures/utils/favorites';
 import {
   ensureViaFormat,
-  mapLegacyLineNameToDestinationDisplay,
   mapToLegacyLineName,
 } from '../../departures/utils/converters';
 
