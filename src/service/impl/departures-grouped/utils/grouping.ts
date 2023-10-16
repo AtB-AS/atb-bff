@@ -8,11 +8,8 @@ import {
 } from '../../../../graphql/journey/journeyplanner-types_v3';
 import {FavoriteDeparture} from '../../../types';
 import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
-import {destinationDisplaysAreEqual} from '../../departures/utils/favorites';
-import {
-  ensureViaFormat,
-  mapToLegacyLineName,
-} from '../../departures/utils/converters';
+import {destinationDisplaysAreMatching} from '../../departures/utils/favorites';
+import {mapToLegacyLineName} from '../../departures/utils/converters';
 
 type Notice = {text?: string};
 type Situation = {
@@ -109,7 +106,7 @@ export default function mapQueryToGroups(
     favorites.some(
       (f) =>
         (!f.destinationDisplay ||
-          destinationDisplaysAreEqual(
+          destinationDisplaysAreMatching(
             f.destinationDisplay,
             item.destinationDisplay,
           )) &&
@@ -147,8 +144,7 @@ export default function mapQueryToGroups(
 
           const lineInfo: DepartureLineInfo = {
             lineName: mapToLegacyLineName(lineInfoEntry.destinationDisplay),
-            destinationDisplay:
-              ensureViaFormat(lineInfoEntry.destinationDisplay) ?? {},
+            destinationDisplay: lineInfoEntry.destinationDisplay ?? {},
             lineNumber: lineInfoEntry.serviceJourney?.line.publicCode ?? '',
             transportMode: lineInfoEntry.serviceJourney?.line.transportMode,
             transportSubmode:

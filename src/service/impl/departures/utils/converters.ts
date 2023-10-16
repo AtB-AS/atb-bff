@@ -4,11 +4,10 @@ export function mapToLegacyLineName(
   destinationDisplay: DestinationDisplay | undefined,
 ): string {
   const frontText = destinationDisplay?.frontText || '';
-  const viaPlacesText = destinationDisplay?.via?.join(' / ') || '';
+  const viaPlacesText = destinationDisplay?.via?.join('-') || '';
   return frontText + (viaPlacesText.length > 0 ? ' via ' + viaPlacesText : '');
 }
 
-// only needed until via params served from EnTur
 function mapLegacyLineNameToDestinationDisplay(
   legacyLineName: string | undefined,
 ): DestinationDisplay | undefined {
@@ -19,8 +18,8 @@ function mapLegacyLineNameToDestinationDisplay(
   if (viaItemsString === undefined) {
     return {frontText, via: undefined};
   }
-  const viaItems = viaItemsString.split('/');
-  const via = viaItems.map((viaItem) => viaItem.trim());
+
+  const via = viaItemsString.split(/\s*[/,-]\s*/); // split on "/" and "-" and trim
   return {frontText, via};
 }
 

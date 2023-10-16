@@ -6,7 +6,7 @@ import {FavoriteDeparture} from '../../../types';
 
 import {DeparturesQuery} from '../journey-gql/departures.graphql-gen';
 import {StopPlaceQuayDeparturesQuery} from '../journey-gql/stop-departures.graphql-gen';
-import {mapToLegacyLineName} from './converters';
+import {ensureViaFormat, mapToLegacyLineName} from './converters';
 
 export function filterFavoriteDepartures(
   result?: DeparturesQuery,
@@ -90,7 +90,7 @@ function favoriteDepartureMatchesEstimatedCall(
   return (
     estimatedCall.serviceJourney?.line.id === favoriteDeparture.lineId &&
     (!favoriteDeparture.destinationDisplay ||
-      destinationDisplaysAreEqual(
+      destinationDisplaysAreMatching(
         favoriteDeparture.destinationDisplay,
         estimatedCall.destinationDisplay,
       )) &&
@@ -101,7 +101,7 @@ function favoriteDepartureMatchesEstimatedCall(
 }
 
 /* NB this is the same function as in the app. Keep in sync! */
-export function destinationDisplaysAreEqual(
+function destinationDisplaysAreEqual(
   destinationDisplay1: DestinationDisplay | undefined,
   destinationDisplay2: DestinationDisplay | undefined,
 ) {
@@ -115,4 +115,14 @@ export function destinationDisplaysAreEqual(
   return !!(destinationDisplay1?.via || []).every((via1Item) =>
     destinationDisplay2?.via?.includes(via1Item),
   ); // doesn't check for same order in via arrays, but should it?
+}
+
+export function destinationDisplaysAreMatching(
+  destinationDisplay1: DestinationDisplay | undefined,
+  destinationDisplay2: DestinationDisplay | undefined,
+) {
+  const dd1 = ensureViaFormat(destinationDisplay1);
+  const dd2 = ensureViaFormat(destinationDisplay2);
+
+  return destinationDisplaysAreEqual(dd1, dd2);
 }
