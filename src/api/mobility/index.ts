@@ -170,6 +170,7 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       tags: ['api', 'mobility', 'violations', 'report'],
       validate: violationsReportRequest,
       description: 'Report a parking violation',
+      payload: {maxBytes: 10485760}, // Max upload size 10MB. Default 1MB
     },
     handler: async (request, h) => {
       const payload = request.payload as unknown as ViolationsReportQuery;
