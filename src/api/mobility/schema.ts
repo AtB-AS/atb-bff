@@ -96,7 +96,7 @@ export const violationsVehicleLookupRequest = {
 };
 export const violationsReportRequest = {
   payload: Joi.object<ViolationsReportQuery>({
-    providerId: Joi.number().required(),
+    providerId: Joi.number(),
     longitude: Joi.number().required(),
     latitude: Joi.number().required(),
     image: Joi.string(),
