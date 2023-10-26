@@ -142,6 +142,7 @@ export default function mapQueryToGroups(
             continue;
           }
 
+          // lineName is included here to support older clients
           const lineInfo: DepartureLineInfo = {
             lineName: mapToLegacyLineName(lineInfoEntry.destinationDisplay),
             destinationDisplay: lineInfoEntry.destinationDisplay ?? {},
