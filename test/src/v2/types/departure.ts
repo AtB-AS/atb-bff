@@ -110,8 +110,8 @@ export type QuayDeparturesType = {
       aimedDepartureTime: any;
       realtime: boolean;
       cancellation: boolean;
-      quay: {id: string};
-      destinationDisplay?: {frontText?: string};
+      quay: { id: string };
+      destinationDisplay?: { frontText?: string, via?: string[] };
       serviceJourney: {
         id: string;
         line: {

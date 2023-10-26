@@ -40,6 +40,7 @@ fragment tripPattern on TripPattern {
             expectedDepartureTime
             destinationDisplay {
                 frontText
+                via
             }
             quay {
                 publicCode

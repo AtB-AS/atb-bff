@@ -3,7 +3,10 @@ import mapQueryToGroups from '../grouping';
 const favorites = [
   {
     stopId: 'NSR:StopPlace:43153',
-    lineName: 'Trondheim S',
+    //lineName: 'Trondheim S',
+    destinationDisplay: {
+      frontText: 'Trondheim S',
+    },
     lineId: 'ATB:Line:200109141544126_24_200109141539610',
   },
 ];
@@ -24,6 +27,11 @@ describe('service stops -> departure group utils', () => {
 
   it('snapshot - should group data from venue with favorites', () => {
     const fixture = require('./fixture-venue-layer-favorites.json');
+    expect(mapQueryToGroups(fixture, favorites)).toMatchSnapshot();
+  });
+
+  it('snapshot - should group data from venue with favorites with via data', () => {
+    const fixture = require('./fixture-venue-layer-favorites-via.json');
     expect(mapQueryToGroups(fixture, favorites)).toMatchSnapshot();
   });
 

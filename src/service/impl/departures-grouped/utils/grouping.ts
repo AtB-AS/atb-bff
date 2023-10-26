@@ -1,12 +1,15 @@
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 import {
+  DestinationDisplay,
   ReportType,
   TransportMode,
   TransportSubmode,
 } from '../../../../graphql/journey/journeyplanner-types_v3';
 import {FavoriteDeparture} from '../../../types';
 import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
+import {destinationDisplaysAreMatching} from '../../departures/utils/favorites';
+import {mapToLegacyLineName} from '../../departures/utils/converters';
 
 type Notice = {text?: string};
 type Situation = {
@@ -32,7 +35,9 @@ type Situation = {
 };
 
 type DepartureLineInfo = {
+  /** @deprecated Use destinationDisplay instead */
   lineName: string;
+  destinationDisplay: DestinationDisplay;
   lineNumber: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;
@@ -96,12 +101,16 @@ export default function mapQueryToGroups(
   if (!stopPlaces) {
     return [];
   }
-
   const isFavorite = (item: DepartureLineInfo, stopId: string) =>
     !favorites ||
     favorites.some(
       (f) =>
-        (!f.lineName || item.lineName === f.lineName) &&
+        (!f.destinationDisplay ||
+          destinationDisplaysAreMatching(
+            f.destinationDisplay,
+            item.destinationDisplay,
+          )) &&
+        (!f.lineName || item.lineName === f.lineName) && // kept for backward compatibility
         item.lineId === f.lineId &&
         stopId === f.stopId &&
         (!f.quayId || item.quayId === f.quayId),
@@ -133,8 +142,10 @@ export default function mapQueryToGroups(
             continue;
           }
 
+          // lineName is included here to support older clients
           const lineInfo: DepartureLineInfo = {
-            lineName: lineInfoEntry.destinationDisplay?.frontText ?? '',
+            lineName: mapToLegacyLineName(lineInfoEntry.destinationDisplay),
+            destinationDisplay: lineInfoEntry.destinationDisplay ?? {},
             lineNumber: lineInfoEntry.serviceJourney?.line.publicCode ?? '',
             transportMode: lineInfoEntry.serviceJourney?.line.transportMode,
             transportSubmode:

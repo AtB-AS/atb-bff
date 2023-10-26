@@ -29,6 +29,7 @@ query departures(
       }
       destinationDisplay {
         frontText
+        via
       }
       serviceJourney {
         id
