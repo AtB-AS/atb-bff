@@ -10,6 +10,15 @@ describe('match destinationDisplays with via as string array or in frontText', (
     ).toBe(true);
   });
 
+  it('matches original formats with undefined via', () => {
+    expect(
+      destinationDisplaysAreMatching(
+        {frontText: 'Hallset via sentrum', via: undefined},
+        {frontText: 'Hallset via sentrum', via: undefined},
+      ),
+    ).toBe(true);
+  });
+
   it('matches the original format from src with the new format from favorite', () => {
     expect(
       destinationDisplaysAreMatching(
@@ -19,10 +28,28 @@ describe('match destinationDisplays with via as string array or in frontText', (
     ).toBe(true);
   });
 
+  it('matches the original format from src with the new format with undefined via from favorite', () => {
+    expect(
+      destinationDisplaysAreMatching(
+        {frontText: 'Hallset', via: ['sentrum']},
+        {frontText: 'Hallset via sentrum', via: undefined},
+      ),
+    ).toBe(true);
+  });
+
   it('matches the new format from src with the original format from favorite', () => {
     expect(
       destinationDisplaysAreMatching(
         {frontText: 'Hallset via sentrum', via: []},
+        {frontText: 'Hallset', via: ['sentrum']},
+      ),
+    ).toBe(true);
+  });
+
+  it('matches the new format from src with undefined via with the original format from favorite', () => {
+    expect(
+      destinationDisplaysAreMatching(
+        {frontText: 'Hallset via sentrum', via: undefined},
         {frontText: 'Hallset', via: ['sentrum']},
       ),
     ).toBe(true);
