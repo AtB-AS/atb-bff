@@ -1,5 +1,12 @@
 import {DestinationDisplay} from '../../../../graphql/journey/journeyplanner-types_v3';
 
+/*
+  Important:
+
+  When more info is obtained about the conversion to the new format with a separate via array,
+  ensure that these functions map correctly.
+*/
+
 export function mapToLegacyLineName(
   destinationDisplay: DestinationDisplay | undefined,
 ): string {
