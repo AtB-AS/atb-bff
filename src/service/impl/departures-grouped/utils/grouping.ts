@@ -90,8 +90,12 @@ export type StopPlaceGroup = {
   quays: QuayGroup[];
 };
 
-function toKey(lineId?: string, frontText?: String) {
-  return [lineId ?? '', frontText ?? ''].join('-&-');
+function toKey(lineId?: string, destinationDisplay?: DestinationDisplay) {
+  return [
+    lineId ?? '',
+    destinationDisplay?.frontText ?? '',
+    destinationDisplay?.via?.join('-'),
+  ].join('-&-');
 }
 
 export default function mapQueryToGroups(
@@ -122,16 +126,10 @@ export default function mapQueryToGroups(
       quays?.map(function (quay) {
         const {times, estimatedCalls, ...quayInfo} = quay;
         const groups = groupBy(times, (item) =>
-          toKey(
-            item.serviceJourney?.line.id,
-            item.destinationDisplay?.frontText,
-          ),
+          toKey(item.serviceJourney?.line.id, item.destinationDisplay),
         );
         const lineInfoGroups = groupBy(estimatedCalls, (item) =>
-          toKey(
-            item.serviceJourney?.line.id,
-            item.destinationDisplay?.frontText,
-          ),
+          toKey(item.serviceJourney?.line.id, item.destinationDisplay),
         );
 
         let lines: QuayGroup['group'] = [];
@@ -142,7 +140,7 @@ export default function mapQueryToGroups(
             continue;
           }
 
-          // lineName is included here to support older clients
+          // lineName is included here to support older clients and used for migration purposes by the new app
           const lineInfo: DepartureLineInfo = {
             lineName: mapToLegacyLineName(lineInfoEntry.destinationDisplay),
             destinationDisplay: lineInfoEntry.destinationDisplay ?? {},
