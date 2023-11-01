@@ -140,7 +140,7 @@ export default function mapQueryToGroups(
             continue;
           }
 
-          // lineName is included here to support older clients and used for migration purposes by the new app
+          // lineName is included here to support older clients and used for migration purposes by app version >= 1.44
           const lineInfo: DepartureLineInfo = {
             lineName: mapToLegacyLineName(lineInfoEntry.destinationDisplay),
             destinationDisplay: lineInfoEntry.destinationDisplay ?? {},
