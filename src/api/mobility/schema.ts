@@ -31,7 +31,7 @@ export const getVehiclesRequest_v2 = {
   query: Joi.object<VehiclesQuery_v2>({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
-    range: Joi.number().optional(),
+    range: Joi.number().required(),
     includeBicycles: Joi.boolean().required(),
     bicycleOperators: Joi.array().items(Joi.string()).optional().single(),
     includeScooters: Joi.boolean().required(),
@@ -63,7 +63,7 @@ export const getStationsRequest_v2 = {
   query: Joi.object<StationsQuery_v2>({
     lat: Joi.number().required(),
     lon: Joi.number().required(),
-    range: Joi.number().optional(),
+    range: Joi.number().required(),
     includeBicycles: Joi.boolean().required(),
     bicycleOperators: Joi.array().items(Joi.string()).optional().single(),
     includeCars: Joi.boolean().required(),
