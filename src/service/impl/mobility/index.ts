@@ -70,6 +70,10 @@ export default (): IMobilityService => ({
   },
 
   async getVehicles_v2(query, headers) {
+    // Prevent unnecessary calls to Entur when no vehicles are requested
+    if (!query.includeBicycles && !query.includeScooters) {
+      return Result.ok({});
+    }
     try {
       const result = await mobilityClient(headers).query<
         GetVehicles_V2Query,
@@ -124,6 +128,10 @@ export default (): IMobilityService => ({
   },
 
   async getStations_v2(query, headers) {
+    // Prevent unnecessary calls to Entur when no stations are requested
+    if (!query.includeBicycles && !query.includeCars) {
+      return Result.ok({});
+    }
     try {
       const result = await mobilityClient(headers).query<
         GetStations_V2Query,
