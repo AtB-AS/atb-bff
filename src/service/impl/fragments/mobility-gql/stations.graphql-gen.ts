@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
 export type VehicleTypeAvailabilityBasicFragment = { count: number, vehicleType: { formFactor: Types.FormFactor } };
 
-export type StationBasicFragment = { id: string, lat: number, lon: number, vehicleTypesAvailable?: Array<VehicleTypeAvailabilityBasicFragment> };
+export type StationBasicFragment = { id: string, lat: number, lon: number, capacity?: number, vehicleTypesAvailable?: Array<VehicleTypeAvailabilityBasicFragment> };
 
 export type BikeStationFragment = (
   { numDocksAvailable?: number, name: TranslatedStringFragment, pricingPlans: Array<PricingPlanFragment>, system: SystemFragment, rentalUris?: RentalUrisFragment }
@@ -35,6 +35,7 @@ export const StationBasicFragmentDoc = gql`
   id
   lat
   lon
+  capacity
   vehicleTypesAvailable {
     ...vehicleTypeAvailabilityBasic
   }
