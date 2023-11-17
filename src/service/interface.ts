@@ -6,10 +6,7 @@ import WebSocket from 'ws';
 import {Subscription} from 'zen-observable-ts';
 import * as Trips from '../types/trips';
 import {DepartureGroupMetadata} from './impl/departures-grouped/departure-group';
-import {
-  DeparturesQuery,
-  DeparturesQueryVariables,
-} from './impl/departures/journey-gql/departures.graphql-gen';
+import {DeparturesQueryVariables} from './impl/departures/journey-gql/departures.graphql-gen';
 import {
   StopPlaceQuayDeparturesQuery,
   StopPlaceQuayDeparturesQueryVariables,
@@ -53,6 +50,7 @@ import {
   DeparturesForServiceJourneyQuery,
   DeparturesPayload,
   DeparturesRealtimeData,
+  DeparturesWithLineName,
   FeaturesQuery,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
@@ -158,7 +156,7 @@ export interface IDeparturesService {
     query: DeparturesQueryVariables,
     payload: DeparturesPayload,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<DeparturesQuery, APIError>>;
+  ): Promise<Result<DeparturesWithLineName, APIError>>;
   getStopPlacesByPosition(
     query: NearestStopPlacesQueryVariables,
     headers: Request<ReqRefDefaults>,

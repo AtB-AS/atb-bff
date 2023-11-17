@@ -11,14 +11,12 @@ import {
   postDeparturesRequest,
 } from './schema';
 import {
-  DeparturesWithLineName,
   DeparturesPayload,
   QuayDeparturesQueryVariables,
 } from '../../service/types';
 import {NearestStopPlacesQueryVariables} from '../../service/impl/departures/journey-gql/stops-nearest.graphql-gen';
 import {StopsDetailsQueryVariables} from '../../service/impl/departures/journey-gql/stops-details.graphql-gen';
 import {DeparturesQueryVariables} from '../../service/impl/departures/journey-gql/departures.graphql-gen';
-import {mapToLegacyLineName} from '../../service/impl/departures/utils/converters';
 
 export default (server: Hapi.Server) => (service: IDeparturesService) => {
   server.route({
@@ -33,21 +31,7 @@ export default (server: Hapi.Server) => (service: IDeparturesService) => {
     handler: async (request, h) => {
       const query = request.query as unknown as DeparturesQueryVariables;
       const payload = request.payload as unknown as DeparturesPayload;
-      const departuresQueryData = (
-        await service.getDepartures(query, payload, h.request)
-      ).unwrap();
-
-      const departuresWithLineName: DeparturesWithLineName = {
-        ...departuresQueryData,
-        quays: departuresQueryData.quays.map((quay) => ({
-          ...quay,
-          estimatedCalls: quay.estimatedCalls.map((estimatedCall) => ({
-            ...estimatedCall,
-            lineName: mapToLegacyLineName(estimatedCall.destinationDisplay),
-          })),
-        })),
-      };
-      return departuresWithLineName;
+      return (await service.getDepartures(query, payload, h.request)).unwrap();
     },
   });
   server.route({
