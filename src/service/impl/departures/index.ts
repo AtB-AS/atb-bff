@@ -28,6 +28,8 @@ import {
   DeparturesQuery,
   DeparturesQueryVariables,
 } from './journey-gql/departures.graphql-gen';
+import {mapToLegacyLineName} from './utils/converters';
+import {DeparturesWithLineName} from '../../types';
 
 export default (): IDeparturesService => {
   const api: IDeparturesService = {
@@ -93,9 +95,24 @@ export default (): IDeparturesService => {
           return Result.err(new APIError(result.errors));
         }
 
-        const data = filterFavoriteDepartures(result.data, favorites);
+        const departuresQueryData = filterFavoriteDepartures(
+          result.data,
+          favorites,
+        );
 
-        return Result.ok(data);
+        const departuresWithLineName: DeparturesWithLineName = {
+          ...departuresQueryData,
+          quays: departuresQueryData.quays.map((quay) => ({
+            ...quay,
+            estimatedCalls: quay.estimatedCalls.map((estimatedCall) => ({
+              ...estimatedCall,
+              lineName: mapToLegacyLineName(estimatedCall.destinationDisplay),
+              destinationDisplay: estimatedCall.destinationDisplay,
+            })),
+          })),
+        };
+
+        return Result.ok(departuresWithLineName);
       } catch (error) {
         return Result.err(new APIError(error));
       }

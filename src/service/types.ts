@@ -10,6 +10,7 @@ import {FormFactor} from '../graphql/mobility/mobility-types_v2';
 import * as Types from '../graphql/vehicles/vehicles-types_v1';
 import {CursoredQuery} from './cursored';
 import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
+import {DeparturesQuery} from './impl/departures/journey-gql/departures.graphql-gen';
 
 export interface Coordinates {
   latitude: number;
@@ -23,6 +24,16 @@ export type FavoriteDeparture = {
   destinationDisplay?: DestinationDisplay;
   lineId: string;
   quayId?: string;
+};
+
+type EstimatedCallWithLineName =
+  DeparturesQuery['quays'][0]['estimatedCalls'][0] & {
+    lineName?: string;
+  };
+export type DeparturesWithLineName = DeparturesQuery & {
+  quays: (DeparturesQuery['quays'][0] & {
+    estimatedCalls: EstimatedCallWithLineName[];
+  })[];
 };
 
 export type FeaturesQuery = {
