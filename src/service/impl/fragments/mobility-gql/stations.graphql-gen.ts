@@ -13,7 +13,7 @@ export type BikeStationFragment = (
   & StationBasicFragment
 );
 
-export type CarVehicleTypeFragment = { formFactor: Types.FormFactor, propulsionType: Types.PropulsionType, maxRangeMeters?: number, riderCapacity?: number, make?: string, model?: string, vehicleAccessories?: Array<Types.VehicleAccessory>, vehicleImage?: string, name?: TranslatedStringFragment };
+export type CarVehicleTypeFragment = { id: string, formFactor: Types.FormFactor, propulsionType: Types.PropulsionType, maxRangeMeters?: number, riderCapacity?: number, make?: string, model?: string, vehicleAccessories?: Array<Types.VehicleAccessory>, vehicleImage?: string, name?: TranslatedStringFragment };
 
 export type CarAvailabilityFragment = { count: number, vehicleType: CarVehicleTypeFragment };
 
@@ -65,6 +65,7 @@ ${SystemFragmentDoc}
 ${RentalUrisFragmentDoc}`;
 export const CarVehicleTypeFragmentDoc = gql`
     fragment carVehicleType on VehicleType {
+  id
   formFactor
   propulsionType
   maxRangeMeters
