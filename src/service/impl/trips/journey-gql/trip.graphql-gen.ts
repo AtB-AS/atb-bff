@@ -9,6 +9,7 @@ export type TripsQueryVariables = Types.Exact<{
   arriveBy: Types.Scalars['Boolean'];
   when?: Types.InputMaybe<Types.Scalars['DateTime']>;
   cursor?: Types.InputMaybe<Types.Scalars['String']>;
+  transferSlack?: Types.InputMaybe<Types.Scalars['Int']>;
   transferPenalty?: Types.InputMaybe<Types.Scalars['Int']>;
   waitReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
   walkReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
@@ -36,13 +37,14 @@ export type TripsNonTransitQuery = { footTrip: { nextPageCursor?: string, previo
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int) {
   trip(
     from: $from
     to: $to
     dateTime: $when
     arriveBy: $arriveBy
     pageCursor: $cursor
+    transferSlack: $transferSlack
     transferPenalty: $transferPenalty
     waitReluctance: $waitReluctance
     walkReluctance: $walkReluctance
