@@ -67,7 +67,7 @@ function createClient(url: string) {
       let error = '';
       if (graphQLErrors) {
         graphQLErrors.forEach(({message, locations, path}) => {
-          error = `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`;
+          error += `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}\n`;
         });
       }
       if (networkError) {
