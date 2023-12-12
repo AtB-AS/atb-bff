@@ -20,6 +20,8 @@ import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {logResponse} from '../utils/log-response';
 import {Timer} from '../utils/timer';
 
+const REQUEST_TIMEOUT = 20_000;
+
 const defaultOptions: DefaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
@@ -47,17 +49,31 @@ const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
+function fetchWithTimeout(url: string, options: Omit<RequestInit, 'signal'>) {
+  const controller = new AbortController();
+  const {signal} = controller;
+
+  const timeout = setTimeout(controller.abort, REQUEST_TIMEOUT);
+
+  // node-fetch uses a different signature than the browser implemented fetch
+  // But we use node-fetch's agent option in other parts of the project.
+  // The functionality overlaps so this works as expected.
+  const nodeFetch = fetch as unknown as WindowOrWorkerGlobalScope['fetch'];
+
+  return nodeFetch(url, {
+    ...options,
+    signal,
+  }).finally(() => {
+    clearTimeout(timeout);
+  });
+}
+
 function createClient(url: string) {
   const cache = new InMemoryCache();
   return function (headers: Request<ReqRefDefaults>) {
     const httpLink = new HttpLink({
       uri: url,
-
-      // node-fetch uses a different signature than the browser implemented fetch
-      // But we use node-fetch's agent option in other parts of the project.
-      // The functionality overlaps so this works as expected.
-      fetch: fetch as unknown as WindowOrWorkerGlobalScope['fetch'],
-
+      fetch: fetchWithTimeout,
       headers: {
         'ET-Client-Name': ET_CLIENT_NAME,
         'X-Correlation-Id': headers['correlationId'],
@@ -87,11 +103,6 @@ function createClient(url: string) {
         error: error,
       });
     });
-
-    const errorLink2 = onError((error) =>
-      console.log('Apollo Error:', JSON.stringify(error)),
-    );
-
     const loggingLink = new ApolloLink((operation, forward) => {
       operation.setContext({start: new Date()});
       return forward(operation).map((response) => {
@@ -111,12 +122,7 @@ function createClient(url: string) {
         return response;
       });
     });
-    const link = ApolloLink.from([
-      loggingLink,
-      errorLink,
-      httpLink,
-      errorLink2,
-    ]);
+    const link = ApolloLink.from([loggingLink, errorLink, httpLink]);
 
     return new ApolloClient({
       link,
