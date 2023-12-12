@@ -12,6 +12,7 @@ type LogResponseParams = {
   method?: string;
   operationName?: string;
   customerAccountId?: string;
+  error?: string;
 };
 
 export const logResponse = ({
@@ -24,6 +25,7 @@ export const logResponse = ({
   method,
   operationName,
   customerAccountId,
+  error,
 }: LogResponseParams) => {
   const rateLimitUsed = responseHeaders?.get('rate-limit-used');
   const rateLimitAllowed = responseHeaders?.get('rate-limit-allowed');
@@ -65,6 +67,7 @@ export const logResponse = ({
     rateLimitAllowed: rateLimitAllowed,
     rateLimitGroup: operationNameGroup,
     duration: `${duration}ms`,
+    error: error,
   };
   console.log(JSON.stringify(log));
 };
