@@ -79,10 +79,10 @@ function createClient(url: string) {
       logResponse({
         operationName: operation.operationName,
         message: 'graphql call',
-        url: context.response.url,
-        statusCode: context.response.status,
+        url: context.response?.url,
+        statusCode: context.response?.status,
         requestHeaders: headers,
-        responseHeaders: context.response.headers,
+        responseHeaders: context.response?.headers,
         duration: timer?.getElapsedMs() || 0,
         error: error,
       });
