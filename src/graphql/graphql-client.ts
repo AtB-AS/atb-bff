@@ -63,9 +63,30 @@ function createClient(url: string) {
         'X-Correlation-Id': headers['correlationId'],
       },
     });
-    const errorLink = onError((error) =>
-      console.log('Apollo Error:', JSON.stringify(error)),
-    );
+    const errorLink = onError(({operation, graphQLErrors, networkError}) => {
+      let error = '';
+      if (graphQLErrors) {
+        graphQLErrors.forEach(({message, locations, path}) => {
+          error += `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}\n`;
+        });
+      }
+      if (networkError) {
+        error = `[Network error]: ${networkError}`;
+      }
+
+      const context = operation.getContext();
+      const timer = new Timer(operation.getContext().start);
+      logResponse({
+        operationName: operation.operationName,
+        message: 'graphql call',
+        url: context.response.url,
+        statusCode: context.response.status,
+        requestHeaders: headers,
+        responseHeaders: context.response.headers,
+        duration: timer?.getElapsedMs() || 0,
+        error: error,
+      });
+    });
     const loggingLink = new ApolloLink((operation, forward) => {
       operation.setContext({start: new Date()});
       return forward(operation).map((response) => {
