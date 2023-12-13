@@ -8,7 +8,7 @@ import {
 } from '@apollo/client/core';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {onError} from '@apollo/client/link/error';
-import fetch from 'node-fetch';
+import fetch, {RequestInit, RequestInfo, Response} from 'node-fetch';
 import {
   ENTUR_BASEURL,
   ENTUR_WEBSOCKET_BASEURL,
@@ -49,22 +49,21 @@ const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
-function fetchWithTimeout(url: string, options: Omit<RequestInit, 'signal'>) {
-  const controller = new AbortController();
-  const {signal} = controller;
-
-  const timeout = setTimeout(controller.abort, REQUEST_TIMEOUT);
-
-  // node-fetch uses a different signature than the browser implemented fetch
-  // But we use node-fetch's agent option in other parts of the project.
-  // The functionality overlaps so this works as expected.
-  const nodeFetch = fetch as unknown as WindowOrWorkerGlobalScope['fetch'];
-
-  return nodeFetch(url, {
-    ...options,
-    signal,
-  }).finally(() => {
-    clearTimeout(timeout);
+function fetchWithTimeout(
+  input: URL | RequestInfo,
+  init: RequestInit | undefined,
+): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new Error('TIMEOUT')),
+      REQUEST_TIMEOUT,
+    );
+    fetch(input, init)
+      .then(
+        (response) => resolve(response),
+        (error) => reject(error),
+      )
+      .finally(() => clearTimeout(timer));
   });
 }
 
@@ -73,7 +72,12 @@ function createClient(url: string) {
   return function (headers: Request<ReqRefDefaults>) {
     const httpLink = new HttpLink({
       uri: url,
-      fetch: fetchWithTimeout,
+
+      // node-fetch uses a different signature than the browser implemented fetch
+      // But we use node-fetch's agent option in other parts of the project.
+      // The functionality overlaps so this works as expected.
+      fetch: fetchWithTimeout as unknown as WindowOrWorkerGlobalScope['fetch'],
+
       headers: {
         'ET-Client-Name': ET_CLIENT_NAME,
         'X-Correlation-Id': headers['correlationId'],
