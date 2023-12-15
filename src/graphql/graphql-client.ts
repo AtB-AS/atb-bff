@@ -8,7 +8,6 @@ import {
 } from '@apollo/client/core';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {onError} from '@apollo/client/link/error';
-import fetch, {RequestInit, RequestInfo, Response} from 'node-fetch';
 import {
   ENTUR_BASEURL,
   ENTUR_WEBSOCKET_BASEURL,
@@ -19,8 +18,7 @@ import {SubscriptionClient} from 'subscriptions-transport-ws';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {logResponse} from '../utils/log-response';
 import {Timer} from '../utils/timer';
-
-const REQUEST_TIMEOUT = 20_000;
+import {fetchWithTimeout} from '../utils/fetch-client';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -48,24 +46,6 @@ const urlVehicles = ENTUR_BASEURL
 const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
-
-function fetchWithTimeout(
-  input: URL | RequestInfo,
-  init: RequestInit | undefined,
-): Promise<Response> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(
-      () => reject(new Error('TIMEOUT')),
-      REQUEST_TIMEOUT,
-    );
-    fetch(input, init)
-      .then(
-        (response) => resolve(response),
-        (error) => reject(error),
-      )
-      .finally(() => clearTimeout(timer));
-  });
-}
 
 function createClient(url: string) {
   const cache = new InMemoryCache();

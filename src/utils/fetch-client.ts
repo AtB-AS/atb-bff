@@ -1,4 +1,4 @@
-import fetch, {RequestInit, Response} from 'node-fetch';
+import fetch, {RequestInit, RequestInfo, Response} from 'node-fetch';
 import {ENTUR_BASEURL, ET_CLIENT_NAME} from '../config/env';
 import {logResponse} from './log-response';
 import {HttpsAgent as Agent} from 'agentkeepalive';
@@ -7,9 +7,29 @@ import {Timer} from './timer';
 
 const enturBaseUrl = ENTUR_BASEURL || 'https://api.entur.io';
 
+const REQUEST_TIMEOUT = 20_000;
+
 const agent = new Agent({
   keepAlive: true,
 });
+
+export function fetchWithTimeout(
+  input: URL | RequestInfo,
+  init: RequestInit | undefined,
+): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new Error('TIMEOUT')),
+      REQUEST_TIMEOUT,
+    );
+    fetch(input, init)
+      .then(
+        (response) => resolve(response),
+        (error) => reject(error),
+      )
+      .finally(() => clearTimeout(timer));
+  });
+}
 
 const performFetch = async (
   url: string,
@@ -18,7 +38,7 @@ const performFetch = async (
   baseUrl: string = enturBaseUrl,
 ): Promise<Response> => {
   const timer = new Timer();
-  const response = await fetch(`${baseUrl}${url}`, {
+  const response = await fetchWithTimeout(`${baseUrl}${url}`, {
     ...init,
     headers: {
       'ET-Client-Name': ET_CLIENT_NAME,

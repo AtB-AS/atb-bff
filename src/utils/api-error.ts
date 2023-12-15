@@ -27,6 +27,10 @@ export class APIError extends Error {
       this.message = networkErrorResponse.statusText;
       this.statusCode = networkErrorResponse.status;
     }
+    if (error?.message === 'TIMEOUT') {
+      this.message = 'Upstream service timed out';
+      this.statusCode = 504;
+    }
 
     return boomify(this, {
       statusCode: this.statusCode,
