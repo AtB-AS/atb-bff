@@ -33,6 +33,8 @@ query departures(
       }
       serviceJourney {
         id
+        transportMode
+        transportSubmode
         line {
           id
           description
