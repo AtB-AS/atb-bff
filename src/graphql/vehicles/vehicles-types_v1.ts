@@ -45,6 +45,52 @@ export enum OccupancyEnumeration {
   Unknown = 'UNKNOWN'
 }
 
+export enum OccupancyStatus {
+  /**
+   * The vehicle or carriage can currently accommodate only standing passengers and has limited
+   * space for them. There isn't a big difference between this and `full` so it's possible to
+   * handle them as the same value, if one wants to limit the number of different values.
+   * SIRI nordic profile: merge into `standingRoomOnly`.
+   */
+  CrushedStandingRoomOnly = 'crushedStandingRoomOnly',
+  /**
+   * The vehicle is considered empty by most measures, and has few or no passengers onboard, but is
+   * still accepting passengers. There isn't a big difference between this and `manySeatsAvailable`
+   * so it's possible to handle them as the same value, if one wants to limit the number of different
+   * values.
+   * SIRI nordic profile: merge these into `manySeatsAvailable`.
+   */
+  Empty = 'empty',
+  /**
+   * The vehicle or carriage has a few seats available.
+   * SIRI nordic profile: less than ~50% of seats available.
+   */
+  FewSeatsAvailable = 'fewSeatsAvailable',
+  /**
+   * The vehicle or carriage is considered full by most measures, but may still be allowing
+   * passengers to board.
+   */
+  Full = 'full',
+  /**
+   * The vehicle or carriage has a large number of seats available.
+   * SIRI nordic profile: more than ~50% of seats available.
+   */
+  ManySeatsAvailable = 'manySeatsAvailable',
+  /** The vehicle or carriage doesn't have any occupancy data available. */
+  NoData = 'noData',
+  /**
+   * The vehicle or carriage has no seats or standing room available.
+   * SIRI nordic profile: if vehicle/carriage is not in use / unavailable, or passengers are only
+   * allowed to alight due to e.g. crowding.
+   */
+  NotAcceptingPassengers = 'notAcceptingPassengers',
+  /**
+   * The vehicle or carriage only has standing room available.
+   * SIRI nordic profile: less than ~10% of seats available.
+   */
+  StandingRoomOnly = 'standingRoomOnly'
+}
+
 export type Operator = {
   operatorRef: Scalars['String'];
 };
@@ -182,7 +228,9 @@ export type VehicleUpdate = {
   location?: Maybe<Location>;
   mode?: Maybe<VehicleModeEnumeration>;
   monitored?: Maybe<Scalars['Boolean']>;
+  /** @deprecated Use 'occupancyStatus'. */
   occupancy?: Maybe<OccupancyEnumeration>;
+  occupancyStatus?: Maybe<OccupancyStatus>;
   operator?: Maybe<Operator>;
   originName?: Maybe<Scalars['String']>;
   originRef?: Maybe<Scalars['String']>;
