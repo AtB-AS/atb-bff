@@ -53,10 +53,18 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
               return;
             }
 
-            ctx.client = service.createServiceJourneySubscription(
-              {serviceJourneyId},
-              ws,
-            );
+            try {
+              ctx.client = service.createServiceJourneySubscription(
+                {serviceJourneyId},
+                ws,
+              );
+            } catch (error) {
+              console.error(`WebSocket error: ${error}`);
+              if (ws.readyState == WebSocket.OPEN) {
+                ws.close(1011, 'Error when creating upstream subscription');
+              }
+              return;
+            }
           },
           disconnect: ({ctx}) => {
             if (ctx.client) {
