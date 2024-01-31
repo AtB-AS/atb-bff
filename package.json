@@ -54,7 +54,7 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.7",
+    "@apollo/client": "^3.9.3",
     "@badrap/result": "^0.2.8",
     "@entur/sdk": "^3.5.0",
     "@hapi/boom": "^9.1.1",
