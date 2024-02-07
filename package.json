@@ -76,7 +76,7 @@
     "hapi-pulse": "^3.0.1",
     "hapi-swagger": "^14.1.0",
     "haversine-distance": "^1.2.1",
-    "joi": "^17.4.0",
+    "joi": "^17.12.1",
     "lodash.groupby": "^4.6.0",
     "lodash.sortby": "^4.7.0",
     "lodash.union": "^4.6.0",
