@@ -11,6 +11,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Coordinates: any;
+  Cost: any;
   Date: any;
   DateTime: any;
   DoubleFunction: any;
@@ -73,7 +74,9 @@ export enum AlternativeLegsFilter {
   NoFilter = 'noFilter',
   SameAuthority = 'sameAuthority',
   SameLine = 'sameLine',
-  SameMode = 'sameMode'
+  SameMode = 'sameMode',
+  /** Must match both subMode and mode */
+  SameSubmode = 'sameSubmode'
 }
 
 export enum ArrivalDeparture {
@@ -1232,7 +1235,7 @@ export type QueryTypeTripArgs = {
   numTripPatterns?: InputMaybe<Scalars['Int']>;
   pageCursor?: InputMaybe<Scalars['String']>;
   passThroughPoints?: InputMaybe<Array<PassThroughPoint>>;
-  relaxTransitPriorityGroup?: InputMaybe<RelaxCostInput>;
+  relaxTransitGroupPriority?: InputMaybe<RelaxCostInput>;
   searchWindow?: InputMaybe<Scalars['Int']>;
   timetableView?: InputMaybe<Scalars['Boolean']>;
   to: Location;
@@ -1296,13 +1299,13 @@ export enum RelativeDirection {
  * with twice as high cost as another one, is accepted. A `constant=$300` means a "fixed"
  * constant is added to the limit. A `{ratio=1.0, constant=0}` is said to be the NORMAL relaxed
  * cost - the limit is the same as the cost used to calculate the limit. The NORMAL is usually
- * the default. We can express the RelaxCost as a function `f(x) = constant + ratio * x`.
- * `f(x)=x` is the NORMAL function.
+ * the default. We can express the RelaxCost as a function `f(t) = constant + ratio * t`.
+ * `f(t)=t` is the NORMAL function.
  *
  */
 export type RelaxCostInput = {
-  /** The constant value to add to the limit. Must be a positive number. The unit is cost-seconds. */
-  constant?: InputMaybe<Array<Scalars['ID']>>;
+  /** The constant value to add to the limit. Must be a positive number. The value isequivalent to transit-cost-seconds. Integers is treated as seconds, but you may use the duration format. Example: '3665 = 'DT1h1m5s' = '1h1m5s'. */
+  constant?: InputMaybe<Scalars['Cost']>;
   /** The factor to multiply with the 'other cost'. Minimum value is 1.0. */
   ratio?: InputMaybe<Scalars['Float']>;
 };
@@ -1348,7 +1351,7 @@ export enum RoutingErrorCode {
   NoStopsInRange = 'noStopsInRange',
   /** No transit connection was found between the origin and destination withing the operating day or the next day */
   NoTransitConnection = 'noTransitConnection',
-  /** Transit connection was found, but it was outside the search window, see metadata for the next search window */
+  /** A transit connection was found, but it was outside the search window. Use paging to navigate to a result. */
   NoTransitConnectionInSearchWindow = 'noTransitConnectionInSearchWindow',
   /** The coordinates are outside the bounds of the data currently loaded into the system */
   OutsideBounds = 'outsideBounds',
@@ -1984,6 +1987,8 @@ export type TripPattern = {
   expectedStartTime: Scalars['DateTime'];
   /** Generalized cost or weight of the itinerary. Used for debugging. */
   generalizedCost?: Maybe<Scalars['Int']>;
+  /** A second cost or weight of the itinerary. Some use-cases like pass-through and transit-priority-groups use a second cost during routing. This is used for debugging. */
+  generalizedCost2?: Maybe<Scalars['Int']>;
   /** A list of legs. Each leg is either a walking (cycling, car) portion of the trip, or a ride leg on a particular vehicle. So a trip where the use walks to the Q train, transfers to the 6, then walks to their destination, has four legs. */
   legs: Array<Leg>;
   /**
