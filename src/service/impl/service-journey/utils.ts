@@ -45,7 +45,7 @@ export function mapToMapLegs(
         length: item.length,
         points: polyline.encode(item),
       },
-    } as MapLeg);
+    }) as MapLeg;
 
   const mapLegs: MapLeg[] = [
     toMapLeg(beforeLegCoords, true),

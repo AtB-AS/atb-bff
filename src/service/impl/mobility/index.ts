@@ -266,10 +266,11 @@ const calculateFuelPercent = <
   currentFuelPercent: vehicle.currentFuelPercent
     ? vehicle.currentFuelPercent
     : vehicle.vehicleType.maxRangeMeters
-    ? Math.floor(
-        (vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) * 100,
-      )
-    : undefined,
+      ? Math.floor(
+          (vehicle.currentRangeMeters / vehicle.vehicleType.maxRangeMeters) *
+            100,
+        )
+      : undefined,
 });
 
 const addFuelPercentageToVehicles = <
