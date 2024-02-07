@@ -69,7 +69,7 @@
     "dotenv": "^16.3.1",
     "firebase-admin": "^12.0.0",
     "google-auth-library": "^9.6.3",
-    "graphql": "^16.2.0",
+    "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "hapi-api-version": "^2.3.1",
     "hapi-plugin-websocket": "git://github.com/AtB-AS/hapi-plugin-websocket.git#79e7458ed880a70a4095c4de31042ea9f73ab196",
