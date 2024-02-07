@@ -62,7 +62,7 @@
     "@hapi/hapi": "^20.2.1",
     "@hapi/inert": "^6.0.3",
     "@hapi/vision": "^6.0.1",
-    "@mapbox/polyline": "^1.1.1",
+    "@mapbox/polyline": "^1.2.1",
     "@types/continuation-local-storage": "^3.2.7",
     "agentkeepalive": "^4.1.4",
     "date-fns": "^2.19.0",
