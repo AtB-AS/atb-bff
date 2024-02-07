@@ -6,8 +6,8 @@ import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-g
 import { QuayWithSituationsFragmentDoc } from '../../fragments/journey-gql/quays.graphql-gen';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type ServiceJourneyDeparturesQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
-  date?: Types.InputMaybe<Types.Scalars['Date']>;
+  id: Types.Scalars['String']['input'];
+  date?: Types.InputMaybe<Types.Scalars['Date']['input']>;
 }>;
 
 
@@ -79,11 +79,11 @@ export const ServiceJourneyDeparturesDocument = gql`
   }
 }
     ${ServiceJourneyEstimatedCallFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     serviceJourneyDepartures(variables: ServiceJourneyDeparturesQueryVariables, options?: C): Promise<ServiceJourneyDeparturesQuery> {
-      return requester<ServiceJourneyDeparturesQuery, ServiceJourneyDeparturesQueryVariables>(ServiceJourneyDeparturesDocument, variables, options);
+      return requester<ServiceJourneyDeparturesQuery, ServiceJourneyDeparturesQueryVariables>(ServiceJourneyDeparturesDocument, variables, options) as Promise<ServiceJourneyDeparturesQuery>;
     }
   };
 }

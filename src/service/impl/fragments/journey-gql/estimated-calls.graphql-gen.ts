@@ -37,8 +37,8 @@ export const EstimatedCallWithQuayFragmentDoc = gql`
     ${QuayFragmentDoc}
 ${NoticeFragmentDoc}
 ${SituationFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
 
   };
