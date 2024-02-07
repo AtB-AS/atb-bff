@@ -64,7 +64,7 @@
     "@hapi/vision": "^6.0.1",
     "@mapbox/polyline": "^1.2.1",
     "@types/continuation-local-storage": "^3.2.7",
-    "agentkeepalive": "^4.1.4",
+    "agentkeepalive": "^4.5.0",
     "date-fns": "^2.19.0",
     "dotenv": "^16.3.1",
     "firebase-admin": "^11.2.0",
