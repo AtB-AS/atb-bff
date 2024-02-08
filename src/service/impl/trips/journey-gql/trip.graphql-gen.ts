@@ -6,16 +6,16 @@ import { TripFragmentDoc } from '../../fragments/journey-gql/trips.graphql-gen';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
-  arriveBy: Types.Scalars['Boolean'];
-  when?: Types.InputMaybe<Types.Scalars['DateTime']>;
-  cursor?: Types.InputMaybe<Types.Scalars['String']>;
-  transferSlack?: Types.InputMaybe<Types.Scalars['Int']>;
-  transferPenalty?: Types.InputMaybe<Types.Scalars['Int']>;
-  waitReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
-  walkReluctance?: Types.InputMaybe<Types.Scalars['Float']>;
-  walkSpeed?: Types.InputMaybe<Types.Scalars['Float']>;
+  arriveBy: Types.Scalars['Boolean']['input'];
+  when?: Types.InputMaybe<Types.Scalars['DateTime']['input']>;
+  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  transferSlack?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  transferPenalty?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  waitReluctance?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  walkReluctance?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  walkSpeed?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   modes?: Types.InputMaybe<Types.Modes>;
-  numTripPatterns?: Types.InputMaybe<Types.Scalars['Int']>;
+  numTripPatterns?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -24,12 +24,12 @@ export type TripsQuery = { trip: { nextPageCursor?: string, previousPageCursor?:
 export type TripsNonTransitQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
-  arriveBy: Types.Scalars['Boolean'];
-  when?: Types.InputMaybe<Types.Scalars['DateTime']>;
-  walkSpeed?: Types.InputMaybe<Types.Scalars['Float']>;
-  includeFoot: Types.Scalars['Boolean'];
-  includeBicycle: Types.Scalars['Boolean'];
-  includeBikeRental: Types.Scalars['Boolean'];
+  arriveBy: Types.Scalars['Boolean']['input'];
+  when?: Types.InputMaybe<Types.Scalars['DateTime']['input']>;
+  walkSpeed?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  includeFoot: Types.Scalars['Boolean']['input'];
+  includeBicycle: Types.Scalars['Boolean']['input'];
+  includeBikeRental: Types.Scalars['Boolean']['input'];
 }>;
 
 
@@ -90,14 +90,14 @@ export const TripsNonTransitDocument = gql`
   }
 }
     ${TripFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     Trips(variables: TripsQueryVariables, options?: C): Promise<TripsQuery> {
-      return requester<TripsQuery, TripsQueryVariables>(TripsDocument, variables, options);
+      return requester<TripsQuery, TripsQueryVariables>(TripsDocument, variables, options) as Promise<TripsQuery>;
     },
     TripsNonTransit(variables: TripsNonTransitQueryVariables, options?: C): Promise<TripsNonTransitQuery> {
-      return requester<TripsNonTransitQuery, TripsNonTransitQueryVariables>(TripsNonTransitDocument, variables, options);
+      return requester<TripsNonTransitQuery, TripsNonTransitQueryVariables>(TripsNonTransitDocument, variables, options) as Promise<TripsNonTransitQuery>;
     }
   };
 }

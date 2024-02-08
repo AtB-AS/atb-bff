@@ -5,31 +5,31 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { VehicleBasicFragmentDoc, VehicleExtendedFragmentDoc } from '../../fragments/mobility-gql/vehicles.graphql-gen';
 export type GetVehiclesQueryVariables = Types.Exact<{
-  lat: Types.Scalars['Float'];
-  lon: Types.Scalars['Float'];
-  range: Types.Scalars['Int'];
+  lat: Types.Scalars['Float']['input'];
+  lon: Types.Scalars['Float']['input'];
+  range: Types.Scalars['Int']['input'];
   formFactors?: Types.InputMaybe<Array<Types.InputMaybe<Types.FormFactor>> | Types.InputMaybe<Types.FormFactor>>;
-  operators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
+  operators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>>;
 }>;
 
 
 export type GetVehiclesQuery = { vehicles?: Array<VehicleBasicFragment> };
 
 export type GetVehicles_V2QueryVariables = Types.Exact<{
-  lat: Types.Scalars['Float'];
-  lon: Types.Scalars['Float'];
-  range: Types.Scalars['Int'];
-  includeBicycles: Types.Scalars['Boolean'];
-  bicycleOperators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
-  includeScooters: Types.Scalars['Boolean'];
-  scooterOperators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>>;
+  lat: Types.Scalars['Float']['input'];
+  lon: Types.Scalars['Float']['input'];
+  range: Types.Scalars['Int']['input'];
+  includeBicycles: Types.Scalars['Boolean']['input'];
+  bicycleOperators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>>;
+  includeScooters: Types.Scalars['Boolean']['input'];
+  scooterOperators?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>>;
 }>;
 
 
 export type GetVehicles_V2Query = { bicycles?: Array<VehicleBasicFragment>, scooters?: Array<VehicleBasicFragment> };
 
 export type GetVehicleQueryVariables = Types.Exact<{
-  ids?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
+  ids?: Types.InputMaybe<Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']>;
 }>;
 
 
@@ -78,17 +78,17 @@ export const GetVehicleDocument = gql`
   }
 }
     ${VehicleExtendedFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     getVehicles(variables: GetVehiclesQueryVariables, options?: C): Promise<GetVehiclesQuery> {
-      return requester<GetVehiclesQuery, GetVehiclesQueryVariables>(GetVehiclesDocument, variables, options);
+      return requester<GetVehiclesQuery, GetVehiclesQueryVariables>(GetVehiclesDocument, variables, options) as Promise<GetVehiclesQuery>;
     },
     getVehicles_v2(variables: GetVehicles_V2QueryVariables, options?: C): Promise<GetVehicles_V2Query> {
-      return requester<GetVehicles_V2Query, GetVehicles_V2QueryVariables>(GetVehicles_V2Document, variables, options);
+      return requester<GetVehicles_V2Query, GetVehicles_V2QueryVariables>(GetVehicles_V2Document, variables, options) as Promise<GetVehicles_V2Query>;
     },
     getVehicle(variables?: GetVehicleQueryVariables, options?: C): Promise<GetVehicleQuery> {
-      return requester<GetVehicleQuery, GetVehicleQueryVariables>(GetVehicleDocument, variables, options);
+      return requester<GetVehicleQuery, GetVehicleQueryVariables>(GetVehicleDocument, variables, options) as Promise<GetVehicleQuery>;
     }
   };
 }

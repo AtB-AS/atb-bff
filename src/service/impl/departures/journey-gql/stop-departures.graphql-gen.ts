@@ -5,12 +5,12 @@ import gql from 'graphql-tag';
 import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
-  numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']>;
-  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
-  startTime?: Types.InputMaybe<Types.Scalars['DateTime']>;
-  timeRange?: Types.InputMaybe<Types.Scalars['Int']>;
-  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
+  id: Types.Scalars['String']['input'];
+  numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  startTime?: Types.InputMaybe<Types.Scalars['DateTime']['input']>;
+  timeRange?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']['input']>> | Types.InputMaybe<Types.Scalars['ID']['input']>>;
 }>;
 
 
@@ -78,11 +78,11 @@ export const StopPlaceQuayDeparturesDocument = gql`
 }
     ${NoticeFragmentDoc}
 ${SituationFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     stopPlaceQuayDepartures(variables: StopPlaceQuayDeparturesQueryVariables, options?: C): Promise<StopPlaceQuayDeparturesQuery> {
-      return requester<StopPlaceQuayDeparturesQuery, StopPlaceQuayDeparturesQueryVariables>(StopPlaceQuayDeparturesDocument, variables, options);
+      return requester<StopPlaceQuayDeparturesQuery, StopPlaceQuayDeparturesQueryVariables>(StopPlaceQuayDeparturesDocument, variables, options) as Promise<StopPlaceQuayDeparturesQuery>;
     }
   };
 }
