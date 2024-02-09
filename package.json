@@ -74,7 +74,7 @@
     "hapi-api-version": "^2.3.1",
     "hapi-plugin-websocket": "git://github.com/AtB-AS/hapi-plugin-websocket.git#79e7458ed880a70a4095c4de31042ea9f73ab196",
     "hapi-pulse": "^3.0.1",
-    "hapi-swagger": "^14.1.0",
+    "hapi-swagger": "^17.2.1",
     "haversine-distance": "^1.2.1",
     "joi": "^17.12.1",
     "lodash.groupby": "^4.6.0",
