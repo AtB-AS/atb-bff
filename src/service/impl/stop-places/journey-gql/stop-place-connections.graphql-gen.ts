@@ -4,7 +4,7 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { JourneyPatternsFragmentDoc } from '../../fragments/journey-gql/journey-pattern.graphql-gen';
 export type GetStopPlaceConnectionsQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
@@ -22,11 +22,11 @@ export const GetStopPlaceConnectionsDocument = gql`
   }
 }
     ${JourneyPatternsFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     getStopPlaceConnections(variables: GetStopPlaceConnectionsQueryVariables, options?: C): Promise<GetStopPlaceConnectionsQuery> {
-      return requester<GetStopPlaceConnectionsQuery, GetStopPlaceConnectionsQueryVariables>(GetStopPlaceConnectionsDocument, variables, options);
+      return requester<GetStopPlaceConnectionsQuery, GetStopPlaceConnectionsQueryVariables>(GetStopPlaceConnectionsDocument, variables, options) as Promise<GetStopPlaceConnectionsQuery>;
     }
   };
 }

@@ -4,17 +4,17 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { Group_StopPlaceFieldsFragmentDoc, Group_QuayFieldsFragmentDoc, Group_Times_EstimatedCallFieldsFragmentDoc, Group_EstimatedCallFieldsFragmentDoc } from './departure-group.graphql-gen';
 export type GroupsByNearestQueryVariables = Types.Exact<{
-  lat: Types.Scalars['Float'];
-  lng: Types.Scalars['Float'];
-  distance: Types.Scalars['Float'];
-  startTime: Types.Scalars['DateTime'];
-  fromCursor?: Types.InputMaybe<Types.Scalars['String']>;
-  pageSize?: Types.InputMaybe<Types.Scalars['Int']>;
-  timeRange: Types.Scalars['Int'];
-  limitPerLine: Types.Scalars['Int'];
-  totalLimit: Types.Scalars['Int'];
+  lat: Types.Scalars['Float']['input'];
+  lng: Types.Scalars['Float']['input'];
+  distance: Types.Scalars['Float']['input'];
+  startTime: Types.Scalars['DateTime']['input'];
+  fromCursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  pageSize?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  timeRange: Types.Scalars['Int']['input'];
+  limitPerLine: Types.Scalars['Int']['input'];
+  totalLimit: Types.Scalars['Int']['input'];
   filterInput?: Types.InputMaybe<Types.InputPlaceIds>;
-  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']['input']>> | Types.InputMaybe<Types.Scalars['ID']['input']>>;
 }>;
 
 
@@ -80,11 +80,11 @@ export const GroupsByNearestDocument = gql`
 ${Group_QuayFieldsFragmentDoc}
 ${Group_Times_EstimatedCallFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     GroupsByNearest(variables: GroupsByNearestQueryVariables, options?: C): Promise<GroupsByNearestQuery> {
-      return requester<GroupsByNearestQuery, GroupsByNearestQueryVariables>(GroupsByNearestDocument, variables, options);
+      return requester<GroupsByNearestQuery, GroupsByNearestQueryVariables>(GroupsByNearestDocument, variables, options) as Promise<GroupsByNearestQuery>;
     }
   };
 }

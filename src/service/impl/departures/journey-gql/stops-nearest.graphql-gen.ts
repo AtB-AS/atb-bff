@@ -4,11 +4,11 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type NearestStopPlacesQueryVariables = Types.Exact<{
-  count?: Types.InputMaybe<Types.Scalars['Int']>;
-  distance: Types.Scalars['Float'];
-  longitude: Types.Scalars['Float'];
-  latitude: Types.Scalars['Float'];
-  after?: Types.InputMaybe<Types.Scalars['String']>;
+  count?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  distance: Types.Scalars['Float']['input'];
+  longitude: Types.Scalars['Float']['input'];
+  latitude: Types.Scalars['Float']['input'];
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
@@ -59,11 +59,11 @@ export const NearestStopPlacesDocument = gql`
   }
 }
     ${SituationFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     nearestStopPlaces(variables: NearestStopPlacesQueryVariables, options?: C): Promise<NearestStopPlacesQuery> {
-      return requester<NearestStopPlacesQuery, NearestStopPlacesQueryVariables>(NearestStopPlacesDocument, variables, options);
+      return requester<NearestStopPlacesQuery, NearestStopPlacesQueryVariables>(NearestStopPlacesDocument, variables, options) as Promise<NearestStopPlacesQuery>;
     }
   };
 }

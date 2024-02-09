@@ -3,12 +3,12 @@ import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type GetDepartureRealtimeQueryVariables = Types.Exact<{
-  quayIds: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
-  startTime: Types.Scalars['DateTime'];
-  timeRange: Types.Scalars['Int'];
-  limit: Types.Scalars['Int'];
-  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
-  lineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
+  quayIds: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+  startTime: Types.Scalars['DateTime']['input'];
+  timeRange: Types.Scalars['Int']['input'];
+  limit: Types.Scalars['Int']['input'];
+  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  lineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']['input']>> | Types.InputMaybe<Types.Scalars['ID']['input']>>;
 }>;
 
 
@@ -48,11 +48,11 @@ export const GetDepartureRealtimeDocument = gql`
   }
 }
     ${EstimatedCallFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     GetDepartureRealtime(variables: GetDepartureRealtimeQueryVariables, options?: C): Promise<GetDepartureRealtimeQuery> {
-      return requester<GetDepartureRealtimeQuery, GetDepartureRealtimeQueryVariables>(GetDepartureRealtimeDocument, variables, options);
+      return requester<GetDepartureRealtimeQuery, GetDepartureRealtimeQueryVariables>(GetDepartureRealtimeDocument, variables, options) as Promise<GetDepartureRealtimeQuery>;
     }
   };
 }
