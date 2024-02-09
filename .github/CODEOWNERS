@@ -4,10 +4,10 @@
 * @gorandalum @rosvik @marius-at-atb
 
 # Mobility
-**/mobility @gorandalum @KristianSelnas @marius-at-atb
+**/mobility @gorandalum @marius-at-atb @reidzeibel
 
 # GH actions
-/.github/workflows/ @gorandalum @jorelosorio @marius-at-atb
+/.github/workflows/ @gorandalum @jorelosorio @reidzeibel
 
 # Tests
 /test/ @gorandalum @rosvik @marius-at-atb @tormoseng
