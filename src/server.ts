@@ -42,7 +42,7 @@ export const createServer = (opts: ServerOptions) => {
         : {
             name: 'memory',
             provider: {
-              constructor: Memory,
+              constructor: Memory.Engine,
               options: {},
             },
           },
@@ -79,7 +79,9 @@ export const initializePlugins = async (server: hapi.Server) => {
     },
   });
 
-  await server.register([hapiVision, hapiInert, hapiPulse]);
+  await server.register(hapiVision);
+  await server.register(hapiInert);
+  await server.register(hapiPulse);
   await server.register({
     plugin: hapiApiVersion,
     options: {
