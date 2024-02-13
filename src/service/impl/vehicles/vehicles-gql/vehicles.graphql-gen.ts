@@ -3,7 +3,7 @@ import * as Types from '../../../../graphql/vehicles/vehicles-types_v1';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type GetServiceJourneyVehicleQueryVariables = Types.Exact<{
-  serviceJourneyId: Types.Scalars['String'];
+  serviceJourneyId: Types.Scalars['String']['input'];
 }>;
 
 
@@ -27,11 +27,11 @@ export const GetServiceJourneyVehicleDocument = gql`
   }
 }
     `;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     getServiceJourneyVehicle(variables: GetServiceJourneyVehicleQueryVariables, options?: C): Promise<GetServiceJourneyVehicleQuery> {
-      return requester<GetServiceJourneyVehicleQuery, GetServiceJourneyVehicleQueryVariables>(GetServiceJourneyVehicleDocument, variables, options);
+      return requester<GetServiceJourneyVehicleQuery, GetServiceJourneyVehicleQueryVariables>(GetServiceJourneyVehicleDocument, variables, options) as Promise<GetServiceJourneyVehicleQuery>;
     }
   };
 }

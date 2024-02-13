@@ -4,7 +4,7 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type StopsDetailsQueryVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
@@ -35,11 +35,11 @@ export const StopsDetailsDocument = gql`
   }
 }
     ${SituationFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     stopsDetails(variables: StopsDetailsQueryVariables, options?: C): Promise<StopsDetailsQuery> {
-      return requester<StopsDetailsQuery, StopsDetailsQueryVariables>(StopsDetailsDocument, variables, options);
+      return requester<StopsDetailsQuery, StopsDetailsQueryVariables>(StopsDetailsDocument, variables, options) as Promise<StopsDetailsQuery>;
     }
   };
 }

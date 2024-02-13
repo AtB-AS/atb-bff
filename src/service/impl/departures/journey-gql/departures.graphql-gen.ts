@@ -6,12 +6,12 @@ import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-g
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 import { BookingArrangementFragmentDoc } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
 export type DeparturesQueryVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']>> | Types.InputMaybe<Types.Scalars['String']>;
-  numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']>;
-  startTime?: Types.InputMaybe<Types.Scalars['DateTime']>;
-  timeRange?: Types.InputMaybe<Types.Scalars['Int']>;
-  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']>> | Types.InputMaybe<Types.Scalars['ID']>>;
-  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']>;
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+  numberOfDepartures?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  startTime?: Types.InputMaybe<Types.Scalars['DateTime']['input']>;
+  timeRange?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']['input']>> | Types.InputMaybe<Types.Scalars['ID']['input']>>;
+  limitPerLine?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -86,11 +86,11 @@ export const DeparturesDocument = gql`
     ${NoticeFragmentDoc}
 ${SituationFragmentDoc}
 ${BookingArrangementFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     departures(variables: DeparturesQueryVariables, options?: C): Promise<DeparturesQuery> {
-      return requester<DeparturesQuery, DeparturesQueryVariables>(DeparturesDocument, variables, options);
+      return requester<DeparturesQuery, DeparturesQueryVariables>(DeparturesDocument, variables, options) as Promise<DeparturesQuery>;
     }
   };
 }

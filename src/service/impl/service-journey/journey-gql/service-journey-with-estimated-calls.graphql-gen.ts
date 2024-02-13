@@ -4,8 +4,8 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { ServiceJourneyWithEstCallsFragmentDoc } from '../../fragments/journey-gql/service-journey.graphql-gen';
 export type ServiceJourneyWithEstimatedCallsQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
-  date?: Types.InputMaybe<Types.Scalars['Date']>;
+  id: Types.Scalars['String']['input'];
+  date?: Types.InputMaybe<Types.Scalars['Date']['input']>;
 }>;
 
 
@@ -19,11 +19,11 @@ export const ServiceJourneyWithEstimatedCallsDocument = gql`
   }
 }
     ${ServiceJourneyWithEstCallsFragmentDoc}`;
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C>(requester: Requester<C>) {
   return {
     serviceJourneyWithEstimatedCalls(variables: ServiceJourneyWithEstimatedCallsQueryVariables, options?: C): Promise<ServiceJourneyWithEstimatedCallsQuery> {
-      return requester<ServiceJourneyWithEstimatedCallsQuery, ServiceJourneyWithEstimatedCallsQueryVariables>(ServiceJourneyWithEstimatedCallsDocument, variables, options);
+      return requester<ServiceJourneyWithEstimatedCallsQuery, ServiceJourneyWithEstimatedCallsQueryVariables>(ServiceJourneyWithEstimatedCallsDocument, variables, options) as Promise<ServiceJourneyWithEstimatedCallsQuery>;
     }
   };
 }

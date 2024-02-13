@@ -3,36 +3,38 @@ export type InputMaybe<T> = T;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type BoundingBox = {
-  maxLat: Scalars['Float'];
-  maxLon: Scalars['Float'];
-  minLat: Scalars['Float'];
-  minLon: Scalars['Float'];
+  maxLat: Scalars['Float']['input'];
+  maxLon: Scalars['Float']['input'];
+  minLat: Scalars['Float']['input'];
+  minLon: Scalars['Float']['input'];
 };
 
 export type Codespace = {
-  codespaceId: Scalars['String'];
+  codespaceId: Scalars['String']['output'];
 };
 
 export type Line = {
-  lineName?: Maybe<Scalars['String']>;
-  lineRef?: Maybe<Scalars['String']>;
-  publicCode?: Maybe<Scalars['String']>;
+  lineName?: Maybe<Scalars['String']['output']>;
+  lineRef?: Maybe<Scalars['String']['output']>;
+  publicCode?: Maybe<Scalars['String']['output']>;
 };
 
 export type Location = {
-  latitude: Scalars['Float'];
-  longitude: Scalars['Float'];
+  latitude: Scalars['Float']['output'];
+  longitude: Scalars['Float']['output'];
 };
 
 export enum OccupancyEnumeration {
@@ -92,12 +94,12 @@ export enum OccupancyStatus {
 }
 
 export type Operator = {
-  operatorRef: Scalars['String'];
+  operatorRef: Scalars['String']['output'];
 };
 
 export type PointsOnLink = {
-  length?: Maybe<Scalars['Float']>;
-  points?: Maybe<Scalars['String']>;
+  length?: Maybe<Scalars['Float']['output']>;
+  points?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -111,46 +113,46 @@ export type Query = {
 
 
 export type QueryLinesArgs = {
-  codespaceId?: InputMaybe<Scalars['String']>;
+  codespaceId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryOperatorsArgs = {
-  codespaceId: Scalars['String'];
+  codespaceId: Scalars['String']['input'];
 };
 
 
 export type QueryServiceJourneyArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryServiceJourneysArgs = {
-  lineRef: Scalars['String'];
+  lineRef: Scalars['String']['input'];
 };
 
 
 export type QueryVehiclesArgs = {
   boundingBox?: InputMaybe<BoundingBox>;
-  codespaceId?: InputMaybe<Scalars['String']>;
-  lineName?: InputMaybe<Scalars['String']>;
-  lineRef?: InputMaybe<Scalars['String']>;
+  codespaceId?: InputMaybe<Scalars['String']['input']>;
+  lineName?: InputMaybe<Scalars['String']['input']>;
+  lineRef?: InputMaybe<Scalars['String']['input']>;
   mode?: InputMaybe<VehicleModeEnumeration>;
-  monitored?: InputMaybe<Scalars['Boolean']>;
-  operatorRef?: InputMaybe<Scalars['String']>;
-  serviceJourneyId?: InputMaybe<Scalars['String']>;
-  vehicleId?: InputMaybe<Scalars['String']>;
+  monitored?: InputMaybe<Scalars['Boolean']['input']>;
+  operatorRef?: InputMaybe<Scalars['String']['input']>;
+  serviceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  vehicleId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ServiceJourney = {
   /** Date as provided when realtime-updates are referenced by ServiceJourneyId + Date */
-  date?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['String']['output']>;
   /** ID that defines this journey */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
   /** @deprecated Experimental - should not be used with subscription */
   pointsOnLink?: Maybe<PointsOnLink>;
   /** @deprecated Use 'id' instead. */
-  serviceJourneyId: Scalars['String'];
+  serviceJourneyId: Scalars['String']['output'];
 };
 
 export type Subscription = {
@@ -162,31 +164,31 @@ export type Subscription = {
 
 export type SubscriptionVehicleUpdatesArgs = {
   boundingBox?: InputMaybe<BoundingBox>;
-  bufferSize?: InputMaybe<Scalars['Int']>;
-  bufferTime?: InputMaybe<Scalars['Int']>;
-  codespaceId?: InputMaybe<Scalars['String']>;
-  lineName?: InputMaybe<Scalars['String']>;
-  lineRef?: InputMaybe<Scalars['String']>;
+  bufferSize?: InputMaybe<Scalars['Int']['input']>;
+  bufferTime?: InputMaybe<Scalars['Int']['input']>;
+  codespaceId?: InputMaybe<Scalars['String']['input']>;
+  lineName?: InputMaybe<Scalars['String']['input']>;
+  lineRef?: InputMaybe<Scalars['String']['input']>;
   mode?: InputMaybe<VehicleModeEnumeration>;
-  monitored?: InputMaybe<Scalars['Boolean']>;
-  operatorRef?: InputMaybe<Scalars['String']>;
-  serviceJourneyId?: InputMaybe<Scalars['String']>;
-  vehicleId?: InputMaybe<Scalars['String']>;
+  monitored?: InputMaybe<Scalars['Boolean']['input']>;
+  operatorRef?: InputMaybe<Scalars['String']['input']>;
+  serviceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  vehicleId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type SubscriptionVehiclesArgs = {
   boundingBox?: InputMaybe<BoundingBox>;
-  bufferSize?: InputMaybe<Scalars['Int']>;
-  bufferTime?: InputMaybe<Scalars['Int']>;
-  codespaceId?: InputMaybe<Scalars['String']>;
-  lineName?: InputMaybe<Scalars['String']>;
-  lineRef?: InputMaybe<Scalars['String']>;
+  bufferSize?: InputMaybe<Scalars['Int']['input']>;
+  bufferTime?: InputMaybe<Scalars['Int']['input']>;
+  codespaceId?: InputMaybe<Scalars['String']['input']>;
+  lineName?: InputMaybe<Scalars['String']['input']>;
+  lineRef?: InputMaybe<Scalars['String']['input']>;
   mode?: InputMaybe<VehicleModeEnumeration>;
-  monitored?: InputMaybe<Scalars['Boolean']>;
-  operatorRef?: InputMaybe<Scalars['String']>;
-  serviceJourneyId?: InputMaybe<Scalars['String']>;
-  vehicleId?: InputMaybe<Scalars['String']>;
+  monitored?: InputMaybe<Scalars['Boolean']['input']>;
+  operatorRef?: InputMaybe<Scalars['String']['input']>;
+  serviceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  vehicleId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum VehicleModeEnumeration {
@@ -209,36 +211,36 @@ export enum VehicleStatusEnumeration {
 }
 
 export type VehicleUpdate = {
-  bearing?: Maybe<Scalars['Float']>;
+  bearing?: Maybe<Scalars['Float']['output']>;
   codespace?: Maybe<Codespace>;
   /** The current delay in seconds - negative delay means ahead of schedule */
-  delay?: Maybe<Scalars['Float']>;
-  destinationName?: Maybe<Scalars['String']>;
-  destinationRef?: Maybe<Scalars['String']>;
-  direction?: Maybe<Scalars['String']>;
-  expiration?: Maybe<Scalars['DateTime']>;
-  expirationEpochSecond?: Maybe<Scalars['Float']>;
+  delay?: Maybe<Scalars['Float']['output']>;
+  destinationName?: Maybe<Scalars['String']['output']>;
+  destinationRef?: Maybe<Scalars['String']['output']>;
+  direction?: Maybe<Scalars['String']['output']>;
+  expiration?: Maybe<Scalars['DateTime']['output']>;
+  expirationEpochSecond?: Maybe<Scalars['Float']['output']>;
   /** @deprecated Use 'bearing''. */
-  heading?: Maybe<Scalars['Float']>;
+  heading?: Maybe<Scalars['Float']['output']>;
   /** Whether the vehicle is affected by traffic jams or other circumstances which may lead to further delays. If `null`, current status is unknown. */
-  inCongestion?: Maybe<Scalars['Boolean']>;
-  lastUpdated?: Maybe<Scalars['DateTime']>;
-  lastUpdatedEpochSecond?: Maybe<Scalars['Float']>;
+  inCongestion?: Maybe<Scalars['Boolean']['output']>;
+  lastUpdated?: Maybe<Scalars['DateTime']['output']>;
+  lastUpdatedEpochSecond?: Maybe<Scalars['Float']['output']>;
   line?: Maybe<Line>;
   location?: Maybe<Location>;
   mode?: Maybe<VehicleModeEnumeration>;
-  monitored?: Maybe<Scalars['Boolean']>;
+  monitored?: Maybe<Scalars['Boolean']['output']>;
   /** @deprecated Use 'occupancyStatus'. */
   occupancy?: Maybe<OccupancyEnumeration>;
   occupancyStatus?: Maybe<OccupancyStatus>;
   operator?: Maybe<Operator>;
-  originName?: Maybe<Scalars['String']>;
-  originRef?: Maybe<Scalars['String']>;
+  originName?: Maybe<Scalars['String']['output']>;
+  originRef?: Maybe<Scalars['String']['output']>;
   serviceJourney?: Maybe<ServiceJourney>;
-  speed?: Maybe<Scalars['Float']>;
-  vehicleId?: Maybe<Scalars['String']>;
+  speed?: Maybe<Scalars['Float']['output']>;
+  vehicleId?: Maybe<Scalars['String']['output']>;
   /** @deprecated Use 'vehicleId'. */
-  vehicleRef?: Maybe<Scalars['String']>;
+  vehicleRef?: Maybe<Scalars['String']['output']>;
   /** Reported status of the vehicle */
   vehicleStatus?: Maybe<VehicleStatusEnumeration>;
 };
