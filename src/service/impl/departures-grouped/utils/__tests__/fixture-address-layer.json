@@ -103,6 +103,22 @@
               },
               "__typename": "ServiceJourney"
             },
+            "bookingArrangements": {
+              "bookingMethods": ["online"],
+              "latestBookingTime": null,
+              "bookingNote": null,
+              "bookWhen": null,
+              "minimumBookingPeriod": "PT15M",
+              "bookingContact": {
+                "contactPerson": null,
+                "email": null,
+                "url": "http://www.vybuss.no",
+                "phone": "+47 40705070",
+                "furtherDetails": null,
+                "__typename": "Contact"
+              },
+              "__typename": "BookingArrangement"
+            },
             "__typename": "EstimatedCall"
           },
           {

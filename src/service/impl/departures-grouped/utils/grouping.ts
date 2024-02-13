@@ -11,7 +11,7 @@ import {GroupsByIdQuery} from '../journey-gql/departure-group.graphql-gen';
 import {destinationDisplaysAreMatching} from '../../departures/utils/favorites';
 import {mapToLegacyLineName} from '../../departures/utils/converters';
 import {BookingArrangementFragment} from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
-import {NoticeFragment} from "../../fragments/journey-gql/notices.graphql-gen";
+import {NoticeFragment} from '../../fragments/journey-gql/notices.graphql-gen';
 
 type Notice = {text?: string};
 type Situation = {
@@ -172,7 +172,7 @@ export default function mapQueryToGroups(
               serviceDate: time.date,
               cancellation: time.cancellation,
               notices: time.notices,
-              bookingArrangements: time.bookingArrangements
+              bookingArrangements: time.bookingArrangements,
             };
           });
 
