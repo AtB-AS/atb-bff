@@ -74,6 +74,9 @@ fragment group_times_estimatedCallFields on EstimatedCall {
       id
     }
   }
+  bookingArrangements {
+    ...bookingArrangement
+  }
 }
 
 fragment group_noticeFields on Notice {

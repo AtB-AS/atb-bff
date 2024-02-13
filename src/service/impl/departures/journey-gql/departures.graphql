@@ -60,6 +60,9 @@ query departures(
       notices {
         ...notice
       }
+      bookingArrangements {
+        ...bookingArrangement
+      }
     }
     situations {
       ...situation
