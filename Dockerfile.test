@@ -1,13 +1,13 @@
 # docker build -t 'gcr.io/atb-mobility-platform/atb-bff-test:sha' -f 'Dockerfile.test' .
 # docker run -e host=https://atb-staging.api.mittatb.no gcr.io/atb-mobility-platform/atb-bff-test:sha
 
-FROM node:16.18-alpine3.16 as dependencies
+FROM node:18-alpine as dependencies
 WORKDIR /test
 COPY ./test/package.json /test/yarn.lock ./
 RUN yarn install
 
 
-FROM node:16.18-alpine3.16 as build
+FROM node:18-alpine as build
 WORKDIR /test
 COPY --from=dependencies /test/node_modules ./node_modules
 COPY ./test/src ./src

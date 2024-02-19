@@ -60,7 +60,7 @@ function createClient(url: string) {
 
       headers: {
         'ET-Client-Name': ET_CLIENT_NAME,
-        'X-Correlation-Id': headers['correlationId'],
+        'X-Correlation-Id': headers['correlationId'] ?? '',
       },
     });
     const errorLink = onError(({operation, graphQLErrors, networkError}) => {
