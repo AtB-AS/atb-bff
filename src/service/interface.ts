@@ -28,9 +28,7 @@ import {
   GetStations_V2Query,
   GetStationsQuery,
 } from './impl/mobility/mobility-gql/stations.graphql-gen';
-import {
-  GetGeofencingZonesQuery
-} from './impl/mobility/mobility-gql/geofencing-zones.graphql-gen';
+import {GetGeofencingZonesQuery} from './impl/mobility/mobility-gql/geofencing-zones.graphql-gen';
 import {
   GetVehicleQuery,
   GetVehicles_V2Query,
