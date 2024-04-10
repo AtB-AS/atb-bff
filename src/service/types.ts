@@ -247,6 +247,8 @@ export type StationsQuery_v2 = {
 export type CarStationQuery = {ids: string[]};
 export type BikeStationQuery = {ids: string[]};
 
+export type GeofencingZonesQuery = {systemIds: string[]};
+
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];
   start?: Coordinates;

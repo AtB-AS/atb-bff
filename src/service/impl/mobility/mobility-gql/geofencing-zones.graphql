@@ -1,0 +1,29 @@
+
+query getGeofencingZones($systemIds: [ID]) { # why not [String!]?
+    geofencingZones(systemIds: $systemIds) {
+        systemId
+        geojson {
+            type
+            features {
+                type
+                geometry {
+                    type
+                    coordinates # todo: use polylineEncodedMultiPolygon instead
+                }
+                properties {
+                    name
+                    start
+                    end
+                    rules {
+                        vehicleTypeIds
+                        rideAllowed
+                        rideThroughAllowed
+                        maximumSpeedKph
+                        stationParking
+                    }
+                    #polylineEncodedMultiPolygon # todo: use this when mobility api ready
+                }
+            }
+        }
+    }
+}
