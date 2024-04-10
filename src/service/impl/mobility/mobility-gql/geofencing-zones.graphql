@@ -8,7 +8,7 @@ query getGeofencingZones($systemIds: [ID]) { # why not [String!]?
                 type
                 geometry {
                     type
-                    coordinates # todo: use polylineEncodedMultiPolygon instead
+                    #coordinates #note: using polylineEncodedMultiPolygon instead
                 }
                 properties {
                     name
@@ -21,7 +21,7 @@ query getGeofencingZones($systemIds: [ID]) { # why not [String!]?
                         maximumSpeedKph
                         stationParking
                     }
-                    #polylineEncodedMultiPolygon # todo: use this when mobility api ready
+                    polylineEncodedMultiPolygon
                 }
             }
         }

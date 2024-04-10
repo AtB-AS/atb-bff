@@ -52,6 +52,8 @@ export enum FormFactor {
 export type GeofencingZoneProperties = {
   end?: Maybe<Scalars['Int']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  /** MultiPolygon where the lists of coordinates are encoded as polyline strings using precision of 6 decimals (see http://code.google.com/apis/maps/documentation/polylinealgorithm.html). Meant to be used instead of geometry.coordinates to minimize the response payload size. */
+  polylineEncodedMultiPolygon?: Maybe<Array<Maybe<Array<Maybe<Scalars['String']['output']>>>>>;
   rules?: Maybe<Array<Maybe<GeofencingZoneRule>>>;
   start?: Maybe<Scalars['Int']['output']>;
 };
@@ -70,6 +72,7 @@ export type GeofencingZones = {
 };
 
 export type MultiPolygon = {
+  /** See properties.polylineEncodedMultiPolygon, and consider using that instead of coordinates */
   coordinates?: Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']['output']>>>>>>>>>;
   type?: Maybe<Scalars['String']['output']>;
 };

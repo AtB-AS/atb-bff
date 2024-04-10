@@ -7,7 +7,7 @@ export type GetGeofencingZonesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetGeofencingZonesQuery = { geofencingZones?: Array<{ systemId?: string, geojson?: { type?: string, features?: Array<{ type?: string, geometry?: { type?: string, coordinates?: Array<Array<Array<Array<number>>>> }, properties?: { name?: string, start?: number, end?: number, rules?: Array<{ vehicleTypeIds?: Array<string>, rideAllowed: boolean, rideThroughAllowed: boolean, maximumSpeedKph?: number, stationParking?: boolean }> } }> } }> };
+export type GetGeofencingZonesQuery = { geofencingZones?: Array<{ systemId?: string, geojson?: { type?: string, features?: Array<{ type?: string, geometry?: { type?: string }, properties?: { name?: string, start?: number, end?: number, polylineEncodedMultiPolygon?: Array<Array<string>>, rules?: Array<{ vehicleTypeIds?: Array<string>, rideAllowed: boolean, rideThroughAllowed: boolean, maximumSpeedKph?: number, stationParking?: boolean }> } }> } }> };
 
 
 export const GetGeofencingZonesDocument = gql`
@@ -20,7 +20,6 @@ export const GetGeofencingZonesDocument = gql`
         type
         geometry {
           type
-          coordinates
         }
         properties {
           name
@@ -33,6 +32,7 @@ export const GetGeofencingZonesDocument = gql`
             maximumSpeedKph
             stationParking
           }
+          polylineEncodedMultiPolygon
         }
       }
     }
