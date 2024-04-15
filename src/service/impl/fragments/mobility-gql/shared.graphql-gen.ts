@@ -20,7 +20,7 @@ export type RentalAppsFragment = { android?: RentalAppFragment, ios?: RentalAppF
 
 export type BrandAssetsFragment = { brandImageUrl: string, brandImageUrlDark?: string, brandLastModified: string };
 
-export type SystemFragment = { operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment };
+export type SystemFragment = { id: string, operator: OperatorFragment, name: TranslatedStringFragment, brandAssets?: BrandAssetsFragment, rentalApps?: RentalAppsFragment };
 
 export type VehicleTypeBasicFragment = { maxRangeMeters?: number, formFactor: Types.FormFactor };
 
@@ -100,6 +100,7 @@ export const RentalAppsFragmentDoc = gql`
     ${RentalAppFragmentDoc}`;
 export const SystemFragmentDoc = gql`
     fragment system on System {
+  id
   operator {
     ...operator
   }

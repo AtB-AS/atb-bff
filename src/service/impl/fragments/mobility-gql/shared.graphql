@@ -59,6 +59,7 @@ fragment brandAssets on BrandAssets {
 }
 
 fragment system on System {
+    id
     operator {
         ...operator
     }
