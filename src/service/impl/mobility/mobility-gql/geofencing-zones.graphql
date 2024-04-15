@@ -1,5 +1,5 @@
 
-query getGeofencingZones($systemIds: [ID]) { # why not [String!]?
+query getGeofencingZones($systemIds: [ID]) {
     geofencingZones(systemIds: $systemIds) {
         systemId
         geojson {
