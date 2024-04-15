@@ -46,6 +46,11 @@ import {
   violationsReportingInitQueryResultSchema,
   violationsVehicleLookupResultSchema,
 } from './schema';
+import {
+  GetGeofencingZonesDocument,
+  GetGeofencingZonesQuery,
+  GetGeofencingZonesQueryVariables,
+} from './mobility-gql/geofencing-zones.graphql-gen';
 
 const nivelBaseUrl = NIVEL_BASEURL || '';
 const nivelApiKey = NIVEL_API_KEY || '';
@@ -174,6 +179,24 @@ export default (): IMobilityService => ({
         GetBikeStationQueryVariables
       >({
         query: GetBikeStationDocument,
+        variables: query,
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      return Result.ok(result.data);
+    } catch (error) {
+      return Result.err(new APIError(error));
+    }
+  },
+
+  async getGeofencingZones(query, headers) {
+    try {
+      const result = await mobilityClient(headers).query<
+        GetGeofencingZonesQuery,
+        GetGeofencingZonesQueryVariables
+      >({
+        query: GetGeofencingZonesDocument,
         variables: query,
       });
       if (result.errors) {

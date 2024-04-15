@@ -28,6 +28,7 @@ import {
   GetStations_V2Query,
   GetStationsQuery,
 } from './impl/mobility/mobility-gql/stations.graphql-gen';
+import {GetGeofencingZonesQuery} from './impl/mobility/mobility-gql/geofencing-zones.graphql-gen';
 import {
   GetVehicleQuery,
   GetVehicles_V2Query,
@@ -40,6 +41,7 @@ import {
   TripsQueryVariables,
 } from './impl/trips/journey-gql/trip.graphql-gen';
 import {
+  GeofencingZonesQuery,
   BikeStationQuery,
   CarStationQuery,
   DepartureFavoritesPayload,
@@ -246,6 +248,10 @@ export interface IMobilityService {
     query: BikeStationQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<GetBikeStationQuery, APIError>>;
+  getGeofencingZones(
+    query: GeofencingZonesQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<GetGeofencingZonesQuery, APIError>>;
   initViolationsReporting(
     query: ViolationsReportingInitQuery,
     headers: Request<ReqRefDefaults>,

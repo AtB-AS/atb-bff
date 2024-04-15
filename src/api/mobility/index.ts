@@ -3,6 +3,7 @@ import {IMobilityService} from '../../service/interface';
 import {
   BikeStationQuery,
   CarStationQuery,
+  GeofencingZonesQuery,
   StationsQuery,
   StationsQuery_v2,
   VehicleQuery,
@@ -18,6 +19,7 @@ import {
   getVehicleRequest,
   getCarStationRequest,
   getBikeStationRequest,
+  getGeofencingZonesRequest,
   getVehiclesRequest_v2,
   getStationsRequest_v2,
   violationsReportingInitRequest,
@@ -125,6 +127,20 @@ export default (server: Hapi.Server) => (service: IMobilityService) => {
       const payload = request.query as unknown as BikeStationQuery;
 
       return (await service.getBikeStation(payload, h.request)).unwrap();
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/mobility/geofencing-zones',
+    options: {
+      tags: ['api', 'mobility', 'parking zones'],
+      validate: getGeofencingZonesRequest,
+      description: 'Get geofencingZones for a transport operator in a city',
+    },
+    handler: async (request, h) => {
+      const payload = request.query as unknown as GeofencingZonesQuery;
+      return (await service.getGeofencingZones(payload, h.request)).unwrap();
     },
   });
 

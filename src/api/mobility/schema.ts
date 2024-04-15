@@ -3,6 +3,7 @@ import {FormFactor} from '../../graphql/mobility/mobility-types_v2';
 import {
   BikeStationQuery,
   CarStationQuery,
+  GeofencingZonesQuery,
   StationsQuery,
   StationsQuery_v2,
   VehicleQuery,
@@ -79,6 +80,12 @@ export const getCarStationRequest = {
 export const getBikeStationRequest = {
   query: Joi.object<BikeStationQuery>({
     ids: Joi.array().items(Joi.string()).required().single(),
+  }),
+};
+
+export const getGeofencingZonesRequest = {
+  query: Joi.object<GeofencingZonesQuery>({
+    systemIds: Joi.array().items(Joi.string()).required().single(),
   }),
 };
 
