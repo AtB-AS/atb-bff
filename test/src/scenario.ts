@@ -5,7 +5,7 @@ import {
   tripsScenario,
   mobilityScenario,
 } from './v2/v2Scenario';
-import {getNextFriday} from './utils/utils';
+import {getDayNextWeek} from './utils/utils';
 import {
   departuresScenarioV1,
   geocoderScenarioV1,
@@ -28,7 +28,7 @@ export const scn = (usecase: string): void => {
 
 //Functional test
 const bff = (): void => {
-  const searchDate = getNextFriday();
+  const searchDate = getDayNextWeek(4);
   // V1
   departuresScenarioV1(searchDate);
   geocoderScenarioV1();
@@ -49,7 +49,7 @@ const test = (): void => {
 
 //Performance test
 const bffPerformanceTest = (): void => {
-  const searchDate = getNextFriday();
+  const searchDate = getDayNextWeek(4);
   if (__ITER === 0) {
     // Some initialization
   }
