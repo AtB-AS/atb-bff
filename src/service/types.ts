@@ -272,7 +272,7 @@ export type ViolationsReportingProvider = {
   image: {
     type: string;
     base64: string;
-  };
+  } | null;
 };
 export type ParkingViolationType = {
   code: string;
