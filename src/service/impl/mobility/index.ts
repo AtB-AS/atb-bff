@@ -220,12 +220,18 @@ export default (): IMobilityService => ({
         {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
-      const result = violationsReportingInitQueryResultSchema.validate(
-        response,
-        {
-          stripUnknown: true,
-        },
-      );
+      const mapped = {
+        ...response,
+        providers: response.providers.map((provider) => ({
+          ...provider,
+          // The image field can in some cases be null, but the app expects it
+          // to be either set or undefined
+          image: provider.image ?? undefined,
+        })),
+      };
+      const result = violationsReportingInitQueryResultSchema.validate(mapped, {
+        stripUnknown: true,
+      });
       if (result.error) {
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }

@@ -13,7 +13,7 @@ export const violationsReportingInitQueryResultSchema =
         image: Joi.object({
           type: Joi.string(),
           base64: Joi.string(),
-        }).allow(null),
+        }).optional(),
       }),
     ),
     violations: Joi.array().items(
