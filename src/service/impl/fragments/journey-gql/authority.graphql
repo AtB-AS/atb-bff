@@ -1,0 +1,5 @@
+fragment authority on Authority {
+    id
+    name
+    url
+}
