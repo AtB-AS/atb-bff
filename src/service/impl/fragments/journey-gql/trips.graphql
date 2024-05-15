@@ -130,7 +130,7 @@ fragment tripPattern on TripPattern {
             date
         }
         authority {
-            id
+            ...authority
         }
         transportSubmode
         serviceJourneyEstimatedCalls {
