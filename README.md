@@ -1,4 +1,4 @@
-# AtB BFF (oneclick-journey-planner)
+# AtB BFF
 
 Provides HTTP REST endpoints for consuming Entur services from mobile / web
 applications. Built as a docker image and runs on GCP.
@@ -35,6 +35,10 @@ Start the development server
 
 `npm run start:dev`
 
+Or, to enable live reloading
+
+`npm run start:watch`
+
 ## Architecture
 
 The runtime is written in TypeScript and runs on Node.js
@@ -53,9 +57,6 @@ dependencies are handled by the same team that maintains Hapi.
 Service interfaces lives in `service/`, implementations in `service/impl`
 
 API endpoints live in `api/`.
-
-The current implementation uses [@entur/sdk](https://github.com/entur/sdk) as an
-abstraction on top of Entur's GraphQL endpoints.
 
 ## GraphQL Code Generation
 
