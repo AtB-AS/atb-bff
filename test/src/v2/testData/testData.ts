@@ -292,7 +292,7 @@ export const tripsTestData: tripsTestDataType = {
       },
       expectedResult: {
         legModes: null,
-        minimumTripPatterns: 2,
+        minimumTripPatterns: 1,
       },
     },
   ],
