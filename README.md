@@ -54,9 +54,6 @@ Service interfaces lives in `service/`, implementations in `service/impl`
 
 API endpoints live in `api/`.
 
-The current implementation uses [@entur/sdk](https://github.com/entur/sdk) as an
-abstraction on top of Entur's GraphQL endpoints.
-
 ## GraphQL Code Generation
 
 For endpoints that uses GraphQL directly we generate types and code using
