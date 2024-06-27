@@ -36,6 +36,11 @@ export default (server: Hapi.Server) => () => {
     options: {
       tags: ['api', 'authentication', 'vipps'],
       description: 'Get Vipps authorisation url',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true,
+        },
+      },
     },
     handler: async (request) => {
       const callbackUrl = request.query.callbackUrl;
@@ -53,6 +58,11 @@ export default (server: Hapi.Server) => () => {
       tags: ['api', 'authentication', 'vipps'],
       description: 'Get Vipps user custom token',
       validate: postVippsLoginRequest,
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true,
+        },
+      },
     },
     handler: async (request, h) => {
       const callbackUrl = request.query.callbackUrl;
