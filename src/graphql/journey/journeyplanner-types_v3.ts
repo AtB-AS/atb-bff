@@ -1222,6 +1222,7 @@ export type QueryTypeTripArgs = {
   bikeSpeed?: InputMaybe<Scalars['Float']['input']>;
   boardSlackDefault?: InputMaybe<Scalars['Int']['input']>;
   boardSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
+  bookingTime?: InputMaybe<Scalars['DateTime']['input']>;
   dateTime?: InputMaybe<Scalars['DateTime']['input']>;
   extraSearchCoachReluctance?: InputMaybe<Scalars['Float']['input']>;
   filters?: InputMaybe<Array<TripFilterInput>>;
@@ -1389,7 +1390,7 @@ export type RoutingParameters = {
   bikeRentalPickupTime?: Maybe<Scalars['Int']['output']>;
   /** Max bike speed along streets, in meters per second */
   bikeSpeed?: Maybe<Scalars['Float']['output']>;
-  /** The boardSlack is the minimum extra time to board a public transport vehicle. This is the same as the 'minimumTransferTime', except that this also apply to to the first transit leg in the trip. This is the default value used, if not overridden by the 'boardSlackList'. */
+  /** The boardSlack is the minimum extra time to board a public transport vehicle. This is the same as the 'minimumTransferTime', except that this also applies to to the first transit leg in the trip. This is the default value used, if not overridden by the 'boardSlackList'. */
   boardSlackDefault?: Maybe<Scalars['Int']['output']>;
   /** List of boardSlack for a given set of modes. */
   boardSlackList?: Maybe<Array<Maybe<TransportModeSlackType>>>;
@@ -1711,6 +1712,40 @@ export type TimeAndDayOffset = {
   time?: Maybe<Scalars['Time']['output']>;
 };
 
+/**
+ * The time-penalty is applied to either the access-legs and/or egress-legs. Both access and
+ * egress may contain more than one leg; Hence, the penalty is not a field on leg.
+ *
+ * Note! This is for debugging only. This type can change without notice.
+ *
+ */
+export type TimePenalty = {
+  /**
+   * The time-penalty is applied to either the access-legs and/or egress-legs. Both access
+   * and egress may contain more than one leg; Hence, the penalty is not a field on leg. The
+   * `appliedTo` describe witch part of the itinerary that this instance applies to.
+   *
+   */
+  appliedTo?: Maybe<Scalars['String']['output']>;
+  /**
+   * The time-penalty does also propagate to the `generalizedCost` But, while the
+   * arrival-/departure-times listed is not affected, the generalized-cost is. In some cases
+   * the time-penalty-cost is excluded when comparing itineraries - that happens if one of
+   * the itineraries is a "direct/street-only" itinerary. Time-penalty can not be set for
+   * direct searches, so it needs to be excluded from such comparison to be fair. The unit
+   * is transit-seconds.
+   *
+   */
+  generalizedCostPenalty?: Maybe<Scalars['Int']['output']>;
+  /**
+   * The time-penalty added to the actual time/duration when comparing the itinerary with
+   * other itineraries. This is used to decide witch is the best option, but is not visible
+   * - the actual departure and arrival-times are not modified.
+   *
+   */
+  timePenalty?: Maybe<Scalars['String']['output']>;
+};
+
 /** Scheduled passing times. These are not affected by real time updates. */
 export type TimetabledPassingTime = {
   /** Scheduled time of arrival at quay */
@@ -2007,6 +2042,15 @@ export type TripPattern = {
   streetDistance?: Maybe<Scalars['Float']['output']>;
   /** Get all system notices. */
   systemNotices: Array<SystemNotice>;
+  /**
+   * A time and cost penalty applied to access and egress to favor regular scheduled
+   * transit over potentially faster options with FLEX, Car, bike and scooter.
+   *
+   * Note! This field is meant for debugging only. The field can be removed without notice
+   * in the future.
+   *
+   */
+  timePenalty: Array<TimePenalty>;
   /** A cost calculated to favor transfer with higher priority. This field is meant for debugging only. */
   transferPriorityCost?: Maybe<Scalars['Int']['output']>;
   /** A cost calculated to distribute wait-time and avoid very short transfers. This field is meant for debugging only. */

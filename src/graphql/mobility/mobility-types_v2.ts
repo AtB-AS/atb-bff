@@ -44,6 +44,7 @@ export enum FormFactor {
   CargoBicycle = 'CARGO_BICYCLE',
   Moped = 'MOPED',
   Other = 'OTHER',
+  /** @deprecated Use SCOOTER_STANDING */
   Scooter = 'SCOOTER',
   ScooterSeated = 'SCOOTER_SEATED',
   ScooterStanding = 'SCOOTER_STANDING'
@@ -60,7 +61,10 @@ export type GeofencingZoneProperties = {
 
 export type GeofencingZoneRule = {
   maximumSpeedKph?: Maybe<Scalars['Int']['output']>;
+  /** @deprecated Use rideStartAllowed and rideEndAllowed */
   rideAllowed: Scalars['Boolean']['output'];
+  rideEndAllowed: Scalars['Boolean']['output'];
+  rideStartAllowed: Scalars['Boolean']['output'];
   rideThroughAllowed: Scalars['Boolean']['output'];
   stationParking?: Maybe<Scalars['Boolean']['output']>;
   vehicleTypeIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -238,10 +242,14 @@ export type Station = {
   lat: Scalars['Float']['output'];
   lon: Scalars['Float']['output'];
   name: TranslatedString;
+  /** @deprecated Use numVehiclesAvailable */
   numBikesAvailable: Scalars['Int']['output'];
+  /** @deprecated Use numVehiclesDisabled */
   numBikesDisabled?: Maybe<Scalars['Int']['output']>;
   numDocksAvailable?: Maybe<Scalars['Int']['output']>;
   numDocksDisabled?: Maybe<Scalars['Int']['output']>;
+  numVehiclesAvailable: Scalars['Int']['output'];
+  numVehiclesDisabled?: Maybe<Scalars['Int']['output']>;
   parkingHoop?: Maybe<Scalars['Boolean']['output']>;
   parkingType?: Maybe<ParkingType>;
   postCode?: Maybe<Scalars['String']['output']>;
@@ -252,20 +260,29 @@ export type Station = {
   shortName?: Maybe<TranslatedString>;
   stationArea?: Maybe<MultiPolygon>;
   system: System;
+  /** @deprecated Use vehicleTypesCapacity */
   vehicleCapacity?: Maybe<Array<Maybe<VehicleTypeCapacity>>>;
   vehicleDocksAvailable?: Maybe<Array<Maybe<VehicleDocksAvailability>>>;
+  vehicleDocksCapacity?: Maybe<Array<Maybe<VehicleDocksCapacity>>>;
+  /** @deprecated Use vehicleDocksCapacity */
   vehicleTypeCapacity?: Maybe<Array<Maybe<VehicleTypeCapacity>>>;
   vehicleTypesAvailable?: Maybe<Array<Maybe<VehicleTypeAvailability>>>;
+  vehicleTypesCapacity?: Maybe<Array<Maybe<VehicleTypesCapacity>>>;
 };
 
 export type System = {
+  attributionOrganizationName?: Maybe<TranslatedString>;
+  attributionUrl?: Maybe<Scalars['String']['output']>;
   brandAssets?: Maybe<BrandAssets>;
   email?: Maybe<Scalars['String']['output']>;
   feedContactEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  /** @deprecated Use languages */
   language: Scalars['String']['output'];
+  languages: Array<Scalars['String']['output']>;
   licenseUrl?: Maybe<Scalars['String']['output']>;
   name: TranslatedString;
+  openingHours?: Maybe<Scalars['String']['output']>;
   operator: Operator;
   phoneNumber?: Maybe<Scalars['String']['output']>;
   privacyLastUpdated?: Maybe<Scalars['String']['output']>;
@@ -274,6 +291,7 @@ export type System = {
   rentalApps?: Maybe<RentalApps>;
   shortName?: Maybe<TranslatedString>;
   startDate?: Maybe<Scalars['String']['output']>;
+  terminationDate?: Maybe<Scalars['String']['output']>;
   termsLastUpdated?: Maybe<Scalars['String']['output']>;
   termsUrl?: Maybe<Scalars['String']['output']>;
   timezone: Scalars['String']['output'];
@@ -329,6 +347,11 @@ export type VehicleDocksAvailability = {
   vehicleTypes: Array<Maybe<VehicleType>>;
 };
 
+export type VehicleDocksCapacity = {
+  count: Scalars['Int']['output'];
+  vehicleTypes: Array<VehicleType>;
+};
+
 export enum VehicleEquipment {
   ChildSeatA = 'CHILD_SEAT_A',
   ChildSeatB = 'CHILD_SEAT_B',
@@ -343,7 +366,10 @@ export type VehicleType = {
   color?: Maybe<Scalars['String']['output']>;
   defaultPricingPlan?: Maybe<PricingPlan>;
   defaultReserveTime?: Maybe<Scalars['Int']['output']>;
+  description?: Maybe<TranslatedString>;
+  /** @deprecated Use ecoLabels */
   ecoLabel?: Maybe<Array<Maybe<EcoLabel>>>;
+  ecoLabels?: Maybe<Array<Maybe<EcoLabel>>>;
   formFactor: FormFactor;
   gCO2km?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
@@ -371,4 +397,9 @@ export type VehicleTypeAvailability = {
 export type VehicleTypeCapacity = {
   count: Scalars['Int']['output'];
   vehicleType: VehicleType;
+};
+
+export type VehicleTypesCapacity = {
+  count: Scalars['Int']['output'];
+  vehicleTypes: Array<VehicleType>;
 };
