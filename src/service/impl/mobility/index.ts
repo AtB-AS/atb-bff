@@ -233,6 +233,9 @@ export default (): IMobilityService => ({
         stripUnknown: true,
       });
       if (result.error) {
+        console.error(
+          `Validation error for request with correlationId ${headers.correlationId}: ${result.error.message}`,
+        );
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
       return Result.ok(result.value);
@@ -257,6 +260,9 @@ export default (): IMobilityService => ({
         stripUnknown: true,
       });
       if (result.error) {
+        console.error(
+          `Validation error for request with correlationId ${headers.correlationId}: ${result.error.message}`,
+        );
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
       return Result.ok(result.value);
