@@ -9,7 +9,6 @@ import {
 import {parseTripQueryString} from '../../service/impl/trips/utils';
 import {
   postEncodedSingleTripRequest,
-  postSingleTripRequest,
   postTripsRequest,
   postJourneyRequest,
   postNonTransitTripsRequest,
@@ -60,7 +59,6 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       const queryString = request.payload as CompressedSingleTripQuery;
       const query: TripsQueryWithJourneyIds = parseTripQueryString(
         queryString.compressedQuery,
-        postSingleTripRequest.payload,
       );
       const result = await service.getSingleTrip(query, h.request);
       return result.unwrap();

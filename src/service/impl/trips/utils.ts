@@ -1,4 +1,3 @@
-import Joi from 'joi';
 import {TripsQueryVariables} from './journey-gql/trip.graphql-gen';
 import {
   TripPattern as TripPattern_v3,
@@ -66,19 +65,15 @@ function getPaddedStartTime(time: string): string {
  * Maps a TripQueryString into QueryVariables and journeyIds
  * JourneyPlanner v3
  * @param compressedQueryString
- * @param queryValidator
  */
 export function parseTripQueryString(
   compressedQueryString: string,
-  queryValidator: Joi.ObjectSchema,
 ): TripsQueryWithJourneyIds {
   const queryString = decompressFromEncodedURIComponent(compressedQueryString);
   if (!queryString) {
     throw new Error();
   }
   const queryFields = JSON.parse(queryString);
-  queryValidator.validate(queryFields.query);
-
   return {
     query: queryFields.query,
     journeyIds: queryFields.journeyIds,
