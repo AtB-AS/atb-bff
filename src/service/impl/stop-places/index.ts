@@ -19,6 +19,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '../../../graphql/journey/journeyplanner-types_v3';
+import { GetStopPlaceParentDocument, GetStopPlaceParentQuery, GetStopPlaceParentQueryVariables } from './journey-gql/stop-place-parent.graphql-gen';
 
 export default (): IStopPlacesService => {
   return {
@@ -98,6 +99,26 @@ export default (): IStopPlacesService => {
       } catch (error) {
         return Result.err(new APIError(error));
       }
+    },
+    async getStopPlaceParent(query, headers) {
+      const result = await journeyPlannerClient(headers).query<
+        GetStopPlaceParentQuery,
+        GetStopPlaceParentQueryVariables
+      >({
+        query: GetStopPlaceParentDocument,
+        variables: {
+          id: query.fromStopPlaceId,
+        },
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      const parentStopPlaceId = result.data.stopPlace?.parent?.id;
+      if (parentStopPlaceId) {
+        return Result.ok(parentStopPlaceId);
+      }
+
+      return Result.ok(query.fromStopPlaceId);
     },
   };
 };
