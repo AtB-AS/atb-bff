@@ -40,7 +40,7 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   });
   server.route({
     method: 'GET',
-    path: '/bff/v2/stop-places/parent',
+    path: '/bff/v2/stop-places/parent-id',
     options: {
       tags: ['api', 'stop', 'parent'],
       validate: getStopPlaceParentRequest,
