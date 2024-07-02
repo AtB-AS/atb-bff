@@ -45,7 +45,7 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
       tags: ['api', 'stop', 'parent'],
       validate: getStopPlaceParentRequest,
       description:
-        'Get stop place parent ID from a stop place ID, if the stop place ID is a parent, return itself',
+        'Get the parent ID of a stop place. If it has no parent, the provided stop ID will be returned instead',
     },
     handler: async (request, h) => {
       const query = request.query as unknown as StopPlaceParentQuery;
