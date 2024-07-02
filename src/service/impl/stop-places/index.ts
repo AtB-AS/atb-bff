@@ -22,7 +22,7 @@ import {
 import {
   GetStopPlaceParentDocument,
   GetStopPlaceParentQuery,
-  GetStopPlaceParentQueryVariables
+  GetStopPlaceParentQueryVariables,
 } from './journey-gql/stop-place-parent.graphql-gen';
 
 export default (): IStopPlacesService => {
