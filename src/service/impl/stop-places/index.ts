@@ -19,7 +19,11 @@ import {
   TransportMode,
   TransportSubmode,
 } from '../../../graphql/journey/journeyplanner-types_v3';
-import { GetStopPlaceParentDocument, GetStopPlaceParentQuery, GetStopPlaceParentQueryVariables } from './journey-gql/stop-place-parent.graphql-gen';
+import {
+  GetStopPlaceParentDocument,
+  GetStopPlaceParentQuery,
+  GetStopPlaceParentQueryVariables
+} from './journey-gql/stop-place-parent.graphql-gen';
 
 export default (): IStopPlacesService => {
   return {
