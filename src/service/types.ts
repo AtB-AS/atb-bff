@@ -63,6 +63,10 @@ export interface StopPlaceConnectionsQuery {
   transportSubmodes?: TransportSubmode[];
 }
 
+export interface StopPlaceParentQuery {
+  id: string;
+}
+
 export type StopPlaces = Array<{
   name: string;
   id: string;

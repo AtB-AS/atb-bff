@@ -77,6 +77,7 @@ import {
   ViolationsReportQueryResult,
   ViolationsVehicleLookupQuery,
   ViolationsVehicleLookupQueryResult,
+  StopPlaceParentQuery,
 } from './types';
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
@@ -190,6 +191,10 @@ export interface IStopPlacesService {
     query: StopPlaceConnectionsQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<StopPlaces, APIError>>;
+  getStopPlaceParent(
+    query: StopPlaceParentQuery,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<string, APIError>>;
 }
 
 export interface IEnrollmentService {

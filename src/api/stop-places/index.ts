@@ -2,10 +2,12 @@ import Hapi from '@hapi/hapi';
 import {IStopPlacesService} from '../../service/interface';
 import {
   getStopPlaceConnectionsRequest,
+  getStopPlaceParentRequest,
   getStopPlacesByModeRequest,
 } from './schema';
 import {
   StopPlaceConnectionsQuery,
+  StopPlaceParentQuery,
   StopPlacesByModeQuery,
 } from '../../service/types';
 
@@ -34,6 +36,20 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
     handler: async (request, h) => {
       const query = request.query as unknown as StopPlaceConnectionsQuery;
       return (await service.getStopPlaceConnections(query, h.request)).unwrap();
+    },
+  });
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/stop-places/parent-id',
+    options: {
+      tags: ['api', 'stop', 'parent'],
+      validate: getStopPlaceParentRequest,
+      description:
+        'Get the parent ID of a stop place. If it has no parent, the provided stop ID will be returned instead',
+    },
+    handler: async (request, h) => {
+      const query = request.query as unknown as StopPlaceParentQuery;
+      return (await service.getStopPlaceParent(query, h.request)).unwrap();
     },
   });
 };
