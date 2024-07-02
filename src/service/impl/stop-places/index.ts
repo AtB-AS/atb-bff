@@ -111,18 +111,25 @@ export default (): IStopPlacesService => {
       >({
         query: GetStopPlaceParentDocument,
         variables: {
-          id: query.fromStopPlaceId,
+          id: query.id,
         },
       });
       if (result.errors) {
         return Result.err(new APIError(result.errors));
       }
       const parentStopPlaceId = result.data.stopPlace?.parent?.id;
+
+      // found parent stop ID
       if (parentStopPlaceId) {
         return Result.ok(parentStopPlaceId);
       }
 
-      return Result.ok(query.fromStopPlaceId);
+      // sent ID is parent stop place
+      if (result.data.stopPlace) {
+        return Result.ok(result.data.stopPlace?.id);
+      }
+
+      return Result.err(new Error('Invalid stop place ID'));
     },
   };
 };

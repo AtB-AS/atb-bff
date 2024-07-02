@@ -24,6 +24,6 @@ export const getStopPlaceConnectionsRequest = {
 
 export const getStopPlaceParentRequest = {
   query: Joi.object<StopPlaceParentQuery>({
-    fromStopPlaceId: Joi.string().required(),
+    id: Joi.string().required(),
   }),
 };
