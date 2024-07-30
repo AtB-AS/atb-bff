@@ -148,6 +148,7 @@ fragment tripPattern on TripPattern {
             ...bookingArrangement
         }
         datedServiceJourney {
+            id
             estimatedCalls {
                 actualDepartureTime
                 quay {
