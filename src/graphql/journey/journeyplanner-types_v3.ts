@@ -400,6 +400,7 @@ export enum InterchangePriority {
   Recommended = 'recommended'
 }
 
+/** Deprecated. Use STOP_INTERCHANGE_PRIORITY */
 export enum InterchangeWeighting {
   /** Third highest priority interchange. */
   InterchangeAllowed = 'interchangeAllowed',
@@ -1587,6 +1588,17 @@ export enum StopCondition {
   StartPoint = 'startPoint'
 }
 
+export enum StopInterchangePriority {
+  /** Allow transfers from/to this stop. This is the default. NeTEx equivalent is INTERCHANGE_ALLOWED. */
+  Allowed = 'allowed',
+  /** Block transfers from/to this stop. In OTP this is not a definitive block, just a huge penalty is added to the cost function. NeTEx equivalent is NO_INTERCHANGE. */
+  Discouraged = 'discouraged',
+  /** Preferred place to transfer, strongly recommended. NeTEx equivalent is PREFERRED_INTERCHANGE. */
+  Preferred = 'preferred',
+  /** Recommended stop place. NeTEx equivalent is RECOMMENDED_INTERCHANGE. */
+  Recommended = 'recommended'
+}
+
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlace = PlaceInterface & {
   description?: Maybe<Scalars['String']['output']>;
@@ -1602,13 +1614,18 @@ export type StopPlace = PlaceInterface & {
   quays?: Maybe<Array<Maybe<Quay>>>;
   /** Get all situations active for the stop place. Situations affecting individual quays are not returned, and should be fetched directly from the quay. */
   situations: Array<PtSituationElement>;
+  /** Specify the priority of interchanges at this stop */
+  stopInterchangePriority?: Maybe<StopInterchangePriority>;
   tariffZones: Array<Maybe<TariffZone>>;
   timeZone?: Maybe<Scalars['String']['output']>;
   /** The transport modes of quays under this stop place. */
   transportMode?: Maybe<Array<Maybe<TransportMode>>>;
   /** The transport submode serviced by this stop place. */
   transportSubmode?: Maybe<Array<Maybe<TransportSubmode>>>;
-  /** Relative weighting of this stop with regards to interchanges. NOT IMPLEMENTED */
+  /**
+   * Relative weighting of this stop with regards to interchanges. NOT IMPLEMENTED
+   * @deprecated Not implemented. Use stopInterchangePriority
+   */
   weighting?: Maybe<InterchangeWeighting>;
 };
 
@@ -1719,7 +1736,7 @@ export type TimeAndDayOffset = {
  * Note! This is for debugging only. This type can change without notice.
  *
  */
-export type TimePenalty = {
+export type TimePenaltyWithCost = {
   /**
    * The time-penalty is applied to either the access-legs and/or egress-legs. Both access
    * and egress may contain more than one leg; Hence, the penalty is not a field on leg. The
@@ -1728,15 +1745,15 @@ export type TimePenalty = {
    */
   appliedTo?: Maybe<Scalars['String']['output']>;
   /**
-   * The time-penalty does also propagate to the `generalizedCost` But, while the
-   * arrival-/departure-times listed is not affected, the generalized-cost is. In some cases
-   * the time-penalty-cost is excluded when comparing itineraries - that happens if one of
-   * the itineraries is a "direct/street-only" itinerary. Time-penalty can not be set for
-   * direct searches, so it needs to be excluded from such comparison to be fair. The unit
-   * is transit-seconds.
+   * The time-penalty does also propagate to the `generalizedCost`. As a result of the given
+   * time-penalty, the generalized-cost also increased by the given amount. This delta is
+   * included in the itinerary generalized-cost. In some cases the generalized-cost-delta is
+   * excluded when comparing itineraries - that happens if one of the itineraries is a
+   * "direct/street-only" itinerary. Time-penalty can not be set for direct searches, so it
+   * needs to be excluded from such comparison to be fair. The unit is transit-seconds.
    *
    */
-  generalizedCostPenalty?: Maybe<Scalars['Int']['output']>;
+  generalizedCostDelta?: Maybe<Scalars['Int']['output']>;
   /**
    * The time-penalty added to the actual time/duration when comparing the itinerary with
    * other itineraries. This is used to decide witch is the best option, but is not visible
@@ -2050,7 +2067,7 @@ export type TripPattern = {
    * in the future.
    *
    */
-  timePenalty: Array<TimePenalty>;
+  timePenalty: Array<TimePenaltyWithCost>;
   /** A cost calculated to favor transfer with higher priority. This field is meant for debugging only. */
   transferPriorityCost?: Maybe<Scalars['Int']['output']>;
   /** A cost calculated to distribute wait-time and avoid very short transfers. This field is meant for debugging only. */
