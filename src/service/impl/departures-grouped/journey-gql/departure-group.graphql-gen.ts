@@ -173,7 +173,6 @@ export const GroupsByIdDocument = gql`
         startTime: $startTime
         timeRange: $timeRange
         numberOfDepartures: $totalLimit
-        numberOfDeparturesPerLineAndDestinationDisplay: 1
         arrivalDeparture: departures
         includeCancelledTrips: $includeCancelledTrips
         whiteListed: {lines: $filterByLineIds}
