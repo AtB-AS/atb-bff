@@ -118,6 +118,7 @@ fragment tripPattern on TripPattern {
             }
             guaranteed
             maximumWaitTime
+            staySeated
         }
         pointsOnLink {
             points
