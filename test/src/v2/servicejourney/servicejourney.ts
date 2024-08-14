@@ -240,15 +240,15 @@ export function polyline(
       let polylineDuration = 0.0;
       // Walk through the trip patterns
       for (let trip of jsonTrip.trip.tripPatterns) {
-        // Only consider direct busses
+        // Only consider direct buses
         if (trip.legs.length === 1 && trip.legs[0].mode === 'bus') {
           const fromCoords = [
             useNoDecimals(trip.legs[0].fromPlace.latitude, 2),
             useNoDecimals(trip.legs[0].fromPlace.longitude, 2),
           ];
           const toCoords = [
-            useNoDecimals(trip.legs[0].toPlace.latitude, 2),
-            useNoDecimals(trip.legs[0].toPlace.longitude, 2),
+            useNoDecimals(trip.legs[0].toPlace.latitude, 0),
+            useNoDecimals(trip.legs[0].toPlace.longitude, 0),
           ];
           const serviceJourney = trip.legs[0].serviceJourney!.id;
           const fromQuay = trip.legs[0].fromPlace.quay!.id;
@@ -278,16 +278,16 @@ export function polyline(
             useNoDecimals(jsonPoly.start.longitude, 2),
           ];
           const stopCoordsPolyline = [
-            useNoDecimals(jsonPoly.stop.latitude, 2),
-            useNoDecimals(jsonPoly.stop.longitude, 2),
+            useNoDecimals(jsonPoly.stop.latitude, 0),
+            useNoDecimals(jsonPoly.stop.longitude, 0),
           ];
           const startCoordsPolyline2 = [
             useNoDecimals(jsonPoly2.start.latitude, 2),
             useNoDecimals(jsonPoly2.start.longitude, 2),
           ];
           const stopCoordsPolyline2 = [
-            useNoDecimals(jsonPoly2.stop.latitude, 2),
-            useNoDecimals(jsonPoly2.stop.longitude, 2),
+            useNoDecimals(jsonPoly2.stop.latitude, 0),
+            useNoDecimals(jsonPoly2.stop.longitude, 0),
           ];
 
           expects.push(

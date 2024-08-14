@@ -7,8 +7,7 @@ export type departureFavoritesTestDataType = {
       quayId: string;
       quayName: string;
       stopId: string;
-      lineNumber: string;
-      lineName: string;
+      lineLineNumber: string;
       lineTransportationMode: string;
       lineTransportationSubMode: string;
       quayPublicCode?: string;
