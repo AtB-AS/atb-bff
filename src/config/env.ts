@@ -45,11 +45,19 @@ const getServiceUrl = (
 };
 
 const getServiceHost = (serviceKey: string): string => {
-  return process.env[`${serviceKey}_SERVICE_HOST`] || '';
+  return (
+    process.env[`${serviceKey}_SERVICE_SERVICE_HOST`] ||
+    process.env[`${serviceKey}_SERVICE_HOST`] ||
+    ''
+  );
 };
 
 const getServicePort = (serviceKey: string): string => {
-  return process.env[`${serviceKey}_SERVICE_PORT`] || '';
+  return (
+    process.env[`${serviceKey}_SERVICE_SERVICE_PORT`] ||
+    process.env[`${serviceKey}_SERVICE_PORT`] ||
+    ''
+  );
 };
 
 export const ENROLLMENT_BASEURL: string = getServiceUrl(
