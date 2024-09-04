@@ -28,6 +28,19 @@ import {
 export default (): IStopPlacesService => {
   return {
     async getStopPlacesByMode(query, headers) {
+      /**
+       * Temporary flag to include ferry submode in the stop places query
+       * so that we have an backward compatible way to show ferry stop places
+       * when buying express boat tickets in the Svipper app.
+       * This flag should be removed once we have enough users on app
+       * version > v1.56
+       */
+      if (
+        (!headers.appVersion || headers.appVersion <= '1.55') &&
+        process.env.INCLUDE_CAR_FERRY_SUBMODE_STOP_PLACES_QUERY === 'true'
+      ) {
+        query.transportSubmodes?.push(TransportSubmode.LocalCarFerry);
+      }
       const result = await journeyPlannerClient(headers).query<
         GetStopPlacesByModeQuery,
         GetStopPlacesByModeQueryVariables
