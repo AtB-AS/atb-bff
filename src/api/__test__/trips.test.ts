@@ -2,7 +2,7 @@ import { createServer, initializePlugins } from '../../server';
 import { randomPort } from './common';
 import routes from '../trips';
 import Hapi from '@hapi/hapi';
-import { IStopsService, ITrips_v2 } from '../../service/interface';
+import { ITrips_v2 } from '../../service/interface';
 import { Result } from '@badrap/result';
 import {TripsQueryWithJourneyIds} from "../../types/trips";
 import {compressToEncodedURIComponent} from "lz-string";
@@ -74,6 +74,30 @@ describe('GET /bff/v2/trips', () => {
       }
     });
     expect(res.statusCode).toBe(200);
+  });
+  it('responds with 400 when missing required parameters', async () => {
+
+    const res = await server.inject({
+      method: 'post',
+      url: `/bff/v2/trips`,
+      payload: {
+        from: {
+          name: 'Trondheim',
+          coordinates: {
+            latitude: 63.43,
+            longitude: 10.34
+          }
+        },
+        to: {
+          name: 'Oslo',
+          coordinates: {
+            latitude: 59.9139,
+            longitude: 10.7522
+          }
+        },
+      }
+    });
+    expect(res.statusCode).toBe(400);
   });
 });
 

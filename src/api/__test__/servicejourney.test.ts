@@ -33,7 +33,7 @@ describe('GET /bff/v1/servicejourney/{id}/polyline', () => {
   const url =
     '/bff/v1/servicejourney/ATB%3AServiceJourney%3A1_200109141595335_51/polyline?fromQuayId=NSR%3AQuay%3A75300&toQuayId=NSR%3AQuay%3A75301';
   it('parses query parameters correctly', async () => {
-    const res = await server.inject({
+    await server.inject({
       method: 'get',
       url: url
     });
@@ -45,13 +45,20 @@ describe('GET /bff/v1/servicejourney/{id}/polyline', () => {
       }
     );
   });
+  it('responds with 200', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: url
+    });
+    expect(res.statusCode).toBe(200)
+  });
 });
 
 describe('GET /bff/v1/servicejourney/{id}/departures', () => {
   const url =
     '/bff/v1/servicejourney/ATB%3AServiceJourney%3A1_200109141595335_51/departures';
   it('parses query parameters correctly', async () => {
-    const res = await server.inject({
+    await server.inject({
       method: 'get',
       url: url
     });
@@ -61,5 +68,12 @@ describe('GET /bff/v1/servicejourney/{id}/departures', () => {
         date: undefined
       }
     );
+  });
+  it('responds with 200', async () => {
+    const res = await server.inject({
+      method: 'get',
+      url: url
+    });
+    expect(res.statusCode).toBe(200)
   });
 });

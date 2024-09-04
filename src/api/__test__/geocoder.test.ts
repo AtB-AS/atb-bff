@@ -1,5 +1,4 @@
 import Hapi from '@hapi/hapi';
-import http from 'http';
 import { createServer, initializePlugins } from '../../server';
 import geocoderRoutes from '../geocoder';
 import { IGeocoderService } from '../../service/interface';

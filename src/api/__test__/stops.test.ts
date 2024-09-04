@@ -148,9 +148,10 @@ describe('GET /bff/v1/departures', () => {
       method: 'get',
       url: '/bff/v1/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
     });
+    expect(res.statusCode).toBe(200)
   });
   it('parses query parameters correctly', async () => {
-    const res = await server.inject({
+    await server.inject({
       method: 'get',
       url: '/bff/v1/departures?from=NSR:StopPlace:42624&to=NSR:StopPlace:41609'
     });
