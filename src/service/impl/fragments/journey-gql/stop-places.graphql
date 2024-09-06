@@ -3,4 +3,5 @@ fragment stopPlace on StopPlace {
   name
   latitude
   longitude
+  transportMode
 }

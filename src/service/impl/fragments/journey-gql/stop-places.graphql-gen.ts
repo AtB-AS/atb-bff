@@ -2,7 +2,7 @@ import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-export type StopPlaceFragment = { id: string, name: string, latitude?: number, longitude?: number };
+export type StopPlaceFragment = { id: string, name: string, latitude?: number, longitude?: number, transportMode?: Array<Types.TransportMode> };
 
 export const StopPlaceFragmentDoc = gql`
     fragment stopPlace on StopPlace {
@@ -10,6 +10,7 @@ export const StopPlaceFragmentDoc = gql`
   name
   latitude
   longitude
+  transportMode
 }
     `;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
