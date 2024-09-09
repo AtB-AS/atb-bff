@@ -9,7 +9,7 @@ export type GetStopPlacesByModeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetStopPlacesByModeQuery = { lines: Array<{ transportSubmode?: Types.TransportSubmode, quays: Array<{ stopPlace?: { id: string, name: string, latitude?: number, longitude?: number } }> }> };
+export type GetStopPlacesByModeQuery = { lines: Array<{ transportSubmode?: Types.TransportSubmode, quays: Array<{ stopPlace?: { id: string, name: string, latitude?: number, longitude?: number, transportMode?: Array<Types.TransportMode> } }> }> };
 
 
 export const GetStopPlacesByModeDocument = gql`

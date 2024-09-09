@@ -72,6 +72,7 @@ export type StopPlaces = Array<{
   id: string;
   latitude?: number;
   longitude?: number;
+  transportMode?: TransportMode[];
 }>;
 
 export type ReverseFeaturesQuery = {
