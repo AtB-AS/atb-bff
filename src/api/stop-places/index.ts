@@ -46,6 +46,11 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
       validate: getStopPlaceParentRequest,
       description:
         'Get the parent ID of a stop place. If it has no parent, the provided stop ID will be returned instead',
+      plugins: {
+        'hapi-swagger': {
+          deprecated: true,
+        },
+      },
     },
     handler: async (request, h) => {
       const query = request.query as unknown as StopPlaceParentQuery;
