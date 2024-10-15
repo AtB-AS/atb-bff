@@ -259,6 +259,8 @@ export type Station = {
   rentalUris?: Maybe<RentalUris>;
   shortName?: Maybe<TranslatedString>;
   stationArea?: Maybe<MultiPolygon>;
+  /** MultiPolygon where the lists of coordinates are encoded as polyline strings using precision of 6 decimals (see http://code.google.com/apis/maps/documentation/polylinealgorithm.html). Meant to be used instead of stationArea to minimize the response payload size. */
+  stationAreaPolylineEncodedMultiPolygon?: Maybe<Array<Maybe<Array<Maybe<Scalars['String']['output']>>>>>;
   system: System;
   /** @deprecated Use vehicleTypesCapacity */
   vehicleCapacity?: Maybe<Array<Maybe<VehicleTypeCapacity>>>;
