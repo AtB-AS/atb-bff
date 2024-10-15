@@ -23,6 +23,7 @@ query departures(
       expectedDepartureTime
       aimedDepartureTime
       realtime
+      predictionInaccurate
       cancellation
       quay {
         id
