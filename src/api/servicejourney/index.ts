@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import {DEFAULT_CACHE_TTL} from '../../config/cache';
+import {CACHE_TTL_MS} from '../../config/env';
 import {EXTERNAL_API_TIMEOUT} from '../../config/external';
 import {IServiceJourneyService_v2} from '../../service/interface';
 import {
@@ -37,7 +37,7 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
           toQuayId,
         }),
       cache: {
-        expiresIn: DEFAULT_CACHE_TTL,
+        expiresIn: CACHE_TTL_MS,
         generateTimeout: EXTERNAL_API_TIMEOUT,
       },
     });

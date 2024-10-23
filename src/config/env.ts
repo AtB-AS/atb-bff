@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import {getEnv} from '../utils/get-env';
+import {DEFAULT_CACHE_TTL_MS} from './cache';
 
 export const TICKET_INVITE_KEY: string | undefined =
   process.env.TICKET_INVITE_KEY;
@@ -60,6 +61,12 @@ const getServicePort = (serviceKey: string): string => {
   );
 };
 
+const getInteger = (envKey: string): number | undefined => {
+  const envVar = process.env[envKey];
+  const isInteger = !!envVar && /^\d+$/.test(envVar);
+  return isInteger ? Number(envVar) : undefined;
+};
+
 export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'http://',
   'ENROLLMENT',
@@ -67,3 +74,5 @@ export const ENROLLMENT_BASEURL: string = getServiceUrl(
 );
 export const REDIS_HOST: string = getServiceHost('REDIS');
 export const REDIS_PORT: string = getServicePort('REDIS');
+
+export const CACHE_TTL_MS = getInteger('CACHE_TTL_MS') || DEFAULT_CACHE_TTL_MS;
