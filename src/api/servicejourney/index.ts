@@ -1,6 +1,5 @@
 import Hapi from '@hapi/hapi';
-import {CACHE_TTL_MS} from '../../config/env';
-import {EXTERNAL_API_TIMEOUT} from '../../config/external';
+import {CACHE_TTL_MS_SERVER_SERVICE_JOURNEY_MAP_INFO} from '../../config/env';
 import {IServiceJourneyService_v2} from '../../service/interface';
 import {
   DeparturesForServiceJourneyQuery,
@@ -14,6 +13,7 @@ import {
 } from './schema';
 import qs from 'querystring';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {getServerCache} from '../../utils/cache';
 
 export function serviceJourneyRoutes_v2(server: Hapi.Server) {
   return (service: IServiceJourneyService_v2) => {
@@ -36,10 +36,7 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
           fromQuayId,
           toQuayId,
         }),
-      cache: {
-        expiresIn: CACHE_TTL_MS,
-        generateTimeout: EXTERNAL_API_TIMEOUT,
-      },
+      cache: getServerCache(CACHE_TTL_MS_SERVER_SERVICE_JOURNEY_MAP_INFO),
     });
 
     server.route({

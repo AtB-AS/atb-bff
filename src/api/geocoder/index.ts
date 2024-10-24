@@ -4,8 +4,12 @@ import qs from 'querystring';
 import {IGeocoderService} from '../../service/interface';
 import {getFeaturesRequest, getFeaturesReverseRequest} from './schema';
 import {FeaturesQuery, ReverseFeaturesQuery} from '../../service/types';
-import {CACHE_TTL_MS} from '../../config/env';
-import {EXTERNAL_API_TIMEOUT} from '../../config/external';
+import {
+  CACHE_TTL_MS_CLIENT,
+  CACHE_TTL_MS_SERVER_GEOCODER_FEATURES,
+  CACHE_TTL_MS_SERVER_GEOCODER_REVERSE,
+} from '../../config/env';
+import {getClientCache, getServerCache} from '../../utils/cache';
 
 export default (server: Hapi.Server) => (service: IGeocoderService) => {
   const getFeatures = async (q: FeaturesQuery, h: Request<ReqRefDefaults>) =>
@@ -17,17 +21,11 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
 
   server.method('feature', getFeatures, {
     generateKey: (q: FeaturesQuery) => qs.stringify(q),
-    cache: {
-      expiresIn: CACHE_TTL_MS,
-      generateTimeout: EXTERNAL_API_TIMEOUT,
-    },
+    cache: getServerCache(CACHE_TTL_MS_SERVER_GEOCODER_FEATURES),
   });
   server.method('reverse', getFeaturesReverse, {
     generateKey: (q: ReverseFeaturesQuery) => qs.stringify(q),
-    cache: {
-      expiresIn: CACHE_TTL_MS,
-      generateTimeout: EXTERNAL_API_TIMEOUT,
-    },
+    cache: getServerCache(CACHE_TTL_MS_SERVER_GEOCODER_REVERSE),
   });
 
   server.route({
@@ -39,10 +37,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
       validate: {
         query: getFeaturesRequest,
       },
-      cache: {
-        expiresIn: CACHE_TTL_MS,
-        privacy: 'public',
-      },
+      cache: getClientCache(CACHE_TTL_MS_CLIENT),
     },
     handler: async (request, h) => {
       const query = request.query as unknown as FeaturesQuery;
@@ -57,10 +52,7 @@ export default (server: Hapi.Server) => (service: IGeocoderService) => {
         'Find addresses, POIs and stop places near the given coordinates',
       tags: ['api', 'geocoder'],
       validate: getFeaturesReverseRequest,
-      cache: {
-        expiresIn: CACHE_TTL_MS,
-        privacy: 'public',
-      },
+      cache: getClientCache(CACHE_TTL_MS_CLIENT),
     },
     handler: async (request, h) => {
       const query = request.query as unknown as ReverseFeaturesQuery;
