@@ -511,7 +511,7 @@ export type Leg = {
   fromPlace: Place;
   /** Generalized cost or weight of the leg. Used for debugging. */
   generalizedCost?: Maybe<Scalars['Int']['output']>;
-  /** An identifier for the leg, which can be used to re-fetch the information. */
+  /** An identifier for the leg, which can be used to re-fetch transit leg information. */
   id?: Maybe<Scalars['ID']['output']>;
   interchangeFrom?: Maybe<Interchange>;
   interchangeTo?: Maybe<Interchange>;
@@ -998,7 +998,7 @@ export type QueryType = {
   groupOfLines?: Maybe<GroupOfLines>;
   /** Get all groups of lines */
   groupsOfLines: Array<GroupOfLines>;
-  /** Refetch a single leg based on its id */
+  /** Refetch a single transit leg based on its id */
   leg?: Maybe<Leg>;
   /** Get a single line based on its id */
   line?: Maybe<Line>;
@@ -1020,7 +1020,7 @@ export type QueryType = {
   quaysByRadius?: Maybe<QuayAtDistanceConnection>;
   /** Get default routing parameters. */
   routingParameters?: Maybe<RoutingParameters>;
-  /** Get OTP server information */
+  /** Get OTP deployment information. This is only useful for developers of OTP itself not regular API users. */
   serverInfo: ServerInfo;
   /** Get a single service journey based on its id */
   serviceJourney?: Maybe<ServiceJourney>;
@@ -1038,7 +1038,10 @@ export type QueryType = {
   stopPlacesByBbox: Array<Maybe<StopPlace>>;
   /** Input type for executing a travel search for a trip between two locations. Returns trip patterns describing suggested alternatives for the trip. */
   trip: Trip;
-  /** Via trip search. Find trip patterns traveling via one or more intermediate (via) locations. */
+  /**
+   * Via trip search. Find trip patterns traveling via one or more intermediate (via) locations.
+   * @deprecated Use the regular trip query with via stop instead.
+   */
   viaTrip: ViaTrip;
 };
 
@@ -1225,7 +1228,6 @@ export type QueryTypeTripArgs = {
   boardSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
   bookingTime?: InputMaybe<Scalars['DateTime']['input']>;
   dateTime?: InputMaybe<Scalars['DateTime']['input']>;
-  extraSearchCoachReluctance?: InputMaybe<Scalars['Float']['input']>;
   filters?: InputMaybe<Array<TripFilterInput>>;
   from: Location;
   ignoreRealtimeUpdates?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1240,7 +1242,6 @@ export type QueryTypeTripArgs = {
   modes?: InputMaybe<Modes>;
   numTripPatterns?: InputMaybe<Scalars['Int']['input']>;
   pageCursor?: InputMaybe<Scalars['String']['input']>;
-  passThroughPoints?: InputMaybe<Array<PassThroughPoint>>;
   relaxTransitGroupPriority?: InputMaybe<RelaxCostInput>;
   searchWindow?: InputMaybe<Scalars['Int']['input']>;
   timetableView?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1249,6 +1250,7 @@ export type QueryTypeTripArgs = {
   transferSlack?: InputMaybe<Scalars['Int']['input']>;
   triangleFactors?: InputMaybe<TriangleFactors>;
   useBikeRentalAvailabilityInformation?: InputMaybe<Scalars['Boolean']['input']>;
+  via?: InputMaybe<Array<TripViaLocationInput>>;
   waitReluctance?: InputMaybe<Scalars['Float']['input']>;
   walkReluctance?: InputMaybe<Scalars['Float']['input']>;
   walkSpeed?: InputMaybe<Scalars['Float']['input']>;
@@ -1479,6 +1481,12 @@ export type RoutingParameters = {
   wheelChairAccessible?: Maybe<Scalars['Boolean']['output']>;
 };
 
+/**
+ * Information about the deployment. This is only useful to developers of OTP itself.
+ * It is not recommended for regular API consumers to use this type as it has no
+ * stability guarantees.
+ *
+ */
 export type ServerInfo = {
   /** The 'configVersion' of the build-config.json file. */
   buildConfigVersion?: Maybe<Scalars['String']['output']>;
@@ -1487,6 +1495,13 @@ export type ServerInfo = {
   gitBranch?: Maybe<Scalars['String']['output']>;
   gitCommit?: Maybe<Scalars['String']['output']>;
   gitCommitTime?: Maybe<Scalars['String']['output']>;
+  /**
+   *   The internal time zone of the transit data.
+   *
+   *   Note: The input data can be in several time zones, but OTP internally operates on a single one.
+   *
+   */
+  internalTransitModelTimeZone?: Maybe<Scalars['String']['output']>;
   /** The 'configVersion' of the otp-config.json file. */
   otpConfigVersion?: Maybe<Scalars['String']['output']>;
   /** The otp-serialization-version-id used to check graphs for compatibility with current version of OTP. */
@@ -2025,6 +2040,23 @@ export type TripFilterSelectInput = {
   transportModes?: InputMaybe<Array<TransportModes>>;
 };
 
+/**
+ * One of the listed stop locations must be visited on-board a transit vehicle or the journey must
+ * alight or board at the location.
+ *
+ */
+export type TripPassThroughViaLocationInput = {
+  /** The label/name of the location. This is pass-through information and is not used in routing. */
+  label?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * A list of stop locations. A stop location can be a quay, a stop place, a multimodal
+   * stop place or a group of stop places. It is enough to visit ONE of the locations
+   * listed.
+   *
+   */
+  stopLocationIds: Array<Scalars['String']['input']>;
+};
+
 /** List of legs constituting a suggested sequence of rides and links for a specific trip. */
 export type TripPattern = {
   /** The aimed date and time the trip ends. */
@@ -2096,6 +2128,45 @@ export type TripSearchData = {
   prevDateTime?: Maybe<Scalars['DateTime']['output']>;
   /** This is the time window used by the raptor search. The input searchWindow is an optional parameter and is dynamically assigned if not set. OTP might override the value if it is too small or too large. When paging OTP adjusts it to the appropriate size, depending on the number of itineraries found in the current search window. The scaling of the search window ensures faster paging and limits resource usage. The unit is seconds. */
   searchWindowUsed: Scalars['Int']['output'];
+};
+
+/**
+ * A via-location is used to specifying a location as an intermediate place the router must
+ * route through. The via-location is either a pass-through-location or a visit-via-location.
+ *
+ */
+export type TripViaLocationInput = {
+  /** Board, alight or pass-through(on-board) at the stop location. */
+  passThrough?: InputMaybe<TripPassThroughViaLocationInput>;
+  /** Board or alight at a stop location or visit a coordinate. */
+  visit?: InputMaybe<TripVisitViaLocationInput>;
+};
+
+/**
+ * A visit-via-location is a physical visit to one of the stop locations or coordinates listed. An
+ * on-board visit does not count, the traveler must alight or board at the given stop for it to to
+ * be accepted. To visit a coordinate, the traveler must walk(bike or drive) to the closest point
+ * in the street network from a stop and back to another stop to join the transit network.
+ *
+ * NOTE! Coordinates are NOT supported yet.
+ *
+ */
+export type TripVisitViaLocationInput = {
+  /** The label/name of the location. This is pass-through information and is not used in routing. */
+  label?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * The minimum wait time is used to force the trip to stay the given duration at the
+   * via-location before the trip is continued.
+   *
+   */
+  minimumWaitTime?: InputMaybe<Scalars['Duration']['input']>;
+  /**
+   * A list of stop locations. A stop location can be a quay, a stop place, a multimodal
+   * stop place or a group of stop places. It is enough to visit ONE of the locations
+   * listed.
+   *
+   */
+  stopLocationIds: Array<Scalars['String']['input']>;
 };
 
 export type ValidityPeriod = {
