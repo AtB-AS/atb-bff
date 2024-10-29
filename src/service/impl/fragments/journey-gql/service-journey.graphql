@@ -5,6 +5,9 @@ fragment serviceJourneyWithEstCalls on ServiceJourney {
   publicCode
   line {
     publicCode
+    authority {
+      id
+    }
     notices {
       ...notice
     }
