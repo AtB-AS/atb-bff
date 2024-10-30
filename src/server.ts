@@ -9,6 +9,7 @@ import hapiApiVersion from 'hapi-api-version';
 
 import logFmtPlugin from './plugins/logfmt';
 import atbHeaders from './plugins/atb-headers';
+import appVersionCheckerPlugin from './plugins/app-version-checker-plugin';
 import url from 'url';
 import Redis from '@hapi/catbox-redis';
 import Memory from '@hapi/catbox-memory';
@@ -57,9 +58,8 @@ export const createServer = (opts: ServerOptions) => {
 };
 
 export const initializePlugins = async (server: hapi.Server) => {
-  await server.register({
-    plugin: atbHeaders,
-  });
+  await server.register({plugin: atbHeaders});
+  await server.register({plugin: appVersionCheckerPlugin});
   await server.register({
     plugin: logFmtPlugin,
     options: {
