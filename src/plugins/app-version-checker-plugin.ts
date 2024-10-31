@@ -9,7 +9,7 @@ const plugin: Hapi.Plugin<Options> = {
   register: (server) => {
     server.ext('onPreHandler', (request, h) => {
       const minAppVersion = process.env.MIN_APP_VERSION;
-      if (isAppVersionTooLow(request.appVersion, minAppVersion)) {
+      if (isAppVersionTooLow(request, minAppVersion)) {
         return h
           .response({error: `Required client app version: ${minAppVersion}`})
           .code(426)
@@ -22,12 +22,14 @@ const plugin: Hapi.Plugin<Options> = {
 };
 
 const isAppVersionTooLow = (
-  appVersion: string | undefined,
+  request: Hapi.Request,
   minAppVersion: string | undefined,
 ): boolean => {
-  if (!appVersion) return false;
+  const isRequestFromApp = !!request.installId;
+  if (!isRequestFromApp) return false;
   if (!minAppVersion) return false;
-  return compareVersion(minAppVersion, appVersion) > 0;
+  if (!request.appVersion) return true;
+  return compareVersion(minAppVersion, request.appVersion) > 0;
 };
 
 export default plugin;
