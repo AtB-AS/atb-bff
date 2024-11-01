@@ -12,7 +12,7 @@ const plugin: Hapi.Plugin<Options> = {
       if (isAppVersionTooLow(request, minAppVersion)) {
         return h
           .response({error: `Required client app version: ${minAppVersion}`})
-          .code(426)
+          .code(406)
           .takeover();
       }
 
