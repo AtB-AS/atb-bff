@@ -41,19 +41,19 @@ describe('appVersionCheckerPlugin', () => {
   it('should reject requests where app version is too low', async () => {
     process.env.MIN_APP_VERSION = '2.25';
     let response = await doRequest({appVersion: '1.1'});
-    expect(response.statusCode).toBe(426);
+    expect(response.statusCode).toBe(406);
 
     response = await doRequest({appVersion: '0.5'});
-    expect(response.statusCode).toBe(426);
+    expect(response.statusCode).toBe(406);
 
     response = await doRequest({appVersion: '1.99'});
-    expect(response.statusCode).toBe(426);
+    expect(response.statusCode).toBe(406);
 
     response = await doRequest({appVersion: '2.0'});
-    expect(response.statusCode).toBe(426);
+    expect(response.statusCode).toBe(406);
 
     response = await doRequest({appVersion: '2.24.9'});
-    expect(response.statusCode).toBe(426);
+    expect(response.statusCode).toBe(406);
   });
 
   it('should allow requests where app version is higher or equal to the min app version', async () => {
@@ -83,7 +83,7 @@ describe('appVersionCheckerPlugin', () => {
     process.env.MIN_APP_VERSION = '2.25';
 
     let response = await doRequest({});
-    expect(response.statusCode).toBe(426);
+    expect(response.statusCode).toBe(406);
   });
 
   it('should allow requests if no min app version', async () => {
