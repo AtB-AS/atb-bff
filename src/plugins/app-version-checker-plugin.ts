@@ -25,8 +25,8 @@ const isAppVersionTooLow = (
   request: Hapi.Request,
   minAppVersion: string | undefined,
 ): boolean => {
-  const isRequestFromApp = !!request.installId;
-  if (!isRequestFromApp) return false;
+  const isRequestFromWebshop = !!request.webshopVersion;
+  if (isRequestFromWebshop) return false;
   if (!minAppVersion) return false;
   if (!request.appVersion) return true;
   return compareVersion(minAppVersion, request.appVersion) > 0;

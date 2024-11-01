@@ -6,6 +6,7 @@ declare module '@hapi/hapi' {
     installId?: string;
     requestId?: string;
     appVersion?: string;
+    webshopVersion?: string;
     correlationId?: string;
     customerAccountId?: string;
   }

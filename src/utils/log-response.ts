@@ -61,6 +61,7 @@ export const logResponse = ({
     code: statusCode,
     requestId: requestHeaders['requestId'],
     installId: requestHeaders['installId'],
+    webshopVersion: requestHeaders['webshopVersion'],
     appVersion: requestHeaders['appVersion'],
     customerAccountId: customerAccountId,
     rateLimitUsed: rateLimitUsed,
