@@ -6,9 +6,11 @@ describe('appVersionCheckerPlugin', () => {
   let server: Hapi.Server;
 
   const doRequest = ({
+    url,
     appVersion,
     webshopVersion,
   }: {
+    url?: string;
     appVersion?: string;
     webshopVersion?: string;
   }) =>
@@ -18,7 +20,7 @@ describe('appVersionCheckerPlugin', () => {
         'atb-app-version': appVersion,
         'atb-webshop-version': webshopVersion,
       },
-      url: '/',
+      url: url || '/',
     });
 
   beforeAll(async () => {
@@ -30,6 +32,13 @@ describe('appVersionCheckerPlugin', () => {
     server.route({
       method: 'GET',
       path: '/',
+      handler: (_, h) => h.response().code(200),
+    });
+    // health route that should be ignored
+    server.route({
+      method: 'GET',
+      path: '/health',
+      options: {tags: ['health']},
       handler: (_, h) => h.response().code(200),
     });
   });
@@ -93,6 +102,13 @@ describe('appVersionCheckerPlugin', () => {
     expect(response.statusCode).toBe(200);
 
     response = await doRequest({appVersion: '0.1'});
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('should not reject on health endpoint even if no client app version and no webshop version', async () => {
+    process.env.MIN_APP_VERSION = '2.25';
+
+    let response = await doRequest({url: '/health'});
     expect(response.statusCode).toBe(200);
   });
 });
