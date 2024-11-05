@@ -8,6 +8,9 @@ const plugin: Hapi.Plugin<Options> = {
   name: 'app-version-checker-plugin',
   register: (server) => {
     server.ext('onPreHandler', (request, h) => {
+      const isHealthEndpoint = request.route.settings.tags?.includes('health');
+      if (isHealthEndpoint) return h.continue;
+
       const minAppVersion = process.env.MIN_APP_VERSION;
       if (isAppVersionTooLow(request, minAppVersion)) {
         return h
