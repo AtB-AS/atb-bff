@@ -88,11 +88,11 @@ describe('appVersionCheckerPlugin', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('should reject requests if no client app version and no webshop version', async () => {
+  it('should allow requests if no client app version and no webshop version', async () => {
     process.env.MIN_APP_VERSION = '2.25';
 
     let response = await doRequest({});
-    expect(response.statusCode).toBe(406);
+    expect(response.statusCode).toBe(200);
   });
 
   it('should allow requests if no min app version', async () => {
@@ -105,10 +105,10 @@ describe('appVersionCheckerPlugin', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('should not reject on health endpoint even if no client app version and no webshop version', async () => {
+  it('should not reject on health endpoint even if app version is below min app version', async () => {
     process.env.MIN_APP_VERSION = '2.25';
 
-    let response = await doRequest({url: '/health'});
+    let response = await doRequest({url: '/health', appVersion: '1.1'});
     expect(response.statusCode).toBe(200);
   });
 });

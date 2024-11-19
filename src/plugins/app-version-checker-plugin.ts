@@ -31,7 +31,7 @@ const isAppVersionTooLow = (
   const isRequestFromWebshop = !!request.webshopVersion;
   if (isRequestFromWebshop) return false;
   if (!minAppVersion) return false;
-  if (!request.appVersion) return true;
+  if (!request.appVersion) return false;
   return compareVersion(minAppVersion, request.appVersion) > 0;
 };
 
