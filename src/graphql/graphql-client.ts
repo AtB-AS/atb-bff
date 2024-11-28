@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import {InMemoryCache, NormalizedCacheObject} from '@apollo/client/cache';
+import {InMemoryCache} from '@apollo/client/cache';
 import {
   ApolloClient,
   DefaultOptions,
@@ -48,7 +48,9 @@ const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
 
 function createClient(url: string) {
-  const cache = new InMemoryCache();
+  // The possibleTypes is empty to disable the in-memory cache
+  const cache = new InMemoryCache({possibleTypes: {}});
+
   return function (headers: Request<ReqRefDefaults>) {
     const httpLink = new HttpLink({
       uri: url,
@@ -149,5 +151,3 @@ export const journeyPlannerClient = createClient(urlJourneyPlanner);
 export const mobilityClient = createClient(urlMobility);
 export const vehiclesClient = createClient(urlVehicles);
 export const vehiclesSubscriptionClient = createWebSocketClient(urlVehiclesWss);
-
-export type GraphQLClient = ApolloClient<NormalizedCacheObject>;
