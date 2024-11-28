@@ -3,44 +3,37 @@ import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {IRealtimeService} from '../../interface';
 import {DepartureRealtimeQuery} from '../../types';
 import {APIError} from '../../../utils/api-error';
-import {
-  createVariables,
-  getPreviousExpectedFromCache,
-  mapToDepartureRealtime,
-} from './departure-time';
+import {mapToDepartureRealtime} from './departure-time';
 import {
   GetDepartureRealtimeDocument,
   GetDepartureRealtimeQuery,
   GetDepartureRealtimeQueryVariables,
 } from './journey-gql/departure-time.graphql-gen';
+import {sanitizeRealtimeQuery} from './sanitize-realtime-query';
 
 export default (): IRealtimeService => {
-  const api: IRealtimeService = {
+  return {
     async getDepartureRealtime(query: DepartureRealtimeQuery, headers) {
       try {
-        const variables = createVariables(query);
-        const previousResult = getPreviousExpectedFromCache(variables, headers);
+        const variables = sanitizeRealtimeQuery(query);
+        if (!variables) return Result.ok({});
+
         const result = await journeyPlannerClient(headers).query<
           GetDepartureRealtimeQuery,
           GetDepartureRealtimeQueryVariables
         >({
           query: GetDepartureRealtimeDocument,
           variables,
-          // With fetch policy set to `network-only`, apollo client will always
-          // fetch and return new data, then update the cache afterwards.
-          fetchPolicy: 'network-only',
         });
 
         if (result.errors) {
           return Result.err(new APIError(result.errors));
         }
-        const mapped = mapToDepartureRealtime(result.data, previousResult);
+        const mapped = mapToDepartureRealtime(result.data);
         return Result.ok(mapped);
       } catch (error) {
         return Result.err(new APIError(error));
       }
     },
   };
-
-  return api;
 };

@@ -4,7 +4,6 @@ import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {CursoredData, generateCursorData} from '../../cursored';
 import {DepartureFavoritesQuery, FavoriteDeparture} from '../../types';
 import {APIError} from '../../../utils/api-error';
-import {populateRealtimeCacheIfNotThere} from '../realtime/departure-time';
 import {
   GroupsByIdDocument,
   GroupsByIdQuery,
@@ -31,22 +30,6 @@ export async function getDepartureFavorites(
     filterByLineIds: favorites?.map((f) => f.lineId),
     includeCancelledTrips: options.includeCancelledTrips,
   };
-
-  const quayIds = union(favorites?.map((f) => f.quayId)).filter(
-    Boolean,
-  ) as string[];
-  const lineIds = union(favorites?.map((f) => f.lineId));
-  // Fire and forget population of cache. Not critial if it fails.
-  populateRealtimeCacheIfNotThere(
-    {
-      limit: 100,
-      startTime: options.startTime,
-      limitPerLine: options.limitPerLine,
-      quayIds,
-      lineIds,
-    },
-    headers,
-  );
 
   const result = await journeyPlannerClient(headers).query<
     GroupsByIdQuery,

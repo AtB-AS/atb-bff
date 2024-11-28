@@ -24,7 +24,6 @@ export async function getMapInfoWithFromQuay(
   >({
     query: MapInfoWithFromQuayV2Document,
     variables,
-    fetchPolicy: 'cache-first',
   });
   return result;
 }
@@ -46,7 +45,6 @@ export async function getMapInfoWithFromAndToQuay(
   >({
     query: MapInfoWithFromAndToQuayV2Document,
     variables,
-    fetchPolicy: 'cache-first',
   });
   return result;
 }

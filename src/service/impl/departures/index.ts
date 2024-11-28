@@ -22,7 +22,6 @@ import {
   filterFavoriteDepartures,
 } from './utils/favorites';
 import * as Boom from '@hapi/boom';
-import {populateRealtimeCacheIfNotThere} from '../realtime/departure-time';
 import {
   DeparturesDocument,
   DeparturesQuery,
@@ -63,19 +62,6 @@ export default (): IDeparturesService => {
               limitPerLine,
               numberOfDepartures,
             };
-
-        // Fire and forget population of cache. Not critial if it fails.
-        populateRealtimeCacheIfNotThere(
-          {
-            quayIds,
-            startTime,
-            lineIds,
-            limit: limit.numberOfDepartures,
-            limitPerLine: limit.limitPerLine,
-            timeRange,
-          },
-          headers,
-        );
 
         const result = await journeyPlannerClient(headers).query<
           DeparturesQuery,
@@ -209,22 +195,6 @@ export default (): IDeparturesService => {
             ...limit,
           },
         });
-
-        const quayIds = result.data.stopPlace?.quays?.map((q) => q.id);
-        if (quayIds) {
-          // Fire and forget population of cache. Not critial if it fails.
-          populateRealtimeCacheIfNotThere(
-            {
-              quayIds,
-              startTime,
-              lineIds,
-              limit: limit.numberOfDepartures,
-              limitPerLine: limit.limitPerLine,
-              timeRange,
-            },
-            headers,
-          );
-        }
 
         if (result.errors) {
           return Result.err(new APIError(result.errors));
