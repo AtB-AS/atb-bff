@@ -38,6 +38,7 @@ import {
 } from './servicejourney';
 import {stations, vehicleByIdScenario, vehicles} from './mobility';
 import {stationByIdScenario} from './mobility/scenario';
+import {oldAppVersion} from './appVersion';
 
 //Scenario with std pattern
 export const departuresScenario = (searchDate: string): void => {
@@ -49,13 +50,13 @@ export const departuresScenario = (searchDate: string): void => {
   quayDepartures('NSR:Quay:73576', searchDate);
   quayDeparturesPOSTandGET('NSR:Quay:73576', searchDate);
   departureFavorites(departureFavoritesTestData, searchDate);
-  realtimeScenario(searchDate);
+  realtimeScenario('NSR:Quay:71181', 'ATB:Line:2_1');
   departures(['NSR:Quay:73576'], searchDate);
   departures(['NSR:Quay:73576', 'NSR:Quay:71184'], searchDate);
 
   // Combinations
   quayDeparturesVsStopDepartures('NSR:StopPlace:42912', searchDate);
-  realtimeForQuayDepartures('NSR:Quay:73576', searchDate);
+  realtimeForQuayDepartures('NSR:Quay:73576');
   departureFavoritesVsQuayDepartures(departureFavoritesTestData, searchDate);
 };
 
@@ -84,6 +85,12 @@ export const mobilityScenario = (): void => {
 
   vehicleByIdScenario();
   stationByIdScenario();
+};
+
+export const appVersionScenario = (): void => {
+  // Requests
+  oldAppVersion('1.30');
+  oldAppVersion('1.53');
 };
 
 //Performance scenario with different patterns

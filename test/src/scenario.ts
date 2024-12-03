@@ -4,15 +4,10 @@ import {
   serviceJourneyScenario,
   tripsScenario,
   mobilityScenario,
+  appVersionScenario,
 } from './v2/v2Scenario';
 import {getDayNextWeek} from './utils/utils';
-import {
-  departuresScenarioV1,
-  geocoderScenarioV1,
-  journeyScenarioV1,
-  serviceJourneyScenarioV1,
-} from './v1/v1Scenario';
-import {stationByIdScenario} from './v2/mobility/scenario';
+import {geocoderScenarioV1} from './v1/v1Scenario';
 
 //Scenarios
 export const scn = (usecase: string): void => {
@@ -30,21 +25,19 @@ export const scn = (usecase: string): void => {
 const bff = (): void => {
   const searchDate = getDayNextWeek(4);
   // V1
-  departuresScenarioV1(searchDate);
   geocoderScenarioV1();
-  journeyScenarioV1(searchDate);
-  serviceJourneyScenarioV1(searchDate);
 
   // V2
   departuresScenario(searchDate);
   tripsScenario(searchDate);
   serviceJourneyScenario(searchDate);
   mobilityScenario();
+  appVersionScenario();
 };
 
 //Test
 const test = (): void => {
-  stationByIdScenario();
+  appVersionScenario();
 };
 
 //Performance test
