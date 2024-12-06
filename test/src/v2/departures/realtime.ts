@@ -13,10 +13,6 @@ export function realtimeScenario(quayId: string, lineId: string): void {
   const searchTimeOutsideOfWindow = new Date(searchTime.getTime() + 31 * 60000);
   realtime(quayId, searchTimeOutsideOfWindow.toISOString(), false);
 
-  // Realtime with short timeRange
-  // TODO: Hva gjør "timeRange"?
-  //realtime(quayId, searchTime.toISOString(), false, 1);
-
   // Realtime with quayId AND corresponding lineId
   realtimeWithLineId(quayId, lineId, searchTime.toISOString());
 
