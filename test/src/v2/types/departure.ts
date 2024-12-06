@@ -105,9 +105,9 @@ export type QuayDeparturesType = {
     publicCode?: string;
     name: string;
     estimatedCalls: Array<{
-      date: any;
-      expectedDepartureTime: any;
-      aimedDepartureTime: any;
+      date: string;
+      expectedDepartureTime: string;
+      aimedDepartureTime: string;
       realtime: boolean;
       cancellation: boolean;
       quay: { id: string };

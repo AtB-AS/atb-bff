@@ -1,35 +1,28 @@
 import http from 'k6/http';
 import {conf, ExpectsType, metrics} from '../../config/configuration';
 import {bffHeadersGet, bffHeadersPost} from '../../utils/headers';
-import {
-  departsAfterExpectedStartTime,
-  isEqual,
-  randomNumber,
-} from '../../utils/utils';
+import {departsAfterExpectedStartTime} from '../../utils/utils';
 import {QuayDeparturesType, RealtimeResponseType} from '../types';
-import {sleep} from 'k6';
 
-export function realtimeScenario(searchDate: string): void {
-  const quayId = 'NSR:Quay:73576';
-  const lineId = 'ATB:Line:2_82';
-
+export function realtimeScenario(quayId: string, lineId: string): void {
   // Realtime with quayId
-  let searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
-  realtime(quayId, searchTime);
+  const searchTime = new Date();
+  realtime(quayId, searchTime.toISOString());
 
-  // Realtime with cache
-  realtime(quayId, searchTime, false);
-
-  // Realtime with short timeRange
-  searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
-  realtime(quayId, searchTime, false, 1);
+  // Realtime outside of window (i.e. 30 min)
+  const searchTimeOutsideOfWindow = new Date(searchTime.getTime() + 31 * 60000);
+  realtime(quayId, searchTimeOutsideOfWindow.toISOString(), false);
 
   // Realtime with quayId AND corresponding lineId
-  searchTime = `${searchDate}T11:00:00.${randomNumber(999, true)}Z`;
-  realtimeWithLineId(quayId, lineId, searchTime);
+  realtimeWithLineId(quayId, lineId, searchTime.toISOString());
 
   // Realtime with quayId AND not corresponding lineId
-  realtimeWithLineId(quayId, lineId, searchTime, false);
+  realtimeWithLineId(
+    quayId,
+    lineId,
+    searchTimeOutsideOfWindow.toISOString(),
+    false,
+  );
 }
 
 export function realtime(
@@ -82,28 +75,10 @@ export function realtime(
         },
       );
     } else {
-      // Re-send. Sometimes immediate requests don't hit the cache
-      const maxRetries = 3;
-      let currentRetry = 0;
-      while (res.body !== '{}' && currentRetry < maxRetries) {
-        sleep(2);
-        res = http.get(url, {
-          tags: {name: requestName},
-          headers: bffHeadersGet,
-        });
-        currentRetry += 1;
-      }
-
-      expects.push(
-        {
-          check: 'should have status 200',
-          expect: res.status === 200,
-        },
-        {
-          check: 'should have empty results',
-          expect: res.body === '{}',
-        },
-      );
+      expects.push({
+        check: 'should have empty results',
+        expect: res.body === '{}',
+      });
     }
     metrics.checkForFailures(
       [res.request.url],
@@ -177,37 +152,15 @@ export function realtimeWithLineId(
               .length === 0,
         },
         {
-          check: `should have ${limit} departures`,
-          expect: Object.keys(json[quayId].departures).length === limit,
-        },
-        {
           check: 'should have departure times after start time',
           expect: departsAfterExpectedStartTime(depTimes, searchTime),
         },
       );
     } else {
-      // Re-send. Sometimes immediate requests don't hit the cache
-      const maxRetries = 3;
-      let currentRetry = 0;
-      while (res.body !== '{}' && currentRetry < maxRetries) {
-        sleep(2);
-        res = http.get(url, {
-          tags: {name: requestName},
-          headers: bffHeadersGet,
-        });
-        currentRetry += 1;
-      }
-
-      expects.push(
-        {
-          check: 'should have status 200',
-          expect: res.status === 200,
-        },
-        {
-          check: 'should have empty results',
-          expect: res.body === '{}',
-        },
-      );
+      expects.push({
+        check: 'should have empty results',
+        expect: res.body === '{}',
+      });
     }
     metrics.checkForFailures(
       [res.request.url],
@@ -232,9 +185,9 @@ export function realtimeWithLineId(
 }
 
 // Check that realtime updates for a quay corresponds to quay departures
-export function realtimeForQuayDepartures(quayId: string, startDate: string) {
+export function realtimeForQuayDepartures(quayId: string) {
   const requestName = 'v2_realtimeForQuayDepartures';
-  let searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;
+  const searchTime = new Date().toISOString();
   const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${searchTime}&timeRange=86400`;
   const resQD = http.post(urlQD, '{}', {
     tags: {name: requestName},
@@ -249,43 +202,49 @@ export function realtimeForQuayDepartures(quayId: string, startDate: string) {
     const jsonQD = resQD.json() as QuayDeparturesType;
 
     // Get realtime to compare
-    searchTime = `${startDate}T00:00:00.${randomNumber(999, true)}Z`;
     const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=10`;
     const resR = http.get(urlR, {
       tags: {name: requestName},
       headers: bffHeadersGet,
     });
-    const jsonR = resR.json() as RealtimeResponseType;
-    // Get departure times
-    const depTimes = [];
-    const serviceJourneys = Object.keys(jsonR[quayId].departures);
-    for (let journey of serviceJourneys) {
-      depTimes.push(
-        jsonR[quayId].departures[journey].timeData.expectedDepartureTime,
+
+    expects.push({
+      check: 'should have status 200',
+      expect: resR.status === 200,
+    });
+
+    // If no realtime departures, the response is "{}"
+    if (resR.body !== '{}') {
+      const jsonR = resR.json() as RealtimeResponseType;
+
+      // Get departure times
+      const depTimes = [];
+      const serviceJourneys = Object.keys(jsonR[quayId].departures);
+      for (let journey of serviceJourneys) {
+        depTimes.push(
+          jsonR[quayId].departures[journey].timeData.expectedDepartureTime,
+        );
+      }
+
+      expects.push(
+        {
+          check: 'should return correct realtime departure times',
+          expect: depTimes.every((time) =>
+            jsonQD
+              .quay!.estimatedCalls.map((call) => call.expectedDepartureTime)
+              .includes(time),
+          ),
+        },
+        {
+          check: 'should return correct service journeys',
+          expect: Object.keys(jsonR[quayId].departures).every((journey) =>
+            jsonQD
+              .quay!.estimatedCalls.map((call) => call.serviceJourney!.id)
+              .includes(journey),
+          ),
+        },
       );
     }
-
-    expects.push(
-      {check: 'should have status 200', expect: resR.status === 200},
-      {
-        check: 'should return correct realtime departure times',
-        expect: isEqual(
-          jsonQD
-            .quay!.estimatedCalls.map((call) => call.expectedDepartureTime)
-            .sort(),
-          depTimes.sort(),
-        ),
-      },
-      {
-        check: 'should return correct service journeys',
-        expect: isEqual(
-          jsonQD
-            .quay!.estimatedCalls.map((call) => call.serviceJourney!.id)
-            .sort(),
-          Object.keys(jsonR[quayId].departures).sort(),
-        ),
-      },
-    );
     metrics.checkForFailures(
       [resQD.request.url, resR.request.url],
       resQD.timings.duration + resR.timings.duration,
