@@ -15,7 +15,7 @@ export function departures(
 ) {
   const requestName = 'v2_departures';
   const quayIdParams = quayIds.join('&ids=');
-  const url = `${conf.host()}/bff/v2/departures/departures?ids=${quayIdParams}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const url = `${conf.host()}/bff/v2/departures/departures?ids=${quayIdParams}&numberOfDepartures=${limit}&startTime=${startDate}T03:00:00.000Z&timeRange=${timeRange}`;
 
   const res = http.post(url, '{}', {
     tags: {name: requestName},
@@ -78,7 +78,7 @@ export function stopDepartures(
   limit: number = 10,
 ) {
   const requestName = 'v2_stopDepartures';
-  const url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T03:00:00.000Z&timeRange=${timeRange}`;
 
   const res = http.post(url, '{}', {
     tags: {name: requestName},
@@ -141,7 +141,7 @@ export function stopDeparturesPOSTandGET(
   limit = 10,
 ) {
   const requestName = 'v2_stopDeparturesPOSTandGET';
-  const url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const url = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=${limit}&startTime=${startDate}T03:00:00.000Z&timeRange=${timeRange}`;
 
   const resGET = http.get(url, {
     tags: {name: requestName},
@@ -191,7 +191,7 @@ export function quayDeparturesVsStopDepartures(
   startDate: string,
 ) {
   const requestName = 'v2_quayDeparturesVsStopDepartures';
-  const urlSD = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+  const urlSD = `${conf.host()}/bff/v2/departures/stop-departures?id=${stopId}&numberOfDepartures=10&startTime=${startDate}T03:00:00.000Z&timeRange=86400`;
 
   const resSD = http.post(urlSD, '{}', {
     tags: {name: requestName},
@@ -204,7 +204,7 @@ export function quayDeparturesVsStopDepartures(
     // Check equality on each quay
     const quays = jsonSD.stopPlace!.quays!.map((el) => el.id);
     for (let quay of quays) {
-      const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quay}&numberOfDepartures=10&startTime=${startDate}T00:00:00.000Z&timeRange=86400`;
+      const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quay}&numberOfDepartures=10&startTime=${startDate}T03:00:00.000Z&timeRange=86400`;
       const resQD = http.post(urlQD, '{}', {
         tags: {name: requestName},
         headers: bffHeadersPost,
@@ -253,7 +253,7 @@ export function quayDepartures(
   limit: number = 1000,
 ) {
   const requestName = 'v2_quayDepartures';
-  const url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T03:00:00.000Z&timeRange=${timeRange}`;
 
   const res = http.post(url, '{}', {
     tags: {name: requestName},
@@ -308,7 +308,7 @@ export function quayDeparturesPOSTandGET(
   limit: number = 1000,
 ) {
   const requestName = 'v2_quayDeparturesPOSTandGET';
-  const url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T00:00:00.000Z&timeRange=${timeRange}`;
+  const url = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=${limit}&startTime=${startDate}T03:00:00.000Z&timeRange=${timeRange}`;
 
   const resGET = http.get(url, {
     tags: {name: requestName},
