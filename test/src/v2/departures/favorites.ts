@@ -17,7 +17,7 @@ export function departureFavorites(
     const requestName = `v2_departureFavorites_${testData.scenarios.indexOf(
       test,
     )}`;
-    const url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T00:00:00.000Z&limitPerLine=${limitPerLine}`;
+    const url = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T03:00:00.000Z&limitPerLine=${limitPerLine}`;
 
     let res = http.post(url, JSON.stringify(test), {
       tags: {name: requestName},

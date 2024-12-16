@@ -104,6 +104,40 @@ export const arrivesBeforeExpectedEndTime = (
   return true;
 };
 
+// List of holidays, i.e. days with either routes as a Saturday or a Sunday
+const holidays = [
+  '2024-12-24',
+  '2024-12-25',
+  '2024-12-26',
+  '2024-12-27',
+  '2024-12-28',
+  '2024-12-29',
+  '2024-12-30',
+  '2024-12-31',
+  '2025-01-01',
+  '2025-04-16',
+  '2025-04-17',
+  '2025-04-18',
+  '2025-04-21',
+  '2025-05-01',
+  '2025-05-29',
+  '2025-06-09',
+  '2025-12-24',
+  '2025-12-25',
+  '2025-12-26',
+  '2025-12-27',
+  '2025-12-28',
+  '2025-12-29',
+  '2025-12-30',
+  '2025-12-31',
+  '2026-01-01',
+];
+
+// Check if a given date is a holiday (format YYYY-MM-DD)
+const isHoliday = (testDate: string): boolean => {
+  return holidays.includes(testDate);
+};
+
 // Return a day the following week as a date - to be used in search
 // E.g. weekday: 4 = Thursday
 export const getDayNextWeek = (weekday: number): string => {
@@ -111,6 +145,10 @@ export const getDayNextWeek = (weekday: number): string => {
   const increaseDays = weekday - today.getDay() + 7;
   today.setDate(today.getDate() + increaseDays);
 
+  // Check if date is holiday - IF: Increase with a week to get same week day
+  while (isHoliday(today.toISOString().split('T')[0])) {
+    today.setDate(today.getDate() + 7);
+  }
   return today.toISOString().split('T')[0];
 };
 
