@@ -1,5 +1,6 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
@@ -12,7 +13,7 @@ export type NearestStopPlacesQueryVariables = Types.Exact<{
 }>;
 
 
-export type NearestStopPlacesQuery = { nearest?: { pageInfo: { endCursor?: string, hasNextPage: boolean }, edges?: Array<{ node?: { distance?: number, place?: { name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }>, validityPeriod?: { startTime?: any, endTime?: any } }> }> } | {} } }> } };
+export type NearestStopPlacesQuery = { nearest?: { pageInfo: { endCursor?: string, hasNextPage: boolean }, edges?: Array<{ node?: { distance?: number, place?: { name: string, transportMode?: Array<Types.TransportMode>, description?: string, id: string, quays?: Array<{ id: string, description?: string, name: string, publicCode?: string, stopPlace?: { id: string }, situations: Array<SituationFragment> }> } | {} } }> } };
 
 
 export const NearestStopPlacesDocument = gql`

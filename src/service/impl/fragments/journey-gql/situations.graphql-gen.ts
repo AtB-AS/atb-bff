@@ -1,9 +1,10 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { MultilingualStringFragment, InfoLinkFragment, ValidityPeriodFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { MultilingualStringFragmentDoc, InfoLinkFragmentDoc, ValidityPeriodFragmentDoc } from './shared.graphql-gen';
-export type SituationFragment = { id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }>, validityPeriod?: { startTime?: any, endTime?: any } };
+export type SituationFragment = { id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<MultilingualStringFragment>, description: Array<MultilingualStringFragment>, advice: Array<MultilingualStringFragment>, infoLinks?: Array<InfoLinkFragment>, validityPeriod?: ValidityPeriodFragment };
 
 export const SituationFragmentDoc = gql`
     fragment situation on PtSituationElement {
