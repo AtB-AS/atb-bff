@@ -26,14 +26,8 @@ fragment tripPattern on TripPattern {
         expectedStartTime
         realtime
         line {
-            id
+            ...line
             name
-            transportSubmode
-            publicCode
-            flexibleLineType
-            notices {
-                ...notice
-            }
         }
         fromEstimatedCall {
             aimedDepartureTime

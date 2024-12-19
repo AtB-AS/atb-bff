@@ -6,7 +6,7 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { AuthorityFragmentDoc } from './authority.graphql-gen';
 import { NoticeFragmentDoc } from './notices.graphql-gen';
-export type LineFragment = { id: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, authority?: AuthorityFragment, notices: Array<NoticeFragment> };
+export type LineFragment = { id: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, flexibleLineType?: string, authority?: AuthorityFragment, notices: Array<NoticeFragment> };
 
 export const LineFragmentDoc = gql`
     fragment line on Line {
@@ -20,6 +20,7 @@ export const LineFragmentDoc = gql`
   }
   transportMode
   transportSubmode
+  flexibleLineType
 }
     ${AuthorityFragmentDoc}
 ${NoticeFragmentDoc}`;

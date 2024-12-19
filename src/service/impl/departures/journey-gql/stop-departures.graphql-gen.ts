@@ -1,9 +1,11 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { LineFragment } from '../../fragments/journey-gql/lines.graphql-gen';
 import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
+import { LineFragmentDoc } from '../../fragments/journey-gql/lines.graphql-gen';
 import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
@@ -16,7 +18,10 @@ export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, notices: Array<NoticeFragment> }, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> }, situations: Array<SituationFragment>, notices: Array<NoticeFragment> }>, situations: Array<SituationFragment> }> } };
+export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney: { id: string, line: (
+            { description?: string }
+            & LineFragment
+          ), journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> }, situations: Array<SituationFragment>, notices: Array<NoticeFragment> }>, situations: Array<SituationFragment> }> } };
 
 
 export const StopPlaceQuayDeparturesDocument = gql`
@@ -47,14 +52,8 @@ export const StopPlaceQuayDeparturesDocument = gql`
         serviceJourney {
           id
           line {
-            id
+            ...line
             description
-            publicCode
-            transportMode
-            transportSubmode
-            notices {
-              ...notice
-            }
           }
           journeyPattern {
             notices {
@@ -78,7 +77,8 @@ export const StopPlaceQuayDeparturesDocument = gql`
     }
   }
 }
-    ${NoticeFragmentDoc}
+    ${LineFragmentDoc}
+${NoticeFragmentDoc}
 ${SituationFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C>(requester: Requester<C>) {

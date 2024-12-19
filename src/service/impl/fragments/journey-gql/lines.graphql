@@ -9,4 +9,5 @@ fragment line on Line {
   }
   transportMode
   transportSubmode
+  flexibleLineType
 }
