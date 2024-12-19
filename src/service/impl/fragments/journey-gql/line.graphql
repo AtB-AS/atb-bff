@@ -1,0 +1,12 @@
+fragment line on Line {
+  id
+  authority {
+    ...authority
+  }
+  publicCode
+  notices {
+    ...notice
+  }
+  transportMode
+  transportSubmode
+}

@@ -34,15 +34,6 @@ fragment serviceJourneyEstimatedCall on EstimatedCall {
   }
 }
 
-
-fragment line on Line {
-  id
-  name
-  publicCode
-  transportMode
-  transportSubmode
-}
-
 fragment serviceJourney on ServiceJourney {
   id
   journeyPattern {

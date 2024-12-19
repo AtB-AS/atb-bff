@@ -4,16 +4,7 @@ fragment serviceJourneyWithEstCalls on ServiceJourney {
   transportSubmode
   publicCode
   line {
-    id
-    authority {
-      ...authority
-    }
-    publicCode
-    notices {
-      ...notice
-    }
-    transportMode
-    transportSubmode
+    ...line
   }
   journeyPattern {
     notices {
