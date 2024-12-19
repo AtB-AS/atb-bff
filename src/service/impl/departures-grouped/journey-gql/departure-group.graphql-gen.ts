@@ -3,11 +3,13 @@ import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
 import { BookingArrangementFragment } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
+import { LineFragment } from '../../fragments/journey-gql/lines.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 import { BookingArrangementFragmentDoc } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
+import { LineFragmentDoc } from '../../fragments/journey-gql/lines.graphql-gen';
 export type GroupsByIdQueryVariables = Types.Exact<{
   ids?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>>;
   startTime: Types.Scalars['DateTime']['input'];
@@ -42,38 +44,24 @@ export type Group_NoticeFieldsFragment = { text?: string };
 
 export type Group_QuayFieldsFragment = { id: string, name: string, description?: string, publicCode?: string, latitude?: number, longitude?: number, situations: Array<SituationFragment> };
 
-export type Group_LineFieldsFragment = { description?: string, flexibleLineType?: string, id: string, name?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, notices: Array<NoticeFragment>, situations: Array<SituationFragment> };
-
 export type Group_StopPlaceFieldsFragment = { id: string, description?: string, name: string, latitude?: number, longitude?: number };
 
-export type Group_ServiceJourneyFieldsFragment = { id: string, directionType?: Types.DirectionType, privateCode?: string, transportSubmode?: Types.TransportSubmode, line: Group_LineFieldsFragment, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> };
+export type Group_ServiceJourneyFieldsFragment = { id: string, directionType?: Types.DirectionType, privateCode?: string, transportSubmode?: Types.TransportSubmode, line: (
+    { description?: string, name?: string, situations: Array<SituationFragment> }
+    & LineFragment
+  ), journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> };
 
-export const Group_LineFieldsFragmentDoc = gql`
-    fragment group_lineFields on Line {
-  description
-  flexibleLineType
-  id
-  name
-  transportMode
-  transportSubmode
-  notices {
-    ...notice
-  }
-  situations {
-    ...situation
-  }
-  publicCode
-  transportMode
-  transportSubmode
-}
-    ${NoticeFragmentDoc}
-${SituationFragmentDoc}`;
 export const Group_ServiceJourneyFieldsFragmentDoc = gql`
     fragment group_serviceJourneyFields on ServiceJourney {
   id
   directionType
   line {
-    ...group_lineFields
+    ...line
+    description
+    name
+    situations {
+      ...situation
+    }
   }
   journeyPattern {
     notices {
@@ -86,7 +74,8 @@ export const Group_ServiceJourneyFieldsFragmentDoc = gql`
   privateCode
   transportSubmode
 }
-    ${Group_LineFieldsFragmentDoc}
+    ${LineFragmentDoc}
+${SituationFragmentDoc}
 ${NoticeFragmentDoc}`;
 export const Group_EstimatedCallFieldsFragmentDoc = gql`
     fragment group_estimatedCallFields on EstimatedCall {

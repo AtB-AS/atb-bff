@@ -37,14 +37,8 @@ query departures(
         transportMode
         transportSubmode
         line {
-          id
+          ...line
           description
-          publicCode
-          transportMode
-          transportSubmode
-          notices {
-            ...notice
-          }
         }
         journeyPattern {
           notices {

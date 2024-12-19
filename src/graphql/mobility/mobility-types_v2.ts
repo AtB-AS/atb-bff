@@ -156,6 +156,10 @@ export type QueryStationsArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   lat?: InputMaybe<Scalars['Float']['input']>;
   lon?: InputMaybe<Scalars['Float']['input']>;
+  maximumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  maximumLongitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLongitude?: InputMaybe<Scalars['Float']['input']>;
   operators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   range?: InputMaybe<Scalars['Int']['input']>;
   systems?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -181,6 +185,10 @@ export type QueryVehiclesArgs = {
   includeReserved?: InputMaybe<Scalars['Boolean']['input']>;
   lat?: InputMaybe<Scalars['Float']['input']>;
   lon?: InputMaybe<Scalars['Float']['input']>;
+  maximumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  maximumLongitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLongitude?: InputMaybe<Scalars['Float']['input']>;
   operators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   propulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
   range?: InputMaybe<Scalars['Int']['input']>;

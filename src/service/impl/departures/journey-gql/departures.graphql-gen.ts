@@ -1,10 +1,12 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { LineFragment } from '../../fragments/journey-gql/lines.graphql-gen';
 import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
 import { BookingArrangementFragment } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
+import { LineFragmentDoc } from '../../fragments/journey-gql/lines.graphql-gen';
 import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
 import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 import { BookingArrangementFragmentDoc } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
@@ -18,7 +20,10 @@ export type DeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type DeparturesQuery = { quays: Array<{ id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, predictionInaccurate: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string, via?: Array<string> }, serviceJourney: { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, notices: Array<NoticeFragment> }, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> }, situations: Array<SituationFragment>, notices: Array<NoticeFragment>, bookingArrangements?: BookingArrangementFragment }>, situations: Array<SituationFragment> }> };
+export type DeparturesQuery = { quays: Array<{ id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, predictionInaccurate: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string, via?: Array<string> }, serviceJourney: { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, line: (
+          { description?: string }
+          & LineFragment
+        ), journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> }, situations: Array<SituationFragment>, notices: Array<NoticeFragment>, bookingArrangements?: BookingArrangementFragment }>, situations: Array<SituationFragment> }> };
 
 
 export const DeparturesDocument = gql`
@@ -54,14 +59,8 @@ export const DeparturesDocument = gql`
         transportMode
         transportSubmode
         line {
-          id
+          ...line
           description
-          publicCode
-          transportMode
-          transportSubmode
-          notices {
-            ...notice
-          }
         }
         journeyPattern {
           notices {
@@ -87,7 +86,8 @@ export const DeparturesDocument = gql`
     }
   }
 }
-    ${NoticeFragmentDoc}
+    ${LineFragmentDoc}
+${NoticeFragmentDoc}
 ${SituationFragmentDoc}
 ${BookingArrangementFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>

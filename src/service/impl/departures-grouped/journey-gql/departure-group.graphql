@@ -95,24 +95,6 @@ fragment group_quayFields on Quay {
   }
 }
 
-fragment group_lineFields on Line {
-  description
-  flexibleLineType
-  id
-  name
-  transportMode
-  transportSubmode
-  notices {
-    ...notice
-  }
-  situations {
-    ...situation
-  }
-  publicCode
-  transportMode
-  transportSubmode
-}
-
 fragment group_stopPlaceFields on StopPlace {
   id
   description
@@ -125,7 +107,12 @@ fragment group_serviceJourneyFields on ServiceJourney {
   id
   directionType
   line {
-    ...group_lineFields
+    ...line
+    description
+    name
+    situations {
+      ...situation
+    }
   }
   journeyPattern {
     notices {
