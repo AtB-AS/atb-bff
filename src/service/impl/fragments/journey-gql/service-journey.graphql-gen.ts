@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
 import { AuthorityFragmentDoc } from './authority.graphql-gen';
 import { NoticeFragmentDoc } from './notices.graphql-gen';
 import { EstimatedCallWithQuayFragmentDoc } from './estimated-calls.graphql-gen';
-export type ServiceJourneyWithEstCallsFragment = { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, line: { publicCode?: string, authority?: AuthorityFragment, notices: Array<NoticeFragment> }, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment>, estimatedCalls?: Array<EstimatedCallWithQuayFragment> };
+export type ServiceJourneyWithEstCallsFragment = { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, line: { id: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, authority?: AuthorityFragment, notices: Array<NoticeFragment> }, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment>, estimatedCalls?: Array<EstimatedCallWithQuayFragment> };
 
 export const ServiceJourneyWithEstCallsFragmentDoc = gql`
     fragment serviceJourneyWithEstCalls on ServiceJourney {
@@ -17,6 +17,7 @@ export const ServiceJourneyWithEstCallsFragmentDoc = gql`
   transportSubmode
   publicCode
   line {
+    id
     authority {
       ...authority
     }
@@ -24,6 +25,8 @@ export const ServiceJourneyWithEstCallsFragmentDoc = gql`
     notices {
       ...notice
     }
+    transportMode
+    transportSubmode
   }
   journeyPattern {
     notices {
