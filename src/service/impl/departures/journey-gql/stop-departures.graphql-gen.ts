@@ -1,5 +1,7 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
+import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
@@ -14,7 +16,7 @@ export type StopPlaceQuayDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, notices: Array<{ id: string, text?: string }> }, journeyPattern?: { notices: Array<{ id: string, text?: string }> }, notices: Array<{ id: string, text?: string }> }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }>, validityPeriod?: { startTime?: any, endTime?: any } }>, notices: Array<{ id: string, text?: string }> }>, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }>, validityPeriod?: { startTime?: any, endTime?: any } }> }> } };
+export type StopPlaceQuayDeparturesQuery = { stopPlace?: { id: string, quays?: Array<{ id: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string }, serviceJourney: { id: string, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, notices: Array<NoticeFragment> }, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> }, situations: Array<SituationFragment>, notices: Array<NoticeFragment> }>, situations: Array<SituationFragment> }> } };
 
 
 export const StopPlaceQuayDeparturesDocument = gql`

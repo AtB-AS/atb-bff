@@ -1,5 +1,8 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { NoticeFragment } from '../../fragments/journey-gql/notices.graphql-gen';
+import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
+import { BookingArrangementFragment } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { NoticeFragmentDoc } from '../../fragments/journey-gql/notices.graphql-gen';
@@ -15,7 +18,7 @@ export type DeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type DeparturesQuery = { quays: Array<{ id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, predictionInaccurate: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string, via?: Array<string> }, serviceJourney: { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, notices: Array<{ id: string, text?: string }> }, journeyPattern?: { notices: Array<{ id: string, text?: string }> }, notices: Array<{ id: string, text?: string }> }, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }>, validityPeriod?: { startTime?: any, endTime?: any } }>, notices: Array<{ id: string, text?: string }>, bookingArrangements?: { bookingMethods?: Array<Types.BookingMethod>, latestBookingTime?: any, bookingNote?: string, bookWhen?: Types.PurchaseWhen, minimumBookingPeriod?: string, bookingContact?: { contactPerson?: string, email?: string, url?: string, phone?: string, furtherDetails?: string } } }>, situations: Array<{ id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<{ language?: string, value: string }>, description: Array<{ language?: string, value: string }>, advice: Array<{ language?: string, value: string }>, infoLinks?: Array<{ uri: string, label?: string }>, validityPeriod?: { startTime?: any, endTime?: any } }> }> };
+export type DeparturesQuery = { quays: Array<{ id: string, description?: string, publicCode?: string, name: string, estimatedCalls: Array<{ date: any, expectedDepartureTime: any, aimedDepartureTime: any, realtime: boolean, predictionInaccurate: boolean, cancellation: boolean, quay: { id: string }, destinationDisplay?: { frontText?: string, via?: Array<string> }, serviceJourney: { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, line: { id: string, description?: string, publicCode?: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, notices: Array<NoticeFragment> }, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment> }, situations: Array<SituationFragment>, notices: Array<NoticeFragment>, bookingArrangements?: BookingArrangementFragment }>, situations: Array<SituationFragment> }> };
 
 
 export const DeparturesDocument = gql`

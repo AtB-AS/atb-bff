@@ -1,5 +1,6 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { StopPlaceFragment } from '../../fragments/journey-gql/stop-places.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { StopPlaceFragmentDoc } from '../../fragments/journey-gql/stop-places.graphql-gen';
@@ -9,7 +10,7 @@ export type GetStopPlacesByModeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetStopPlacesByModeQuery = { lines: Array<{ transportSubmode?: Types.TransportSubmode, quays: Array<{ stopPlace?: { id: string, name: string, latitude?: number, longitude?: number, transportMode?: Array<Types.TransportMode> } }> }> };
+export type GetStopPlacesByModeQuery = { lines: Array<{ transportSubmode?: Types.TransportSubmode, quays: Array<{ stopPlace?: StopPlaceFragment }> }> };
 
 
 export const GetStopPlacesByModeDocument = gql`
