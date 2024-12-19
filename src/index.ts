@@ -1,4 +1,7 @@
 /* eslint no-console: 0 */
+import WebSocket from 'ws';
+(globalThis as any).webSocketImpl = WebSocket;
+
 import {Boom} from '@hapi/boom';
 import {createServer, initializePlugins} from './server';
 

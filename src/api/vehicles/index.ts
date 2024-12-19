@@ -38,6 +38,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
         websocket: {
           only: true,
           connect: ({ctx, ws, req}) => {
+            console.log('connect');
             if (!req.url) {
               if (ws.readyState == WebSocket.OPEN) {
                 ws.close(1011);
@@ -46,6 +47,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
             }
 
             const serviceJourneyId = getUrlParam(req.url, 'serviceJourneyId');
+            console.log('serviceJourneyId', serviceJourneyId);
             if (!serviceJourneyId) {
               if (ws.readyState == WebSocket.OPEN) {
                 ws.close(1002, 'Missing parameter `serviceJourneyId`');
@@ -54,10 +56,12 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
             }
 
             try {
+              console.log('createServiceJourneySubscription');
               ctx.client = service.createServiceJourneySubscription(
                 {serviceJourneyId},
                 ws,
               );
+              console.log('ctx.client', ctx.client);
             } catch (error) {
               console.error(`WebSocket error: ${error}`);
               if (ws.readyState == WebSocket.OPEN) {

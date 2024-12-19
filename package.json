@@ -68,6 +68,7 @@
     "google-auth-library": "^9.6.3",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.16.0",
     "hapi-api-version": "^2.3.1",
     "hapi-plugin-websocket": "2.4.8",
     "hapi-pulse": "^3.0.1",
@@ -83,8 +84,8 @@
     "openid-client": "^5.6.4",
     "p-limit": "^5.0.0",
     "p-throttle": "^4.1.1",
-    "subscriptions-transport-ws": "^0.11.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "ws": "^8.18.0"
   },
   "nodemonConfig": {
     "ignore": [

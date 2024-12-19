@@ -60,6 +60,7 @@ export default (): IVehiclesService => ({
           const vehicle = data.vehicles?.find(
             (v) => v.serviceJourney?.id === query.serviceJourneyId,
           );
+          console.log('vehicle', vehicle);
           if (!vehicle) return;
           ws.send(JSON.stringify(vehicle));
         },

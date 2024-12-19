@@ -6,7 +6,9 @@ import {
   HttpLink,
   ApolloLink,
 } from '@apollo/client/core';
-import {WebSocketLink} from '@apollo/client/link/ws';
+// import {WebSocketLink} from '@apollo/client/link/ws';
+import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
+import {createClient as createGraphqlWsClient} from 'graphql-ws';
 import {onError} from '@apollo/client/link/error';
 import {
   ENTUR_BASEURL,
@@ -14,7 +16,7 @@ import {
   ET_CLIENT_NAME,
 } from '../config/env';
 import WebSocket from 'ws';
-import {SubscriptionClient} from 'subscriptions-transport-ws';
+// import {SubscriptionClient} from 'subscriptions-transport-ws';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {logResponse} from '../utils/log-response';
 import {Timer} from '../utils/timer';
@@ -46,6 +48,10 @@ const urlVehicles = ENTUR_BASEURL
 const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
   ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
   : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
+
+const urlVehiclesWssNew = ENTUR_WEBSOCKET_BASEURL
+  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v2/vehicles/graphql`
+  : 'wss://api.entur.io/realtime/v2/vehicles/graphql';
 
 function createClient(url: string) {
   // The possibleTypes is empty to disable the in-memory cache
@@ -118,21 +124,49 @@ function createClient(url: string) {
   };
 }
 
-function createWebSocketClient(url: string) {
+// function createWebSocketClient(url: string) {
+//   const cache = new InMemoryCache({
+//     addTypename: false,
+//   });
+
+//   const wsLink = new WebSocketLink(
+//     new SubscriptionClient(
+//       url,
+//       {
+//         reconnect: true,
+//         lazy: true,
+//         minTimeout: 10000,
+//       },
+//       WebSocket,
+//     ),
+//   );
+
+//   const errorLink = onError((error) =>
+//     console.log('Apollo Error:', JSON.stringify(error)),
+//   );
+//   const link = ApolloLink.from([errorLink, wsLink]);
+
+//   return new ApolloClient({
+//     link,
+//     cache,
+//     defaultOptions,
+//   });
+// }
+
+console.log('Websocket', WebSocket);
+
+function createNewWebSocketClient(url: string) {
   const cache = new InMemoryCache({
     addTypename: false,
   });
 
-  const wsLink = new WebSocketLink(
-    new SubscriptionClient(
+  const wsLink = new GraphQLWsLink(
+    createGraphqlWsClient({
       url,
-      {
-        reconnect: true,
-        lazy: true,
-        minTimeout: 10000,
-      },
-      WebSocket,
-    ),
+      shouldRetry: () => true,
+      lazy: true,
+      webSocketImpl: WebSocket,
+    }),
   );
 
   const errorLink = onError((error) =>
@@ -150,4 +184,5 @@ function createWebSocketClient(url: string) {
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
 export const mobilityClient = createClient(urlMobility);
 export const vehiclesClient = createClient(urlVehicles);
-export const vehiclesSubscriptionClient = createWebSocketClient(urlVehiclesWss);
+export const vehiclesSubscriptionClient =
+  createNewWebSocketClient(urlVehiclesWssNew);
