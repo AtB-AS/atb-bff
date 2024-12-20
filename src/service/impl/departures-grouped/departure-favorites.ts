@@ -11,23 +11,24 @@ import {
 } from './journey-gql/departure-group.graphql-gen';
 import mapQueryToGroups, {StopPlaceGroup} from './utils/grouping';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
+import {onlyUniques} from '../stop-places/utils';
 
 export type DepartureFavoritesMetadata = CursoredData<StopPlaceGroup[]>;
 
 export async function getDepartureFavorites(
   options: DepartureFavoritesQuery,
   headers: Request<ReqRefDefaults>,
-  favorites?: FavoriteDeparture[],
+  favorites: FavoriteDeparture[],
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {
-  const stopIds = union(favorites?.map((f) => f.stopId));
+  const quayIds = favorites?.map((f) => f.quayId).filter(onlyUniques);
 
   const variables: GroupsByIdQueryVariables = {
-    ids: stopIds,
+    ids: quayIds,
     timeRange: 86400 * 2, // Two days
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,
     totalLimit: options.limitPerLine * 10,
-    filterByLineIds: favorites?.map((f) => f.lineId),
+    filterByLineIds: favorites.map((f) => f.lineId),
     includeCancelledTrips: options.includeCancelledTrips,
   };
 
@@ -44,7 +45,7 @@ export async function getDepartureFavorites(
   }
 
   try {
-    const data = mapQueryToGroups(result.data.stopPlaces, favorites);
+    const data = mapQueryToGroups(result.data.quays, favorites);
     return Result.ok(generateCursorData(data, {hasNextPage: false}, options));
   } catch (error) {
     return Result.err(new APIError(error));
