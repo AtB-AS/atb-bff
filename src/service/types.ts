@@ -82,25 +82,6 @@ export type ReverseFeaturesQuery = {
   layers?: Array<'address' | 'venue'>;
 };
 
-export type DepartureGroupsPayload = {
-  location:
-    | {
-        layer: 'address';
-        coordinates: {longitude: number; latitude: number};
-      }
-    | {
-        layer: 'venue';
-        id: string;
-      };
-  favorites?: FavoriteDeparture[];
-};
-
-export type DepartureGroupsQuery = CursoredQuery<{
-  startTime: Date;
-  limitPerLine: number;
-  includeCancelledTrips?: boolean;
-}>;
-
 export type DepartureFavoritesPayload = {
   favorites?: FavoriteDeparture[];
 };

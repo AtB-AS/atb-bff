@@ -5,7 +5,6 @@ import {Boom} from '@hapi/boom';
 import WebSocket from 'ws';
 import {Subscription} from 'zen-observable-ts';
 import * as Trips from '../types/trips';
-import {DepartureGroupMetadata} from './impl/departures-grouped/departure-group';
 import {DeparturesQueryVariables} from './impl/departures/journey-gql/departures.graphql-gen';
 import {
   StopPlaceQuayDeparturesQuery,
@@ -46,8 +45,6 @@ import {
   CarStationQuery,
   DepartureFavoritesPayload,
   DepartureFavoritesQuery,
-  DepartureGroupsPayload,
-  DepartureGroupsQuery,
   DepartureRealtimeQuery,
   DeparturesForServiceJourneyQuery,
   DeparturesPayload,
@@ -84,6 +81,8 @@ import {Feature, Point} from 'geojson';
 import {Location} from '../types/geocoder';
 import {NonTransitTripsQueryVariables} from '../types/trips';
 import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-gen';
+import {CursoredData} from './cursored';
+import {StopPlaceGroup} from './impl/departures-grouped/utils/grouping';
 
 export interface IGeocoderService {
   getFeatures(
@@ -135,16 +134,11 @@ export interface ITrips_v2 {
 }
 
 export interface IDeparturesGroupedService {
-  getDeparturesGrouped(
-    location: DepartureGroupsPayload,
-    query: DepartureGroupsQuery,
-    headers: Request<ReqRefDefaults>,
-  ): Promise<Result<DepartureGroupMetadata, APIError>>;
   getDeparturesFavorites(
     location: DepartureFavoritesPayload,
     query: DepartureFavoritesQuery,
     headers: Request<ReqRefDefaults>,
-  ): Promise<Result<DepartureGroupMetadata, APIError>>;
+  ): Promise<Result<CursoredData<StopPlaceGroup[]>, APIError>>;
 }
 
 export interface IRealtimeService {
