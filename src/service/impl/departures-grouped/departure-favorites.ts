@@ -1,5 +1,4 @@
 import {Result} from '@badrap/result';
-import union from 'lodash.union';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {CursoredData, generateCursorData} from '../../cursored';
 import {DepartureFavoritesQuery, FavoriteDeparture} from '../../types';

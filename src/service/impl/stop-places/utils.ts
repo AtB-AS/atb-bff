@@ -1,5 +1,5 @@
 export const onlyUniques = <T>(value: T, index: number, self: T[]) =>
-    self.indexOf(value) === index;
+  self.indexOf(value) === index;
 
 export const onlyUniquesBasedOnField =
   <T>(field: keyof T) =>
