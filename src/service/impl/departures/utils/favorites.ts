@@ -61,8 +61,7 @@ export function filterStopPlaceFavorites(
     favorites.some(
       (f) =>
         favoriteDepartureMatchesEstimatedCall(f, ec) &&
-        stopPlace.id === f.stopId &&
-        (!f.quayId || ec.quay?.id === f.quayId),
+        ec.quay?.id === f.quayId,
     );
 
   const filteredQuays = stopPlace.quays?.map((quay) => {

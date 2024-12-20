@@ -103,14 +103,10 @@ function toKey(lineId?: string, destinationDisplay?: DestinationDisplay) {
 }
 
 export default function mapQueryToGroups(
-  stopPlaces?: GroupsByIdQuery['stopPlaces'],
-  favorites?: FavoriteDeparture[],
+  quays: GroupsByIdQuery['quays'],
+  favorites: FavoriteDeparture[],
 ): StopPlaceGroup[] {
-  if (!stopPlaces) {
-    return [];
-  }
-  const isFavorite = (item: DepartureLineInfo, stopId: string) =>
-    !favorites ||
+  const isFavorite = (item: DepartureLineInfo) =>
     favorites.some(
       (f) =>
         (!f.destinationDisplay ||
@@ -120,12 +116,12 @@ export default function mapQueryToGroups(
           )) &&
         (!f.lineName || item.lineName === f.lineName) && // kept for backward compatibility
         item.lineId === f.lineId &&
-        stopId === f.stopId &&
-        (!f.quayId || item.quayId === f.quayId),
+        item.quayId === f.quayId,
     );
 
-  return stopPlaces.filter(Boolean).map(function (stopPlace) {
-    const {quays, ...stopPlaceInfo} = stopPlace;
+  const stopPlaceAndQuays = groupByStopPlace(quays);
+
+  return stopPlaceAndQuays.map(function ({stopPlace, quays}) {
     const quayGroups =
       quays?.map(function (quay) {
         const {times, estimatedCalls, ...quayInfo} = quay;
@@ -157,7 +153,7 @@ export default function mapQueryToGroups(
             lineId: lineInfoEntry.serviceJourney?.line.id ?? '',
           };
 
-          if (!isFavorite(lineInfo, stopPlaceInfo.id)) {
+          if (!isFavorite(lineInfo)) {
             continue;
           }
 
@@ -189,7 +185,7 @@ export default function mapQueryToGroups(
       }) ?? [];
 
     return {
-      stopPlace: stopPlaceInfo,
+      stopPlace,
       quays: sortBy(quayGroups, [
         (group) => sortByNumberIfPossible(group.quay.publicCode),
         (group) => group.quay.id,
@@ -197,6 +193,27 @@ export default function mapQueryToGroups(
     };
   });
 }
+
+const groupByStopPlace = (quays: GroupsByIdQuery['quays']) =>
+  quays.reduce<
+    {
+      stopPlace: Required<GroupsByIdQuery['quays'][number]>['stopPlace'];
+      quays: GroupsByIdQuery['quays'];
+    }[]
+  >((grouped, quay) => {
+    if (!quay.stopPlace) return grouped;
+
+    const index = grouped.findIndex(
+      (g) => g.stopPlace.id === quay.stopPlace?.id,
+    );
+    if (index >= 0) {
+      grouped[index].quays.push(quay);
+    } else {
+      grouped.push({stopPlace: quay.stopPlace, quays: [quay]});
+      // return [...grouped, {stopPlace: quay.stopPlace, quay}];
+    }
+    return grouped;
+  }, []);
 
 function sortByNumberIfPossible(val?: string) {
   if (!val) return val;

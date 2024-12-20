@@ -9,10 +9,10 @@ import {DestinationDisplay} from '../../graphql/journey/journeyplanner-types_v3'
 export const getDepartureFavoritesCursoredRequest = {
   payload: Joi.object<DepartureFavoritesPayload>({
     favorites: Joi.array()
+      .required()
       .single()
       .items(
         Joi.object<FavoriteDeparture>({
-          stopId: Joi.string().required(),
           lineName: Joi.string().description(
             'deprecated - use destinationDisplay instead',
           ),
@@ -21,7 +21,7 @@ export const getDepartureFavoritesCursoredRequest = {
             via: Joi.array().items(Joi.string()).optional().single(),
           }),
           lineId: Joi.string().required(),
-          quayId: Joi.string(),
+          quayId: Joi.string().required(),
         })
           .options({stripUnknown: true})
           .required(),

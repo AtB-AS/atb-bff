@@ -11,7 +11,7 @@ import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.gra
 import { BookingArrangementFragmentDoc } from '../../fragments/journey-gql/booking-arrangements.graphql-gen';
 import { LineFragmentDoc } from '../../fragments/journey-gql/lines.graphql-gen';
 export type GroupsByIdQueryVariables = Types.Exact<{
-  ids?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>>;
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
   startTime: Types.Scalars['DateTime']['input'];
   timeRange: Types.Scalars['Int']['input'];
   limitPerLine: Types.Scalars['Int']['input'];
@@ -21,12 +21,9 @@ export type GroupsByIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type GroupsByIdQuery = { stopPlaces: Array<(
-    { quays?: Array<(
-      { times: Array<Group_Times_EstimatedCallFieldsFragment>, estimatedCalls: Array<Group_EstimatedCallFieldsFragment> }
-      & Group_QuayFieldsFragment
-    )> }
-    & Group_StopPlaceFieldsFragment
+export type GroupsByIdQuery = { quays: Array<(
+    { stopPlace?: Group_StopPlaceFieldsFragment, times: Array<Group_Times_EstimatedCallFieldsFragment>, estimatedCalls: Array<Group_EstimatedCallFieldsFragment> }
+    & Group_QuayFieldsFragment
   )> };
 
 export type QuayIdInStopsQueryVariables = Types.Exact<{
@@ -151,38 +148,38 @@ export const Group_StopPlaceFieldsFragmentDoc = gql`
 }
     `;
 export const GroupsByIdDocument = gql`
-    query GroupsById($ids: [String], $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID], $includeCancelledTrips: Boolean) {
-  stopPlaces(ids: $ids) {
-    ...group_stopPlaceFields
-    quays(filterByInUse: true) {
-      ...group_quayFields
-      times: estimatedCalls(
-        startTime: $startTime
-        timeRange: $timeRange
-        numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
-        numberOfDepartures: $totalLimit
-        arrivalDeparture: departures
-        includeCancelledTrips: $includeCancelledTrips
-        whiteListed: {lines: $filterByLineIds}
-      ) {
-        ...group_times_estimatedCallFields
-      }
-      estimatedCalls(
-        startTime: $startTime
-        timeRange: $timeRange
-        numberOfDepartures: $totalLimit
-        numberOfDeparturesPerLineAndDestinationDisplay: 1
-        arrivalDeparture: departures
-        includeCancelledTrips: $includeCancelledTrips
-        whiteListed: {lines: $filterByLineIds}
-      ) {
-        ...group_estimatedCallFields
-      }
+    query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID], $includeCancelledTrips: Boolean) {
+  quays(ids: $ids) {
+    ...group_quayFields
+    stopPlace {
+      ...group_stopPlaceFields
+    }
+    times: estimatedCalls(
+      startTime: $startTime
+      timeRange: $timeRange
+      numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
+      numberOfDepartures: $totalLimit
+      arrivalDeparture: departures
+      includeCancelledTrips: $includeCancelledTrips
+      whiteListed: {lines: $filterByLineIds}
+    ) {
+      ...group_times_estimatedCallFields
+    }
+    estimatedCalls(
+      startTime: $startTime
+      timeRange: $timeRange
+      numberOfDepartures: $totalLimit
+      numberOfDeparturesPerLineAndDestinationDisplay: 1
+      arrivalDeparture: departures
+      includeCancelledTrips: $includeCancelledTrips
+      whiteListed: {lines: $filterByLineIds}
+    ) {
+      ...group_estimatedCallFields
     }
   }
 }
-    ${Group_StopPlaceFieldsFragmentDoc}
-${Group_QuayFieldsFragmentDoc}
+    ${Group_QuayFieldsFragmentDoc}
+${Group_StopPlaceFieldsFragmentDoc}
 ${Group_Times_EstimatedCallFieldsFragmentDoc}
 ${Group_EstimatedCallFieldsFragmentDoc}`;
 export const QuayIdInStopsDocument = gql`
