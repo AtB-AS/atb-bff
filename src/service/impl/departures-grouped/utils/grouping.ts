@@ -210,7 +210,6 @@ const groupByStopPlace = (quays: GroupsByIdQuery['quays']) =>
       grouped[index].quays.push(quay);
     } else {
       grouped.push({stopPlace: quay.stopPlace, quays: [quay]});
-      // return [...grouped, {stopPlace: quay.stopPlace, quay}];
     }
     return grouped;
   }, []);
