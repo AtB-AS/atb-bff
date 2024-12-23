@@ -42,10 +42,9 @@ export const postStopDeparturesRequest = {
       .single()
       .items(
         Joi.object<FavoriteDeparture>({
-          stopId: Joi.string().required(),
           lineName: Joi.string(),
           lineId: Joi.string().required(),
-          quayId: Joi.string(),
+          quayId: Joi.string().required(),
         }).options({stripUnknown: true}),
       ),
   }),
@@ -64,7 +63,6 @@ export const postDeparturesRequest = {
       .single()
       .items(
         Joi.object<FavoriteDeparture>({
-          stopId: Joi.string().required(),
           lineName: Joi.string().description(
             'deprecated - use destinationDisplay instead',
           ), // kept for backward compatibility
@@ -73,7 +71,7 @@ export const postDeparturesRequest = {
             via: Joi.array().items(Joi.string()).optional().single(),
           }),
           lineId: Joi.string().required(),
-          quayId: Joi.string(),
+          quayId: Joi.string().required(),
         }).options({stripUnknown: true}),
       ),
   }),
@@ -102,10 +100,9 @@ export const postQuayDeparturesRequest = {
       .single()
       .items(
         Joi.object<FavoriteDeparture>({
-          stopId: Joi.string().required(),
           lineName: Joi.string(),
           lineId: Joi.string().required(),
-          quayId: Joi.string(),
+          quayId: Joi.string().required(),
         }).options({stripUnknown: true}),
       ),
   }),

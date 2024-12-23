@@ -18,12 +18,11 @@ export interface Coordinates {
 }
 
 export type FavoriteDeparture = {
-  stopId: string;
   /** @deprecated Use destinationDisplay instead */
   lineName?: string; // kept for backward compatibility
   destinationDisplay?: DestinationDisplay;
   lineId: string;
-  quayId?: string;
+  quayId: string;
 };
 
 type EstimatedCallWithLineName =
@@ -83,7 +82,7 @@ export type ReverseFeaturesQuery = {
 };
 
 export type DepartureFavoritesPayload = {
-  favorites?: FavoriteDeparture[];
+  favorites: FavoriteDeparture[];
 };
 
 export type DepartureFavoritesQuery = CursoredQuery<{
