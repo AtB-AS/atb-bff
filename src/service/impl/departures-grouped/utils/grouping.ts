@@ -59,7 +59,7 @@ type DepartureTime = {
   cancellation: boolean;
   bookingArrangements?: BookingArrangementFragment;
   notices?: NoticeFragment[];
-  stopPositionInPattern: number,
+  stopPositionInPattern: number;
 };
 
 type DepartureGroup = {
