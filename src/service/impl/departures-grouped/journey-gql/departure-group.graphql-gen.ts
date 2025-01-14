@@ -33,9 +33,9 @@ export type QuayIdInStopsQueryVariables = Types.Exact<{
 
 export type QuayIdInStopsQuery = { stopPlaces: Array<{ id: string, quays?: Array<{ id: string }> }> };
 
-export type Group_EstimatedCallFieldsFragment = { destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, serviceJourney: Group_ServiceJourneyFieldsFragment };
+export type Group_EstimatedCallFieldsFragment = { stopPositionInPattern: number, destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, serviceJourney: Group_ServiceJourneyFieldsFragment };
 
-export type Group_Times_EstimatedCallFieldsFragment = { date: any, expectedDepartureTime: any, aimedDepartureTime: any, predictionInaccurate: boolean, realtime: boolean, cancellation: boolean, destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, situations: Array<SituationFragment>, serviceJourney: { id: string, line: { id: string } }, bookingArrangements?: BookingArrangementFragment };
+export type Group_Times_EstimatedCallFieldsFragment = { date: any, expectedDepartureTime: any, aimedDepartureTime: any, predictionInaccurate: boolean, realtime: boolean, cancellation: boolean, stopPositionInPattern: number, destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, situations: Array<SituationFragment>, serviceJourney: { id: string, line: { id: string } }, bookingArrangements?: BookingArrangementFragment };
 
 export type Group_NoticeFieldsFragment = { text?: string };
 
@@ -86,6 +86,7 @@ export const Group_EstimatedCallFieldsFragmentDoc = gql`
   serviceJourney {
     ...group_serviceJourneyFields
   }
+  stopPositionInPattern
 }
     ${NoticeFragmentDoc}
 ${Group_ServiceJourneyFieldsFragmentDoc}`;
@@ -116,6 +117,7 @@ export const Group_Times_EstimatedCallFieldsFragmentDoc = gql`
   bookingArrangements {
     ...bookingArrangement
   }
+  stopPositionInPattern
 }
     ${NoticeFragmentDoc}
 ${SituationFragmentDoc}

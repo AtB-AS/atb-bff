@@ -59,6 +59,7 @@ type DepartureTime = {
   cancellation: boolean;
   bookingArrangements?: BookingArrangementFragment;
   notices?: NoticeFragment[];
+  stopPositionInPattern: number,
 };
 
 type DepartureGroup = {
@@ -157,7 +158,7 @@ export default function mapQueryToGroups(
             continue;
           }
 
-          const departures = times.map<DepartureTime>(function (time) {
+          const departures = times.map(function (time): DepartureTime {
             return {
               time: time.expectedDepartureTime,
               aimedTime: time.aimedDepartureTime,
@@ -169,6 +170,7 @@ export default function mapQueryToGroups(
               cancellation: time.cancellation,
               notices: time.notices,
               bookingArrangements: time.bookingArrangements,
+              stopPositionInPattern: time.stopPositionInPattern,
             };
           });
 

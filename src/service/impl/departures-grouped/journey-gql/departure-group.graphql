@@ -49,6 +49,7 @@ fragment group_estimatedCallFields on EstimatedCall {
   serviceJourney {
     ...group_serviceJourneyFields
   }
+  stopPositionInPattern
 }
 
 fragment group_times_estimatedCallFields on EstimatedCall {
@@ -77,6 +78,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   bookingArrangements {
     ...bookingArrangement
   }
+  stopPositionInPattern
 }
 
 fragment group_noticeFields on Notice {

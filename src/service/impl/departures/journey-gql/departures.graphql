@@ -58,6 +58,7 @@ query departures(
       bookingArrangements {
         ...bookingArrangement
       }
+      stopPositionInPattern
     }
     situations {
       ...situation

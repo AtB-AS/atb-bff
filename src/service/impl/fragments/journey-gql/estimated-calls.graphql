@@ -26,4 +26,5 @@ fragment estimatedCallWithQuay on EstimatedCall {
   bookingArrangements {
     ...bookingArrangement
   }
+  stopPositionInPattern
 }
