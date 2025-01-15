@@ -10,7 +10,7 @@ import { QuayFragmentDoc } from './quays.graphql-gen';
 import { NoticeFragmentDoc } from './notices.graphql-gen';
 import { SituationFragmentDoc } from './situations.graphql-gen';
 import { BookingArrangementFragmentDoc } from './booking-arrangements.graphql-gen';
-export type EstimatedCallWithQuayFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, forBoarding: boolean, realtime: boolean, destinationDisplay?: { frontText?: string, via?: Array<string> }, quay: QuayFragment, notices: Array<NoticeFragment>, situations: Array<SituationFragment>, bookingArrangements?: BookingArrangementFragment };
+export type EstimatedCallWithQuayFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, forBoarding: boolean, realtime: boolean, stopPositionInPattern: number, destinationDisplay?: { frontText?: string, via?: Array<string> }, quay: QuayFragment, notices: Array<NoticeFragment>, situations: Array<SituationFragment>, bookingArrangements?: BookingArrangementFragment };
 
 export const EstimatedCallWithQuayFragmentDoc = gql`
     fragment estimatedCallWithQuay on EstimatedCall {
@@ -41,6 +41,7 @@ export const EstimatedCallWithQuayFragmentDoc = gql`
   bookingArrangements {
     ...bookingArrangement
   }
+  stopPositionInPattern
 }
     ${QuayFragmentDoc}
 ${NoticeFragmentDoc}

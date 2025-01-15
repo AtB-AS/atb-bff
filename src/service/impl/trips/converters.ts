@@ -56,6 +56,7 @@ function mapToLegacyLeg(leg: Leg_v2): Leg {
     ride: false,
     authority: undefined,
     fromEstimatedCall: fromEstimatedCall,
+    toEstimatedCall: undefined,
     fromPlace: mapToLegacyPlace(leg.fromPlace),
     toPlace: mapToLegacyPlace(leg.toPlace),
     interchangeTo: undefined,

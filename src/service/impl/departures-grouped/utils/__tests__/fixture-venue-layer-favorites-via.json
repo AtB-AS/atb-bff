@@ -30,6 +30,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 0,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600002_71_200109141539610",
           "line": {
@@ -53,6 +54,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 1,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600003_73_200109141539610",
           "line": {
@@ -92,6 +94,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 2,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600004_75_200109141539610",
           "line": {
@@ -115,6 +118,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 3,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600005_77_200109141539610",
           "line": {
@@ -138,6 +142,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 4,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600006_79_200109141539610",
           "line": {
@@ -161,6 +166,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600007_81_200109141539610",
           "line": {
@@ -184,6 +190,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 6,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600008_83_200109141539610",
           "line": {
@@ -207,6 +214,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 7,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600009_85_200109141539610",
           "line": {
@@ -230,6 +238,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 8,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600010_87_200109141539610",
           "line": {
@@ -253,6 +262,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 9,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600011_89_200109141539610",
           "line": {
@@ -275,6 +285,7 @@
         "realtime": false,
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 10,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600025_117_200109141539610",
           "line": {
@@ -297,6 +308,7 @@
         "realtime": false,
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 11,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600027_121_200109141539610",
           "line": {
@@ -319,6 +331,7 @@
         "realtime": false,
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 12,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600029_125_200109141539610",
           "line": {
@@ -341,6 +354,7 @@
         "realtime": false,
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 13,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600031_129_200109141539610",
           "line": {
@@ -363,6 +377,7 @@
         "realtime": false,
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 14,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600033_133_200109141539610",
           "line": {
@@ -385,6 +400,7 @@
         "realtime": false,
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 15,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599969_5_200109141539610",
           "line": {
@@ -404,6 +420,7 @@
           "__typename": "DestinationDisplay"
         },
         "notices": [],
+        "stopPositionInPattern": 0,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600002_71_200109141539610",
           "directionType": "outbound",
@@ -437,6 +454,7 @@
           "__typename": "DestinationDisplay"
         },
         "notices": [],
+        "stopPositionInPattern": 1,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600003_73_200109141539610",
           "directionType": "outbound",
@@ -470,6 +488,7 @@
           "__typename": "DestinationDisplay"
         },
         "notices": [],
+        "stopPositionInPattern": 2,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141600025_117_200109141539610",
           "directionType": "outbound",
@@ -503,6 +522,7 @@
           "__typename": "DestinationDisplay"
         },
         "notices": [],
+        "stopPositionInPattern": 3,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599969_5_200109141539610",
           "directionType": "outbound",
@@ -561,6 +581,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599832_78_200109141539610",
           "line": {
@@ -583,6 +604,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599833_80_200109141539610",
           "line": {
@@ -605,6 +627,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599834_82_200109141539610",
           "line": {
@@ -627,6 +650,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599835_84_200109141539610",
           "line": {
@@ -649,6 +673,7 @@
         "serviceDate": "2020-12-09",
         "notices": [],
         "situations": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599836_86_200109141539610",
           "line": {
@@ -667,6 +692,7 @@
           "__typename": "DestinationDisplay"
         },
         "notices": [],
+        "stopPositionInPattern": 5,
         "serviceJourney": {
           "id": "ATB:ServiceJourney:24_200109141599832_78_200109141539610",
           "directionType": "inbound",

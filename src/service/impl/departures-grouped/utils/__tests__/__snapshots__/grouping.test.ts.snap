@@ -39,6 +39,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599832_78_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -51,6 +52,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599833_80_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -63,6 +65,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599834_82_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -75,6 +78,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599835_84_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -87,6 +91,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599836_86_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
             ],
@@ -176,6 +181,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599832_78_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -188,6 +194,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599833_80_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -200,6 +207,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599834_82_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -212,6 +220,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599835_84_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
               {
@@ -224,6 +233,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "serviceDate": undefined,
                 "serviceJourneyId": "ATB:ServiceJourney:24_200109141599836_86_200109141539610",
                 "situations": [],
+                "stopPositionInPattern": 5,
                 "time": undefined,
               },
             ],
