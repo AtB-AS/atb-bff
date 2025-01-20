@@ -46,6 +46,9 @@ fragment tripPattern on TripPattern {
             stopPositionInPattern
         }
         toEstimatedCall {
+            notices {
+                ...notice
+            }
             stopPositionInPattern
         }
         situations {
