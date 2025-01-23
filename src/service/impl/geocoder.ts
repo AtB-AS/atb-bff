@@ -9,6 +9,7 @@ import {
 import {APIError} from '../../utils/api-error';
 import {get} from '../../utils/fetch-client';
 import {IGeocoderService} from '../interface';
+import {temporarilyPrioritizeWorldCupFeatures} from '../../utils/temporarily-prioritize-world-cup-features';
 
 const FOCUS_WEIGHT = parseInt(process.env.GEOCODER_FOCUS_WEIGHT || '18');
 
@@ -41,7 +42,10 @@ export default (): IGeocoderService => {
           `/geocoder/v1/autocomplete?${queryString}`,
           headers,
         );
-        return Result.ok(result.features);
+        const prioritizedFeatures = temporarilyPrioritizeWorldCupFeatures(
+          result.features,
+        );
+        return Result.ok(prioritizedFeatures);
       } catch (error) {
         return Result.err(new APIError(error));
       }
