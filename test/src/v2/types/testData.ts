@@ -4,6 +4,7 @@ export type departureFavoritesTestDataType = {
   scenarios: Array<{
     favorites: Array<{
       lineId: string;
+      lineName: string;
       quayId: string;
       quayName: string;
       stopId: string;

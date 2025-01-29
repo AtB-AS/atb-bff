@@ -117,6 +117,7 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
       favorites: [
         {
           lineId: 'ATB:Line:2_82',
+          lineName: 'Hesttrøa via Melhus skysstasjon',
           quayId: 'NSR:Quay:73576',
           quayName: 'Loddgårdstrøa',
           stopId: 'NSR:StopPlace:42912',
@@ -130,6 +131,7 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
       favorites: [
         {
           lineId: 'ATB:Line:2_82',
+          lineName: 'Hesttrøa via Melhus skysstasjon',
           quayId: 'NSR:Quay:73576',
           quayName: 'Loddgårdstrøa',
           stopId: 'NSR:StopPlace:42912',
@@ -140,6 +142,7 @@ export const departureFavoritesTestData: departureFavoritesTestDataType = {
         },
         {
           lineId: 'ATB:Line:2_82',
+          lineName: 'Hesttrøa via Melhus skysstasjon',
           quayId: 'NSR:Quay:71785',
           quayName: 'Uglevegen',
           stopId: 'NSR:StopPlace:41942',
