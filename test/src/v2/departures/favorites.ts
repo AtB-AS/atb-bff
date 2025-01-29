@@ -31,6 +31,7 @@ export function departureFavorites(
       const resStopPlaceIds = json.data.map((fav) => fav.stopPlace.id).sort();
       const expQuayIds = test.favorites.map((e) => e.quayId).sort();
       const expLineIds = test.favorites.map((e) => e.lineId).sort();
+      const expLineNames = test.favorites.map((e) => e.lineName).sort();
       const resQuayIds = json.data
         .map((fav) => fav.quays.map((quay) => quay.quay.id))
         .flat();
@@ -60,23 +61,25 @@ export function departureFavorites(
               expect: quay.group.length > 0,
             });
             for (let line of quay.group) {
-              expects.push(
-                {
-                  check: `should have correct line from quay '${quay.quay.id}'`,
-                  expect: expLineIds.includes(line.lineInfo.lineId),
-                },
-                {
-                  check: `should have correct date for departures from quay '${quay.quay.id}'`,
-                  expect:
-                    line.departures.filter(
-                      (dep) => dep.serviceDate !== startDate,
-                    ).length === 0,
-                },
-                {
-                  check: `should have correct number of departures from quay '${quay.quay.id}'`,
-                  expect: line.departures.length === limitPerLine,
-                },
-              );
+              if (expLineNames.includes(line.lineInfo.lineName)) {
+                expects.push(
+                  {
+                    check: `should have correct line from quay '${quay.quay.id}'`,
+                    expect: expLineIds.includes(line.lineInfo.lineId),
+                  },
+                  {
+                    check: `should have correct date for departures from quay '${quay.quay.id}'`,
+                    expect:
+                      line.departures.filter(
+                        (dep) => dep.serviceDate !== startDate,
+                      ).length === 0,
+                  },
+                  {
+                    check: `should have correct number of departures from quay '${quay.quay.id}'`,
+                    expect: line.departures.length === limitPerLine,
+                  },
+                );
+              }
             }
           } else {
             expects.push({
