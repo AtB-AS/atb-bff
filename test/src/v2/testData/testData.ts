@@ -104,6 +104,12 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
               publicCode: 'P3',
               description: null,
             },
+            {
+              id: 'NSR:Quay:109933',
+              name: 'Prinsens gate',
+              publicCode: 'P4',
+              description: null,
+            },
           ],
         },
       ],
