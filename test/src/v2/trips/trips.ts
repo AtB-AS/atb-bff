@@ -38,7 +38,7 @@ export function trips(
 
     const res = http.post(url, JSON.stringify(test.query), {
       tags: {name: requestName},
-      headers: bffHeadersPost,
+      headers: bffHeadersPost(),
     });
 
     const expects: ExpectsType = [
@@ -190,7 +190,7 @@ export function tripsWithCursor(
 
   const res = http.post(url, JSON.stringify(test.query), {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -206,7 +206,7 @@ export function tripsWithCursor(
       : json.trip.nextPageCursor;
     const resNext = http.post(url, JSON.stringify(test.query), {
       tags: {name: requestName},
-      headers: bffHeadersPost,
+      headers: bffHeadersPost(),
     });
     // Remove cursor on object
     delete test.query.cursor;
@@ -359,7 +359,7 @@ export function filteredTrips(
 
   const res = http.post(url, JSON.stringify(request), {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -516,7 +516,7 @@ export function singleTrip(
 
   const resTrips = http.post(urlTrips, JSON.stringify(testData.query), {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -546,7 +546,7 @@ export function singleTrip(
 
         const resSingle = http.post(urlSingleTrip, JSON.stringify(bodySingle), {
           tags: {name: requestName},
-          headers: bffHeadersPost,
+          headers: bffHeadersPost(),
         });
         const jsonSingle = resSingle.json() as TripPatternWithCompressedQuery;
 

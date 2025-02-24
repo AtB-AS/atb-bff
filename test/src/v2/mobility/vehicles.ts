@@ -18,7 +18,7 @@ export function vehicles(range: number = 200): VehicleInfoType | undefined {
 
   const res = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
   let returnVehicle = undefined;
@@ -93,7 +93,7 @@ export function vehicle(vehicleInfo: VehicleInfoType) {
 
   const res = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
   try {

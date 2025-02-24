@@ -14,7 +14,7 @@ export function serviceJourneys() {
 
   const resDep = http.post(urlDep, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
   let resSJUrl = '';
   let resSJTimimg = 0;
@@ -34,7 +34,7 @@ export function serviceJourneys() {
 
     const res = http.get(url, {
       tags: {name: requestName},
-      headers: bffHeadersGet,
+      headers: bffHeadersGet(),
     });
     resSJUrl = res.request.url;
     resSJTimimg = res.timings.duration;

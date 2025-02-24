@@ -21,7 +21,7 @@ export function stations(
 
   const res = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
   let returnStation: StationInfoType = undefined;
@@ -109,7 +109,7 @@ export function station(stationInfo: StationInfoType) {
 
   const res = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
   try {
