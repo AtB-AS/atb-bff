@@ -20,10 +20,7 @@ import {conf} from './config/configuration';
 import {scn} from './scenario';
 import {createJUnitCheckOutput} from './utils/log';
 /* @ts-ignore */
-import {
-  jUnit,
-  textSummary,
-} from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
+import {jUnit, textSummary} from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 
 //Settings for the simulation
 export let options: Options = {

@@ -36,6 +36,9 @@ export type ExpectsType = Array<{
 const env: string = __ENV.environment || 'staging';
 const envHosts: EnvType = JSON.parse(open('config/env.json'));
 
+// Sleep per request - to avoid rate limiting
+export const sleepPrReq = 0.3;
+
 //Default options are different for perfTest or not - vu/duration/iteration can be overrun by cli options
 const options =
   __ENV.performanceTest === 'true'

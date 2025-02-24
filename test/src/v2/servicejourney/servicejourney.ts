@@ -25,7 +25,7 @@ export function serviceJourneyDepartures(
     test.query.when = searchTime;
     const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
       tags: {name: requestName},
-      headers: bffHeadersPost,
+      headers: bffHeadersPost(),
     });
 
     try {
@@ -38,7 +38,7 @@ export function serviceJourneyDepartures(
       const urlSJD = `${conf.host()}/bff/v2/servicejourney/${serviceJourneyId}/departures?date=${searchDate}`;
       const resSJD = http.get(urlSJD, {
         tags: {name: requestName},
-        headers: bffHeadersGet,
+        headers: bffHeadersGet(),
       });
       const jsonSJD = resSJD.json() as ServiceJourneyDeparturesResponseType;
 
@@ -117,7 +117,7 @@ export function serviceJourneyCalls(
     test.query.when = searchTime;
     const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
       tags: {name: requestName},
-      headers: bffHeadersPost,
+      headers: bffHeadersPost(),
     });
 
     try {
@@ -131,7 +131,7 @@ export function serviceJourneyCalls(
       const urlSJC = `${conf.host()}/bff/v2/servicejourney/${serviceJourneyId}/calls?date=${searchDate}`;
       const resSJC = http.get(urlSJC, {
         tags: {name: requestName},
-        headers: bffHeadersGet,
+        headers: bffHeadersGet(),
       });
       const jsonSJC = resSJC.json() as ServiceJourneyCallsResponseType;
 
@@ -223,7 +223,7 @@ export function polyline(
 
     const resTrip = http.post(urlTrip, JSON.stringify(test.query), {
       tags: {name: requestName},
-      headers: bffHeadersPost,
+      headers: bffHeadersPost(),
     });
 
     try {
@@ -262,13 +262,13 @@ export function polyline(
 
           const resPolyline = http.get(urlPolyline, {
             tags: {name: requestName},
-            headers: bffHeadersGet,
+            headers: bffHeadersGet(),
           });
           polylineDuration += resPolyline.timings.duration;
           const jsonPoly = resPolyline.json() as PolylineSimplifiedResponseType;
           const resPolyline2 = http.get(urlPolyline2, {
             tags: {name: requestName},
-            headers: bffHeadersGet,
+            headers: bffHeadersGet(),
           });
           polylineDuration += resPolyline2.timings.duration;
           const jsonPoly2 = resPolyline2.json() as PolylineSimplifiedResponseType;

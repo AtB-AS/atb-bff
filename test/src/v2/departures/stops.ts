@@ -18,7 +18,7 @@ export function stopsNearest(testData: stopsNearestTestDataType) {
 
     const res = http.get(url, {
       tags: {name: requestName},
-      headers: bffHeadersGet,
+      headers: bffHeadersGet(),
     });
 
     try {
@@ -71,7 +71,7 @@ export function stopsDetails(testData: stopsDetailsTestDataType) {
 
     const res = http.get(url, {
       tags: {name: requestName},
-      headers: bffHeadersGet,
+      headers: bffHeadersGet(),
     });
 
     try {

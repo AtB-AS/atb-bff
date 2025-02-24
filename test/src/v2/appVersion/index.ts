@@ -9,10 +9,10 @@ export function oldAppVersion(appVersion: string) {
 
   const resCurrent = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
-  const bffHeadersGetOldVersion = JSON.parse(JSON.stringify(bffHeadersGet));
+  const bffHeadersGetOldVersion = JSON.parse(JSON.stringify(bffHeadersGet()));
   bffHeadersGetOldVersion['atb-app-version'] = appVersion;
   const resOld = http.get(url, {
     tags: {name: requestName},

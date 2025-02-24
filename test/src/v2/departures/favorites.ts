@@ -21,7 +21,7 @@ export function departureFavorites(
 
     let res = http.post(url, JSON.stringify(test), {
       tags: {name: requestName},
-      headers: bffHeadersPost,
+      headers: bffHeadersPost(),
     });
 
     try {
@@ -126,7 +126,7 @@ export function departureFavoritesVsQuayDepartures(
   const urlFav = `${conf.host()}/bff/v2/departure-favorites?startTime=${startDate}T16:00:00.000Z&limitPerLine=${limit}`;
   const resFav = http.post(urlFav, JSON.stringify(testScenario), {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   // Get departures to assert favorite results
@@ -135,7 +135,7 @@ export function departureFavoritesVsQuayDepartures(
   }&numberOfDepartures=${limit}&startTime=${startDate}T16:00:00.000Z&timeRange=86400`;
   const resDep = http.post(urlDep, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   try {

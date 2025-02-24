@@ -19,7 +19,7 @@ export function departures(
 
   const res = http.post(url, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -82,7 +82,7 @@ export function stopDepartures(
 
   const res = http.post(url, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -145,11 +145,11 @@ export function stopDeparturesPOSTandGET(
 
   const resGET = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
   const resPOST = http.post(url, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   try {
@@ -195,7 +195,7 @@ export function quayDeparturesVsStopDepartures(
 
   const resSD = http.post(urlSD, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   try {
@@ -207,7 +207,7 @@ export function quayDeparturesVsStopDepartures(
       const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quay}&numberOfDepartures=10&startTime=${startDate}T03:00:00.000Z&timeRange=86400`;
       const resQD = http.post(urlQD, '{}', {
         tags: {name: requestName},
-        headers: bffHeadersPost,
+        headers: bffHeadersPost(),
       });
       const jsonQD = resQD.json() as QuayDeparturesType;
 
@@ -257,7 +257,7 @@ export function quayDepartures(
 
   const res = http.post(url, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -312,11 +312,11 @@ export function quayDeparturesPOSTandGET(
 
   const resGET = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
   const resPOST = http.post(url, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [

@@ -37,7 +37,7 @@ export function realtime(
 
   let res = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
   const expects: ExpectsType = [
@@ -115,7 +115,7 @@ export function realtimeWithLineId(
 
   let res = http.get(url, {
     tags: {name: requestName},
-    headers: bffHeadersGet,
+    headers: bffHeadersGet(),
   });
 
   const expects: ExpectsType = [
@@ -191,7 +191,7 @@ export function realtimeForQuayDepartures(quayId: string) {
   const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${searchTime}&timeRange=86400`;
   const resQD = http.post(urlQD, '{}', {
     tags: {name: requestName},
-    headers: bffHeadersPost,
+    headers: bffHeadersPost(),
   });
 
   const expects: ExpectsType = [
@@ -205,7 +205,7 @@ export function realtimeForQuayDepartures(quayId: string) {
     const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=10`;
     const resR = http.get(urlR, {
       tags: {name: requestName},
-      headers: bffHeadersGet,
+      headers: bffHeadersGet(),
     });
 
     expects.push({

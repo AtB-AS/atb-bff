@@ -22,7 +22,7 @@ export function geocoderFeatures(
 
     const res = http.get(url, {
       tags: {name: requestName},
-      headers: bffHeadersGet,
+      headers: bffHeadersGet(),
     });
 
     const expects: ExpectsType = [
@@ -100,7 +100,7 @@ export function geocoderReverse(testData: geocoderTestDataType) {
 
     const res = http.get(url, {
       tags: {name: requestName},
-      headers: bffHeadersGet,
+      headers: bffHeadersGet(),
     });
 
     const expects: ExpectsType = [
