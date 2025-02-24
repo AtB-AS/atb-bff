@@ -10,7 +10,7 @@ import {
 } from './journey-gql/departure-group.graphql-gen';
 import mapQueryToGroups, {StopPlaceGroup} from './utils/grouping';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {onlyUniques} from '../stop-places/utils';
+import {isDefined, onlyUniques} from '../stop-places/utils';
 
 export type DepartureFavoritesMetadata = CursoredData<StopPlaceGroup[]>;
 
@@ -43,8 +43,11 @@ export async function getDepartureFavorites(
     return Result.err(new APIError(result.errors));
   }
 
+  // Quays that have been removed from NSR, will be `null` in the response.
+  const quays = result.data.quays.filter(isDefined);
+
   try {
-    const data = mapQueryToGroups(result.data.quays, favorites);
+    const data = mapQueryToGroups(quays, favorites);
     return Result.ok(generateCursorData(data, {hasNextPage: false}, options));
   } catch (error) {
     return Result.err(new APIError(error));
