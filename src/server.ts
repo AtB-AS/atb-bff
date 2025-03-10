@@ -75,6 +75,7 @@ export const initializePlugins = async (server: hapi.Server) => {
         appVersion: request.appVersion,
         correlationId: request.correlationId,
         customerAccountId: request.customerAccountId,
+        tlsVersion: request.tlsVersion,
         message: 'handle request',
       }),
     },
