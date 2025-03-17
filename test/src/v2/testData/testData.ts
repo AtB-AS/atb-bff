@@ -61,7 +61,7 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
     },
     {
       query: {
-        stopPlaceIds: ['NSR:StopPlace:42912', 'NSR:StopPlace:41613'],
+        stopPlaceIds: ['NSR:StopPlace:42912', 'NSR:StopPlace:43292'],
       },
       expectedResults: [
         {
@@ -83,32 +83,20 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
           ],
         },
         {
-          stopPlaceId: 'NSR:StopPlace:41613',
-          stopPlaceName: 'Prinsens gate',
+          stopPlaceId: 'NSR:StopPlace:43292',
+          stopPlaceName: 'Kongens gate',
           quays: [
             {
-              id: 'NSR:Quay:71181',
-              name: 'Prinsens gate',
-              publicCode: 'P2',
-              description: 'ved AtB Kundesenter',
+              id: 'NSR:Quay:74265',
+              name: 'Kongens gate',
+              publicCode: 'K1',
+              description: 'ved Egon',
             },
             {
-              id: 'NSR:Quay:71184',
-              name: 'Prinsens gate',
-              publicCode: 'P1',
-              description: 'ved Bunnpris',
-            },
-            {
-              id: 'NSR:Quay:107493',
-              name: 'Prinsens gate',
-              publicCode: 'P3',
-              description: null,
-            },
-            {
-              id: 'NSR:Quay:109933',
-              name: 'Prinsens gate',
-              publicCode: 'P4',
-              description: null,
+              id: 'NSR:Quay:74264',
+              name: 'Kongens gate',
+              publicCode: 'K2',
+              description: 'ved Narvesen',
             },
           ],
         },
