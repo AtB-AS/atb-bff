@@ -9,5 +9,6 @@ declare module '@hapi/hapi' {
     webshopVersion?: string;
     correlationId?: string;
     customerAccountId?: string;
+    tlsVersion?: string;
   }
 }

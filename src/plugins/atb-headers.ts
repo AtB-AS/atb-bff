@@ -18,6 +18,8 @@ const plugin: Hapi.Plugin<Options> = {
       request.headers['atb-correlation-id'] || uuid();
     const customerAccountId = (request: Hapi.Request) =>
       request.headers['entur-customer-account-id'];
+    const tlsVersion = (request: Hapi.Request) =>
+      request.headers['tls-version'];
     server.decorate('request', 'installId', installId, {apply: true});
     server.decorate('request', 'requestId', requestId, {apply: true});
     server.decorate('request', 'appVersion', appVersion, {apply: true});
@@ -26,6 +28,7 @@ const plugin: Hapi.Plugin<Options> = {
     server.decorate('request', 'customerAccountId', customerAccountId, {
       apply: true,
     });
+    server.decorate('request', 'tlsVersion', tlsVersion, {apply: true});
   },
 };
 
