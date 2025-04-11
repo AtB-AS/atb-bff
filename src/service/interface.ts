@@ -7,10 +7,6 @@ import {Subscription} from 'zen-observable-ts';
 import * as Trips from '../types/trips';
 import {DeparturesQueryVariables} from './impl/departures/journey-gql/departures.graphql-gen';
 import {
-  StopPlaceQuayDeparturesQuery,
-  StopPlaceQuayDeparturesQueryVariables,
-} from './impl/departures/journey-gql/stop-departures.graphql-gen';
-import {
   StopsDetailsQuery,
   StopsDetailsQueryVariables,
 } from './impl/departures/journey-gql/stops-details.graphql-gen';
@@ -162,11 +158,6 @@ export interface IDeparturesService {
     query: StopsDetailsQueryVariables,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<StopsDetailsQuery, APIError>>;
-  getStopQuayDepartures(
-    query: StopPlaceQuayDeparturesQueryVariables,
-    headers: Request<ReqRefDefaults>,
-    payload?: DeparturesPayload,
-  ): Promise<Result<StopPlaceQuayDeparturesQuery, APIError>>;
 }
 
 export interface IQuayService {

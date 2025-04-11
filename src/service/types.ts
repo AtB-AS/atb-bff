@@ -100,15 +100,6 @@ export type DepartureRealtimeQuery = {
   timeRange?: number;
 };
 
-export type QuayDeparturesQueryVariables = {
-  id: string;
-  numberOfDepartures?: number;
-  startTime?: string;
-  timeRange?: number;
-  filterByLineIds?: string[];
-  limitPerLine?: number;
-};
-
 export type DeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
