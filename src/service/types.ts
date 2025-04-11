@@ -214,12 +214,6 @@ export type ServiceJourneyMapInfoData = {
   stop?: Coordinates;
 };
 
-export type VippsCustomTokenRequest = {
-  authorizationCode: string;
-  state: string;
-  nonce: string;
-};
-
 export type ViolationsReportingInitQuery = {
   lng: string;
   lat: string;
