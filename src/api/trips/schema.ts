@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import {Location, Modes} from '../../graphql/journey/journeyplanner-types_v3';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
-import {TripPatternsQuery} from '../../service/types';
 import {
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
@@ -102,41 +101,4 @@ export const postSingleTripRequest = {
     }),
     journeyIds: Joi.array().items(Joi.string()).default([]).single(),
   }),
-};
-
-export const postJourneyRequest = {
-  payload: Joi.object<TripPatternsQuery>({
-    from: Joi.object<Location>({
-      place: Joi.string().optional(),
-      name: Joi.string().default('UNKNOWN'),
-      coordinates: Joi.object({
-        latitude: Joi.number(),
-        longitude: Joi.number(),
-      }),
-    }).required(),
-    to: Joi.object<Location>({
-      place: Joi.string().optional(),
-      name: Joi.string().default('UNKNOWN'),
-      coordinates: Joi.object({
-        latitude: Joi.number(),
-        longitude: Joi.number(),
-      }),
-    }).required(),
-    searchDate: Joi.date(),
-    arriveBy: Joi.bool().default(false),
-
-    minimumTransferTime: Joi.number().default(30),
-    modes: Joi.array()
-      .single()
-      .default(['foot', 'bus', 'tram', 'rail', 'metro', 'water', 'air']),
-    limit: Joi.number().default(15),
-    // Default in meters. 2000m = 2km. Should be somewhat high
-    // for more rural areas.
-    maxPreTransitWalkDistance: Joi.number().default(2000),
-    // Max meters walking on transfers. Defaults to 2000 by Entur.
-    maxTransferWalkDistance: Joi.number().default(2000),
-    // Higher number = lower rating for walking. Default by entur is 4
-    walkReluctance: Joi.number().default(5),
-    wheelchairAccessible: Joi.bool().default(false),
-  }).options({abortEarly: false}),
 };

@@ -3,9 +3,7 @@ import {
   EstimatedCall,
 } from '../../../../graphql/journey/journeyplanner-types_v3';
 import {FavoriteDeparture} from '../../../types';
-
 import {DeparturesQuery} from '../journey-gql/departures.graphql-gen';
-import {StopPlaceQuayDeparturesQuery} from '../journey-gql/stop-departures.graphql-gen';
 import {ensureViaFormat, mapToLegacyLineName} from './converters';
 
 export function filterFavoriteDepartures(
@@ -38,47 +36,6 @@ export function filterFavoriteDepartures(
         ),
       };
     }),
-  };
-}
-
-/**
- * Deprecated. Should be removed together with /bff/v2/departures/stop-departures
- */
-export function filterStopPlaceFavorites(
-  result?: StopPlaceQuayDeparturesQuery,
-  favorites?: FavoriteDeparture[],
-  limit?: number,
-): StopPlaceQuayDeparturesQuery {
-  const stopPlace = result?.stopPlace;
-  if (!stopPlace) return {};
-
-  /**
-   * Returns whether a departure is a favorite, but if no favorites are
-   * provided, returns true.
-   */
-  const isFavorite = (ec: EstimatedCall) =>
-    !favorites ||
-    favorites.some(
-      (f) =>
-        favoriteDepartureMatchesEstimatedCall(f, ec) &&
-        ec.quay?.id === f.quayId,
-    );
-
-  const filteredQuays = stopPlace.quays?.map((quay) => {
-    return {
-      ...quay,
-      estimatedCalls: quay.estimatedCalls
-        .filter((estimatedCall) => isFavorite(estimatedCall as EstimatedCall))
-        .slice(0, limit),
-    };
-  });
-
-  return {
-    ...result,
-    stopPlace: {
-      ...stopPlace,
-      quays: filteredQuays,
-    },
   };
 }
 

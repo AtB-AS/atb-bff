@@ -27,7 +27,6 @@ import stopPlacesRoutes from './api/stop-places';
 
 import {serviceJourneyRoutes_v2} from './api/servicejourney';
 import {serviceJourneyService_v2} from './service/impl/service-journey';
-import vippsLoginRoutes from './api/vipps-login';
 
 process.on('unhandledRejection', (err) => {
   console.error(err);
@@ -64,7 +63,6 @@ process.on('unhandledRejection', (err) => {
     departureRoutes(server)(departuresService());
     realtimeRoutes(server)(realtimeService());
     serviceJourneyRoutes_v2(server)(serviceJourneyService_v2());
-    vippsLoginRoutes(server)();
 
     await server.initialize();
     await server.start();

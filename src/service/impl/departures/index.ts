@@ -3,11 +3,6 @@ import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {IDeparturesService} from '../../interface';
 import {APIError} from '../../../utils/api-error';
 import {
-  StopPlaceQuayDeparturesDocument,
-  StopPlaceQuayDeparturesQuery,
-  StopPlaceQuayDeparturesQueryVariables,
-} from './journey-gql/stop-departures.graphql-gen';
-import {
   NearestStopPlacesDocument,
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables,
@@ -17,10 +12,7 @@ import {
   StopsDetailsQuery,
   StopsDetailsQueryVariables,
 } from './journey-gql/stops-details.graphql-gen';
-import {
-  filterStopPlaceFavorites,
-  filterFavoriteDepartures,
-} from './utils/favorites';
+import {filterFavoriteDepartures} from './utils/favorites';
 import * as Boom from '@hapi/boom';
 import {
   DeparturesDocument,
@@ -155,58 +147,6 @@ export default (): IDeparturesService => {
           );
         }
         return Result.ok(result.data);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
-    },
-    async getStopQuayDepartures(
-      {id, numberOfDepartures = 10, startTime, timeRange, limitPerLine},
-      headers,
-      payload,
-    ) {
-      const favorites = payload?.favorites;
-      try {
-        /**
-         * If favorites are provided, get more departures per quay from journey
-         * planner and set limitPerLine instead, since some departures may be
-         * filtered out.
-         */
-        const limit = favorites
-          ? {
-              limitPerLine: limitPerLine ?? numberOfDepartures,
-              numberOfDepartures: numberOfDepartures * 10,
-            }
-          : {
-              limitPerLine,
-              numberOfDepartures,
-            };
-        const lineIds = favorites?.map((f) => f.lineId);
-
-        const result = await journeyPlannerClient(headers).query<
-          StopPlaceQuayDeparturesQuery,
-          StopPlaceQuayDeparturesQueryVariables
-        >({
-          query: StopPlaceQuayDeparturesDocument,
-          variables: {
-            id,
-            startTime,
-            timeRange,
-            filterByLineIds: lineIds,
-            ...limit,
-          },
-        });
-
-        if (result.errors) {
-          return Result.err(new APIError(result.errors));
-        }
-
-        const data = filterStopPlaceFavorites(
-          result.data,
-          favorites,
-          numberOfDepartures,
-        );
-
-        return Result.ok(data);
       } catch (error) {
         return Result.err(new APIError(error));
       }
