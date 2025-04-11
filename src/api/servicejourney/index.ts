@@ -41,26 +41,6 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
 
     server.route({
       method: 'GET',
-      path: '/bff/v1/servicejourney/{id}/polyline',
-      options: {
-        tags: ['api', 'service-journey'],
-        validate: getServiceJourneyMapDataRequest,
-        description: 'Get departures for Service Journey',
-        plugins: {
-          'hapi-swagger': {
-            deprecated: true,
-          },
-        },
-      },
-      handler: async (request, h) => {
-        const {id} = request.params;
-        const query = request.query as unknown as ServiceJourneyMapInfoQuery;
-        return server.methods.getServiceJourneyMapInfo_v2(id, query, h.request);
-      },
-    });
-
-    server.route({
-      method: 'GET',
       path: '/bff/v2/servicejourney/{id}/polyline',
       options: {
         tags: ['api', 'service-journey', 'map'],
@@ -71,33 +51,6 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
         const {id} = request.params;
         const query = request.query as unknown as ServiceJourneyMapInfoQuery;
         return server.methods.getServiceJourneyMapInfo_v2(id, query, h.request);
-      },
-    });
-
-    server.route({
-      method: 'GET',
-      path: '/bff/v1/servicejourney/{id}/departures',
-      options: {
-        tags: ['api', 'stops'],
-        validate: getDeparturesForServiceJourneyRequestV2,
-        description: 'Get departures for Service Journey',
-        plugins: {
-          'hapi-swagger': {
-            deprecated: true,
-          },
-        },
-      },
-      handler: async (request, h) => {
-        const {id} = request.params;
-        const {date} =
-          request.query as unknown as DeparturesForServiceJourneyQuery;
-        return await service.getDeparturesForServiceJourneyV2(
-          id,
-          {
-            date,
-          },
-          h.request,
-        );
       },
     });
 
