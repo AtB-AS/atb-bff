@@ -54,7 +54,6 @@
   "dependencies": {
     "@apollo/client": "^3.9.3",
     "@badrap/result": "^0.2.13",
-    "@entur/sdk": "^3.5.0",
     "@hapi/boom": "^10.0.1",
     "@hapi/catbox-memory": "^6.0.1",
     "@hapi/catbox-redis": "^7.0.2",

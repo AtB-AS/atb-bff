@@ -1,4 +1,3 @@
-import {Location, QueryMode} from '@entur/sdk';
 import {
   DestinationDisplay,
   Mode,
@@ -105,20 +104,6 @@ export type DeparturesPayload = {
 
 export interface EnrollmentQuery {
   inviteKey: string;
-}
-
-export interface TripPatternsQuery {
-  from: Location;
-  to: Location;
-  searchDate?: Date;
-  arriveBy: boolean;
-  minimumTransferTime?: number;
-  limit: number;
-  maxTransferWalkDistance: number; // Meters. Defaults to 2000 in Entur
-  maxPreTransitWalkDistance: number; // Meters. Defaults to alot in Entur
-  walkReluctance: number; // Factor. Defaults to 4 in Entur
-  modes: QueryMode[];
-  wheelchairAccessible: boolean;
 }
 
 export interface DeparturesForServiceJourneyQuery {

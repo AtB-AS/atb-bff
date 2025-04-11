@@ -1,6 +1,5 @@
 import {Result} from '@badrap/result';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {TripPattern} from '@entur/sdk';
 import {Boom} from '@hapi/boom';
 import WebSocket from 'ws';
 import {Subscription} from 'zen-observable-ts';
@@ -56,7 +55,6 @@ import {
   StopPlaceConnectionsQuery,
   StopPlaces,
   StopPlacesByModeQuery,
-  TripPatternsQuery,
   VehicleQuery,
   VehiclesQuery_v2,
   ViolationsReportingInitQuery,
@@ -118,10 +116,6 @@ export interface ITrips_v2 {
     query: Trips.TripsQueryWithJourneyIds,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<Trips.TripPattern, Boom>>;
-  getTripPatterns(
-    query: TripPatternsQuery,
-    headers: Request<ReqRefDefaults>,
-  ): Promise<Result<TripPattern[], APIError>>;
 }
 
 export interface IDeparturesGroupedService {
