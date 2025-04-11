@@ -48,6 +48,7 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
         'Get the parent ID of a stop place. If it has no parent, the provided stop ID will be returned instead',
       plugins: {
         'hapi-swagger': {
+          // Used by app version 1.57 and below.
           deprecated: true,
         },
       },
