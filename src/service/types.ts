@@ -6,7 +6,6 @@ import {
   TransportMode,
   TransportSubmode,
 } from '../graphql/journey/journeyplanner-types_v3';
-import {FormFactor} from '../graphql/mobility/mobility-types_v2';
 import * as Types from '../graphql/vehicles/vehicles-types_v1';
 import {CursoredQuery} from './cursored';
 import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
@@ -184,14 +183,6 @@ export type VehicleQuery = {
   ids: string | string[];
 };
 
-export type VehiclesQuery = {
-  lat: number;
-  lon: number;
-  range: number;
-  formFactors?: FormFactor | FormFactor[];
-  operators?: string[];
-};
-
 export type VehiclesQuery_v2 = {
   lat: number;
   lon: number;
@@ -200,14 +191,6 @@ export type VehiclesQuery_v2 = {
   scooterOperators?: string[];
   includeBicycles: boolean;
   bicycleOperators?: string[];
-};
-
-export type StationsQuery = {
-  lat: number;
-  lon: number;
-  range: number;
-  availableFormFactors?: FormFactor | FormFactor[];
-  operators?: string[];
 };
 
 export type StationsQuery_v2 = {

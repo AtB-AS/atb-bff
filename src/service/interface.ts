@@ -16,18 +16,15 @@ import {
 } from './impl/departures/journey-gql/stops-nearest.graphql-gen';
 import {EnrollResponse} from './impl/enrollment';
 import {ServiceJourneyWithEstCallsFragment} from './impl/fragments/journey-gql/service-journey.graphql-gen';
-import {VehicleBasicFragment} from './impl/fragments/mobility-gql/vehicles.graphql-gen';
 import {
   GetBikeStationQuery,
   GetCarStationQuery,
   GetStations_V2Query,
-  GetStationsQuery,
 } from './impl/mobility/mobility-gql/stations.graphql-gen';
 import {GetGeofencingZonesQuery} from './impl/mobility/mobility-gql/geofencing-zones.graphql-gen';
 import {
   GetVehicleQuery,
   GetVehicles_V2Query,
-  GetVehiclesQuery,
 } from './impl/mobility/mobility-gql/vehicles.graphql-gen';
 import {GetQuaysCoordinatesQuery} from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
 import {ServiceJourneyEstimatedCallFragment} from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
@@ -55,14 +52,12 @@ import {
   ServiceJourneyVehicleQueryVariables,
   ServiceJourneyVehicles,
   ServiceJourneyWithEstimatedCallsQuery,
-  StationsQuery,
   StationsQuery_v2,
   StopPlaceConnectionsQuery,
   StopPlaces,
   StopPlacesByModeQuery,
   TripPatternsQuery,
   VehicleQuery,
-  VehiclesQuery,
   VehiclesQuery_v2,
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
@@ -201,19 +196,7 @@ export interface IVehiclesService {
   ): Subscription;
 }
 
-export type VehicleFragment = Pick<
-  VehicleBasicFragment,
-  'id' | 'lat' | 'lon' | 'currentFuelPercent'
->;
-export type GetVehiclesListQuery = Omit<GetVehiclesQuery, 'vehicles'> & {
-  vehicles?: Array<VehicleFragment>;
-};
-
 export interface IMobilityService {
-  getVehicles(
-    query: VehiclesQuery,
-    headers: Request<ReqRefDefaults>,
-  ): Promise<Result<GetVehiclesListQuery, APIError>>;
   getVehicles_v2(
     query: VehiclesQuery_v2,
     headers: Request<ReqRefDefaults>,
@@ -222,10 +205,6 @@ export interface IMobilityService {
     query: VehicleQuery,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<GetVehicleQuery, APIError>>;
-  getStations(
-    query: StationsQuery,
-    headers: Request<ReqRefDefaults>,
-  ): Promise<Result<GetStationsQuery, APIError>>;
   getStations_v2(
     query: StationsQuery_v2,
     headers: Request<ReqRefDefaults>,

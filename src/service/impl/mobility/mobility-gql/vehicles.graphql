@@ -1,8 +1,3 @@
-query getVehicles($lat: Float!, $lon: Float!, $range: Int!, $formFactors: [FormFactor], $operators: [String]) {
-    vehicles(lat: $lat, lon: $lon, range: $range, formFactors: $formFactors, operators: $operators) {
-        ...vehicleBasic
-    }
-}
 query getVehicles_v2(
     $lat: Float!,
     $lon: Float!,

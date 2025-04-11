@@ -12,9 +12,6 @@ import {
   GetStations_V2Document,
   GetStations_V2Query,
   GetStations_V2QueryVariables,
-  GetStationsDocument,
-  GetStationsQuery,
-  GetStationsQueryVariables,
 } from './mobility-gql/stations.graphql-gen';
 import {
   GetVehicleDocument,
@@ -23,9 +20,6 @@ import {
   GetVehicles_V2Document,
   GetVehicles_V2Query,
   GetVehicles_V2QueryVariables,
-  GetVehiclesDocument,
-  GetVehiclesQuery,
-  GetVehiclesQueryVariables,
 } from './mobility-gql/vehicles.graphql-gen';
 import {
   VehicleBasicFragment,
@@ -56,24 +50,6 @@ const nivelBaseUrl = NIVEL_BASEURL || '';
 const nivelApiKey = NIVEL_API_KEY || '';
 
 export default (): IMobilityService => ({
-  async getVehicles(query, headers) {
-    try {
-      const result = await mobilityClient(headers).query<
-        GetVehiclesQuery,
-        GetVehiclesQueryVariables
-      >({
-        query: GetVehiclesDocument,
-        variables: query,
-      });
-      if (result.errors) {
-        return Result.err(new APIError(result.errors));
-      }
-      return Result.ok(addFuelPercentageToVehicles(result.data));
-    } catch (error) {
-      return Result.err(new APIError(error));
-    }
-  },
-
   async getVehicles_v2(query, headers) {
     // Prevent unnecessary calls to Entur when no vehicles are requested
     if (!query.includeBicycles && !query.includeScooters) {
@@ -109,24 +85,6 @@ export default (): IMobilityService => ({
         return Result.err(new APIError(result.errors));
       }
       return Result.ok(addFuelPercentageToVehicles(result.data));
-    } catch (error) {
-      return Result.err(new APIError(error));
-    }
-  },
-
-  async getStations(query, headers) {
-    try {
-      const result = await mobilityClient(headers).query<
-        GetStationsQuery,
-        GetStationsQueryVariables
-      >({
-        query: GetStationsDocument,
-        variables: query,
-      });
-      if (result.errors) {
-        return Result.err(new APIError(result.errors));
-      }
-      return Result.ok(result.data);
     } catch (error) {
       return Result.err(new APIError(error));
     }
@@ -308,9 +266,7 @@ const calculateFuelPercent = <
       : undefined,
 });
 
-const addFuelPercentageToVehicles = <
-  T extends GetVehicleQuery | GetVehiclesQuery,
->(
+const addFuelPercentageToVehicles = <T extends GetVehicleQuery>(
   data: T,
 ): T => ({
   ...data,
