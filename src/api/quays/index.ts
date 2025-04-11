@@ -10,7 +10,7 @@ export default (server: Hapi.Server) => (service: IQuayService) => {
     options: {
       tags: ['api', 'quays', 'coordinates'],
       validate: getQuaysCoordinatesRequest,
-      description: 'Get quays coordinates',
+      description: 'Get quays coordinates. Used by iOS Widget.',
     },
     handler: async (request, h) => {
       const payload = request.payload as unknown as QuaysCoordinatesPayload;
