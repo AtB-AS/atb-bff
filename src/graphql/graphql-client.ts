@@ -149,5 +149,8 @@ function createWebSocketClient(url: string) {
 
 export const journeyPlannerClient = createClient(urlJourneyPlanner);
 export const mobilityClient = createClient(urlMobility);
+export const mobilityClientDev = createClient(
+  urlMobility.replace('staging', 'dev'),
+);
 export const vehiclesClient = createClient(urlVehicles);
 export const vehiclesSubscriptionClient = createWebSocketClient(urlVehiclesWss);
