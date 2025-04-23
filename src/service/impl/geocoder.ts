@@ -11,6 +11,7 @@ import {get} from '../../utils/fetch-client';
 import {IGeocoderService} from '../interface';
 
 const FOCUS_WEIGHT = parseInt(process.env.GEOCODER_FOCUS_WEIGHT || '18');
+const SCALE = parseInt(process.env.GEOCODER_SCALE || '200');
 
 export default (): IGeocoderService => {
   return {
@@ -29,7 +30,7 @@ export default (): IGeocoderService => {
               lon: params.lon,
             },
             weight: FOCUS_WEIGHT,
-            scale: '200km',
+            scale: `${SCALE}km`,
             function: 'exp',
           },
         };
