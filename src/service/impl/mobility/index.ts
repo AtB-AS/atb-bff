@@ -1,7 +1,10 @@
 import {IMobilityService} from '../../interface';
 import {Result} from '@badrap/result';
 import {APIError} from '../../../utils/api-error';
-import {mobilityClient} from '../../../graphql/graphql-client';
+import {
+  mobilityClient,
+  mobilityClientDev,
+} from '../../../graphql/graphql-client';
 import {
   GetBikeStationDocument,
   GetBikeStationQuery,
@@ -74,7 +77,7 @@ export default (): IMobilityService => ({
 
   async getVehicle(query, headers) {
     try {
-      const result = await mobilityClient(headers).query<
+      const result = await mobilityClientDev(headers).query<
         GetVehicleQuery,
         GetVehicleQueryVariables
       >({
