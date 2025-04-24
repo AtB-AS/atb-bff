@@ -2,7 +2,8 @@ import http from 'k6/http';
 import {conf, ExpectsType, metrics} from '../../config/configuration';
 import {bffHeadersGet, bffHeadersPost} from '../../utils/headers';
 import {departsAfterExpectedStartTime} from '../../utils/utils';
-import {QuayDeparturesType, RealtimeResponseType} from '../types';
+import {RealtimeResponseType} from '../types';
+import {DeparturesQuery} from '../../../../src/service/impl/departures/journey-gql/departures.graphql-gen';
 
 export function realtimeScenario(quayId: string, lineId: string): void {
   // Realtime with quayId
@@ -188,7 +189,7 @@ export function realtimeWithLineId(
 export function realtimeForQuayDepartures(quayId: string) {
   const requestName = 'v2_realtimeForQuayDepartures';
   const searchTime = new Date().toISOString();
-  const urlQD = `${conf.host()}/bff/v2/departures/quay-departures?id=${quayId}&numberOfDepartures=10&startTime=${searchTime}&timeRange=86400`;
+  const urlQD = `${conf.host()}/bff/v2/departures/departures?ids=${quayId}&numberOfDepartures=10&startTime=${searchTime}&timeRange=86400`;
   const resQD = http.post(urlQD, '{}', {
     tags: {name: requestName},
     headers: bffHeadersPost(),
@@ -199,7 +200,7 @@ export function realtimeForQuayDepartures(quayId: string) {
   ];
 
   try {
-    const jsonQD = resQD.json() as QuayDeparturesType;
+    const jsonQD = resQD.json() as DeparturesQuery;
 
     // Get realtime to compare
     const urlR = `${conf.host()}/bff/v2/departures/realtime?quayIds=${quayId}&startTime=${searchTime}&limit=10`;
@@ -230,16 +231,16 @@ export function realtimeForQuayDepartures(quayId: string) {
         {
           check: 'should return correct realtime departure times',
           expect: depTimes.every((time) =>
-            jsonQD
-              .quay!.estimatedCalls.map((call) => call.expectedDepartureTime)
+            jsonQD.quays[0].estimatedCalls
+              .map((call) => call.expectedDepartureTime)
               .includes(time),
           ),
         },
         {
           check: 'should return correct service journeys',
           expect: Object.keys(jsonR[quayId].departures).every((journey) =>
-            jsonQD
-              .quay!.estimatedCalls.map((call) => call.serviceJourney!.id)
+            jsonQD.quays[0].estimatedCalls
+              .map((call) => call.serviceJourney!.id)
               .includes(journey),
           ),
         },

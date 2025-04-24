@@ -6,15 +6,14 @@ import {
   Vehicle,
 } from '../../../../src/graphql/mobility/mobility-types_v2';
 import {randomNumber} from '../../utils/utils';
-import {VehicleInfoType} from '../types/mobility';
+import {VehicleInfoType, Vehicles} from '../types/mobility';
 
 export function vehicles(range: number = 200): VehicleInfoType | undefined {
   const requestName = `v2_vehicles_${range}`;
-  const formFactor = 'SCOOTER';
   // coordinates around Trondheim city center
   const lat = `63.43047907765${randomNumber(1000, true)}`;
   const lon = `10.39503129802${randomNumber(1000, true)}`;
-  const url = `${conf.host()}/bff/v2/mobility/vehicles?formFactors=${formFactor}&lat=${lat}&lon=${lon}&range=${range}`;
+  const url = `${conf.host()}/bff/v2/mobility/vehicles_v2?includeBicycles=false&includeScooters=true&lat=${lat}&lon=${lon}&range=${range}`;
 
   const res = http.get(url, {
     tags: {name: requestName},
@@ -24,8 +23,8 @@ export function vehicles(range: number = 200): VehicleInfoType | undefined {
   let returnVehicle = undefined;
 
   try {
-    const json = res.json() as Query;
-    const vehicles = json.vehicles! as VehicleInfoType[];
+    const json = res.json() as Vehicles;
+    const vehicles = json.scooters! as VehicleInfoType[];
     const numberOfVehicles = vehicles.length;
 
     const expects: ExpectsType = [
@@ -88,7 +87,7 @@ export function vehicles(range: number = 200): VehicleInfoType | undefined {
 // Get one vehicle
 export function vehicle(vehicleInfo: VehicleInfoType) {
   const requestName = `v2_vehicle`;
-  const formFactor = 'SCOOTER';
+  const formFactor = 'SCOOTER_STANDING';
   const url = `${conf.host()}/bff/v2/mobility/vehicle?ids=${vehicleInfo!.id}`;
 
   const res = http.get(url, {
@@ -123,11 +122,10 @@ export function vehicle(vehicleInfo: VehicleInfoType) {
         expect: vehicle.vehicleType.formFactor === formFactor,
       },
       {
-        check: 'vehicle have a price per minute',
+        check: 'vehicle have a price',
         expect:
-          vehicle.pricingPlan.perMinPricing?.filter(
-            (price) => price.interval === 1 && price.rate > 0,
-          ).length === 1,
+          vehicle.pricingPlan.perMinPricing?.filter((price) => price.rate > 0)
+            .length === 1,
       },
       {
         check: 'an url to the operator exists',

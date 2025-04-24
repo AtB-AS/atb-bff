@@ -8,13 +8,8 @@ import {
   departureFavorites,
   departureFavoritesVsQuayDepartures,
   departures,
-  quayDepartures,
-  quayDeparturesPOSTandGET,
-  quayDeparturesVsStopDepartures,
   realtimeForQuayDepartures,
   realtimeScenario,
-  stopDepartures,
-  stopDeparturesPOSTandGET,
   stopsDetails,
   stopsNearest,
 } from './departures';
@@ -36,7 +31,7 @@ import {
   serviceJourneyDepartures,
   serviceJourneyCalls,
 } from './servicejourney';
-import {stations, vehicleByIdScenario, vehicles} from './mobility';
+import {stations, vehicles} from './mobility';
 import {stationByIdScenario} from './mobility/scenario';
 import {oldAppVersion} from './appVersion';
 
@@ -45,17 +40,12 @@ export const departuresScenario = (searchDate: string): void => {
   // Requests
   stopsNearest(stopsNearestTestData);
   stopsDetails(stopsDetailsTestData);
-  stopDepartures('NSR:StopPlace:42912', searchDate);
-  stopDeparturesPOSTandGET('NSR:StopPlace:42912', searchDate);
-  quayDepartures('NSR:Quay:73576', searchDate);
-  quayDeparturesPOSTandGET('NSR:Quay:73576', searchDate);
   departureFavorites(departureFavoritesTestData, searchDate);
   realtimeScenario('NSR:Quay:71181', 'ATB:Line:2_1');
   departures(['NSR:Quay:73576'], searchDate);
   departures(['NSR:Quay:73576', 'NSR:Quay:71184'], searchDate);
 
   // Combinations
-  quayDeparturesVsStopDepartures('NSR:StopPlace:42912', searchDate);
   realtimeForQuayDepartures('NSR:Quay:73576');
   departureFavoritesVsQuayDepartures(departureFavoritesTestData, searchDate);
 };
@@ -83,7 +73,8 @@ export const mobilityScenario = (): void => {
   stations('BICYCLE', 250);
   stations('CAR', 500);
 
-  vehicleByIdScenario();
+  // NB! DISABLED until Staging is using Staging
+  //vehicleByIdScenario();
   stationByIdScenario();
 };
 

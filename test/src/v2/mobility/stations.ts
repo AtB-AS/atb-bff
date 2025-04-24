@@ -6,7 +6,7 @@ import {
   Station,
 } from '../../../../src/graphql/mobility/mobility-types_v2';
 import {randomNumber} from '../../utils/utils';
-import {StationInfoType} from '../types/mobility';
+import {StationInfoType, Stations} from '../types/mobility';
 
 // CAR har flere vehicleTypesAvailable tilgjengelig så kan ikke bare ta første
 export function stations(
@@ -17,7 +17,9 @@ export function stations(
   // coordinates around Trondheim city center
   const lat = `63.4304571134${randomNumber(1000, true)}`;
   const lon = `10.39810091257${randomNumber(1000, true)}`;
-  const url = `${conf.host()}/bff/v2/mobility/stations?availableFormFactors=${stationType}&lat=${lat}&lon=${lon}&range=${range}`;
+  const includeBicycles = stationType === 'BICYCLE' ? 'true' : 'false';
+  const includeCars = stationType === 'CAR' ? 'true' : 'false';
+  const url = `${conf.host()}/bff/v2/mobility/stations_v2?includeBicycles=${includeBicycles}&includeCars=${includeCars}&lat=${lat}&lon=${lon}&range=${range}`;
 
   const res = http.get(url, {
     tags: {name: requestName},
@@ -27,8 +29,11 @@ export function stations(
   let returnStation: StationInfoType = undefined;
 
   try {
-    const json = res.json() as Query;
-    const stations = json.stations! as Station[];
+    const json = res.json() as Stations;
+    const stations =
+      stationType === 'BICYCLE'
+        ? (json.bicycles as Station[])
+        : (json.cars as Station[]);
     const numberOfStations = stations.length;
 
     const expects: ExpectsType = [
@@ -43,7 +48,7 @@ export function stations(
       );
       returnStation = {
         id: stations[0].id,
-        count: countPerStation,
+        capacity: countPerStation,
         formFactor: stations[0].vehicleTypesAvailable![0].vehicleType
           .formFactor,
       };
@@ -141,7 +146,7 @@ export function station(stationInfo: StationInfoType) {
       },
       {
         check: 'number of available vehicles is correct',
-        expect: countPerStation === stationInfo!.count,
+        expect: countPerStation === stationInfo!.capacity,
       },
       {
         check: 'vehicles should have price',
