@@ -1,5 +1,3 @@
-import * as Types from '../../../../src/graphql/journey/journeyplanner-types_v3';
-
 export type FavoriteResponseType = {
   data: Array<{
     stopPlace: StopPlaceFragment;
@@ -95,57 +93,5 @@ export type RealtimeResponseType = {
         };
       };
     };
-  };
-};
-
-export type QuayDeparturesType = {
-  quay: {
-    id: string;
-    description?: string;
-    publicCode?: string;
-    name: string;
-    estimatedCalls: Array<{
-      date: string;
-      expectedDepartureTime: string;
-      aimedDepartureTime: string;
-      realtime: boolean;
-      cancellation: boolean;
-      quay: {id: string};
-      destinationDisplay?: {frontText?: string; via?: string[]};
-      serviceJourney: {
-        id: string;
-        line: {
-          id: string;
-          description?: string;
-          publicCode?: string;
-          transportMode?: Types.TransportMode;
-          transportSubmode?: Types.TransportSubmode;
-          notices: Array<{id: string; text?: string}>;
-        };
-        journeyPattern?: {notices: Array<{id: string; text?: string}>};
-        notices: Array<{id: string; text?: string}>;
-      };
-      situations: Array<{
-        id: string;
-        situationNumber?: string;
-        reportType?: Types.ReportType;
-        summary: Array<{language?: string; value: string}>;
-        description: Array<{language?: string; value: string}>;
-        advice: Array<{language?: string; value: string}>;
-        infoLinks?: Array<{uri: string; label?: string}>;
-        validityPeriod?: {startTime?: any; endTime?: any};
-      }>;
-      notices: Array<{id: string; text?: string}>;
-    }>;
-    situations: Array<{
-      id: string;
-      situationNumber?: string;
-      reportType?: Types.ReportType;
-      summary: Array<{language?: string; value: string}>;
-      description: Array<{language?: string; value: string}>;
-      advice: Array<{language?: string; value: string}>;
-      infoLinks?: Array<{uri: string; label?: string}>;
-      validityPeriod?: {startTime?: any; endTime?: any};
-    }>;
   };
 };

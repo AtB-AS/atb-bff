@@ -2,7 +2,6 @@ export type {PolylineSimplifiedResponseType} from './servicejourney';
 export type {FavoriteResponseType} from './departure';
 export type {RealtimeResponseType} from './departure';
 export type {NearestStopPlacesResponseType} from './departure';
-export type {QuayDeparturesType} from './departure';
 export type {TripPatternWithCompressedQuery} from './trips';
 export type {ServiceJourneyDeparturesResponseType} from './servicejourney';
 

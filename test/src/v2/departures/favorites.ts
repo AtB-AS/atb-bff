@@ -1,12 +1,8 @@
 import http from 'k6/http';
 import {conf, ExpectsType, metrics} from '../../config/configuration';
 import {bffHeadersPost} from '../../utils/headers';
-import {
-  departureFavoritesTestDataType,
-  FavoriteResponseType,
-  QuayDeparturesType,
-} from '../types';
-import {isEqual} from '../../utils/utils';
+import {departureFavoritesTestDataType, FavoriteResponseType} from '../types';
+import {DeparturesQuery} from '../../../../src/service/impl/departures/journey-gql/departures.graphql-gen';
 
 export function departureFavorites(
   testData: departureFavoritesTestDataType,
@@ -129,10 +125,9 @@ export function departureFavoritesVsQuayDepartures(
     headers: bffHeadersPost(),
   });
 
-  // Get departures to assert favorite results
-  const urlDep = `${conf.host()}/bff/v2/departures/quay-departures?id=${
+  const urlDep = `${conf.host()}/bff/v2/departures/departures?ids=${
     testScenario.favorites[0].quayId
-  }&numberOfDepartures=${limit}&startTime=${startDate}T16:00:00.000Z&timeRange=86400`;
+  }&numberOfDepartures=1000&startTime=${startDate}T16:00:00.000Z&timeRange=86400`;
   const resDep = http.post(urlDep, '{}', {
     tags: {name: requestName},
     headers: bffHeadersPost(),
@@ -140,7 +135,7 @@ export function departureFavoritesVsQuayDepartures(
 
   try {
     const jsonFav = resFav.json() as FavoriteResponseType;
-    const jsonDep = resDep.json() as QuayDeparturesType;
+    const jsonDep = resDep.json() as DeparturesQuery;
 
     const expects: ExpectsType = [
       {
@@ -153,24 +148,31 @@ export function departureFavoritesVsQuayDepartures(
     const serviceJourneyFavorites = jsonFav.data[0].quays
       .filter((quay) => quay.quay.id === testScenario.favorites[0].quayId)[0]
       .group[0].departures.map((dep) => dep.serviceJourneyId);
-    const serviceJourneyDepartures = jsonDep.quay.estimatedCalls.map(
+    const serviceJourneyDepartures = jsonDep.quays[0].estimatedCalls.map(
       (call) => call.serviceJourney!.id,
     );
     const aimedTimeFavorites = jsonFav.data[0].quays
       .filter((quay) => quay.quay.id === testScenario.favorites[0].quayId)[0]
       .group[0].departures.map((dep) => dep.aimedTime);
-    const aimedTimeDepartures = jsonDep.quay.estimatedCalls.map(
+    const aimedTimeDepartures = jsonDep.quays[0].estimatedCalls.map(
       (call) => call.aimedDepartureTime,
     );
 
     expects.push(
       {
-        check: 'favorite departures should have the same service journeys',
-        expect: isEqual(serviceJourneyFavorites, serviceJourneyDepartures),
+        check:
+          'departures should include the favorite departure service journeys',
+        expect:
+          serviceJourneyFavorites.filter(
+            (el) => !serviceJourneyDepartures.includes(el),
+          ).length == 0,
       },
       {
-        check: 'favorite departures should have the same aimed time',
-        expect: isEqual(aimedTimeFavorites, aimedTimeDepartures),
+        check:
+          'departures should include the favorite departure aimed departure times',
+        expect:
+          aimedTimeFavorites.filter((el) => !aimedTimeDepartures.includes(el))
+            .length == 0,
       },
     );
 

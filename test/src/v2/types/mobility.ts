@@ -1,3 +1,12 @@
+import {
+  Station,
+  Vehicle,
+} from '../../../../src/graphql/mobility/mobility-types_v2';
+
+export type Vehicles = {
+  scooters: Vehicle[];
+};
+
 export type VehicleInfoType =
   | {
       id: string;
@@ -7,10 +16,15 @@ export type VehicleInfoType =
     }
   | undefined;
 
+export type Stations = {
+  bicycles?: Station[];
+  cars?: Station[];
+};
+
 export type StationInfoType =
   | {
       id: string;
-      count: number;
+      capacity: number;
       formFactor: string;
     }
   | undefined;
