@@ -117,7 +117,7 @@ export default (): IMobilityService => ({
 
   async getCarStation(query, headers) {
     try {
-      const result = await mobilityClient(headers).query<
+      const result = await mobilityClientDev(headers).query<
         GetCarStationQuery,
         GetCarStationQueryVariables
       >({
@@ -135,7 +135,7 @@ export default (): IMobilityService => ({
 
   async getBikeStation(query, headers) {
     try {
-      const result = await mobilityClient(headers).query<
+      const result = await mobilityClientDev(headers).query<
         GetBikeStationQuery,
         GetBikeStationQueryVariables
       >({
@@ -153,7 +153,7 @@ export default (): IMobilityService => ({
 
   async getGeofencingZones(query, headers) {
     try {
-      const result = await mobilityClient(headers).query<
+      const result = await mobilityClientDev(headers).query<
         GetGeofencingZonesQuery,
         GetGeofencingZonesQueryVariables
       >({
