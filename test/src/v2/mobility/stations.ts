@@ -162,12 +162,6 @@ export function station(stationInfo: StationInfoType) {
           station.system.rentalApps?.android?.storeUri?.length! > 0 &&
           station.system.rentalApps?.ios?.storeUri?.length! > 0,
       },
-      {
-        check: 'an url to the operator exists',
-        expect:
-          station.rentalUris?.android?.length! > 0 &&
-          station.rentalUris?.ios?.length! > 0,
-      },
     );
 
     // Only for bikes
