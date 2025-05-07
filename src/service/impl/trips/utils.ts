@@ -31,6 +31,7 @@ export function generateSingleTripQueryString(
   const {
     from,
     to,
+    cursor,
     transferPenalty,
     waitReluctance,
     walkReluctance,
@@ -39,7 +40,7 @@ export function generateSingleTripQueryString(
   } = queryVariables;
   const arriveBy = false;
   const singleTripQuery: TripsQueryVariables = {
-    when,
+    ...(cursor !== undefined ? {cursor} : {when}),
     from,
     to,
     transferPenalty,
