@@ -11,6 +11,7 @@ export const FLEX_TICKET_INVITE_KEY: string | undefined =
 export const ENTUR_BASEURL: string | undefined = process.env.ENTUR_BASEURL;
 export const ENTUR_WEBSOCKET_BASEURL: string | undefined =
   process.env.ENTUR_WEBSOCKET_BASEURL;
+export const SHMO_INVITE_KEY: string | undefined = process.env.SHMO_INVITE_KEY;
 
 export const ET_CLIENT_NAME = process.env.CLIENT_NAME || 'atb-bff';
 
