@@ -47,7 +47,7 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
         FLEX_TICKET_INVITE_KEY === query.inviteKey
       ) {
         enrollmentId = 'flexible-ticket';
-      } else if (SHMO_INVITE_KEY === query.inviteKey) {
+      } else if (SHMO_INVITE_KEY && SHMO_INVITE_KEY === query.inviteKey) {
         enrollmentId = 'shmo';
       }
 
