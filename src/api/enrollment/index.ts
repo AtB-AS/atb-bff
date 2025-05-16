@@ -6,6 +6,7 @@ import {
   PERIOD_TICKET_INVITE_KEY,
   TICKET_INVITE_KEY,
   FLEX_TICKET_INVITE_KEY,
+  SHMO_INVITE_KEY,
 } from '../../config/env';
 import {IEnrollmentService} from '../../service/interface';
 
@@ -46,6 +47,8 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
         FLEX_TICKET_INVITE_KEY === query.inviteKey
       ) {
         enrollmentId = 'flexible-ticket';
+      } else if (SHMO_INVITE_KEY && SHMO_INVITE_KEY === query.inviteKey) {
+        enrollmentId = 'shmo';
       }
 
       if (enrollmentId.length < 1) {
