@@ -197,7 +197,7 @@ export type Contact = {
 /** A planned journey on a specific day */
 export type DatedServiceJourney = {
   /** Returns scheduled passingTimes for this dated service journey, updated with real-time-updates (if available).  */
-  estimatedCalls?: Maybe<Array<Maybe<EstimatedCall>>>;
+  estimatedCalls: Array<EstimatedCall>;
   id: Scalars['ID']['output'];
   /** JourneyPattern for the dated service journey. */
   journeyPattern?: Maybe<JourneyPattern>;
@@ -246,6 +246,12 @@ export type ElevationProfileStep = {
    *
    */
   elevation?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Emission information for a trip-pattern or legs. */
+export type Emission = {
+  /** The average CO₂ emission per passenger in grams. */
+  co2?: Maybe<Scalars['Float']['output']>;
 };
 
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
@@ -501,6 +507,8 @@ export type Leg = {
    *
    */
   elevationProfile: Array<Maybe<ElevationProfileStep>>;
+  /** The emission per person */
+  emission?: Maybe<Emission>;
   /** The expected, real-time adjusted date and time this leg ends. */
   expectedEndTime: Scalars['DateTime']['output'];
   /** The expected, real-time adjusted date and time this leg starts. */
@@ -640,7 +648,7 @@ export enum Mode {
 
 /** Input format for specifying which modes will be allowed for this search. If this element is not present, it will default to accessMode/egressMode/directMode of foot and all transport modes will be allowed. */
 export type Modes = {
-  /** The mode used to get from the origin to the access stops in the transit network the transit network (first-mile). If the element is not present or null,only transit that can be immediately boarded from the origin will be used. */
+  /** The mode used to get from the origin to the access stops in the transit network (first-mile). If the element is not present or null,only transit that can be immediately boarded from the origin will be used. */
   accessMode?: InputMaybe<StreetMode>;
   /** The mode used to get from the origin to the destination directly, without using the transit network. If the element is not present or null,direct travel without using transit will be disallowed. */
   directMode?: InputMaybe<StreetMode>;
@@ -1002,7 +1010,7 @@ export type QueryType = {
   leg?: Maybe<Leg>;
   /** Get a single line based on its id */
   line?: Maybe<Line>;
-  /** Get all lines */
+  /** Get all _lines_ */
   lines: Array<Maybe<Line>>;
   /** Get all places (quays, stop places, car parks etc. with coordinates) within the specified radius from a location. The returned type has two fields place and distance. The search is done by walking so the distance is according to the network of walkables. */
   nearest?: Maybe<PlaceAtDistanceConnection>;
@@ -1150,7 +1158,6 @@ export type QueryTypeQuaysArgs = {
 
 
 export type QueryTypeQuaysByBboxArgs = {
-  authority?: InputMaybe<Scalars['String']['input']>;
   filterByInUse?: InputMaybe<Scalars['Boolean']['input']>;
   maximumLatitude: Scalars['Float']['input'];
   maximumLongitude: Scalars['Float']['input'];
@@ -1291,6 +1298,9 @@ export enum RelativeDirection {
   Continue = 'continue',
   Depart = 'depart',
   Elevator = 'elevator',
+  EnterStation = 'enterStation',
+  ExitStation = 'exitStation',
+  FollowSigns = 'followSigns',
   HardLeft = 'hardLeft',
   HardRight = 'hardRight',
   Left = 'left',
@@ -1531,7 +1541,7 @@ export type ServiceJourney = {
   bookingArrangements?: Maybe<BookingArrangement>;
   directionType?: Maybe<DirectionType>;
   /** Returns scheduled passingTimes for this ServiceJourney for a given date, updated with real-time-updates (if available). NB! This takes a date as argument (default=today) and returns estimatedCalls for that date and should only be used if the date is known when creating the request. For fetching estimatedCalls for a given trip.leg, use leg.serviceJourneyEstimatedCalls instead. */
-  estimatedCalls?: Maybe<Array<Maybe<EstimatedCall>>>;
+  estimatedCalls: Array<EstimatedCall>;
   id: Scalars['ID']['output'];
   /** JourneyPattern for the service journey, according to scheduled data. If the ServiceJourney is not included in the scheduled data, null is returned. */
   journeyPattern?: Maybe<JourneyPattern>;
@@ -2070,6 +2080,13 @@ export type TripPattern = {
   /** Duration of the trip, in seconds. */
   duration?: Maybe<Scalars['Long']['output']>;
   /**
+   * The total emission per preson. The total emission is only available if all transit
+   * and car leg emissions can be calculated. If only a partial result is obtained, this
+   * will be null.
+   *
+   */
+  emission?: Maybe<Emission>;
+  /**
    * Time that the trip arrives.
    * @deprecated Replaced with expectedEndTime
    */
@@ -2148,10 +2165,10 @@ export type TripViaLocationInput = {
  * be accepted. To visit a coordinate, the traveler must walk(bike or drive) to the closest point
  * in the street network from a stop and back to another stop to join the transit network.
  *
- * NOTE! Coordinates are NOT supported yet.
- *
  */
 export type TripVisitViaLocationInput = {
+  /** A coordinate to route through. */
+  coordinate?: InputMaybe<InputCoordinates>;
   /** The label/name of the location. This is pass-through information and is not used in routing. */
   label?: InputMaybe<Scalars['String']['input']>;
   /**
@@ -2166,7 +2183,7 @@ export type TripVisitViaLocationInput = {
    * listed.
    *
    */
-  stopLocationIds: Array<Scalars['String']['input']>;
+  stopLocationIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type ValidityPeriod = {

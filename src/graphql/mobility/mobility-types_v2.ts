@@ -280,6 +280,53 @@ export type Station = {
   vehicleTypesCapacity?: Maybe<Array<Maybe<VehicleTypesCapacity>>>;
 };
 
+export type StationUpdate = {
+  station?: Maybe<Station>;
+  stationId: Scalars['String']['output'];
+  updateType: UpdateType;
+};
+
+export type Subscription = {
+  /** @deprecated Experimental feature - API is subject to change */
+  stations?: Maybe<Array<Maybe<StationUpdate>>>;
+  /** @deprecated Experimental feature - API is subject to change */
+  vehicles?: Maybe<Array<Maybe<VehicleUpdate>>>;
+};
+
+
+export type SubscriptionStationsArgs = {
+  availableFormFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
+  availablePropulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
+  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  lat?: InputMaybe<Scalars['Float']['input']>;
+  lon?: InputMaybe<Scalars['Float']['input']>;
+  maximumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  maximumLongitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLongitude?: InputMaybe<Scalars['Float']['input']>;
+  operators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  range?: InputMaybe<Scalars['Int']['input']>;
+  systems?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type SubscriptionVehiclesArgs = {
+  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  formFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
+  includeDisabled?: InputMaybe<Scalars['Boolean']['input']>;
+  includeReserved?: InputMaybe<Scalars['Boolean']['input']>;
+  lat?: InputMaybe<Scalars['Float']['input']>;
+  lon?: InputMaybe<Scalars['Float']['input']>;
+  maximumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  maximumLongitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLatitude?: InputMaybe<Scalars['Float']['input']>;
+  minimumLongitude?: InputMaybe<Scalars['Float']['input']>;
+  operators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  propulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
+  range?: InputMaybe<Scalars['Int']['input']>;
+  systems?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 export type System = {
   attributionOrganizationName?: Maybe<TranslatedString>;
   attributionUrl?: Maybe<Scalars['String']['output']>;
@@ -317,6 +364,12 @@ export type Translation = {
   value: Scalars['String']['output'];
 };
 
+export enum UpdateType {
+  Create = 'CREATE',
+  Delete = 'DELETE',
+  Update = 'UPDATE'
+}
+
 export type Vehicle = {
   availableUntil?: Maybe<Scalars['String']['output']>;
   currentFuelPercent?: Maybe<Scalars['Float']['output']>;
@@ -328,6 +381,7 @@ export type Vehicle = {
   lon: Scalars['Float']['output'];
   pricingPlan: PricingPlan;
   rentalUris?: Maybe<RentalUris>;
+  station?: Maybe<Station>;
   system: System;
   vehicleEquipment?: Maybe<Array<Maybe<VehicleEquipment>>>;
   vehicleType: VehicleType;
@@ -412,4 +466,10 @@ export type VehicleTypeCapacity = {
 export type VehicleTypesCapacity = {
   count: Scalars['Int']['output'];
   vehicleTypes: Array<VehicleType>;
+};
+
+export type VehicleUpdate = {
+  updateType: UpdateType;
+  vehicle?: Maybe<Vehicle>;
+  vehicleId: Scalars['String']['output'];
 };
