@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi';
 import {ITrips_v2} from '../../service/interface';
 import {
   BookingTripsQueryParameters,
+  BookingTripsQueryPayload,
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
@@ -48,7 +49,7 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
   });
 
   server.route({
-    method: 'GET',
+    method: 'POST',
     path: '/bff/v2/trips/booking',
     options: {
       tags: ['api', 'trips'],
@@ -56,8 +57,11 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       validate: postBookingTripsRequest,
     },
     handler: async (request, h) => {
+      // console.log('query', request.headers, h.request.headers);
+
       const query = request.query as unknown as BookingTripsQueryParameters;
-      const result = await service.getBookingTrips(query, h.request);
+      const payload = request.payload as unknown as BookingTripsQueryPayload;
+      const result = await service.getBookingTrips(query, payload, h.request);
       return result.unwrap();
     },
   });

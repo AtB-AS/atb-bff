@@ -18,6 +18,9 @@ export const ET_CLIENT_NAME = process.env.CLIENT_NAME || 'atb-bff';
 export const PROJECT_ID = process.env.PROJECT_ID;
 export const NIVEL_BASEURL: string | undefined = process.env.NIVEL_BASEURL;
 export const NIVEL_API_KEY: string | undefined = process.env.NIVEL_API_KEY;
+export const SALES_BASEURL: string | undefined =
+  process.env.SALES_BASEURL ?? 'https://nfk-staging.api.mittatb.no';
+
 /**
  * Return a URL to the given service. `serviceKey` should be uppercased.
  */

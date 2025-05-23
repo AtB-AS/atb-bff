@@ -29,8 +29,23 @@ export type NonTransitTripsQueryVariables = Omit<
   directModes: StreetMode[];
 };
 
+export type BookingTraveller = {
+  id: string;
+  userType: number;
+};
 export type BookingTripsQueryParameters = {
   searchTime: string;
   fromStopPlaceId: string;
   toStopPlaceId: string;
+};
+export type BookingTripsQueryPayload = {
+  travellers: BookingTraveller[];
+  products: string[];
+  // legs: Array<{
+  //   fromStopPlaceId: string;
+  //   toStopPlaceId: string;
+  //   serviceJourneyId: string;
+  //   mode: string;
+  //   travelDate: string;
+  // }>;
 };

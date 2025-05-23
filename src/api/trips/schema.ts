@@ -3,6 +3,7 @@ import {Location, Modes} from '../../graphql/journey/journeyplanner-types_v3';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 import {
   BookingTripsQueryParameters,
+  BookingTripsQueryPayload,
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
@@ -78,6 +79,24 @@ export const postBookingTripsRequest = {
     searchTime: Joi.string().required(),
     fromStopPlaceId: Joi.string().required(),
     toStopPlaceId: Joi.string().required(),
+  }),
+  payload: Joi.object<BookingTripsQueryPayload>({
+    travellers: Joi.array().items(
+      Joi.object({
+        id: Joi.string().required(),
+        userType: Joi.number().required(),
+      }),
+    ),
+    products: Joi.array().items(Joi.string()).required(),
+    // legs: Joi.array().items(
+    //   Joi.object({
+    //     fromStopPlaceId: Joi.string().required(),
+    //     toStopPlaceId: Joi.string().required(),
+    //     serviceJourneyId: Joi.string().required(),
+    //     mode: Joi.string().required(),
+    //     travelDate: Joi.string().required(),
+    //   }),
+    // ),
   }),
 };
 
