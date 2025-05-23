@@ -4,7 +4,6 @@ import { TripFragment } from '../../fragments/journey-gql/trips.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { TripFragmentDoc } from '../../fragments/journey-gql/trips.graphql-gen';
-import { BookingAvailabilityType } from '../../../types';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
@@ -23,14 +22,6 @@ export type TripsQueryVariables = Types.Exact<{
 
 
 export type TripsQuery = { trip: TripFragment };
-
-export type BookingTripsQuery = {
-  trip: TripFragment & {
-    tripPatterns: Array<TripFragment['tripPatterns'][0] & {
-      available: BookingAvailabilityType;
-    }>
-  }
-}
 
 export type TripsNonTransitQueryVariables = Types.Exact<{
   from: Types.Location;
