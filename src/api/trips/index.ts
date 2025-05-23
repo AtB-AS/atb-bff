@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi';
 import {ITrips_v2} from '../../service/interface';
 import {
+  BookingTripsQueryParameters,
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
@@ -10,6 +11,7 @@ import {
   postEncodedSingleTripRequest,
   postTripsRequest,
   postNonTransitTripsRequest,
+  postBookingTripsRequest,
 } from './schema';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 
@@ -41,6 +43,21 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     handler: async (request, h) => {
       const query = request.payload as unknown as NonTransitTripsQueryVariables;
       const result = await service.getNonTransitTrips(query, h.request);
+      return result.unwrap();
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/bff/v2/trips/booking',
+    options: {
+      tags: ['api', 'trips'],
+      description: 'Get trips with availability information',
+      validate: postBookingTripsRequest,
+    },
+    handler: async (request, h) => {
+      const query = request.query as unknown as BookingTripsQueryParameters;
+      const result = await service.getBookingTrips(query, h.request);
       return result.unwrap();
     },
   });

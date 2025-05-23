@@ -4,6 +4,7 @@ import { TripFragment } from '../../fragments/journey-gql/trips.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { TripFragmentDoc } from '../../fragments/journey-gql/trips.graphql-gen';
+import { BookingAvailabilityType } from '../../../types';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
@@ -17,10 +18,19 @@ export type TripsQueryVariables = Types.Exact<{
   walkSpeed?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   modes?: Types.InputMaybe<Types.Modes>;
   numTripPatterns?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  searchWindow?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
 export type TripsQuery = { trip: TripFragment };
+
+export type BookingTripsQuery = {
+  trip: TripFragment & {
+    tripPatterns: Array<TripFragment['tripPatterns'][0] & {
+      available: BookingAvailabilityType;
+    }>
+  }
+}
 
 export type TripsNonTransitQueryVariables = Types.Exact<{
   from: Types.Location;
@@ -38,7 +48,7 @@ export type TripsNonTransitQuery = { footTrip: TripFragment, bikeRentalTrip: Tri
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int, $searchWindow: Int) {
   trip(
     from: $from
     to: $to
@@ -52,6 +62,7 @@ export const TripsDocument = gql`
     walkSpeed: $walkSpeed
     modes: $modes
     numTripPatterns: $numTripPatterns
+    searchWindow: $searchWindow
   ) {
     ...trip
   }

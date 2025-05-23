@@ -245,3 +245,9 @@ export type ViolationsReportQuery = {
 export type ViolationsReportQueryResult = {
   status: 'OK';
 };
+
+export enum BookingAvailabilityType {
+  Available = 'available',
+  SoldOut = 'sold_out',
+  Closed = 'closed',
+}

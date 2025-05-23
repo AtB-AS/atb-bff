@@ -28,6 +28,7 @@ import {
 import {GetQuaysCoordinatesQuery} from './impl/quays/journey-gql/quays-coordinates.graphql-gen';
 import {ServiceJourneyEstimatedCallFragment} from './impl/service-journey/journey-gql/service-journey-departures.graphql-gen';
 import {
+  BookingTripsQuery,
   TripsQuery,
   TripsQueryVariables,
 } from './impl/trips/journey-gql/trip.graphql-gen';
@@ -68,7 +69,10 @@ import {
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
 import {Location} from '../types/geocoder';
-import {NonTransitTripsQueryVariables} from '../types/trips';
+import {
+  NonTransitTripsQueryVariables,
+  BookingTripsQueryParameters,
+} from '../types/trips';
 import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-gen';
 import {CursoredData} from './cursored';
 import {StopPlaceGroup} from './impl/departures-grouped/utils/grouping';
@@ -112,6 +116,10 @@ export interface ITrips_v2 {
     query: NonTransitTripsQueryVariables,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<TripPatternFragment[], APIError>>;
+  getBookingTrips(
+    query: BookingTripsQueryParameters,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<BookingTripsQuery, APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds,
     headers: Request<ReqRefDefaults>,

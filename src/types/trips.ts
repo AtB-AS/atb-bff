@@ -28,3 +28,9 @@ export type NonTransitTripsQueryVariables = Omit<
 > & {
   directModes: StreetMode[];
 };
+
+export type BookingTripsQueryParameters = {
+  searchTime: string;
+  fromStopPlaceId: string;
+  toStopPlaceId: string;
+};
