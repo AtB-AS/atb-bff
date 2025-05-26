@@ -69,7 +69,7 @@ function findIndex(
       const distance = haversineDistance(t, quayCoords);
       return distance < closest.distance ? {index, distance} : closest;
     },
-    {index: -1, distance: 100},
+    {index: -1, distance: 250},
   ).index;
 }
 
