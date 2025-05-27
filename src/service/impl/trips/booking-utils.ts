@@ -40,6 +40,9 @@ export const getBookingInfo = async (
     }
   } catch (error) {
     console.error(error);
+    return {
+      availability: BookingAvailabilityType.Unknown,
+    };
   }
 };
 
