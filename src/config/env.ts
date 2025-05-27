@@ -16,9 +16,9 @@ export const SHMO_INVITE_KEY: string | undefined = process.env.SHMO_INVITE_KEY;
 export const ET_CLIENT_NAME = process.env.CLIENT_NAME || 'atb-bff';
 
 export const PROJECT_ID = process.env.PROJECT_ID;
+export const API_BASE_URL: string | undefined = process.env.API_BASE_URL;
 export const NIVEL_BASEURL: string | undefined = process.env.NIVEL_BASEURL;
 export const NIVEL_API_KEY: string | undefined = process.env.NIVEL_API_KEY;
-export const SALES_BASEURL: string | undefined = process.env.SALES_BASEURL;
 
 /**
  * Return a URL to the given service. `serviceKey` should be uppercased.
