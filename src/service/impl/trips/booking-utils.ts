@@ -22,6 +22,14 @@ export const getBookingInfo = async (
           availability: BookingAvailabilityType.SoldOut,
         };
       }
+      if (
+        errorResponse?.kind ===
+        'NO_AVAILABLE_OFFERS_DUE_TO_PURCHASE_WINDOW_BEING_CLOSED'
+      ) {
+        return {
+          availability: BookingAvailabilityType.Closed,
+        };
+      }
       console.error(`Unexpected error fetching offers for trip: ${data}`);
       return {
         availability: BookingAvailabilityType.Unknown,
@@ -47,9 +55,15 @@ export const getBookingInfo = async (
 };
 
 export enum BookingAvailabilityType {
+  /** The product supports booking and has available seats */
   Available = 'available',
+  /** The product does not support booking */
+  BookingNotSupported = 'booking_not_supported',
+  /** No more seats are available for booking */
   SoldOut = 'sold_out',
+  /** The product supports booking, but ticket sale isn't currently open */
   Closed = 'closed',
+  /** Fallback state for unhandled errors */
   Unknown = 'unknown',
 }
 
@@ -87,8 +101,7 @@ function mapToAvailabilityStatus(
     return BookingAvailabilityType.Closed;
   }
   if (offer.available === undefined || offer.available === null) {
-    console.error('Offer availability is undefined or null', offer);
-    return BookingAvailabilityType.Unknown;
+    return BookingAvailabilityType.BookingNotSupported;
   }
   if (offer.available === 0) {
     return BookingAvailabilityType.SoldOut;
