@@ -4,6 +4,7 @@ import {BookingTraveller} from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {z} from 'zod';
 import {getErrorResponse} from '../../../utils/api-error';
+import {post} from '../../../utils/fetch-client';
 
 export const getBookingInfo = async (
   trip: TripPatternFragment,
@@ -107,15 +108,9 @@ async function fetchOffers(
   products: string[],
   headers: Request<ReqRefDefaults>,
 ) {
-  return await fetch(`${SALES_BASEURL}/sales/v1/search/trip-pattern`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Atb-App-Version': headers.headers['atb-app-version'],
-      'Atb-Distribution-Channel': headers.headers['atb-distribution-channel'],
-      Authorization: headers.headers.authorization,
-    },
-    body: JSON.stringify({
+  return await post(
+    `/sales/v1/search/trip-pattern`,
+    {
       travellers,
       travelDate: trip.expectedStartTime,
       products,
@@ -126,6 +121,16 @@ async function fetchOffers(
         mode: leg.mode,
         travelDate: leg.expectedStartTime.split('T')[0],
       })),
-    }),
-  });
+    },
+    headers,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Atb-App-Version': headers.headers['atb-app-version'],
+        'Atb-Distribution-Channel': headers.headers['atb-distribution-channel'],
+        Authorization: headers.headers.authorization,
+      },
+    },
+    SALES_BASEURL,
+  );
 }
