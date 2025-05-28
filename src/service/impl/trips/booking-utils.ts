@@ -147,6 +147,7 @@ async function fetchOffers(
         'Content-Type': 'application/json',
         'Atb-App-Version': headers.headers['atb-app-version'],
         'Atb-Distribution-Channel': headers.headers['atb-distribution-channel'],
+        'X-Endpoint-API-UserInfo': headers.headers['x-endpoint-api-userinfo'],
         Authorization: headers.headers.authorization,
       },
     },
