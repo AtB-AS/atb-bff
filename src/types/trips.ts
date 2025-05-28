@@ -58,6 +58,6 @@ export type BookingTripsQuery = {
 export type TripPatternWithBooking = TripPatternFragment & {
   booking: {
     availability: BookingAvailabilityType;
-    offer: TicketOffer;
+    offer?: TicketOffer;
   };
 };

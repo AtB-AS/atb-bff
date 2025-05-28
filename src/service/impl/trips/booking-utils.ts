@@ -11,7 +11,10 @@ export const getBookingInfo = async (
   travellers: BookingTraveller[],
   products: string[],
   headers: Request<ReqRefDefaults>,
-): Promise<any> => {
+): Promise<{
+  availability: BookingAvailabilityType;
+  offer?: TicketOffer;
+}> => {
   try {
     const response = await fetchOffers(trip, travellers, products, headers);
     const data = await response.json();
@@ -48,10 +51,10 @@ export const getBookingInfo = async (
     }
   } catch (error) {
     console.error(error);
-    return {
-      availability: BookingAvailabilityType.Unknown,
-    };
   }
+  return {
+    availability: BookingAvailabilityType.Unknown,
+  };
 };
 
 export enum BookingAvailabilityType {
