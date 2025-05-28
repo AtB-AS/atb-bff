@@ -16,7 +16,7 @@ export type ServiceJourneyDeparturesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ServiceJourneyDeparturesQuery = { serviceJourney?: { estimatedCalls?: Array<ServiceJourneyEstimatedCallFragment> } };
+export type ServiceJourneyDeparturesQuery = { serviceJourney?: { estimatedCalls: Array<ServiceJourneyEstimatedCallFragment> } };
 
 export type ServiceJourneyEstimatedCallFragment = { actualArrivalTime?: any, actualDepartureTime?: any, aimedArrivalTime: any, aimedDepartureTime: any, cancellation: boolean, date: any, expectedDepartureTime: any, expectedArrivalTime: any, forAlighting: boolean, realtime: boolean, destinationDisplay?: { frontText?: string }, notices: Array<NoticeFragment>, quay: QuayWithSituationsFragment, serviceJourney: ServiceJourneyFragment, situations: Array<SituationFragment> };
 

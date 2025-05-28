@@ -17,6 +17,7 @@ export type TripsQueryVariables = Types.Exact<{
   walkSpeed?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   modes?: Types.InputMaybe<Types.Modes>;
   numTripPatterns?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  searchWindow?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -38,7 +39,7 @@ export type TripsNonTransitQuery = { footTrip: TripFragment, bikeRentalTrip: Tri
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int, $searchWindow: Int) {
   trip(
     from: $from
     to: $to
@@ -52,6 +53,7 @@ export const TripsDocument = gql`
     walkSpeed: $walkSpeed
     modes: $modes
     numTripPatterns: $numTripPatterns
+    searchWindow: $searchWindow
   ) {
     ...trip
   }

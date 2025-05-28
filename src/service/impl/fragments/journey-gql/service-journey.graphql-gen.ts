@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
 import { LineFragmentDoc } from './lines.graphql-gen';
 import { NoticeFragmentDoc } from './notices.graphql-gen';
 import { EstimatedCallWithQuayFragmentDoc } from './estimated-calls.graphql-gen';
-export type ServiceJourneyWithEstCallsFragment = { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, line: LineFragment, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment>, estimatedCalls?: Array<EstimatedCallWithQuayFragment> };
+export type ServiceJourneyWithEstCallsFragment = { id: string, transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, publicCode?: string, line: LineFragment, journeyPattern?: { notices: Array<NoticeFragment> }, notices: Array<NoticeFragment>, estimatedCalls: Array<EstimatedCallWithQuayFragment> };
 
 export const ServiceJourneyWithEstCallsFragmentDoc = gql`
     fragment serviceJourneyWithEstCalls on ServiceJourney {

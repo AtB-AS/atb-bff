@@ -18,6 +18,13 @@ export const ET_CLIENT_NAME = process.env.CLIENT_NAME || 'atb-bff';
 export const PROJECT_ID = process.env.PROJECT_ID;
 export const NIVEL_BASEURL: string | undefined = process.env.NIVEL_BASEURL;
 export const NIVEL_API_KEY: string | undefined = process.env.NIVEL_API_KEY;
+
+/**
+ * The base URL for the API, used in development mode. Use `getServiceUrl` to
+ * connect directly to service in production.
+ */
+const API_BASE_URL: string | undefined = process.env.API_BASE_URL;
+
 /**
  * Return a URL to the given service. `serviceKey` should be uppercased.
  */
@@ -26,6 +33,8 @@ const getServiceUrl = (
   serviceKey: string,
   required: boolean = false,
 ): string => {
+  if (getEnv() === 'dev') return API_BASE_URL ?? '';
+
   const host = getServiceHost(serviceKey);
   const port = getServicePort(serviceKey);
 
@@ -68,6 +77,11 @@ const getInteger = (envKey: string): number | undefined => {
 export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'http://',
   'ENROLLMENT',
+  getEnv() === 'prod',
+);
+export const SALES_BASEURL: string | undefined = getServiceUrl(
+  'http://',
+  'SALES',
   getEnv() === 'prod',
 );
 export const REDIS_HOST: string = getServiceHost('REDIS');

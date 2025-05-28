@@ -68,7 +68,11 @@ import {
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
 import {Location} from '../types/geocoder';
-import {NonTransitTripsQueryVariables} from '../types/trips';
+import {
+  NonTransitTripsQueryVariables,
+  BookingTripsQueryParameters,
+  BookingTripsQueryPayload,
+} from '../types/trips';
 import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-gen';
 import {CursoredData} from './cursored';
 import {StopPlaceGroup} from './impl/departures-grouped/utils/grouping';
@@ -112,6 +116,11 @@ export interface ITrips_v2 {
     query: NonTransitTripsQueryVariables,
     headers: Request<ReqRefDefaults>,
   ): Promise<Result<TripPatternFragment[], APIError>>;
+  getBookingTrips(
+    query: BookingTripsQueryParameters,
+    payload: BookingTripsQueryPayload,
+    headers: Request<ReqRefDefaults>,
+  ): Promise<Result<Trips.BookingTripsQuery, APIError>>;
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds,
     headers: Request<ReqRefDefaults>,
