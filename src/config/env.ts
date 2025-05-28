@@ -28,6 +28,8 @@ const getServiceUrl = (
   serviceKey: string,
   required: boolean = false,
 ): string => {
+  if (getEnv() === 'dev') return API_BASE_URL ?? '';
+
   const host = getServiceHost(serviceKey);
   const port = getServicePort(serviceKey);
 
@@ -70,6 +72,11 @@ const getInteger = (envKey: string): number | undefined => {
 export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'http://',
   'ENROLLMENT',
+  getEnv() === 'prod',
+);
+export const SALES_BASEURL: string | undefined = getServiceUrl(
+  'http://',
+  'SALES',
   getEnv() === 'prod',
 );
 export const REDIS_HOST: string = getServiceHost('REDIS');

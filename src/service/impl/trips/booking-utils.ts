@@ -1,5 +1,5 @@
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {API_BASE_URL} from '../../../config/env';
+import {SALES_BASEURL} from '../../../config/env';
 import {BookingTraveller} from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {z} from 'zod';
@@ -150,6 +150,6 @@ async function fetchOffers(
         Authorization: headers.headers.authorization,
       },
     },
-    API_BASE_URL,
+    SALES_BASEURL,
   );
 }
