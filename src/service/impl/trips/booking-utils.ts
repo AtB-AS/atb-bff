@@ -3,7 +3,7 @@ import {API_BASE_URL} from '../../../config/env';
 import {BookingTraveller} from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {z} from 'zod';
-import {getErrorResponse} from '../../../utils/api-error';
+import {ErrorResponse} from '@atb-as/utils';
 import {post} from '../../../utils/fetch-client';
 
 export const getBookingInfo = async (
@@ -19,7 +19,7 @@ export const getBookingInfo = async (
     const response = await fetchOffers(trip, travellers, products, headers);
     const data = await response.json();
     if (!response.ok) {
-      let errorResponse = getErrorResponse(data);
+      let errorResponse = ErrorResponse.safeParse(data).data;
       if (errorResponse?.kind === 'NO_AVAILABLE_OFFERS_DUE_TO_BEING_SOLD_OUT') {
         return {
           availability: BookingAvailabilityType.SoldOut,

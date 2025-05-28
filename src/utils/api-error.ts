@@ -1,6 +1,5 @@
 import {boomify} from '@hapi/boom';
 import {FetchError, Response} from 'node-fetch';
-import {z} from 'zod';
 
 const STATUS_CODES_TO_FORWARD = [429];
 
@@ -45,23 +44,3 @@ function getNetworkErrorResponse(error: any): Response | undefined {
     return error.networkError.response;
   }
 }
-
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
-const HttpError = z.object({
-  code: z.number(),
-  message: z.string(),
-});
-type HttpError = z.infer<typeof HttpError>;
-
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
-export const ErrorResponse = z.object({
-  http: HttpError,
-  kind: z.string(),
-  message: z.string().nullish(),
-  details: z.array(z.unknown()).nullish(),
-});
-export type ErrorResponse = z.infer<typeof ErrorResponse>;
-
-export const getErrorResponse = (error: any): ErrorResponse | undefined => {
-  return ErrorResponse.safeParse(error).data;
-};

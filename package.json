@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.9.3",
+    "@atb-as/utils": "^3.2.0",
     "@badrap/result": "^0.2.13",
     "@hapi/boom": "^10.0.1",
     "@hapi/catbox-memory": "^6.0.1",
