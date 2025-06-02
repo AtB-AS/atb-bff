@@ -14,9 +14,9 @@ export default (): IQuayService => {
   const api: IQuayService = {
     async getQuaysCoordinates(
       payload: QuaysCoordinatesPayload,
-      headers: Request<ReqRefDefaults>,
+      request: Request<ReqRefDefaults>,
     ): Promise<Result<GetQuaysCoordinatesQuery, APIError>> {
-      const result = await journeyPlannerClient(headers).query<
+      const result = await journeyPlannerClient(request).query<
         GetQuaysCoordinatesQuery,
         GetQuaysCoordinatesQueryVariables
       >({

@@ -51,7 +51,7 @@ function createClient(url: string) {
   // The possibleTypes is empty to disable the in-memory cache
   const cache = new InMemoryCache({possibleTypes: {}});
 
-  return function (headers: Request<ReqRefDefaults>) {
+  return function (request: Request<ReqRefDefaults>) {
     const httpLink = new HttpLink({
       uri: url,
 
@@ -62,7 +62,7 @@ function createClient(url: string) {
 
       headers: {
         'ET-Client-Name': ET_CLIENT_NAME,
-        'X-Correlation-Id': headers['correlationId'] ?? '',
+        'X-Correlation-Id': request['correlationId'] ?? '',
       },
     });
     const errorLink = onError(({operation, graphQLErrors, networkError}) => {
@@ -83,7 +83,7 @@ function createClient(url: string) {
         message: 'graphql call',
         url: context.response?.url,
         statusCode: context.response?.status,
-        requestHeaders: headers,
+        request,
         responseHeaders: context.response?.headers,
         duration: timer?.getElapsedMs() || 0,
         error: error,
@@ -100,7 +100,7 @@ function createClient(url: string) {
           message: 'graphql call',
           url: context.response.url,
           statusCode: context.response.status,
-          requestHeaders: headers,
+          request,
           responseHeaders: context.response.headers,
           duration: timer.getElapsedMs(),
         });

@@ -16,7 +16,7 @@ export type DepartureFavoritesMetadata = CursoredData<StopPlaceGroup[]>;
 
 export async function getDepartureFavorites(
   options: DepartureFavoritesQuery,
-  headers: Request<ReqRefDefaults>,
+  request: Request<ReqRefDefaults>,
   favorites: FavoriteDeparture[],
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {
   const quayIds = favorites?.map((f) => f.quayId).filter(onlyUniques);
@@ -31,7 +31,7 @@ export async function getDepartureFavorites(
     includeCancelledTrips: options.includeCancelledTrips,
   };
 
-  const result = await journeyPlannerClient(headers).query<
+  const result = await journeyPlannerClient(request).query<
     GroupsByIdQuery,
     GroupsByIdQueryVariables
   >({

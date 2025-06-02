@@ -10,13 +10,13 @@ export const getBookingInfo = async (
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
-  headers: Request<ReqRefDefaults>,
+  request: Request<ReqRefDefaults>,
 ): Promise<{
   availability: BookingAvailabilityType;
   offer?: TicketOffer;
 }> => {
   try {
-    const response = await fetchOffers(trip, travellers, products, headers);
+    const response = await fetchOffers(trip, travellers, products, request);
     const data = await response.json();
     if (!response.ok) {
       let errorResponse = ErrorResponse.safeParse(data).data;
@@ -125,7 +125,7 @@ async function fetchOffers(
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
-  headers: Request<ReqRefDefaults>,
+  request: Request<ReqRefDefaults>,
 ) {
   return await post(
     `/sales/v1/search/trip-pattern`,
@@ -141,14 +141,14 @@ async function fetchOffers(
         travelDate: leg.expectedStartTime.split('T')[0],
       })),
     },
-    headers,
+    request,
     {
       headers: {
         'Content-Type': 'application/json',
-        'Atb-App-Version': headers.headers['atb-app-version'],
-        'Atb-Distribution-Channel': headers.headers['atb-distribution-channel'],
-        'X-Endpoint-API-UserInfo': headers.headers['x-endpoint-api-userinfo'],
-        Authorization: headers.headers.authorization,
+        'Atb-App-Version': request.headers['atb-app-version'],
+        'Atb-Distribution-Channel': request.headers['atb-distribution-channel'],
+        'X-Endpoint-API-UserInfo': request.headers['x-endpoint-api-userinfo'],
+        Authorization: request.headers.authorization,
       },
     },
     SALES_BASEURL,

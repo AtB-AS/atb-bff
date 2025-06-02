@@ -53,13 +53,13 @@ const nivelBaseUrl = NIVEL_BASEURL || '';
 const nivelApiKey = NIVEL_API_KEY || '';
 
 export default (): IMobilityService => ({
-  async getVehicles_v2(query, headers) {
+  async getVehicles_v2(query, request) {
     // Prevent unnecessary calls to Entur when no vehicles are requested
     if (!query.includeBicycles && !query.includeScooters) {
       return Result.ok({});
     }
     try {
-      const result = await mobilityClient(headers).query<
+      const result = await mobilityClient(request).query<
         GetVehicles_V2Query,
         GetVehicles_V2QueryVariables
       >({
@@ -75,9 +75,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getVehicle(query, headers) {
+  async getVehicle(query, request) {
     try {
-      const result = await mobilityClientDev(headers).query<
+      const result = await mobilityClientDev(request).query<
         GetVehicleQuery,
         GetVehicleQueryVariables
       >({
@@ -93,13 +93,13 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getStations_v2(query, headers) {
+  async getStations_v2(query, request) {
     // Prevent unnecessary calls to Entur when no stations are requested
     if (!query.includeBicycles && !query.includeCars) {
       return Result.ok({});
     }
     try {
-      const result = await mobilityClient(headers).query<
+      const result = await mobilityClient(request).query<
         GetStations_V2Query,
         GetStations_V2QueryVariables
       >({
@@ -115,9 +115,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getCarStation(query, headers) {
+  async getCarStation(query, request) {
     try {
-      const result = await mobilityClientDev(headers).query<
+      const result = await mobilityClientDev(request).query<
         GetCarStationQuery,
         GetCarStationQueryVariables
       >({
@@ -133,9 +133,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getBikeStation(query, headers) {
+  async getBikeStation(query, request) {
     try {
-      const result = await mobilityClientDev(headers).query<
+      const result = await mobilityClientDev(request).query<
         GetBikeStationQuery,
         GetBikeStationQueryVariables
       >({
@@ -151,9 +151,9 @@ export default (): IMobilityService => ({
     }
   },
 
-  async getGeofencingZones(query, headers) {
+  async getGeofencingZones(query, request) {
     try {
-      const result = await mobilityClientDev(headers).query<
+      const result = await mobilityClientDev(request).query<
         GetGeofencingZonesQuery,
         GetGeofencingZonesQueryVariables
       >({
@@ -171,13 +171,13 @@ export default (): IMobilityService => ({
 
   async initViolationsReporting(
     query: ViolationsReportingInitQuery,
-    headers: Request<ReqRefDefaults>,
+    request: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsReportingInitQueryResult, APIError>> {
     try {
       const urlParams = new URLSearchParams(query).toString();
       const response = await get<ViolationsReportingInitQueryResult>(
         `/atb/init?${urlParams}`,
-        headers,
+        request,
         {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
@@ -195,7 +195,7 @@ export default (): IMobilityService => ({
       });
       if (result.error) {
         console.error(
-          `Validation error for request with correlationId ${headers.correlationId}: ${result.error.message}`,
+          `Validation error for request with correlationId ${request.correlationId}: ${result.error.message}`,
         );
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
@@ -207,13 +207,13 @@ export default (): IMobilityService => ({
 
   async violationsVehicleLookup(
     query: ViolationsVehicleLookupQuery,
-    headers: Request<ReqRefDefaults>,
+    request: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsVehicleLookupQueryResult, APIError>> {
     try {
       const urlParams = new URLSearchParams(query).toString();
       const response = await get<ViolationsReportingInitQueryResult>(
         `/atb/vehicle?${urlParams}`,
-        headers,
+        request,
         {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );
@@ -222,7 +222,7 @@ export default (): IMobilityService => ({
       });
       if (result.error) {
         console.error(
-          `Validation error for request with correlationId ${headers.correlationId}: ${result.error.message}`,
+          `Validation error for request with correlationId ${request.correlationId}: ${result.error.message}`,
         );
         return Result.err(new APIError(`Invalid response. ${result.error}`));
       }
@@ -234,13 +234,13 @@ export default (): IMobilityService => ({
 
   async sendViolationsReport(
     query: ViolationsReportQuery,
-    headers: Request<ReqRefDefaults>,
+    request: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsReportQueryResult, APIError>> {
     try {
       const response = await post(
         `/atb/report`,
         query,
-        headers,
+        request,
         {headers: {'x-api-key': nivelApiKey}},
         nivelBaseUrl,
       );

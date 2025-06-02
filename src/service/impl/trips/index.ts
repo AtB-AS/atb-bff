@@ -20,21 +20,21 @@ import {getBookingInfo} from './booking-utils';
 
 export default (): ITrips_v2 => {
   const api: ITrips_v2 = {
-    async getTrips(query, headers: Request<ReqRefDefaults>) {
-      return getTrips(query, headers);
+    async getTrips(query, request: Request<ReqRefDefaults>) {
+      return getTrips(query, request);
     },
 
-    async getNonTransitTrips(query, headers) {
+    async getNonTransitTrips(query, request) {
       const gqlQueryVariables: TripsNonTransitQueryVariables = {
         ...query,
         includeFoot: query.directModes.includes(StreetMode.Foot),
         includeBicycle: query.directModes.includes(StreetMode.Bicycle),
         includeBikeRental: query.directModes.includes(StreetMode.BikeRental),
       };
-      return getTripsNonTransit(gqlQueryVariables, headers);
+      return getTripsNonTransit(gqlQueryVariables, request);
     },
 
-    async getBookingTrips(query, payload, headers) {
+    async getBookingTrips(query, payload, request) {
       const tripsQueryVariables: TripsQueryVariables = {
         from: {place: query.fromStopPlaceId},
         to: {place: query.toStopPlaceId},
@@ -51,7 +51,7 @@ export default (): ITrips_v2 => {
         },
       };
 
-      const result = (await getTrips(tripsQueryVariables, headers)).unwrap();
+      const result = (await getTrips(tripsQueryVariables, request)).unwrap();
 
       const tripPatternsWithBookingInfo: TripPatternWithBooking[] =
         await Promise.all(
@@ -60,7 +60,7 @@ export default (): ITrips_v2 => {
               tripPattern,
               payload.travellers,
               payload.products,
-              headers,
+              request,
             );
             return {
               ...tripPattern,
@@ -81,9 +81,9 @@ export default (): ITrips_v2 => {
 
     async getSingleTrip(
       queryWithIds: TripsQueryWithJourneyIds,
-      headers: Request<ReqRefDefaults>,
+      request: Request<ReqRefDefaults>,
     ) {
-      return getSingleTrip(queryWithIds, headers);
+      return getSingleTrip(queryWithIds, request);
     },
   };
 

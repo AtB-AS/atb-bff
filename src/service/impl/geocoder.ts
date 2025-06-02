@@ -15,7 +15,7 @@ const SCALE = parseInt(process.env.GEOCODER_SCALE || '200');
 
 export default (): IGeocoderService => {
   return {
-    async getFeatures(params, headers) {
+    async getFeatures(params, request) {
       try {
         const autocompleteParams: AutocompleteParams = {
           text: params.query,
@@ -40,14 +40,14 @@ export default (): IGeocoderService => {
         });
         const result = await get<FeatureCollection<Point, Location>>(
           `/geocoder/v1/autocomplete?${queryString}`,
-          headers,
+          request,
         );
         return Result.ok(result.features);
       } catch (error) {
         return Result.err(new APIError(error));
       }
     },
-    async getFeaturesReverse({lat, lon, ...params}, headers) {
+    async getFeaturesReverse({lat, lon, ...params}, request) {
       try {
         const reverseParams: ReverseParams = {
           size: params.limit,
@@ -63,7 +63,7 @@ export default (): IGeocoderService => {
         });
         const result = await get<FeatureCollection<Point, Location>>(
           `/geocoder/v1/reverse?${queryString}`,
-          headers,
+          request,
         );
 
         return Result.ok(result.features);

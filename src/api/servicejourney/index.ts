@@ -20,10 +20,10 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
     const getServiceJourneyMapInfo_v2 = async (
       serviceJourneyId: string,
       query: ServiceJourneyMapInfoQuery,
-      headers: Request<ReqRefDefaults>,
+      request: Request<ReqRefDefaults>,
     ) =>
       (
-        await service.getServiceJourneyMapInfo(serviceJourneyId, query, headers)
+        await service.getServiceJourneyMapInfo(serviceJourneyId, query, request)
       ).unwrap();
 
     server.method('getServiceJourneyMapInfo_v2', getServiceJourneyMapInfo_v2, {
