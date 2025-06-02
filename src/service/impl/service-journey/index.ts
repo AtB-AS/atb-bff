@@ -28,7 +28,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
     async getServiceJourneyMapInfo(
       serviceJourneyId: string,
       query: ServiceJourneyMapInfoQuery,
-      headers: Request<ReqRefDefaults>,
+      request: Request<ReqRefDefaults>,
     ) {
       try {
         const result = query.toQuayId
@@ -36,12 +36,12 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
               serviceJourneyId,
               query.fromQuayId,
               query.toQuayId,
-              headers,
+              request,
             )
           : await getMapInfoWithFromQuay(
               serviceJourneyId,
               query.fromQuayId,
-              headers,
+              request,
             );
 
         if (result.errors) {
@@ -52,13 +52,13 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         return Result.err(new APIError(error));
       }
     },
-    async getDeparturesForServiceJourneyV2(id, {date}, headers) {
+    async getDeparturesForServiceJourneyV2(id, {date}, request) {
       try {
         const serviceDate = date
           ? formatISO(date, {representation: 'date'})
           : undefined;
 
-        const result = await journeyPlannerClient(headers).query<
+        const result = await journeyPlannerClient(request).query<
           ServiceJourneyDeparturesQuery,
           ServiceJourneyDeparturesQueryVariables
         >({
@@ -78,13 +78,13 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         return Result.err(new APIError(error));
       }
     },
-    async getServiceJourneyWithEstimatedCallsV2(id, {date}, headers) {
+    async getServiceJourneyWithEstimatedCallsV2(id, {date}, request) {
       try {
         const serviceDate = date
           ? formatISO(date, {representation: 'date'})
           : undefined;
 
-        const result = await journeyPlannerClient(headers).query<
+        const result = await journeyPlannerClient(request).query<
           ServiceJourneyWithEstimatedCallsQuery,
           ServiceJourneyWithEstimatedCallsQueryVariables
         >({

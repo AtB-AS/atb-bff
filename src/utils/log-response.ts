@@ -5,7 +5,7 @@ import {ReqRefDefaults, Request} from '@hapi/hapi';
 type LogResponseParams = {
   message: string;
   duration: number;
-  requestHeaders: Request<ReqRefDefaults>;
+  request: Request<ReqRefDefaults>;
   responseHeaders?: any;
   url?: string;
   statusCode?: number;
@@ -18,7 +18,7 @@ type LogResponseParams = {
 export const logResponse = ({
   message,
   duration,
-  requestHeaders,
+  request,
   responseHeaders,
   url,
   statusCode,
@@ -55,14 +55,14 @@ export const logResponse = ({
     severity: severity,
     time: time,
     message: message,
-    correlationId: requestHeaders['correlationId'],
+    correlationId: request['correlationId'],
     method: method,
     url: url,
     code: statusCode,
-    requestId: requestHeaders['requestId'],
-    installId: requestHeaders['installId'],
-    webshopVersion: requestHeaders['webshopVersion'],
-    appVersion: requestHeaders['appVersion'],
+    requestId: request['requestId'],
+    installId: request['installId'],
+    webshopVersion: request['webshopVersion'],
+    appVersion: request['appVersion'],
     customerAccountId: customerAccountId,
     rateLimitUsed: rateLimitUsed,
     rateLimitAllowed: rateLimitAllowed,

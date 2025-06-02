@@ -33,7 +33,7 @@ export default (): IDeparturesService => {
         limitPerLine,
       },
       payload,
-      headers,
+      request,
     ) {
       const favorites = payload?.favorites;
       const quayIds = typeof ids === 'string' ? [ids] : ids;
@@ -55,7 +55,7 @@ export default (): IDeparturesService => {
               numberOfDepartures,
             };
 
-        const result = await journeyPlannerClient(headers).query<
+        const result = await journeyPlannerClient(request).query<
           DeparturesQuery,
           DeparturesQueryVariables
         >({
@@ -97,10 +97,10 @@ export default (): IDeparturesService => {
     },
     async getStopPlacesByPosition(
       {latitude, longitude, distance = 1000, count = 10, after},
-      headers,
+      request,
     ) {
       try {
-        const result = await journeyPlannerClient(headers).query<
+        const result = await journeyPlannerClient(request).query<
           NearestStopPlacesQuery,
           NearestStopPlacesQueryVariables
         >({
@@ -124,9 +124,9 @@ export default (): IDeparturesService => {
       }
     },
 
-    async getStopsDetails({ids}, headers) {
+    async getStopsDetails({ids}, request) {
       try {
-        const result = await journeyPlannerClient(headers).query<
+        const result = await journeyPlannerClient(request).query<
           StopsDetailsQuery,
           StopsDetailsQueryVariables
         >({

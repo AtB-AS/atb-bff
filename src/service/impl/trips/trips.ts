@@ -19,10 +19,10 @@ import {Mode} from '../../../graphql/journey/journeyplanner-types_v3';
 
 export async function getTrips(
   query: TripsQueryVariables,
-  headers: Request<ReqRefDefaults>,
+  request: Request<ReqRefDefaults>,
 ): Promise<Result<TripsQuery, APIError>> {
   try {
-    const result = await journeyPlannerClient(headers).query<
+    const result = await journeyPlannerClient(request).query<
       TripsQuery,
       TripsQueryVariables
     >({
@@ -41,10 +41,10 @@ export async function getTrips(
 
 export async function getTripsNonTransit(
   query: TripsNonTransitQueryVariables,
-  headers: Request<ReqRefDefaults>,
+  request: Request<ReqRefDefaults>,
 ): Promise<Result<TripPatternFragment[], APIError>> {
   try {
-    const result = await journeyPlannerClient(headers).query<
+    const result = await journeyPlannerClient(request).query<
       TripsNonTransitQuery,
       TripsNonTransitQueryVariables
     >({
@@ -74,9 +74,9 @@ export async function getTripsNonTransit(
 
 export async function getSingleTrip(
   query: Trips.TripsQueryWithJourneyIds,
-  headers: Request<ReqRefDefaults>,
+  request: Request<ReqRefDefaults>,
 ): Promise<Result<Trips.TripPattern, Boom.Boom>> {
-  const results = await journeyPlannerClient(headers).query<
+  const results = await journeyPlannerClient(request).query<
     TripsQuery,
     TripsQueryVariables
   >({

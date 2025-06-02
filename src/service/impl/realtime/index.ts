@@ -13,12 +13,12 @@ import {sanitizeRealtimeQuery} from './sanitize-realtime-query';
 
 export default (): IRealtimeService => {
   return {
-    async getDepartureRealtime(query: DepartureRealtimeQuery, headers) {
+    async getDepartureRealtime(query: DepartureRealtimeQuery, request) {
       try {
         const variables = sanitizeRealtimeQuery(query);
         if (!variables) return Result.ok({});
 
-        const result = await journeyPlannerClient(headers).query<
+        const result = await journeyPlannerClient(request).query<
           GetDepartureRealtimeQuery,
           GetDepartureRealtimeQueryVariables
         >({

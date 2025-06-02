@@ -27,8 +27,8 @@ import {
 
 export default (): IStopPlacesService => {
   return {
-    async getStopPlacesByMode(query, headers) {
-      const result = await journeyPlannerClient(headers).query<
+    async getStopPlacesByMode(query, request) {
+      const result = await journeyPlannerClient(request).query<
         GetStopPlacesByModeQuery,
         GetStopPlacesByModeQueryVariables
       >({
@@ -61,8 +61,8 @@ export default (): IStopPlacesService => {
         return Result.err(new APIError(error));
       }
     },
-    async getStopPlaceConnections(query, headers) {
-      const result = await journeyPlannerClient(headers).query<
+    async getStopPlaceConnections(query, request) {
+      const result = await journeyPlannerClient(request).query<
         GetStopPlaceConnectionsQuery,
         GetStopPlaceConnectionsQueryVariables
       >({
@@ -104,8 +104,8 @@ export default (): IStopPlacesService => {
         return Result.err(new APIError(error));
       }
     },
-    async getStopPlaceParent(query, headers) {
-      const result = await journeyPlannerClient(headers).query<
+    async getStopPlaceParent(query, request) {
+      const result = await journeyPlannerClient(request).query<
         GetStopPlaceParentQuery,
         GetStopPlaceParentQueryVariables
       >({
