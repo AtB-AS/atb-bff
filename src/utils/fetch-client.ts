@@ -1,7 +1,7 @@
 import fetch, {RequestInit, RequestInfo, Response} from 'node-fetch';
 import {ENTUR_BASEURL, ET_CLIENT_NAME} from '../config/env';
 import {logResponse} from './log-response';
-import {HttpsAgent as Agent} from 'agentkeepalive';
+import {HttpsAgent, HttpAgent} from 'agentkeepalive';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {Timer} from './timer';
 
@@ -9,7 +9,10 @@ const enturBaseUrl = ENTUR_BASEURL || 'https://api.entur.io';
 
 const REQUEST_TIMEOUT = 20_000;
 
-const agent = new Agent({
+const httpsAgent = new HttpsAgent({
+  keepAlive: true,
+});
+const httpAgent = new HttpAgent({
   keepAlive: true,
 });
 
@@ -72,7 +75,7 @@ export const get = async <T>(
     {
       ...options,
       method: 'GET',
-      agent: agent,
+      agent: baseUrl?.startsWith('http:') ? httpAgent : httpsAgent,
     },
     baseUrl,
   );
@@ -97,7 +100,7 @@ export const post = async (
       },
       method: 'POST',
       body: JSON.stringify(body),
-      agent: agent,
+      agent: baseUrl?.startsWith('http:') ? httpAgent : httpsAgent,
     },
     baseUrl,
   );

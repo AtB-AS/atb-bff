@@ -62,7 +62,7 @@
     "@hapi/inert": "^7.1.0",
     "@hapi/vision": "^7.0.3",
     "@mapbox/polyline": "^1.2.1",
-    "agentkeepalive": "^4.5.0",
+    "agentkeepalive": "^4.6.0",
     "date-fns": "^3.3.1",
     "dotenv": "^16.4.1",
     "graphql": "^16.8.1",
