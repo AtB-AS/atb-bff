@@ -7,7 +7,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from 'lz-string';
-import {addSeconds, parseISO, formatDate} from 'date-fns';
+import {addSeconds, parseISO} from 'date-fns';
 
 const START_TIME_PADDING = 60; // time in seconds
 
