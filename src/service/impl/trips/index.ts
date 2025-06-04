@@ -15,7 +15,6 @@ import {
   TransportSubmode,
 } from '../../../graphql/journey/journeyplanner-types_v3';
 import {Result} from '@badrap/result';
-import {toMidnight} from './utils';
 import {getBookingInfo} from './booking-utils';
 
 export default (): ITrips_v2 => {
@@ -39,7 +38,7 @@ export default (): ITrips_v2 => {
         from: {place: query.fromStopPlaceId},
         to: {place: query.toStopPlaceId},
         arriveBy: false,
-        when: toMidnight(query.searchTime),
+        when: query.searchTime,
         searchWindow: 1440, // 24 hours
         modes: {
           transportModes: [

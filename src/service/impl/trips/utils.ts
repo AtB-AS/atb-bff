@@ -61,11 +61,6 @@ function getPaddedStartTime(time: string): string {
   return addSeconds(startTime, -START_TIME_PADDING).toISOString();
 }
 
-export function toMidnight(time: string): string {
-  const date = formatDate(parseISO(time), 'yyyy-MM-dd');
-  return `${date}T00:00:00.000Z`;
-}
-
 /**
  * Maps a TripQueryString into QueryVariables and journeyIds
  * JourneyPlanner v3
