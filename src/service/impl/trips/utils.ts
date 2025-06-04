@@ -7,7 +7,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from 'lz-string';
-import {addSeconds, parseISO, formatDate} from 'date-fns';
+import {addSeconds, parseISO} from 'date-fns';
 
 const START_TIME_PADDING = 60; // time in seconds
 
@@ -59,11 +59,6 @@ export function generateSingleTripQueryString(
 function getPaddedStartTime(time: string): string {
   const startTime = parseISO(time);
   return addSeconds(startTime, -START_TIME_PADDING).toISOString();
-}
-
-export function toMidnight(time: string): string {
-  const date = formatDate(parseISO(time), 'yyyy-MM-dd');
-  return `${date}T00:00:00.000Z`;
 }
 
 /**
