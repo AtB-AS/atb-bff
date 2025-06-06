@@ -79,11 +79,7 @@ export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'ENROLLMENT',
   getEnv() === 'prod',
 );
-export const SALES_BASEURL: string | undefined = getServiceUrl(
-  'http://',
-  'SALES',
-  getEnv() === 'prod',
-);
+export const SALES_BASEURL: string = getServiceUrl('http://', 'SALES', false);
 export const REDIS_HOST: string = getServiceHost('REDIS');
 export const REDIS_PORT: string = getServicePort('REDIS');
 
