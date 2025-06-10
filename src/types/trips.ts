@@ -39,7 +39,8 @@ export type NonTransitTripsQueryVariables = Omit<
 
 export type BookingTraveller = {
   id: string;
-  userType: number;
+  userType: string;
+  count: number;
 };
 export type BookingTripsQueryParameters = {
   searchTime: string;

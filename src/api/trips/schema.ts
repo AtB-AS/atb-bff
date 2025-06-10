@@ -85,6 +85,7 @@ export const postBookingTripsRequest = {
       Joi.object({
         id: Joi.string().required(),
         userType: Joi.string().required(),
+        count: Joi.number().required(),
       }),
     ),
     products: Joi.array().items(Joi.string()).required(),

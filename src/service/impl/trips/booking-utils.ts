@@ -44,9 +44,13 @@ export const getBookingInfo = async (
     }
     if (offers.success) {
       const offer = getSingleOffer(offers.data);
+      const totalTravellerCount = travellers.reduce(
+        (sum, traveller) => sum + traveller.count,
+        0,
+      );
       return {
         offer,
-        availability: mapToAvailabilityStatus(offer),
+        availability: mapToAvailabilityStatus(offer, totalTravellerCount),
       };
     }
   } catch (error) {
@@ -98,6 +102,7 @@ export type TicketOffers = z.infer<typeof TicketOffers>;
 
 function mapToAvailabilityStatus(
   offer: TicketOffer | undefined,
+  totalPassengerCount: number
 ): BookingAvailabilityType {
   if (!offer) {
     // No offer means ticket sale is closed
@@ -106,7 +111,7 @@ function mapToAvailabilityStatus(
   if (offer.available === undefined || offer.available === null) {
     return BookingAvailabilityType.BookingNotSupported;
   }
-  if (offer.available === 0) {
+  if (offer.available < totalPassengerCount) {
     return BookingAvailabilityType.SoldOut;
   }
   return BookingAvailabilityType.Available;
