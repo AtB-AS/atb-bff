@@ -8,7 +8,7 @@ import {
   FLEX_TICKET_INVITE_KEY,
   SHMO_INVITE_KEY,
   BONUS_INVITE_KEY_A,
-  BONUS_INVITE_KEY_B
+  BONUS_INVITE_KEY_B,
 } from '../../config/env';
 import {IEnrollmentService} from '../../service/interface';
 
@@ -56,7 +56,6 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
       } else if (BONUS_INVITE_KEY_B && BONUS_INVITE_KEY_B === query.inviteKey) {
         enrollmentId = 'bonus-pilot-b';
       }
-      
 
       if (enrollmentId.length < 1) {
         // Unknown code
