@@ -102,7 +102,7 @@ export type TicketOffers = z.infer<typeof TicketOffers>;
 
 function mapToAvailabilityStatus(
   offer: TicketOffer | undefined,
-  totalPassengerCount: number
+  totalPassengerCount: number,
 ): BookingAvailabilityType {
   if (!offer) {
     // No offer means ticket sale is closed
