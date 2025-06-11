@@ -22,9 +22,7 @@ export async function getTrips(
   request: Request<ReqRefDefaults>,
 ): Promise<Result<TripsQuery, APIError>> {
   try {
-    console.log(
-      `Requesting trips with query:${JSON.stringify(query)}, and request: ${JSON.stringify(request)}`,
-    );
+    console.info(`Requesting trips with query:${JSON.stringify(query)}`);
     const result = await journeyPlannerClient(request).query<
       TripsQuery,
       TripsQueryVariables
@@ -32,7 +30,7 @@ export async function getTrips(
       query: TripsDocument,
       variables: query,
     });
-    console.log('Got trips response:', JSON.stringify(result));
+    console.info('Got trips response:', JSON.stringify(result));
 
     if (result.errors) {
       return Result.err(new APIError(result.errors));
