@@ -68,11 +68,9 @@ function createClient(url: string) {
     const errorLink = onError(({operation, graphQLErrors, networkError}) => {
       let error = '';
       if (graphQLErrors) {
-        graphQLErrors.forEach(
-          ({message, locations, path, stack, originalError}) => {
-            error += `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}, stack: ${JSON.stringify(stack)} originalError: ${JSON.stringify(originalError)}\n`;
-          },
-        );
+        graphQLErrors.forEach(({message, locations, path}) => {
+          error += `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(locations)}, Path: ${path}\n`;
+        });
       }
       if (networkError) {
         error = `[Network error]: ${networkError}`;
