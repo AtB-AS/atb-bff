@@ -67,17 +67,17 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
         enrollmentId,
         query.inviteKey,
       );
-      const analyticsGroups = ['ticketing_group'];
-
+      
       if (response.isErr) {
         return Boom.badData(response.error.message);
       }
-
+      
       const payload = response.unwrap();
-
+      
+      const analyticsGroups = [];
       analyticsGroups.push(payload.analytics_group);
 
-      return {status: 'ok', groups: analyticsGroups};
+      return {status: 'ok',enrollmentId: enrollmentId, groups: analyticsGroups};
     },
   });
 };
