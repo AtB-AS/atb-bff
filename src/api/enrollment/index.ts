@@ -73,7 +73,11 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
       const payload = response.unwrap();
       const analyticsGroups = [];
       analyticsGroups.push(payload.analytics_group);
-      return {status: 'ok',enrollmentId: enrollmentId, groups: analyticsGroups};
+      return {
+        status: 'ok',
+        enrollmentId: enrollmentId,
+        groups: analyticsGroups,
+      };
     },
   });
 };
