@@ -1,16 +1,16 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Global
-* @gorandalum @rosvik @marius-at-atb
+* @rosvik @marius-at-atb
 
 # Mobility
-**/mobility @gorandalum @marius-at-atb @reidzeibel
+**/mobility @rosvik @marius-at-atb @Dahly96
 
 # GH actions
-/.github/workflows/ @gorandalum @jorelosorio @reidzeibel
+/.github/workflows/ @rosvik @reidzeibel
 
 # Tests
-/test/ @gorandalum @rosvik @marius-at-atb @tormoseng
+/test/ @rosvik @marius-at-atb @tormoseng
 
 # No code owners for generated files
 src/graphql/journey/journeyplanner-types_v3.ts
