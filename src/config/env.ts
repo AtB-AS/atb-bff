@@ -83,7 +83,7 @@ export const ENROLLMENT_BASEURL: string = getServiceUrl(
   'ENROLLMENT',
   getEnv() === 'prod',
 );
-export const SALES_BASEURL: string = getServiceUrl('http://', 'SALES', false);
+export const SALES_BASEURL: string = getServiceUrl('http://', 'SALES', false) ?? 'https://troms-staging.api.mittatb.no';
 export const REDIS_HOST: string = getServiceHost('REDIS');
 export const REDIS_PORT: string = getServicePort('REDIS');
 

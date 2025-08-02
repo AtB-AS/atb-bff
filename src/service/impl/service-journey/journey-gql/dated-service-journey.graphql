@@ -1,0 +1,25 @@
+query DatedServiceJourney($id: String!) {
+    datedServiceJourney(
+        id: $id
+    ) {
+        id
+        estimatedCalls {
+            expectedDepartureTime
+            expectedArrivalTime
+            quay {
+                stopPlace {
+                    id
+                    name
+                }
+            }
+        }
+        serviceJourney {
+            transportMode
+            transportSubmode
+            line {
+                publicCode
+                name
+            }
+        }
+    }
+}

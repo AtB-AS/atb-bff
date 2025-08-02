@@ -76,6 +76,7 @@ import {
 import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-gen';
 import {CursoredData} from './cursored';
 import {StopPlaceGroup} from './impl/departures-grouped/utils/grouping';
+import {DatedServiceJourneyQuery} from "./impl/service-journey/journey-gql/dated-service-journey.graphql-gen";
 
 export interface IGeocoderService {
   getFeatures(
@@ -95,16 +96,23 @@ export interface IServiceJourneyService_v2 {
     query: ServiceJourneyMapInfoQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<ServiceJourneyMapInfoData, APIError>>;
+
   getDeparturesForServiceJourneyV2(
     id: string,
     query: DeparturesForServiceJourneyQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<ServiceJourneyEstimatedCallFragment[] | null, APIError>>;
+
   getServiceJourneyWithEstimatedCallsV2(
     id: string,
     query: ServiceJourneyWithEstimatedCallsQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<ServiceJourneyWithEstCallsFragment | null, APIError>>;
+
+  getDatedServiceJourney(
+    id: string,
+    request: Request<ReqRefDefaults>,
+  ): Promise<Result<DatedServiceJourneyQuery['datedServiceJourney'], APIError>>;
 }
 
 export interface ITrips_v2 {
@@ -112,15 +120,18 @@ export interface ITrips_v2 {
     query: TripsQueryVariables,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<TripsQuery, APIError>>;
+
   getNonTransitTrips(
     query: NonTransitTripsQueryVariables,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<TripPatternFragment[], APIError>>;
+
   getBookingTrips(
     query: BookingTripsQueryParameters,
     payload: BookingTripsQueryPayload,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<Trips.BookingTripsQuery, APIError>>;
+
   getSingleTrip(
     query: Trips.TripsQueryWithJourneyIds,
     request: Request<ReqRefDefaults>,
@@ -148,10 +159,12 @@ export interface IDeparturesService {
     payload: DeparturesPayload,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<DeparturesWithLineName, APIError>>;
+
   getStopPlacesByPosition(
     query: NearestStopPlacesQueryVariables,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<NearestStopPlacesQuery, APIError>>;
+
   getStopsDetails(
     query: StopsDetailsQueryVariables,
     request: Request<ReqRefDefaults>,
@@ -170,10 +183,12 @@ export interface IStopPlacesService {
     query: StopPlacesByModeQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<StopPlaces, APIError>>;
+
   getStopPlaceConnections(
     query: StopPlaceConnectionsQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<StopPlaces, APIError>>;
+
   getStopPlaceParent(
     query: StopPlaceParentQuery,
     request: Request<ReqRefDefaults>,
@@ -193,6 +208,7 @@ export interface IVehiclesService {
     query: ServiceJourneyVehicleQueryVariables,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<ServiceJourneyVehicles, APIError>>;
+
   createServiceJourneySubscription(
     query: ServiceJourneySubscriptionQueryVariables,
     ws: WebSocket.WebSocket,
@@ -204,34 +220,42 @@ export interface IMobilityService {
     query: VehiclesQuery_v2,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<GetVehicles_V2Query, APIError>>;
+
   getVehicle(
     query: VehicleQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<GetVehicleQuery, APIError>>;
+
   getStations_v2(
     query: StationsQuery_v2,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<GetStations_V2Query, APIError>>;
+
   getCarStation(
     query: CarStationQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<GetCarStationQuery, APIError>>;
+
   getBikeStation(
     query: BikeStationQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<GetBikeStationQuery, APIError>>;
+
   getGeofencingZones(
     query: GeofencingZonesQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<GetGeofencingZonesQuery, APIError>>;
+
   initViolationsReporting(
     query: ViolationsReportingInitQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsReportingInitQueryResult, APIError>>;
+
   violationsVehicleLookup(
     query: ViolationsVehicleLookupQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<ViolationsVehicleLookupQueryResult, APIError>>;
+
   sendViolationsReport(
     query: ViolationsReportQuery,
     request: Request<ReqRefDefaults>,

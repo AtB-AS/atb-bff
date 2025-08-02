@@ -3,7 +3,12 @@ import {
   TripPatternWithBooking,
   TripsQueryWithJourneyIds,
 } from '../../../types/trips';
-import {getSingleTrip, getTrips, getTripsNonTransit} from './trips';
+import {
+  getDatedServiceJourney,
+  getSingleTrip,
+  getTrips,
+  getTripsNonTransit,
+} from './trips';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {
   TripsNonTransitQueryVariables,
@@ -84,6 +89,7 @@ export default (): ITrips_v2 => {
     ) {
       return getSingleTrip(queryWithIds, request);
     },
+
   };
 
   return api;

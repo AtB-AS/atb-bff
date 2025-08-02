@@ -12,7 +12,7 @@ import {
   postEncodedSingleTripRequest,
   postTripsRequest,
   postNonTransitTripsRequest,
-  postBookingTripsRequest,
+  postBookingTripsRequest
 } from './schema';
 import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 
@@ -81,4 +81,5 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       return result.unwrap();
     },
   });
+
 };

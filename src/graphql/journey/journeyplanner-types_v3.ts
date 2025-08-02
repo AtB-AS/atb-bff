@@ -248,12 +248,6 @@ export type ElevationProfileStep = {
   elevation?: Maybe<Scalars['Float']['output']>;
 };
 
-/** Emission information for a trip-pattern or legs. */
-export type Emission = {
-  /** The average CO₂ emission per passenger in grams. */
-  co2?: Maybe<Scalars['Float']['output']>;
-};
-
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
   /** Actual time of arrival at quay. Updated from real time information if available. */
@@ -507,8 +501,6 @@ export type Leg = {
    *
    */
   elevationProfile: Array<Maybe<ElevationProfileStep>>;
-  /** The emission per person */
-  emission?: Maybe<Emission>;
   /** The expected, real-time adjusted date and time this leg ends. */
   expectedEndTime: Scalars['DateTime']['output'];
   /** The expected, real-time adjusted date and time this leg starts. */
@@ -2079,13 +2071,6 @@ export type TripPattern = {
   distance?: Maybe<Scalars['Float']['output']>;
   /** Duration of the trip, in seconds. */
   duration?: Maybe<Scalars['Long']['output']>;
-  /**
-   * The total emission per preson. The total emission is only available if all transit
-   * and car leg emissions can be calculated. If only a partial result is obtained, this
-   * will be null.
-   *
-   */
-  emission?: Maybe<Emission>;
   /**
    * Time that the trip arrives.
    * @deprecated Replaced with expectedEndTime

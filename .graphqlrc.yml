@@ -1,2 +1,2 @@
-schema: 'https://api.entur.io/journey-planner/v2/graphql'
+schema: 'https://api.entur.io/journey-planner/v3/graphql'
 documents: 'src/**/*.{graphql,js,ts,jsx,tsx'
