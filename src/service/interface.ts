@@ -76,7 +76,7 @@ import {
 import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-gen';
 import {CursoredData} from './cursored';
 import {StopPlaceGroup} from './impl/departures-grouped/utils/grouping';
-import {DatedServiceJourneyQuery} from "./impl/service-journey/journey-gql/dated-service-journey.graphql-gen";
+import {DatedServiceJourneyQuery} from './impl/service-journey/journey-gql/dated-service-journey.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(

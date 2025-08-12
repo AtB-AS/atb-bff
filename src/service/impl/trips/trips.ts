@@ -15,10 +15,7 @@ import * as Boom from '@hapi/boom';
 import {extractServiceJourneyIds, generateSingleTripQueryString} from './utils';
 import * as Trips from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
-import {
-  DatedServiceJourney,
-  Mode,
-} from '../../../graphql/journey/journeyplanner-types_v3';
+import {Mode} from '../../../graphql/journey/journeyplanner-types_v3';
 import {
   DatedServiceJourneyDocument,
   DatedServiceJourneyQuery,
@@ -132,8 +129,6 @@ export async function getDatedServiceJourney(
     query: DatedServiceJourneyDocument,
     variables: {id},
   });
-
-  console.log("Result: ", JSON.stringify(result, null, 2));
 
   if (result.errors) {
     return Result.err(new APIError(result.errors));

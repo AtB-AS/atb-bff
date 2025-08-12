@@ -132,22 +132,20 @@ async function fetchOffers(
   products: string[],
   request: Request<ReqRefDefaults>,
 ) {
-  const data = {
-    travellers,
-    travelDate: trip.expectedStartTime,
-    products,
-    legs: trip.legs.map((leg) => ({
-      fromStopPlaceId: leg.fromPlace.quay?.stopPlace?.id,
-      toStopPlaceId: leg.toPlace.quay?.stopPlace?.id,
-      serviceJourneyId: leg.serviceJourney?.id,
-      mode: leg.mode,
-      travelDate: leg.expectedStartTime.split('T')[0],
-    })),
-  };
-  console.log("Data: ", JSON.stringify(data, null, 2));
   return await post(
     `/sales/v1/search/trip-pattern`,
-    data,
+    {
+      travellers,
+      travelDate: trip.expectedStartTime,
+      products,
+      legs: trip.legs.map((leg) => ({
+        fromStopPlaceId: leg.fromPlace.quay?.stopPlace?.id,
+        toStopPlaceId: leg.toPlace.quay?.stopPlace?.id,
+        serviceJourneyId: leg.serviceJourney?.id,
+        mode: leg.mode,
+        travelDate: leg.expectedStartTime.split('T')[0],
+      })),
+    },
     request,
     {
       headers: {

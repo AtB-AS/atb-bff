@@ -97,21 +97,19 @@ export function serviceJourneyRoutes_v2(server: Hapi.Server) {
       },
     });
 
-
     server.route({
       method: 'GET',
       path: '/bff/v2/servicejourney/datedservicejourney/{id}',
       options: {
         tags: ['api', 'datedServiceJourney'],
         description: 'Get a datedServiceJourney',
-        validate: getDatedServiceJourneyRequest
+        validate: getDatedServiceJourneyRequest,
       },
       handler: async (request, h) => {
-        const {id} = request.params
-        const result = await service.getDatedServiceJourney(id, h.request)
+        const {id} = request.params;
+        const result = await service.getDatedServiceJourney(id, h.request);
         return result.unwrap();
-      }
-
-    })
+      },
+    });
   };
 }

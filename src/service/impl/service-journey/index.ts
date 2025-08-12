@@ -22,8 +22,7 @@ import {
 } from './journey-gql/service-journey-with-estimated-calls.graphql-gen';
 import {ServiceJourneyWithEstCallsFragment} from '../fragments/journey-gql/service-journey.graphql-gen';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {DatedServiceJourneyQueryVariables} from "./journey-gql/dated-service-journey.graphql-gen";
-import {getDatedServiceJourney} from "../trips/trips";
+import {getDatedServiceJourney} from '../trips/trips';
 
 export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
   return {
@@ -104,10 +103,7 @@ export function serviceJourneyService_v2(): IServiceJourneyService_v2 {
         return Result.err(new APIError(error));
       }
     },
-    async getDatedServiceJourney(
-        id: string,
-        request: Request<ReqRefDefaults>,
-    ) {
+    async getDatedServiceJourney(id: string, request: Request<ReqRefDefaults>) {
       return getDatedServiceJourney(id, request);
     },
   };

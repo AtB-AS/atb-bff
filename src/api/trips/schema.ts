@@ -1,8 +1,6 @@
 import Joi from 'joi';
 import {Location, Modes} from '../../graphql/journey/journeyplanner-types_v3';
-import {
-  TripsQueryVariables
-} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
+import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 import {
   BookingTripsQueryParameters,
   BookingTripsQueryPayload,
@@ -10,9 +8,6 @@ import {
   NonTransitTripsQueryVariables,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
-import {
-  DatedServiceJourneyQueryVariables
-} from "../../service/impl/service-journey/journey-gql/dated-service-journey.graphql-gen";
 
 export const postTripsRequest = {
   payload: Joi.object<TripsQueryVariables>({
