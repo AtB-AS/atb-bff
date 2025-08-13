@@ -16,6 +16,11 @@ import {extractServiceJourneyIds, generateSingleTripQueryString} from './utils';
 import * as Trips from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {Mode} from '../../../graphql/journey/journeyplanner-types_v3';
+import {
+  DatedServiceJourneyDocument,
+  DatedServiceJourneyQuery,
+  DatedServiceJourneyQueryVariables,
+} from '../service-journey/journey-gql/dated-service-journey.graphql-gen';
 
 export async function getTrips(
   query: TripsQueryVariables,
@@ -111,6 +116,25 @@ export async function getSingleTrip(
       ),
     );
   }
+}
+
+export async function getDatedServiceJourney(
+  id: string,
+  request: Request<ReqRefDefaults>,
+): Promise<Result<DatedServiceJourneyQuery['datedServiceJourney'], APIError>> {
+  const result = await journeyPlannerClient(request).query<
+    DatedServiceJourneyQuery,
+    DatedServiceJourneyQueryVariables
+  >({
+    query: DatedServiceJourneyDocument,
+    variables: {id},
+  });
+
+  if (result.errors) {
+    return Result.err(new APIError(result.errors));
+  }
+
+  return Result.ok(result.data.datedServiceJourney);
 }
 
 function mapTripsData(

@@ -4,6 +4,7 @@ import {
   ServiceJourneyMapInfoQuery,
   ServiceJourneyWithEstimatedCallsQuery,
 } from '../../service/types';
+import {DatedServiceJourneyQueryVariables} from '../../service/impl/service-journey/journey-gql/dated-service-journey.graphql-gen';
 
 export const getServiceJourneyMapDataRequest = {
   params: Joi.object({
@@ -31,4 +32,10 @@ export const getServiceJourneyWithEstimatedCallsV2 = {
   query: Joi.object<ServiceJourneyWithEstimatedCallsQuery>({
     date: Joi.date(),
   }),
+};
+
+export const getDatedServiceJourneyRequest = {
+  params: Joi.object<DatedServiceJourneyQueryVariables>({
+    id: Joi.string().required(),
+  }).required(),
 };
