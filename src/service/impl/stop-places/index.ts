@@ -25,6 +25,8 @@ import {
   GetStopPlaceParentQueryVariables,
 } from './journey-gql/stop-place-parent.graphql-gen';
 
+const MAX_RECURSIVE_DEPTH = 3;
+
 export default (): IStopPlacesService => {
   return {
     async getStopPlacesByMode(query, request) {
@@ -61,7 +63,10 @@ export default (): IStopPlacesService => {
         return Result.err(new APIError(error));
       }
     },
-    async getStopPlaceConnections(query, request) {
+    async getStopPlaceConnections(query, request, recursiveDepth) {
+      if (recursiveDepth > MAX_RECURSIVE_DEPTH) {
+        return Result.ok([]);
+      }
       const result = await journeyPlannerClient(request).query<
         GetStopPlaceConnectionsQuery,
         GetStopPlaceConnectionsQueryVariables
@@ -70,6 +75,7 @@ export default (): IStopPlacesService => {
         variables: {
           id: query.fromStopPlaceId,
         },
+        fetchPolicy: 'cache-first', // This policy is important since this function is called recursively
       });
       if (result.errors) {
         return Result.err(new APIError(result.errors));
@@ -98,8 +104,36 @@ export default (): IStopPlacesService => {
         .filter(isDefined)
         .filter(onlyUniquesBasedOnField('id'));
 
+      const transitivelyReachableStopPlaces = (
+        await Promise.all(
+          uniqueStopPlaces.map(async (sp) => {
+            const result = await this.getStopPlaceConnections(
+              {
+                ...query,
+                fromStopPlaceId: sp.id,
+              },
+              request,
+              recursiveDepth + 1,
+            );
+            if (result.isErr) {
+              return [];
+            }
+            return result.unwrap();
+          }),
+        )
+      ).flat();
+
+      const uniqueTransitiveStopPlaces = transitivelyReachableStopPlaces
+        .filter(isDefined)
+        .filter((sp) => sp?.id !== query.fromStopPlaceId)
+        .filter(onlyUniquesBasedOnField('id'));
+
+      const union = uniqueStopPlaces
+        .concat(uniqueTransitiveStopPlaces)
+        .filter(onlyUniquesBasedOnField('id'));
+
       try {
-        return Result.ok(uniqueStopPlaces ?? []);
+        return Result.ok(union ?? []);
       } catch (error) {
         return Result.err(new APIError(error));
       }

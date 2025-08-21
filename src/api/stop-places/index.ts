@@ -10,6 +10,8 @@ import {
   StopPlaceParentQuery,
   StopPlacesByModeQuery,
 } from '../../service/types';
+import {getClientCache, getServerCache} from "../../utils/cache";
+import {CACHE_TTL_MS_CLIENT, CACHE_TTL_MS_SERVER_SERVICE_JOURNEY_MAP_INFO} from "../../config/env";
 
 export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   server.route({
@@ -35,7 +37,7 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
     },
     handler: async (request, h) => {
       const query = request.query as unknown as StopPlaceConnectionsQuery;
-      return (await service.getStopPlaceConnections(query, h.request)).unwrap();
+      return (await service.getStopPlaceConnections(query, h.request, 1)).unwrap();
     },
   });
   server.route({

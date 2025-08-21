@@ -187,6 +187,7 @@ export interface IStopPlacesService {
   getStopPlaceConnections(
     query: StopPlaceConnectionsQuery,
     request: Request<ReqRefDefaults>,
+    recursiveDepth: number
   ): Promise<Result<StopPlaces, APIError>>;
 
   getStopPlaceParent(
