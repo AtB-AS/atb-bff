@@ -78,6 +78,7 @@ export const TripsNonTransitDocument = gql`
     arriveBy: $arriveBy
     walkSpeed: $walkSpeed
     modes: {directMode: bike_rental, transportModes: []}
+    whiteListed: {rentalNetworks: ["trondheimbysykkel", "bergenbysykkel", "oslobysykkel", "kolumbusbysykkel", "fartebysykkel"]}
   ) @include(if: $includeBikeRental) {
     ...trip
   }
