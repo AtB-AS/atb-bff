@@ -49,8 +49,8 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
     handler: async (request, h) => {
       const query = request.query as unknown as StopPlaceConnectionsQuery;
       return (await service.getStopPlaceDistances(query, h.request)).unwrap();
-    }
-  })
+    },
+  });
   server.route({
     method: 'GET',
     path: '/bff/v2/stop-places/parent-id',

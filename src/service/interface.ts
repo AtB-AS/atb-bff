@@ -195,9 +195,9 @@ export interface IStopPlacesService {
   ): Promise<Result<string, APIError>>;
 
   getStopPlaceDistances(
-      query: StopPlaceConnectionsQuery,
-      request: Request<ReqRefDefaults>,
-  ): Promise<Result<StopPlaces, APIError>>
+    query: StopPlaceConnectionsQuery,
+    request: Request<ReqRefDefaults>,
+  ): Promise<Result<StopPlaces, APIError>>;
 }
 
 export interface IEnrollmentService {

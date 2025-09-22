@@ -25,7 +25,7 @@ import {
   GetStopPlaceParentQueryVariables,
 } from './journey-gql/stop-place-parent.graphql-gen';
 import {StopPlaces} from '../../types';
-import {getDistancesResult} from "../../../api/stop-places/schema";
+import {getDistancesResult} from '../../../api/stop-places/schema';
 
 export default (): IStopPlacesService => {
   return {
@@ -138,15 +138,16 @@ export default (): IStopPlacesService => {
       const distances = await fetch(
         `https://api.staging.entur.io/distance/neighbour-distances/${query.fromStopPlaceId}?organisationId=18`,
       ).then((data) => data.json());
-      const {value: distancesValidated, error} = getDistancesResult.validate(distances);
-      if(error) return Result.err(new APIError(error));
+      const {value: distancesValidated, error} =
+        getDistancesResult.validate(distances);
+      if (error) return Result.err(new APIError(error));
 
       const allStopPlaces = (
         await this.getStopPlacesByMode(
           {
             authorities: query.authorities,
             transportModes: query.transportModes ?? [],
-            transportSubmodes: query.transportSubmodes ?? undefined
+            transportSubmodes: query.transportSubmodes ?? undefined,
           },
           request,
         )

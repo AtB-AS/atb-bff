@@ -34,8 +34,8 @@ const getDistancesVersion = Joi.object({
   validityPeriod: Joi.object({
     from: Joi.date().required(),
     to: Joi.date(),
-  })
-})
+  }),
+});
 
 export const getDistancesResult = Joi.object({
   id: Joi.string().required(),
@@ -43,4 +43,4 @@ export const getDistancesResult = Joi.object({
   toStopPlaceId: Joi.string().required(),
   organisationId: Joi.number().required(),
   versions: Joi.array().single().items(getDistancesVersion),
-})
+});
