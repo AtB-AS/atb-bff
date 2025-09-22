@@ -16,6 +16,8 @@ export const BONUS_INVITE_KEY_A: string | undefined =
   process.env.BONUS_INVITE_KEY_A;
 export const BONUS_INVITE_KEY_B: string | undefined =
   process.env.BONUS_INVITE_KEY_B;
+export const STOP_SIGNAL_BUTTON_INVITE_KEY: string | undefined =
+  process.env.STOP_SIGNAL_BUTTON_INVITE_KEY;
 
 export const ET_CLIENT_NAME = process.env.CLIENT_NAME || 'atb-bff';
 
