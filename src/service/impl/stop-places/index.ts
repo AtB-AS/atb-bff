@@ -24,6 +24,8 @@ import {
   GetStopPlaceParentQuery,
   GetStopPlaceParentQueryVariables,
 } from './journey-gql/stop-place-parent.graphql-gen';
+import {StopPlaces} from '../../types';
+import {getDistancesResult} from "../../../api/stop-places/schema";
 
 export default (): IStopPlacesService => {
   return {
@@ -130,6 +132,34 @@ export default (): IStopPlacesService => {
       }
 
       return Result.err(new Error('Invalid stop place ID'));
+    },
+    async getStopPlaceDistances(query, request) {
+      // This is only a POC in staging. OrgId 18 is Reis Nordland and for testing purposes only.
+      const distances = await fetch(
+        `https://api.staging.entur.io/distance/neighbour-distances/${query.fromStopPlaceId}?organisationId=18`,
+      ).then((data) => data.json());
+      const {value: distancesValidated, error} = getDistancesResult.validate(distances);
+      if(error) return Result.err(new APIError(error));
+
+      const allStopPlaces = (
+        await this.getStopPlacesByMode(
+          {
+            authorities: query.authorities,
+            transportModes: query.transportModes ?? [],
+            transportSubmodes: query.transportSubmodes ?? undefined
+          },
+          request,
+        )
+      ).unwrap();
+
+      const reachableStopPlaces: StopPlaces = distancesValidated
+        .filter((sp: any) => sp.fromStopPlaceId === query.fromStopPlaceId)
+        .map((sp: any) =>
+          allStopPlaces.find((asp) => asp.id === sp.toStopPlaceId),
+        )
+        .filter(isDefined);
+
+      return Result.ok(reachableStopPlaces);
     },
   };
 };
