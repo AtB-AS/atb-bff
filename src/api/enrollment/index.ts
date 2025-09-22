@@ -9,6 +9,7 @@ import {
   SHMO_INVITE_KEY,
   BONUS_INVITE_KEY_A,
   BONUS_INVITE_KEY_B,
+  STOP_SIGNAL_BUTTON_INVITE_KEY,
 } from '../../config/env';
 import {IEnrollmentService} from '../../service/interface';
 
@@ -55,6 +56,11 @@ export default (server: Hapi.Server) => (service: IEnrollmentService) => {
         enrollmentId = 'bonus-pilot-a';
       } else if (BONUS_INVITE_KEY_B && BONUS_INVITE_KEY_B === query.inviteKey) {
         enrollmentId = 'bonus-pilot-b';
+      } else if (
+        STOP_SIGNAL_BUTTON_INVITE_KEY &&
+        STOP_SIGNAL_BUTTON_INVITE_KEY === query.inviteKey
+      ) {
+        enrollmentId = 'stop-signal-button';
       }
 
       if (enrollmentId.length < 1) {
