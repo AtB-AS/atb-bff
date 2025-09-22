@@ -40,6 +40,20 @@ export default (server: Hapi.Server) => (service: IStopPlacesService) => {
   });
   server.route({
     method: 'GET',
+    path: '/bff/v2/stop-places/distances',
+    options: {
+      tags: ['api', 'stop', 'distances'],
+      validate: getStopPlaceConnectionsRequest,
+      description:
+        'Get stop place distances. This is a POC endpoint and will change. Should not be relied upon currently',
+    },
+    handler: async (request, h) => {
+      const query = request.query as unknown as StopPlaceConnectionsQuery;
+      return (await service.getStopPlaceDistances(query, h.request)).unwrap();
+    },
+  });
+  server.route({
+    method: 'GET',
     path: '/bff/v2/stop-places/parent-id',
     options: {
       tags: ['api', 'stop', 'parent'],
