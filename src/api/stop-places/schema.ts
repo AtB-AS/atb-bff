@@ -28,5 +28,7 @@ export const getStopPlaceParentRequest = {
   }),
 };
 
-export const getDistancesResult = Joi.object().pattern(Joi.string(), Joi.number());
-
+export const getDistancesResult = Joi.object().pattern(
+  Joi.string(),
+  Joi.number(),
+);
