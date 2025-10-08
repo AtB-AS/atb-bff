@@ -138,14 +138,14 @@ export default (): IStopPlacesService => {
     async getStopPlaceDistances(query, request) {
       // This is only a POC in staging. OrgId 18 is Reis Nordland and for testing purposes only.
       const distances = await fetch(
-        `https://api.staging.entur.io/distance/neighbour-distances/${query.fromStopPlaceId}?organisationId=18`,
+        `https://api.staging.entur.io/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=18`,
       ).then((data) => data.json());
-      const validationResult: Joi.ValidationResult<DistancesResult>[] =
-        distances.map((distance: any) => getDistancesResult.validate(distance));
-      const errors = validationResult.map((vr) => vr.error).filter(isDefined);
-      if (errors.length) return Result.err(new APIError(errors));
+      const validationResult: Joi.ValidationResult<DistancesResult> = getDistancesResult.validate(distances);
+      const error = validationResult.error
+      if (error) return Result.err(new APIError(error));
 
-      const distancesValidated = validationResult.map((vr) => vr.value);
+      const reachableStopPlaceIds = Object.keys(validationResult.value);
+      console.log("ReachableStopPlaceIds", JSON.stringify(reachableStopPlaceIds, null, 2));
 
       const allStopPlaces = (
         await this.getStopPlacesByMode(
@@ -158,10 +158,9 @@ export default (): IStopPlacesService => {
         )
       ).unwrap();
 
-      const reachableStopPlaces: StopPlaces = distancesValidated
-        .filter((sp: any) => sp.fromStopPlaceId === query.fromStopPlaceId)
-        .map((sp: any) =>
-          allStopPlaces.find((asp) => asp.id === sp.toStopPlaceId),
+      const reachableStopPlaces: StopPlaces = reachableStopPlaceIds
+        .map((spId) =>
+          allStopPlaces.find((asp) => asp.id === spId),
         )
         .filter(isDefined);
 
