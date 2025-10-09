@@ -28,19 +28,7 @@ export const getStopPlaceParentRequest = {
   }),
 };
 
-const getDistancesVersion = Joi.object({
-  distance: Joi.number().required(),
-  isPricingPath: Joi.boolean().required(),
-  validityPeriod: Joi.object({
-    from: Joi.date().required(),
-    to: Joi.date(),
-  }),
-});
-
-export const getDistancesResult = Joi.object({
-  id: Joi.string().required(),
-  fromStopPlaceId: Joi.string().required(),
-  toStopPlaceId: Joi.string().required(),
-  organisationId: Joi.number().required(),
-  versions: Joi.array().single().items(getDistancesVersion),
-});
+export const getDistancesResult = Joi.object().pattern(
+  Joi.string(),
+  Joi.number(),
+);
