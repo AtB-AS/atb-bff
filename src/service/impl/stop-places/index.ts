@@ -135,8 +135,12 @@ export default (): IStopPlacesService => {
 
       return Result.err(new Error('Invalid stop place ID'));
     },
+
+    /*
+     *  This is only a POC in staging. OrgId 18 is Reis Nordland and for testing purposes only.
+     *  Swaggerdoc for the API: https://petstore.swagger.io/?url=https://api.staging.entur.io/distance/v3/api-docs#/Distance/reachableStops
+     */
     async getStopPlaceDistances(query, request) {
-      // This is only a POC in staging. OrgId 18 is Reis Nordland and for testing purposes only.
       const distances = await fetch(
         `https://api.staging.entur.io/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=18`,
       ).then((data) => data.json());
