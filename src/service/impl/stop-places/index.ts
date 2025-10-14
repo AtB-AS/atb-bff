@@ -164,6 +164,7 @@ export default (): IStopPlacesService => {
 
       const reachableStopPlaces: StopPlaces = reachableStopPlaceIds
         .map((spId) => allStopPlaces.find((asp) => asp.id === spId))
+        .filter((sp) => sp?.id !== query.fromStopPlaceId) // Exclude the origin stop place from the results
         .filter(isDefined);
 
       return Result.ok(reachableStopPlaces);
