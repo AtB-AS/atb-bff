@@ -64,6 +64,7 @@ fragment tripPattern on TripPattern {
                 name
                 longitude
                 latitude
+                description
                 stopPlace {
                     id
                     longitude
@@ -88,6 +89,7 @@ fragment tripPattern on TripPattern {
                 name
                 longitude
                 latitude
+                description
                 stopPlace {
                     id
                     longitude

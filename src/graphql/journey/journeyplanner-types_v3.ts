@@ -170,7 +170,7 @@ export enum BookingMethod {
 export type Branding = {
   /** Description of branding. */
   description?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
   /** URL to an image be used for branding */
   image?: Maybe<Scalars['String']['output']>;
   /** Full name to be used for branding. */
@@ -248,6 +248,23 @@ export type ElevationProfileStep = {
   elevation?: Maybe<Scalars['Float']['output']>;
 };
 
+/** Emission information for a trip-pattern or legs. */
+export type Emission = {
+  /** The average CO₂ emission per passenger in grams. */
+  co2?: Maybe<Scalars['Float']['output']>;
+};
+
+/**
+ * The empirical delay indicate how late a service journey is based on historic data.
+ *
+ */
+export type EmpiricalDelay = {
+  /** The median/50% percentile. This value is in the middle of the distribution. */
+  p50?: Maybe<Scalars['Duration']['output']>;
+  /** The 90% percentile. 90% of the values is better and 10% have is more delayed. */
+  p90?: Maybe<Scalars['Duration']['output']>;
+};
+
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
   /** Actual time of arrival at quay. Updated from real time information if available. */
@@ -266,6 +283,8 @@ export type EstimatedCall = {
   date: Scalars['Date']['output'];
   datedServiceJourney?: Maybe<DatedServiceJourney>;
   destinationDisplay?: Maybe<DestinationDisplay>;
+  /** The typical delay for this trip on this day for this stop based on historical data. */
+  empiricalDelay?: Maybe<EmpiricalDelay>;
   /** Expected time of arrival at quay. Updated with real time information if available. Will be null if an actualArrivalTime exists */
   expectedArrivalTime: Scalars['DateTime']['output'];
   /** Expected time of departure from quay. Updated with real time information if available. Will be null if an actualDepartureTime exists */
@@ -501,6 +520,8 @@ export type Leg = {
    *
    */
   elevationProfile: Array<Maybe<ElevationProfileStep>>;
+  /** The emission per person */
+  emission?: Maybe<Emission>;
   /** The expected, real-time adjusted date and time this leg ends. */
   expectedEndTime: Scalars['DateTime']['output'];
   /** The expected, real-time adjusted date and time this leg starts. */
@@ -1305,7 +1326,7 @@ export enum RelativeDirection {
 
 /**
  * A relax-cost is used to increase the limit when comparing one cost to another cost.
- * This is used to include more results into the result. A `ratio=2.0` means a path(itinerary)
+ * This is used to include more results into the result. A `ratio=2.0` means a path (itinerary)
  * with twice as high cost as another one, is accepted. A `constant=$300` means a "fixed"
  * constant is added to the limit. A `{ratio=1.0, constant=0}` is said to be the NORMAL relaxed
  * cost - the limit is the same as the cost used to calculate the limit. The NORMAL is usually
@@ -1463,7 +1484,7 @@ export type RoutingParameters = {
    * @deprecated This parameter is always enabled
    */
   showIntermediateStops?: Maybe<Scalars['Boolean']['output']>;
-  /** Used instead of walkReluctance for stairs. */
+  /** A multiplier to specify how bad walking on stairs is, compared to walking on flat ground, on top of the walk reluctance. */
   stairsReluctance?: Maybe<Scalars['Float']['output']>;
   /** An extra penalty added on transfers (i.e. all boardings except the first one). */
   transferPenalty?: Maybe<Scalars['Int']['output']>;
@@ -1759,7 +1780,7 @@ export type TimePenaltyWithCost = {
   /**
    * The time-penalty is applied to either the access-legs and/or egress-legs. Both access
    * and egress may contain more than one leg; Hence, the penalty is not a field on leg. The
-   * `appliedTo` describe witch part of the itinerary that this instance applies to.
+   * `appliedTo` describe which part of the itinerary that this instance applies to.
    *
    */
   appliedTo?: Maybe<Scalars['String']['output']>;
@@ -1775,7 +1796,7 @@ export type TimePenaltyWithCost = {
   generalizedCostDelta?: Maybe<Scalars['Int']['output']>;
   /**
    * The time-penalty added to the actual time/duration when comparing the itinerary with
-   * other itineraries. This is used to decide witch is the best option, but is not visible
+   * other itineraries. This is used to decide which is the best option, but is not visible
    * - the actual departure and arrival-times are not modified.
    *
    */
@@ -2072,6 +2093,13 @@ export type TripPattern = {
   /** Duration of the trip, in seconds. */
   duration?: Maybe<Scalars['Long']['output']>;
   /**
+   * The total emission per person. The total emission is only available if all transit
+   * and car leg emissions can be calculated. If only a partial result is obtained, this
+   * will be null.
+   *
+   */
+  emission?: Maybe<Emission>;
+  /**
    * Time that the trip arrives.
    * @deprecated Replaced with expectedEndTime
    */
@@ -2091,7 +2119,7 @@ export type TripPattern = {
    * @deprecated Replaced with expectedStartTime
    */
   startTime?: Maybe<Scalars['DateTime']['output']>;
-  /** How far the user has to walk, bike and/or drive in meters. It includes all street(none transit) modes. */
+  /** How far the user has to walk, bike and/or drive in meters. It includes all street (none transit) modes. */
   streetDistance?: Maybe<Scalars['Float']['output']>;
   /** Get all system notices. */
   systemNotices: Array<SystemNotice>;
@@ -2138,7 +2166,7 @@ export type TripSearchData = {
  *
  */
 export type TripViaLocationInput = {
-  /** Board, alight or pass-through(on-board) at the stop location. */
+  /** Board, alight or pass-through (on-board) at the stop location. */
   passThrough?: InputMaybe<TripPassThroughViaLocationInput>;
   /** Board or alight at a stop location or visit a coordinate. */
   visit?: InputMaybe<TripVisitViaLocationInput>;
@@ -2147,7 +2175,7 @@ export type TripViaLocationInput = {
 /**
  * A visit-via-location is a physical visit to one of the stop locations or coordinates listed. An
  * on-board visit does not count, the traveler must alight or board at the given stop for it to to
- * be accepted. To visit a coordinate, the traveler must walk(bike or drive) to the closest point
+ * be accepted. To visit a coordinate, the traveler must walk (bike or drive) to the closest point
  * in the street network from a stop and back to another stop to join the transit network.
  *
  */
