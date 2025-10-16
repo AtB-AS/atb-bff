@@ -8,6 +8,7 @@ fragment quay on Quay {
   tariffZones {
     ...tariffZone
   }
+  description
 }
 
 fragment quayWithSituations on Quay {

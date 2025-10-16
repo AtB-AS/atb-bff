@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
 import { StopPlaceFragmentDoc } from './stop-places.graphql-gen';
 import { TariffZoneFragmentDoc } from './tariff-zones.graphql-gen';
 import { SituationFragmentDoc } from './situations.graphql-gen';
-export type QuayFragment = { id: string, name: string, publicCode?: string, stopPlace?: StopPlaceFragment, tariffZones: Array<TariffZoneFragment> };
+export type QuayFragment = { id: string, name: string, publicCode?: string, description?: string, stopPlace?: StopPlaceFragment, tariffZones: Array<TariffZoneFragment> };
 
 export type QuayWithSituationsFragment = (
   { situations: Array<SituationFragment> }
@@ -26,6 +26,7 @@ export const QuayFragmentDoc = gql`
   tariffZones {
     ...tariffZone
   }
+  description
 }
     ${StopPlaceFragmentDoc}
 ${TariffZoneFragmentDoc}`;
