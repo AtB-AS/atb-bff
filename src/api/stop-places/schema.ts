@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {
-  StopPlaceConnectionsQuery,
+  StopPlaceDistancesQuery,
   StopPlaceParentQuery,
   StopPlacesByModeQuery,
 } from '../../service/types';
@@ -14,11 +14,12 @@ export const getStopPlacesByModeRequest = {
 };
 
 export const getStopPlaceConnectionsRequest = {
-  query: Joi.object<StopPlaceConnectionsQuery>({
+  query: Joi.object<StopPlaceDistancesQuery>({
     authorities: Joi.array().single().items(Joi.string()).required(),
     fromStopPlaceId: Joi.string().required(),
     transportModes: Joi.array().single().items(Joi.string()),
     transportSubmodes: Joi.array().single().items(Joi.string()),
+    orgId: Joi.string().optional(),
   }),
 };
 
