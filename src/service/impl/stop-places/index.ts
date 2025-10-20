@@ -142,7 +142,7 @@ export default (): IStopPlacesService => {
      */
     async getStopPlaceDistances(query, request) {
       const distances = await fetch(
-        `https://api.staging.entur.io/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=18`,
+        `https://api.staging.entur.io/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=${query.orgId}`,
       ).then((data) => data.json());
       const validationResult: Joi.ValidationResult<DistancesResult> =
         getDistancesResult.validate(distances);
