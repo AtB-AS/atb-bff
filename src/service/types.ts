@@ -60,10 +60,6 @@ export interface StopPlaceConnectionsQuery {
   transportSubmodes?: TransportSubmode[];
 }
 
-export type StopPlaceDistancesQuery = StopPlaceConnectionsQuery & {
-  orgId?: string;
-};
-
 export interface StopPlaceParentQuery {
   id: string;
 }
@@ -249,3 +245,10 @@ export type ViolationsReportQuery = {
 export type ViolationsReportQueryResult = {
   status: 'OK';
 };
+
+export enum Orgs {
+  atb,
+  fram,
+  nfk,
+  troms
+}

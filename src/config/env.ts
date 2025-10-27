@@ -32,6 +32,11 @@ export const NIVEL_API_KEY: string | undefined = process.env.NIVEL_API_KEY;
 const API_BASE_URL: string | undefined = process.env.API_BASE_URL;
 
 /**
+ * The tenant / org the BFF is running on
+ */
+export const ORG_ID: string | undefined = process.env.ORG_ID;
+
+/**
  * Return a URL to the given service. `serviceKey` should be uppercased.
  */
 const getServiceUrl = (

@@ -64,7 +64,6 @@ import {
   ViolationsVehicleLookupQuery,
   ViolationsVehicleLookupQueryResult,
   StopPlaceParentQuery,
-  StopPlaceDistancesQuery,
 } from './types';
 import {APIError} from '../utils/api-error';
 import {Feature, Point} from 'geojson';
@@ -196,7 +195,7 @@ export interface IStopPlacesService {
   ): Promise<Result<string, APIError>>;
 
   getStopPlaceDistances(
-    query: StopPlaceDistancesQuery,
+    query: StopPlaceConnectionsQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<StopPlaces, APIError>>;
 }
