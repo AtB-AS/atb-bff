@@ -2,215 +2,219 @@ import {IStopPlacesService} from '../../interface';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {Result} from '@badrap/result';
 import {
-    GetStopPlaceConnectionsDocument,
-    GetStopPlaceConnectionsQuery,
-    GetStopPlaceConnectionsQueryVariables,
+  GetStopPlaceConnectionsDocument,
+  GetStopPlaceConnectionsQuery,
+  GetStopPlaceConnectionsQueryVariables,
 } from './journey-gql/stop-place-connections.graphql-gen';
 import {isDefined, onlyUniquesBasedOnField, orgToEnturOrgNoMap} from './utils';
 import {APIError} from '../../../utils/api-error';
 import {
-    GetStopPlacesByModeDocument,
-    GetStopPlacesByModeQuery,
-    GetStopPlacesByModeQueryVariables,
+  GetStopPlacesByModeDocument,
+  GetStopPlacesByModeQuery,
+  GetStopPlacesByModeQueryVariables,
 } from './journey-gql/stop-places-mode.graphql-gen';
 import {QuayFragment} from '../fragments/journey-gql/quays.graphql-gen';
 import {JourneyPatternsFragment} from '../fragments/journey-gql/journey-pattern.graphql-gen';
 import {
-    TransportMode,
-    TransportSubmode,
+  TransportMode,
+  TransportSubmode,
 } from '../../../graphql/journey/journeyplanner-types_v3';
 import {
-    GetStopPlaceParentDocument,
-    GetStopPlaceParentQuery,
-    GetStopPlaceParentQueryVariables,
+  GetStopPlaceParentDocument,
+  GetStopPlaceParentQuery,
+  GetStopPlaceParentQueryVariables,
 } from './journey-gql/stop-place-parent.graphql-gen';
 import {StopPlaces} from '../../types';
 import {getDistancesResult} from '../../../api/stop-places/schema';
 import {DistancesResult} from '../../../api/stop-places/types';
 import Joi from 'joi';
-import {get} from "../../../utils/fetch-client";
-import {getOrg} from "../../../utils/get-org";
-
-const ORG_ID = getOrg();
+import {get} from '../../../utils/fetch-client';
+import {getOrg} from '../../../utils/get-org';
 
 export default (): IStopPlacesService => {
-    return {
-        async getStopPlacesByMode(query, request) {
-            const result = await journeyPlannerClient(request).query<
-                GetStopPlacesByModeQuery,
-                GetStopPlacesByModeQueryVariables
-            >({
-                query: GetStopPlacesByModeDocument,
-                variables: {
-                    authorities: query.authorities,
-                    transportModes: query.transportModes,
-                },
-            });
-
-            if (result.errors) {
-                return Result.err(new APIError(result.errors));
-            }
-
-            try {
-                const uniqueStopPlaces = result.data.lines
-                    .filter((line) =>
-                        filterTransportModes(
-                            {submodes: query.transportSubmodes},
-                            undefined,
-                            line.transportSubmode,
-                        ),
-                    )
-                    .flatMap((line) => line.quays)
-                    .map((quay) => quay.stopPlace)
-                    .filter(isDefined)
-                    .filter(onlyUniquesBasedOnField('id'));
-                return Result.ok(uniqueStopPlaces);
-            } catch (error) {
-                return Result.err(new APIError(error));
-            }
+  return {
+    async getStopPlacesByMode(query, request) {
+      const result = await journeyPlannerClient(request).query<
+        GetStopPlacesByModeQuery,
+        GetStopPlacesByModeQueryVariables
+      >({
+        query: GetStopPlacesByModeDocument,
+        variables: {
+          authorities: query.authorities,
+          transportModes: query.transportModes,
         },
-        async getStopPlaceConnections(query, request) {
-            const result = await journeyPlannerClient(request).query<
-                GetStopPlaceConnectionsQuery,
-                GetStopPlaceConnectionsQueryVariables
-            >({
-                query: GetStopPlaceConnectionsDocument,
-                variables: {
-                    id: query.fromStopPlaceId,
-                },
-            });
-            if (result.errors) {
-                return Result.err(new APIError(result.errors));
-            }
-            if (!result.data.stopPlace?.quays) {
-                return Result.ok([]);
-            }
-            const journeyPatternsWithMatchingAuthority = result.data.stopPlace.quays
-                .flatMap((quay) => quay.journeyPatterns)
-                .filter((jp) => filterAuthorities(jp, query.authorities))
-                .filter((jp) =>
-                    filterTransportModes(
-                        {modes: query.transportModes, submodes: query.transportSubmodes},
-                        jp.line.transportMode,
-                        jp.line.transportSubmode,
-                    ),
-                );
+      });
 
-            const reachableQuays = journeyPatternsWithMatchingAuthority.flatMap(
-                (jp) => getReachableQuays(jp.quays, query.fromStopPlaceId),
-            );
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
 
-            const reachableStopPlaces = reachableQuays.map((quay) => quay.stopPlace);
-
-            const uniqueStopPlaces = reachableStopPlaces
-                .filter(isDefined)
-                .filter(onlyUniquesBasedOnField('id'));
-
-            try {
-                return Result.ok(uniqueStopPlaces ?? []);
-            } catch (error) {
-                return Result.err(new APIError(error));
-            }
+      try {
+        const uniqueStopPlaces = result.data.lines
+          .filter((line) =>
+            filterTransportModes(
+              {submodes: query.transportSubmodes},
+              undefined,
+              line.transportSubmode,
+            ),
+          )
+          .flatMap((line) => line.quays)
+          .map((quay) => quay.stopPlace)
+          .filter(isDefined)
+          .filter(onlyUniquesBasedOnField('id'));
+        return Result.ok(uniqueStopPlaces);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async getStopPlaceConnections(query, request) {
+      const result = await journeyPlannerClient(request).query<
+        GetStopPlaceConnectionsQuery,
+        GetStopPlaceConnectionsQueryVariables
+      >({
+        query: GetStopPlaceConnectionsDocument,
+        variables: {
+          id: query.fromStopPlaceId,
         },
-        async getStopPlaceParent(query, request) {
-            const result = await journeyPlannerClient(request).query<
-                GetStopPlaceParentQuery,
-                GetStopPlaceParentQueryVariables
-            >({
-                query: GetStopPlaceParentDocument,
-                variables: {
-                    id: query.id,
-                },
-            });
-            if (result.errors) {
-                return Result.err(new APIError(result.errors));
-            }
-            const parentStopPlaceId = result.data.stopPlace?.parent?.id;
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      if (!result.data.stopPlace?.quays) {
+        return Result.ok([]);
+      }
+      const journeyPatternsWithMatchingAuthority = result.data.stopPlace.quays
+        .flatMap((quay) => quay.journeyPatterns)
+        .filter((jp) => filterAuthorities(jp, query.authorities))
+        .filter((jp) =>
+          filterTransportModes(
+            {modes: query.transportModes, submodes: query.transportSubmodes},
+            jp.line.transportMode,
+            jp.line.transportSubmode,
+          ),
+        );
 
-            // found parent stop ID
-            if (parentStopPlaceId) {
-                return Result.ok(parentStopPlaceId);
-            }
+      const reachableQuays = journeyPatternsWithMatchingAuthority.flatMap(
+        (jp) => getReachableQuays(jp.quays, query.fromStopPlaceId),
+      );
 
-            // sent ID is parent stop place
-            if (result.data.stopPlace) {
-                return Result.ok(result.data.stopPlace?.id);
-            }
+      const reachableStopPlaces = reachableQuays.map((quay) => quay.stopPlace);
 
-            return Result.err(new Error('Invalid stop place ID'));
+      const uniqueStopPlaces = reachableStopPlaces
+        .filter(isDefined)
+        .filter(onlyUniquesBasedOnField('id'));
+
+      try {
+        return Result.ok(uniqueStopPlaces ?? []);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async getStopPlaceParent(query, request) {
+      const result = await journeyPlannerClient(request).query<
+        GetStopPlaceParentQuery,
+        GetStopPlaceParentQueryVariables
+      >({
+        query: GetStopPlaceParentDocument,
+        variables: {
+          id: query.id,
         },
+      });
+      if (result.errors) {
+        return Result.err(new APIError(result.errors));
+      }
+      const parentStopPlaceId = result.data.stopPlace?.parent?.id;
 
-        async getStopPlaceDistances(query, request) {
-            const org = getOrg()
-            if (!org) {
-                return Result.err(new APIError({
-                    statusCode: 500,
-                    message: "No ORG ID! This endpoint requires orgID environement variable to be set, but it was not. Please set ORG_ID and try again"
-                }))
-            }
-            const orgId = orgToEnturOrgNoMap[org];
-            const distances = await get<DistancesResult>(`/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=${orgId}`, request)
-            const validationResult: Joi.ValidationResult<DistancesResult> =
-                getDistancesResult.validate(distances);
-            const error = validationResult.error;
-            if (error) return Result.err(new APIError(error));
+      // found parent stop ID
+      if (parentStopPlaceId) {
+        return Result.ok(parentStopPlaceId);
+      }
 
-            const reachableStopPlaceIds = Object.keys(validationResult.value);
+      // sent ID is parent stop place
+      if (result.data.stopPlace) {
+        return Result.ok(result.data.stopPlace?.id);
+      }
 
-            const allStopPlaces = (
-                await this.getStopPlacesByMode(
-                    {
-                        authorities: query.authorities,
-                        transportModes: query.transportModes ?? [],
-                        transportSubmodes: query.transportSubmodes ?? undefined,
-                    },
-                    request,
-                )
-            ).unwrap();
+      return Result.err(new Error('Invalid stop place ID'));
+    },
 
-            const reachableStopPlaces: StopPlaces = reachableStopPlaceIds
-                .map((spId) => allStopPlaces.find((asp) => asp.id === spId))
-                .filter((sp) => sp?.id !== query.fromStopPlaceId) // Exclude the origin stop place from the results
-                .filter(isDefined);
+    async getStopPlaceDistances(query, request) {
+      const org = getOrg();
+      if (!org) {
+        return Result.err(
+          new APIError({
+            statusCode: 500,
+            message:
+              'No ORG ID! This endpoint requires orgID environement variable to be set, but it was not. Please set ORG_ID and try again',
+          }),
+        );
+      }
+      const orgId = orgToEnturOrgNoMap[org];
+      const distances = await get<DistancesResult>(
+        `/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=${orgId}`,
+        request,
+      );
+      const validationResult: Joi.ValidationResult<DistancesResult> =
+        getDistancesResult.validate(distances);
+      const error = validationResult.error;
+      if (error) return Result.err(new APIError(error));
 
-            return Result.ok(reachableStopPlaces);
-        },
-    };
+      const reachableStopPlaceIds = Object.keys(validationResult.value);
+
+      const allStopPlaces = (
+        await this.getStopPlacesByMode(
+          {
+            authorities: query.authorities,
+            transportModes: query.transportModes ?? [],
+            transportSubmodes: query.transportSubmodes ?? undefined,
+          },
+          request,
+        )
+      ).unwrap();
+
+      const reachableStopPlaces: StopPlaces = reachableStopPlaceIds
+        .map((spId) => allStopPlaces.find((asp) => asp.id === spId))
+        .filter((sp) => sp?.id !== query.fromStopPlaceId) // Exclude the origin stop place from the results
+        .filter(isDefined);
+
+      return Result.ok(reachableStopPlaces);
+    },
+  };
 };
 
 function filterAuthorities(
-    journeyPattern: JourneyPatternsFragment,
-    authorities: string[],
+  journeyPattern: JourneyPatternsFragment,
+  authorities: string[],
 ) {
-    return authorities.some(
-        (authority) => journeyPattern.line.authority?.id === authority,
-    );
+  return authorities.some(
+    (authority) => journeyPattern.line.authority?.id === authority,
+  );
 }
 
 function filterTransportModes(
-    filter: {
-        modes?: TransportMode[];
-        submodes?: TransportSubmode[];
-    },
-    mode?: TransportMode,
-    submode?: TransportSubmode,
+  filter: {
+    modes?: TransportMode[];
+    submodes?: TransportSubmode[];
+  },
+  mode?: TransportMode,
+  submode?: TransportSubmode,
 ) {
-    const isOneOfModes = filter.modes
-        ? filter.modes.some((m) => mode === m)
-        : true;
-    const isOneOfSubmodes = filter.submodes
-        ? filter.submodes.some((sm) => submode === sm)
-        : true;
-    return isOneOfModes && isOneOfSubmodes;
+  const isOneOfModes = filter.modes
+    ? filter.modes.some((m) => mode === m)
+    : true;
+  const isOneOfSubmodes = filter.submodes
+    ? filter.submodes.some((sm) => submode === sm)
+    : true;
+  return isOneOfModes && isOneOfSubmodes;
 }
 
 function getReachableQuays(quays: QuayFragment[], fromStopPlaceId: string) {
-    const index = quays.findIndex(
-        (quay) => quay.stopPlace?.id === fromStopPlaceId,
-    );
-    const reachableQuaysOnLine = quays.slice(index + 1);
-    const reachableQuaysOnLineWithoutFromStopPlace = reachableQuaysOnLine.filter(
-        (quay) => quay.stopPlace?.id !== fromStopPlaceId,
-    );
-    return reachableQuaysOnLineWithoutFromStopPlace;
+  const index = quays.findIndex(
+    (quay) => quay.stopPlace?.id === fromStopPlaceId,
+  );
+  const reachableQuaysOnLine = quays.slice(index + 1);
+  const reachableQuaysOnLineWithoutFromStopPlace = reachableQuaysOnLine.filter(
+    (quay) => quay.stopPlace?.id !== fromStopPlaceId,
+  );
+  return reachableQuaysOnLineWithoutFromStopPlace;
 }

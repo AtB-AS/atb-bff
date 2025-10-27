@@ -1,5 +1,5 @@
 import {Orgs} from '../service/types';
-import {ORG_ID} from "../config/env";
+import {ORG_ID} from '../config/env';
 
 export function getOrg(): Orgs | undefined {
   switch (ORG_ID) {

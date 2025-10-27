@@ -250,5 +250,5 @@ export enum Orgs {
   atb,
   fram,
   nfk,
-  troms
+  troms,
 }
