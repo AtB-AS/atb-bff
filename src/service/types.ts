@@ -245,3 +245,10 @@ export type ViolationsReportQuery = {
 export type ViolationsReportQueryResult = {
   status: 'OK';
 };
+
+export enum Org {
+  atb = 'atb',
+  fram = 'fram',
+  nfk = 'nfk',
+  troms = 'troms',
+}

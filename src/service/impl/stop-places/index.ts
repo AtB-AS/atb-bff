@@ -6,7 +6,7 @@ import {
   GetStopPlaceConnectionsQuery,
   GetStopPlaceConnectionsQueryVariables,
 } from './journey-gql/stop-place-connections.graphql-gen';
-import {isDefined, onlyUniquesBasedOnField} from './utils';
+import {isDefined, onlyUniquesBasedOnField, orgToEnturOrgNoMap} from './utils';
 import {APIError} from '../../../utils/api-error';
 import {
   GetStopPlacesByModeDocument,
@@ -28,6 +28,8 @@ import {StopPlaces} from '../../types';
 import {getDistancesResult} from '../../../api/stop-places/schema';
 import {DistancesResult} from '../../../api/stop-places/types';
 import Joi from 'joi';
+import {get} from '../../../utils/fetch-client';
+import {getOrg} from '../../../utils/get-org';
 
 export default (): IStopPlacesService => {
   return {
@@ -136,14 +138,22 @@ export default (): IStopPlacesService => {
       return Result.err(new Error('Invalid stop place ID'));
     },
 
-    /*
-     *  This is only a POC in staging. OrgId 18 is Reis Nordland and for testing purposes only.
-     *  Swaggerdoc for the API: https://petstore.swagger.io/?url=https://api.staging.entur.io/distance/v3/api-docs#/Distance/reachableStops
-     */
     async getStopPlaceDistances(query, request) {
-      const distances = await fetch(
-        `https://api.staging.entur.io/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=18`,
-      ).then((data) => data.json());
+      const org = getOrg();
+      if (!org) {
+        return Result.err(
+          new APIError({
+            statusCode: 500,
+            message:
+              'No ORG ID! This endpoint requires orgID environement variable to be set, but it was not. Please set ORG_ID and try again',
+          }),
+        );
+      }
+      const orgId = orgToEnturOrgNoMap[org];
+      const distances = await get<DistancesResult>(
+        `/distance/stop-place-distances/reachable/${query.fromStopPlaceId}?organisationId=${orgId}`,
+        request,
+      );
       const validationResult: Joi.ValidationResult<DistancesResult> =
         getDistancesResult.validate(distances);
       const error = validationResult.error;
