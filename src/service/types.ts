@@ -247,8 +247,8 @@ export type ViolationsReportQueryResult = {
 };
 
 export enum Org {
-  atb = "atb",
-  fram = "fram",
-  nfk = "nfk",
-  troms = "troms" ,
+  atb = 'atb',
+  fram = 'fram',
+  nfk = 'nfk',
+  troms = 'troms',
 }
