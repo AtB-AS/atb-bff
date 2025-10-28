@@ -246,9 +246,9 @@ export type ViolationsReportQueryResult = {
   status: 'OK';
 };
 
-export enum Orgs {
-  atb,
-  fram,
-  nfk,
-  troms,
+export enum Org {
+  atb = "atb",
+  fram = "fram",
+  nfk = "nfk",
+  troms = "troms" ,
 }
