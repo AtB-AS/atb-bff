@@ -79,8 +79,8 @@ export const geocoderReverseTestData: geocoderTestDataType = {
           category: 'onstreetBus',
         },
         {
-          id: 'KVE:TopographicPlace:5028-Spurvevegen',
-          name: 'Spurvevegen',
+          id: 'KVE:TopographicPlace:5028-Uglevegen',
+          name: 'Uglevegen',
           category: 'street',
         },
       ],
