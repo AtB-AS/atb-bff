@@ -255,17 +255,17 @@ export type Emission = {
 };
 
 /**
- * The empirical delay indicate how late a service journey is based on historic data.
+ * The empirical delay indicates how late a service journey is based on historic data.
  *
  */
 export type EmpiricalDelay = {
   /** The median/50% percentile. This value is in the middle of the distribution. */
   p50?: Maybe<Scalars['Duration']['output']>;
-  /** The 90% percentile. 90% of the values is better and 10% have is more delayed. */
+  /** The 90% percentile. 90% of the values in the distribution is better and 10% is more delayed. */
   p90?: Maybe<Scalars['Duration']['output']>;
 };
 
-/** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
+/** List of calls on quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
   /** Actual time of arrival at quay. Updated from real time information if available. */
   actualArrivalTime?: Maybe<Scalars['DateTime']['output']>;
@@ -285,9 +285,9 @@ export type EstimatedCall = {
   destinationDisplay?: Maybe<DestinationDisplay>;
   /** The typical delay for this trip on this day for this stop based on historical data. */
   empiricalDelay?: Maybe<EmpiricalDelay>;
-  /** Expected time of arrival at quay. Updated with real time information if available. Will be null if an actualArrivalTime exists */
+  /** Expected time of arrival at quay. Updated with real time information if available. */
   expectedArrivalTime: Scalars['DateTime']['output'];
-  /** Expected time of departure from quay. Updated with real time information if available. Will be null if an actualDepartureTime exists */
+  /** Expected time of departure from quay. Updated with real time information if available. */
   expectedDepartureTime: Scalars['DateTime']['output'];
   /** Whether vehicle may be alighted at quay. */
   forAlighting: Scalars['Boolean']['output'];
@@ -304,6 +304,8 @@ export type EstimatedCall = {
   /** Whether vehicle will only stop on request. */
   requestStop: Scalars['Boolean']['output'];
   serviceJourney: ServiceJourney;
+  /** Estimated calls for the ServiceJourney on this date. */
+  serviceJourneyEstimatedCalls: SjEstimatedCalls;
   /** Get all relevant situations for this EstimatedCall. */
   situations: Array<PtSituationElement>;
   stopPositionInPattern: Scalars['Int']['output'];
@@ -314,9 +316,15 @@ export type EstimatedCall = {
 export enum FilterPlaceType {
   /** Bicycle rent stations */
   BicycleRent = 'bicycleRent',
-  /** Bike parks */
+  /**
+   * Bike parks
+   * @deprecated Not supported
+   */
   BikePark = 'bikePark',
-  /** Car parks */
+  /**
+   * Car parks
+   * @deprecated Not supported
+   */
   CarPark = 'carPark',
   /** Quay */
   Quay = 'quay',
@@ -532,7 +540,12 @@ export type Leg = {
   fromPlace: Place;
   /** Generalized cost or weight of the leg. Used for debugging. */
   generalizedCost?: Maybe<Scalars['Int']['output']>;
-  /** An identifier for the leg, which can be used to re-fetch transit leg information. */
+  /**
+   * An identifier for the leg, which can be used to re-fetch transit leg information. The
+   * identifier is valid for a maximum of 2 years, but sometimes it will fail after a few hours.
+   * We do not recommend storing IDs for a long time.
+   *
+   */
   id?: Maybe<Scalars['ID']['output']>;
   interchangeFrom?: Maybe<Interchange>;
   interchangeTo?: Maybe<Interchange>;
@@ -869,6 +882,8 @@ export type PlaceInterface = {
 
 /** A list of coordinates encoded as a polyline string (see http://code.google.com/apis/maps/documentation/polylinealgorithm.html) */
 export type PointsOnLink = {
+  /** The distance in meters. */
+  distance?: Maybe<Scalars['Int']['output']>;
   /** The number of points in the string */
   length?: Maybe<Scalars['Int']['output']>;
   /** The encoded points of the polyline. Be aware that the string could contain escape characters that need to be accounted for. (https://www.freeformatter.com/javascript-escape.html) */
@@ -1057,6 +1072,8 @@ export type QueryType = {
   stopPlaces: Array<Maybe<StopPlace>>;
   /** Get all stop places within the specified bounding box */
   stopPlacesByBbox: Array<Maybe<StopPlace>>;
+  /** Get information about the transit data available in the system. */
+  transitInfo: TransitInfo;
   /** Input type for executing a travel search for a trip between two locations. Returns trip patterns describing suggested alternatives for the trip. */
   trip: Trip;
   /**
@@ -1504,6 +1521,30 @@ export type RoutingParameters = {
   wheelChairAccessible?: Maybe<Scalars['Boolean']['output']>;
 };
 
+/** List of visits to quays as part of a vehicle journey, relative to the current quay and for a given date. Includes real-time updates */
+export type SjEstimatedCalls = {
+  /** The first call in this service journey */
+  first: EstimatedCall;
+  /** The last call in this service journey */
+  last: EstimatedCall;
+  /** The list of subsequent calls in this service journey after the current call */
+  next: Array<EstimatedCall>;
+  /** The list of previous calls in this service journey before the current call */
+  previous: Array<EstimatedCall>;
+};
+
+
+/** List of visits to quays as part of a vehicle journey, relative to the current quay and for a given date. Includes real-time updates */
+export type SjEstimatedCallsNextArgs = {
+  count?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** List of visits to quays as part of a vehicle journey, relative to the current quay and for a given date. Includes real-time updates */
+export type SjEstimatedCallsPreviousArgs = {
+  count?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /**
  * Information about the deployment. This is only useful to developers of OTP itself.
  * It is not recommended for regular API consumers to use this type as it has no
@@ -1525,6 +1566,8 @@ export type ServerInfo = {
    *
    */
   internalTransitModelTimeZone?: Maybe<Scalars['String']['output']>;
+  /** Number of CPU cores on the OTP server */
+  numberOfCores?: Maybe<Scalars['Int']['output']>;
   /** The 'configVersion' of the otp-config.json file. */
   otpConfigVersion?: Maybe<Scalars['String']['output']>;
   /** The otp-serialization-version-id used to check graphs for compatibility with current version of OTP. */
@@ -1832,6 +1875,12 @@ export type TimetabledPassingTime = {
 export type TransitGeneralizedCostFilterParams = {
   costLimitFunction: Scalars['DoubleFunction']['input'];
   intervalRelaxFactor: Scalars['Float']['input'];
+};
+
+/** Information about the transit data available in the system. */
+export type TransitInfo = {
+  /** The validity period for the transit data currently loaded in the system. */
+  validityPeriod?: Maybe<ValidityPeriod>;
 };
 
 export enum TransportMode {
@@ -2147,16 +2196,48 @@ export type TripPattern = {
 /** Trips search metadata. */
 export type TripSearchData = {
   /**
-   * This is the suggested search time for the "next page" or time window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips following in the time-window AFTER the current search.
+   * This will not be available after March 2026!
    * @deprecated Use pageCursor instead
    */
   nextDateTime?: Maybe<Scalars['DateTime']['output']>;
+  /** The end-time of the search-window/page for trip departure times. See `pageDepartureTimeStart` */
+  pageDepartureTimeEnd?: Maybe<Scalars['DateTime']['output']>;
   /**
-   * This is the suggested search time for the "previous page" or time-window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips preceding in the time-window BEFORE the current search.
+   * The start-time of the search-window/page for trip departure times.
+   *
+   * The search-window/page start and end time describe the time-window the search is
+   * performed in. All results in the window is expected to be inside the given window. When
+   * navigating to the next/previous window the new window might overlap.
+   *
+   * **Merging results from multiple searches**
+   *
+   * Trips from separate searches (multiple OTP calls or other search engines) can be merged
+   * into the current page/result set if the following conditions are met:
+   * - The page is empty and the candidate trip departure time is between
+   *   `pageDepartureTimeStart` and `pageDepartureTimeEnd`, or
+   * - The candidate trip sorts before the last trip in the current page(if trips exists).
+   *
+   * If the trip sorts after the last trip, it should be merged into the next page instead.
+   * Note that the sort order is diffrent for arrive-by and depart-after search. The sort
+   * vector is:
+   * - Depart-after: _departure-time_ → _generalized-cost_ → _number-of-transfers_ → _arrival-time_
+   * - Arrive-by: _arrival-time_ → _generalized-cost_ → _number-of-transfers_ → _departure-time_
+   *
+   * **Special case for arrive-by searches:** For the first request (no paging cursor used)
+   * with `arriveBy=true`, the `pageDepartureTimeEnd` can be ignored - trips departing after
+   * this time can still be merged into the current page.
+   *
+   */
+  pageDepartureTimeStart?: Maybe<Scalars['DateTime']['output']>;
+  /**
+   * This will not be available after March 2026!
    * @deprecated Use pageCursor instead
    */
   prevDateTime?: Maybe<Scalars['DateTime']['output']>;
-  /** This is the time window used by the raptor search. The input searchWindow is an optional parameter and is dynamically assigned if not set. OTP might override the value if it is too small or too large. When paging OTP adjusts it to the appropriate size, depending on the number of itineraries found in the current search window. The scaling of the search window ensures faster paging and limits resource usage. The unit is minutes. */
+  /**
+   * This is the time window used by the raptor search. The input searchWindow is an optional parameter and is dynamically assigned if not set. OTP might override the value if it is too small or too large. When paging OTP adjusts it to the appropriate size, depending on the number of itineraries found in the current search window. The scaling of the search window ensures faster paging and limits resource usage. The unit is minutes.
+   * @deprecated This not needed for debugging, and is misleading if the window is cropped.
+   */
   searchWindowUsed: Scalars['Int']['output'];
 };
 
