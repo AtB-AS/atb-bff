@@ -2,7 +2,7 @@ import * as Types from '../../../../graphql/vehicles/vehicles-types_v2';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-export type VehicleFragment = { mode?: Types.VehicleModeEnumeration, lastUpdated?: any, bearing?: number, serviceJourney?: { id: string }, location?: { latitude: number, longitude: number }, progressBetweenStops?: { percentage?: number, linkDistance?: number } };
+export type VehicleFragment = { mode?: Types.VehicleModeEnumeration, lastUpdated?: any, bearing?: number, serviceJourney?: { id: string }, location?: { latitude: number, longitude: number }, progressBetweenStops?: { percentage?: number, linkDistance?: number }, monitoredCall?: { stopPointRef?: string, vehicleAtStop?: boolean } };
 
 export const VehicleFragmentDoc = gql`
     fragment Vehicle on VehicleUpdate {
@@ -19,6 +19,10 @@ export const VehicleFragmentDoc = gql`
   progressBetweenStops {
     percentage
     linkDistance
+  }
+  monitoredCall {
+    stopPointRef
+    vehicleAtStop
   }
 }
     `;

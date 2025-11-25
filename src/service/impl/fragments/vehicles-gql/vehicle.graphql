@@ -13,4 +13,8 @@ fragment Vehicle on VehicleUpdate {
     percentage
     linkDistance
   }
+  monitoredCall {
+    stopPointRef
+    vehicleAtStop
+  }
 }

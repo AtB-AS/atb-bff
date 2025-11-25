@@ -15,5 +15,9 @@ query getServiceJourneyVehicle($serviceJourneyId: String!) {
       percentage
       linkDistance
     }
+    monitoredCall {
+      stopPointRef
+      vehicleAtStop
+    }
   }
 }

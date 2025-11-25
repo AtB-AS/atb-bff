@@ -7,7 +7,7 @@ export type GetServiceJourneyVehicleQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetServiceJourneyVehicleQuery = { vehicles?: Array<{ lastUpdated?: any, bearing?: number, mode?: Types.VehicleModeEnumeration, vehicleStatus?: Types.VehicleStatusEnumeration, location?: { latitude: number, longitude: number }, serviceJourney?: { id: string }, progressBetweenStops?: { percentage?: number, linkDistance?: number } }> };
+export type GetServiceJourneyVehicleQuery = { vehicles?: Array<{ lastUpdated?: any, bearing?: number, mode?: Types.VehicleModeEnumeration, vehicleStatus?: Types.VehicleStatusEnumeration, location?: { latitude: number, longitude: number }, serviceJourney?: { id: string }, progressBetweenStops?: { percentage?: number, linkDistance?: number }, monitoredCall?: { stopPointRef?: string, vehicleAtStop?: boolean } }> };
 
 
 export const GetServiceJourneyVehicleDocument = gql`
@@ -27,6 +27,10 @@ export const GetServiceJourneyVehicleDocument = gql`
     progressBetweenStops {
       percentage
       linkDistance
+    }
+    monitoredCall {
+      stopPointRef
+      vehicleAtStop
     }
   }
 }
