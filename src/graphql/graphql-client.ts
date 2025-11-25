@@ -40,12 +40,12 @@ const urlMobility = ENTUR_BASEURL
   : 'https://api.entur.io/mobility/v2/graphql';
 
 const urlVehicles = ENTUR_BASEURL
-  ? `${ENTUR_BASEURL}/realtime/v1/vehicles/graphql`
-  : 'https://api.entur.io/realtime/v1/vehicles/graphql';
+  ? `${ENTUR_BASEURL}/realtime/v2/vehicles/graphql`
+  : 'https://api.entur.io/realtime/v2/vehicles/graphql';
 
 const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
-  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
-  : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
+  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v2/vehicles/subscriptions`
+  : 'wss://api.entur.io/realtime/v2/vehicles/subscriptions';
 
 function createClient(url: string) {
   // The possibleTypes is empty to disable the in-memory cache

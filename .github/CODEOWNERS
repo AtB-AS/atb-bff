@@ -15,5 +15,5 @@
 # No code owners for generated files
 src/graphql/journey/journeyplanner-types_v3.ts
 src/graphql/mobility/mobility-types_v2.ts
-src/graphql/vehicles/vehicles-types_v1.ts
+src/graphql/vehicles/vehicles-types_v2.ts
 *-gen.ts
