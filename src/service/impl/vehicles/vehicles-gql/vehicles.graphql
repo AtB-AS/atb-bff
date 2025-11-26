@@ -11,5 +11,13 @@ query getServiceJourneyVehicle($serviceJourneyId: String!) {
       id
     }
     vehicleStatus
+    progressBetweenStops {
+      percentage
+      linkDistance
+    }
+    monitoredCall {
+      stopPointRef
+      vehicleAtStop
+    }
   }
 }

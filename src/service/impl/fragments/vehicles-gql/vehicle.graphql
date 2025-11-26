@@ -9,4 +9,12 @@ fragment Vehicle on VehicleUpdate {
     latitude
     longitude
   }
+  progressBetweenStops {
+    percentage
+    linkDistance
+  }
+  monitoredCall {
+    stopPointRef
+    vehicleAtStop
+  }
 }

@@ -6,7 +6,7 @@ import {
   HttpLink,
   ApolloLink,
 } from '@apollo/client/core';
-import {WebSocketLink} from '@apollo/client/link/ws';
+import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
 import {onError} from '@apollo/client/link/error';
 import {
   ENTUR_BASEURL,
@@ -14,7 +14,7 @@ import {
   ET_CLIENT_NAME,
 } from '../config/env';
 import WebSocket from 'ws';
-import {SubscriptionClient} from 'subscriptions-transport-ws';
+import {createClient as createWsClient} from 'graphql-ws';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {logResponse} from '../utils/log-response';
 import {Timer} from '../utils/timer';
@@ -40,12 +40,12 @@ const urlMobility = ENTUR_BASEURL
   : 'https://api.entur.io/mobility/v2/graphql';
 
 const urlVehicles = ENTUR_BASEURL
-  ? `${ENTUR_BASEURL}/realtime/v1/vehicles/graphql`
-  : 'https://api.entur.io/realtime/v1/vehicles/graphql';
+  ? `${ENTUR_BASEURL}/realtime/v2/vehicles/graphql`
+  : 'https://api.entur.io/realtime/v2/vehicles/graphql';
 
 const urlVehiclesWss = ENTUR_WEBSOCKET_BASEURL
-  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v1/vehicles/subscriptions`
-  : 'wss://api.entur.io/realtime/v1/vehicles/subscriptions';
+  ? `${ENTUR_WEBSOCKET_BASEURL}/realtime/v2/vehicles/subscriptions`
+  : 'wss://api.entur.io/realtime/v2/vehicles/subscriptions';
 
 function createClient(url: string) {
   // The possibleTypes is empty to disable the in-memory cache
@@ -123,16 +123,13 @@ function createWebSocketClient(url: string) {
     addTypename: false,
   });
 
-  const wsLink = new WebSocketLink(
-    new SubscriptionClient(
+  const wsLink = new GraphQLWsLink(
+    createWsClient({
       url,
-      {
-        reconnect: true,
-        lazy: true,
-        minTimeout: 10000,
-      },
-      WebSocket,
-    ),
+      webSocketImpl: WebSocket,
+      retryAttempts: 10,
+      lazy: true,
+    }),
   );
 
   const errorLink = onError((error) =>

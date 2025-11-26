@@ -1,4 +1,4 @@
-import * as Types from '../../../../graphql/vehicles/vehicles-types_v1';
+import * as Types from '../../../../graphql/vehicles/vehicles-types_v2';
 
 import { VehicleFragment } from '../../fragments/vehicles-gql/vehicle.graphql-gen';
 import { DocumentNode } from 'graphql';

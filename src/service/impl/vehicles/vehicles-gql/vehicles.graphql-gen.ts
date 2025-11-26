@@ -1,4 +1,4 @@
-import * as Types from '../../../../graphql/vehicles/vehicles-types_v1';
+import * as Types from '../../../../graphql/vehicles/vehicles-types_v2';
 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
@@ -7,7 +7,7 @@ export type GetServiceJourneyVehicleQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetServiceJourneyVehicleQuery = { vehicles?: Array<{ lastUpdated?: any, bearing?: number, mode?: Types.VehicleModeEnumeration, vehicleStatus?: Types.VehicleStatusEnumeration, location?: { latitude: number, longitude: number }, serviceJourney?: { id: string } }> };
+export type GetServiceJourneyVehicleQuery = { vehicles?: Array<{ lastUpdated?: any, bearing?: number, mode?: Types.VehicleModeEnumeration, vehicleStatus?: Types.VehicleStatusEnumeration, location?: { latitude: number, longitude: number }, serviceJourney?: { id: string }, progressBetweenStops?: { percentage?: number, linkDistance?: number }, monitoredCall?: { stopPointRef?: string, vehicleAtStop?: boolean } }> };
 
 
 export const GetServiceJourneyVehicleDocument = gql`
@@ -24,6 +24,14 @@ export const GetServiceJourneyVehicleDocument = gql`
       id
     }
     vehicleStatus
+    progressBetweenStops {
+      percentage
+      linkDistance
+    }
+    monitoredCall {
+      stopPointRef
+      vehicleAtStop
+    }
   }
 }
     `;

@@ -5,7 +5,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '../graphql/journey/journeyplanner-types_v3';
-import * as Types from '../graphql/vehicles/vehicles-types_v1';
+import * as Types from '../graphql/vehicles/vehicles-types_v2';
 import {CursoredQuery} from './cursored';
 import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
 import {DeparturesQuery} from './impl/departures/journey-gql/departures.graphql-gen';
