@@ -1,9 +1,10 @@
-fragment Vehicle on VehicleUpdate {
+fragment vehicle on VehicleUpdate {
   serviceJourney {
     id
   }
   mode
   lastUpdated
+  vehicleStatus
   bearing
   location {
     latitude
