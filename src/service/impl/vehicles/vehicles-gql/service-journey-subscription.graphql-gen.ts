@@ -15,7 +15,7 @@ export type ServiceJourneySubscription = { vehicles?: Array<VehicleFragment> };
 export const ServiceJourneyDocument = gql`
     subscription ServiceJourney($serviceJourneyId: String) {
   vehicles(serviceJourneyId: $serviceJourneyId, bufferTime: 500) {
-    ...Vehicle
+    ...vehicle
   }
 }
     ${VehicleFragmentDoc}`;
