@@ -52,13 +52,13 @@ export const getBookingInfo = async (
           availability: BookingAvailabilityType.BookingNotSupported,
         };
       }
-      const offer = getSingleOffer(offers.data);
+      const offer = offers.data[0];
       const totalTravellerCount = travellers.reduce(
         (sum, traveller) => sum + traveller.count,
         0,
       );
       return {
-        offer,
+        offer: offers.data[0],
         availability: mapToAvailabilityStatus(offer, totalTravellerCount),
       };
     }
@@ -107,7 +107,6 @@ export const TicketOffer = z.object({
 export type TicketOffer = z.infer<typeof TicketOffer>;
 
 export const TicketOffers = z.array(TicketOffer);
-export type TicketOffers = z.infer<typeof TicketOffers>;
 
 function mapToAvailabilityStatus(
   offer: TicketOffer | undefined,
@@ -126,14 +125,6 @@ function mapToAvailabilityStatus(
   return BookingAvailabilityType.Available;
 }
 
-function getSingleOffer(offers: TicketOffers): TicketOffer | undefined {
-  return offers.sort((a, b) => {
-    if (a.price.amountFloat && b.price.amountFloat) {
-      return a.price.amountFloat - b.price.amountFloat;
-    }
-    return 0;
-  })[0];
-}
 
 async function fetchOffers(
   trip: TripPatternFragment,
