@@ -43,6 +43,15 @@ export const getBookingInfo = async (
       console.error(`Invalid offers data: ${offers.error}`);
     }
     if (offers.success) {
+      if(offers.data?.length > 1) {
+        /*
+         * For now we only support booking with a single offer,
+         * since the app is not ready for multiple offers yet.
+         */
+        return {
+          availability: BookingAvailabilityType.BookingNotSupported
+        }
+      }
       const offer = getSingleOffer(offers.data);
       const totalTravellerCount = travellers.reduce(
         (sum, traveller) => sum + traveller.count,
