@@ -125,7 +125,6 @@ function mapToAvailabilityStatus(
   return BookingAvailabilityType.Available;
 }
 
-
 async function fetchOffers(
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
