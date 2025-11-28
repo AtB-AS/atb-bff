@@ -58,7 +58,7 @@ export const getBookingInfo = async (
         0,
       );
       return {
-        offer: offers.data[0],
+        offer,
         availability: mapToAvailabilityStatus(offer, totalTravellerCount),
       };
     }
