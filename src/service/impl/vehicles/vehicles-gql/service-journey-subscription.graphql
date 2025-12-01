@@ -3,6 +3,6 @@ subscription ServiceJourney($serviceJourneyId: String) {
     serviceJourneyId: $serviceJourneyId
     bufferTime: 500
   ) {
-    ...Vehicle
+    ...vehicle
   }
 }

@@ -1,23 +1,5 @@
 query getServiceJourneyVehicle($serviceJourneyId: String!) {
   vehicles(serviceJourneyId: $serviceJourneyId) {
-    lastUpdated
-    location {
-      latitude
-      longitude
-    }
-    bearing
-    mode
-    serviceJourney {
-      id
-    }
-    vehicleStatus
-    progressBetweenStops {
-      percentage
-      linkDistance
-    }
-    monitoredCall {
-      stopPointRef
-      vehicleAtStop
-    }
+    ...vehicle
   }
 }
