@@ -43,9 +43,10 @@ export const getBookingInfo = async (
       console.error(`Invalid offers data: ${offers.error}`);
     }
     if (offers.success) {
-      if (offers.data?.length !== 1) {
+      const travellerCounts = reduceToTravellerCount(offers.data);
+      if (travellerCounts.find((count) => count > 1)) {
         /*
-         * For now we only support booking with a single offer,
+         * For now we only support booking with a single offer for each traveller,
          * since the app is not ready for multiple offers yet.
          */
         return {
@@ -157,4 +158,15 @@ async function fetchOffers(
     },
     SALES_BASEURL,
   );
+}
+
+function reduceToTravellerCount(offers: TicketOffer[]): number[] {
+  const travellerCountMap = offers.reduce(
+    (acc, offer) => {
+      acc[offer.travellerId] = (acc[offer.travellerId] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+  return Object.values(travellerCountMap);
 }
