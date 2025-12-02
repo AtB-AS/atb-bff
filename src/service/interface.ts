@@ -47,9 +47,8 @@ import {
   ReverseFeaturesQuery,
   ServiceJourneyMapInfoData,
   ServiceJourneyMapInfoQuery,
-  ServiceJourneySubscriptionQueryVariables,
-  ServiceJourneyVehicleQueryVariables,
-  ServiceJourneyVehicles,
+  VehicleUpdateSubscriptionQueryVariables,
+  VehicleUpdateQueryVariables,
   ServiceJourneyWithEstimatedCallsQuery,
   StationsQuery_v2,
   StopPlaceConnectionsQuery,
@@ -77,6 +76,7 @@ import {TripPatternFragment} from './impl/fragments/journey-gql/trips.graphql-ge
 import {CursoredData} from './cursored';
 import {StopPlaceGroup} from './impl/departures-grouped/utils/grouping';
 import {DatedServiceJourneyQuery} from './impl/service-journey/journey-gql/dated-service-journey.graphql-gen';
+import {VehicleUpdateFragment} from './impl/fragments/vehicles-gql/vehicle-update.graphql-gen';
 
 export interface IGeocoderService {
   getFeatures(
@@ -209,13 +209,13 @@ export interface IEnrollmentService {
 }
 
 export interface IVehiclesService {
-  getServiceJourneyVehicles(
-    query: ServiceJourneyVehicleQueryVariables,
+  getVehicleUpdate(
+    query: VehicleUpdateQueryVariables,
     request: Request<ReqRefDefaults>,
-  ): Promise<Result<ServiceJourneyVehicles, APIError>>;
+  ): Promise<Result<VehicleUpdateFragment[], APIError>>;
 
-  createServiceJourneySubscription(
-    query: ServiceJourneySubscriptionQueryVariables,
+  createVehicleUpdateSubscription(
+    query: VehicleUpdateSubscriptionQueryVariables,
     ws: WebSocket.WebSocket,
   ): Subscription;
 }

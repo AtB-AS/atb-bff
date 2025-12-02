@@ -1,8 +1,8 @@
-subscription ServiceJourney($serviceJourneyId: String) {
+subscription VehicleUpdate($serviceJourneyId: String) {
   vehicles(
     serviceJourneyId: $serviceJourneyId
     bufferTime: 500
   ) {
-    ...vehicle
+    ...vehicleUpdate
   }
 }

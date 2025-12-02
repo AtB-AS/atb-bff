@@ -5,9 +5,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '../graphql/journey/journeyplanner-types_v3';
-import * as Types from '../graphql/vehicles/vehicles-types_v2';
 import {CursoredQuery} from './cursored';
-import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
 import {DeparturesQuery} from './impl/departures/journey-gql/departures.graphql-gen';
 
 export interface Coordinates {
@@ -144,25 +142,13 @@ export type MapLeg = {
   pointsOnLink: PointsOnLink;
 };
 
-export type ServiceJourneyVehicleQueryVariables = {
+export type VehicleUpdateQueryVariables = {
   serviceJourneyIds: string[];
 };
 
-export type ServiceJourneySubscriptionQueryVariables = {
+export type VehicleUpdateSubscriptionQueryVariables = {
   serviceJourneyId: string;
 };
-
-export type GetServiceJourneyVehicles = Required<
-  Required<GetServiceJourneyVehicleQuery>['vehicles']
->;
-
-export type ServiceJourneyVehicles = Array<{
-  lastUpdated?: any;
-  bearing?: number;
-  mode?: Types.VehicleModeEnumeration;
-  location?: {latitude: number; longitude: number};
-  serviceJourney?: {id: string};
-}>;
 
 export type VehicleQuery = {
   ids: string | string[];

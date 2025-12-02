@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
 import {IVehiclesService} from '../../service/interface';
-import {ServiceJourneyVehicleQueryVariables} from '../../service/types';
+import {VehicleUpdateQueryVariables} from '../../service/types';
 import {getUrlParam} from '../../utils/get-url-param';
 import WebSocket from 'ws';
 import {
@@ -18,12 +18,9 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
       description: 'Get vehicle information for a list of service journeys',
     },
     handler: async (request, h) => {
-      const payload =
-        request.query as unknown as ServiceJourneyVehicleQueryVariables;
+      const payload = request.query as unknown as VehicleUpdateQueryVariables;
 
-      return (
-        await service.getServiceJourneyVehicles(payload, h.request)
-      ).unwrap();
+      return (await service.getVehicleUpdate(payload, h.request)).unwrap();
     },
   });
   server.route({
@@ -54,7 +51,7 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
             }
 
             try {
-              ctx.client = service.createServiceJourneySubscription(
+              ctx.client = service.createVehicleUpdateSubscription(
                 {serviceJourneyId},
                 ws,
               );

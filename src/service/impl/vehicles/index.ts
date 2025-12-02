@@ -1,30 +1,30 @@
 import {IVehiclesService} from '../../interface';
 import {Result} from '@badrap/result';
-import {GetServiceJourneyVehicles} from '../../types';
 import {APIError} from '../../../utils/api-error';
 import {
   vehiclesClient,
   vehiclesSubscriptionClient,
 } from '../../../graphql/graphql-client';
 import {
-  GetServiceJourneyVehicleDocument,
-  GetServiceJourneyVehicleQuery,
-  GetServiceJourneyVehicleQueryVariables,
-} from './vehicles-gql/vehicles.graphql-gen';
+  GetVehicleUpdateDocument,
+  GetVehicleUpdateQuery,
+  GetVehicleUpdateQueryVariables,
+} from './vehicles-gql/vehicle-update.graphql-gen';
 import {
-  ServiceJourneyDocument,
-  ServiceJourneySubscription,
-} from './vehicles-gql/service-journey-subscription.graphql-gen';
+  VehicleUpdateDocument,
+  VehicleUpdateSubscription,
+} from './vehicles-gql/vehicle-update-subscription.graphql-gen';
+import {isDefined} from '../stop-places/utils';
 
 export default (): IVehiclesService => ({
-  async getServiceJourneyVehicles(query, request) {
+  async getVehicleUpdate(query, request) {
     try {
       const results = query.serviceJourneyIds.map((id) => {
         return vehiclesClient(request).query<
-          GetServiceJourneyVehicleQuery,
-          GetServiceJourneyVehicleQueryVariables
+          GetVehicleUpdateQuery,
+          GetVehicleUpdateQueryVariables
         >({
-          query: GetServiceJourneyVehicleDocument,
+          query: GetVehicleUpdateDocument,
           variables: {
             serviceJourneyId: id,
           },
@@ -40,23 +40,23 @@ export default (): IVehiclesService => ({
 
       const vehiclesData = result
         .flatMap((v) => v.data.vehicles)
-        .filter(Boolean) as GetServiceJourneyVehicles;
+        .filter(isDefined);
 
       return Result.ok(vehiclesData);
     } catch (error) {
       return Result.err(new APIError(error));
     }
   },
-  createServiceJourneySubscription(query, ws) {
+  createVehicleUpdateSubscription(query, ws) {
     return vehiclesSubscriptionClient
       .subscribe({
-        query: ServiceJourneyDocument,
+        query: VehicleUpdateDocument,
         fetchPolicy: 'no-cache',
         variables: query,
       })
       .subscribe({
         next: (value) => {
-          const data = value.data as ServiceJourneySubscription;
+          const data = value.data as VehicleUpdateSubscription;
           const vehicle = data.vehicles?.find(
             (v) => v.serviceJourney?.id === query.serviceJourneyId,
           );

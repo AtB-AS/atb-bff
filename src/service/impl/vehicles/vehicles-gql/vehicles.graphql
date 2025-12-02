@@ -1,5 +1,0 @@
-query getServiceJourneyVehicle($serviceJourneyId: String!) {
-  vehicles(serviceJourneyId: $serviceJourneyId) {
-    ...vehicle
-  }
-}

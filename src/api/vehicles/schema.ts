@@ -1,8 +1,8 @@
 import Joi from 'joi';
-import {ServiceJourneyVehicleQueryVariables} from '../../service/types';
+import {VehicleUpdateQueryVariables} from '../../service/types';
 
 export const getVehiclesRequest = {
-  query: Joi.object<ServiceJourneyVehicleQueryVariables>({
+  query: Joi.object<VehicleUpdateQueryVariables>({
     serviceJourneyIds: Joi.array().items(Joi.string()).default([]).single(),
   }),
 };
