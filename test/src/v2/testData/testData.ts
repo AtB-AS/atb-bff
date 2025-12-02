@@ -90,7 +90,7 @@ export const stopsDetailsTestData: stopsDetailsTestDataType = {
               id: 'NSR:Quay:74265',
               name: 'Kongens gate',
               publicCode: 'K1',
-              description: 'ved Egon',
+              description: 'i St. Olavs gate før Holstveita',
             },
             {
               id: 'NSR:Quay:74264',
