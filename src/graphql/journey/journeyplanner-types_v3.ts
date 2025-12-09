@@ -658,6 +658,7 @@ export enum Mode {
   Bus = 'bus',
   Cableway = 'cableway',
   Car = 'car',
+  Carpool = 'carpool',
   Coach = 'coach',
   Foot = 'foot',
   Funicular = 'funicular',
