@@ -104,6 +104,7 @@ fragment tripPattern on TripPattern {
                 }
             }
         }
+        serviceDate
         serviceJourney {
             id
             notices {
