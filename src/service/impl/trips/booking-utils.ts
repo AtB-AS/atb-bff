@@ -7,16 +7,17 @@ import {ErrorResponse} from '@atb-as/utils';
 import {post} from '../../../utils/fetch-client';
 
 export const getBookingInfo = async (
+  request: Request<ReqRefDefaults>,
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
-  request: Request<ReqRefDefaults>,
+  existingProduct?: string,
 ): Promise<{
   availability: BookingAvailabilityType;
   offer?: TicketOffer;
 }> => {
   try {
-    const response = await fetchOffers(trip, travellers, products, request);
+    const response = await fetchOffers(request, trip, travellers, products, existingProduct);
     const data = await response.json();
     if (!response.ok) {
       let errorResponse = ErrorResponse.safeParse(data).data;
@@ -127,25 +128,28 @@ function mapToAvailabilityStatus(
 }
 
 async function fetchOffers(
+  request: Request<ReqRefDefaults>,
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
-  request: Request<ReqRefDefaults>,
+  existingProduct?: string,
 ) {
+  const body = {
+    travellers,
+    travelDate: trip.expectedStartTime,
+    products,
+    legs: trip.legs.map((leg) => ({
+      fromStopPlaceId: leg.fromPlace.quay?.stopPlace?.id,
+      toStopPlaceId: leg.toPlace.quay?.stopPlace?.id,
+      serviceJourneyId: leg.serviceJourney?.id,
+      mode: leg.mode,
+      travelDate: leg.expectedStartTime.split('T')[0],
+    })),
+    existingProduct
+  };
   return await post(
     `/sales/v1/search/trip-pattern`,
-    {
-      travellers,
-      travelDate: trip.expectedStartTime,
-      products,
-      legs: trip.legs.map((leg) => ({
-        fromStopPlaceId: leg.fromPlace.quay?.stopPlace?.id,
-        toStopPlaceId: leg.toPlace.quay?.stopPlace?.id,
-        serviceJourneyId: leg.serviceJourney?.id,
-        mode: leg.mode,
-        travelDate: leg.expectedStartTime.split('T')[0],
-      })),
-    },
+    body,
     request,
     {
       headers: {
