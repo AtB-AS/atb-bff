@@ -17,7 +17,13 @@ export const getBookingInfo = async (
   offer?: TicketOffer;
 }> => {
   try {
-    const response = await fetchOffers(request, trip, travellers, products, existingProduct);
+    const response = await fetchOffers(
+      request,
+      trip,
+      travellers,
+      products,
+      existingProduct,
+    );
     const data = await response.json();
     if (!response.ok) {
       let errorResponse = ErrorResponse.safeParse(data).data;
@@ -145,7 +151,7 @@ async function fetchOffers(
       mode: leg.mode,
       travelDate: leg.expectedStartTime.split('T')[0],
     })),
-    existingProduct
+    existingProduct,
   };
   return await post(
     `/sales/v1/search/trip-pattern`,
