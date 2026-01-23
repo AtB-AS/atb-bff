@@ -49,7 +49,10 @@ export type BookingTripsQueryParameters = {
 };
 export type BookingTripsQueryPayload = {
   travellers: BookingTraveller[];
+  // List of product IDs the user is interested in booking
   products: string[];
+  // An ID of a product the user already has, if any. Used to purchase supplement products to periodic tickets
+  existingProduct?: string;
 };
 export type BookingTripsQuery = {
   trip: TripFragment & {

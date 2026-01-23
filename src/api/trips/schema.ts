@@ -89,6 +89,7 @@ export const postBookingTripsRequest = {
       }),
     ),
     products: Joi.array().items(Joi.string()).required(),
+    existingProduct: Joi.string().optional(),
   }),
 };
 

@@ -56,10 +56,11 @@ export default (): ITrips_v2 => {
         await Promise.all(
           result.trip?.tripPatterns.map(async (tripPattern) => {
             const booking = await getBookingInfo(
+              request,
               tripPattern,
               payload.travellers,
               payload.products,
-              request,
+              payload.existingProduct,
             );
             return {
               ...tripPattern,
