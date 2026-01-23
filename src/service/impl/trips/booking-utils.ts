@@ -11,19 +11,12 @@ export const getBookingInfo = async (
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
-  existingProduct?: string,
 ): Promise<{
   availability: BookingAvailabilityType;
   offer?: TicketOffer;
 }> => {
   try {
-    const response = await fetchOffers(
-      request,
-      trip,
-      travellers,
-      products,
-      existingProduct,
-    );
+    const response = await fetchOffers(request, trip, travellers, products);
     const data = await response.json();
     if (!response.ok) {
       let errorResponse = ErrorResponse.safeParse(data).data;
@@ -138,7 +131,6 @@ async function fetchOffers(
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
-  existingProduct?: string,
 ) {
   const body = {
     travellers,
@@ -151,7 +143,6 @@ async function fetchOffers(
       mode: leg.mode,
       travelDate: leg.expectedStartTime.split('T')[0],
     })),
-    existingProduct,
   };
   return await post(
     `/sales/v1/search/trip-pattern`,

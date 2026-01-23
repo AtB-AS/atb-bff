@@ -60,7 +60,6 @@ export default (): ITrips_v2 => {
               tripPattern,
               payload.travellers,
               payload.products,
-              payload.existingProduct,
             );
             return {
               ...tripPattern,
