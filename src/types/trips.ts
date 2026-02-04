@@ -52,6 +52,7 @@ export type BookingTripsQueryParameters = {
 export type BookingTripsQueryPayload = {
   travellers: BookingTraveller[];
   products: string[];
+  supplementProducts?: string[];
 };
 export type BookingTripsQuery = {
   trip: TripFragment & {

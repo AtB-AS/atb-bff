@@ -1,22 +1,47 @@
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {SALES_BASEURL} from '../../../config/env';
+import {PRODUCT_BASEURL, SALES_BASEURL} from '../../../config/env';
 import {BookingTraveller} from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {z} from 'zod';
 import {ErrorResponse} from '@atb-as/utils';
-import {post} from '../../../utils/fetch-client';
+import {post, get} from '../../../utils/fetch-client';
+import {isDefined} from '../stop-places/utils';
 
 export const getBookingInfo = async (
   request: Request<ReqRefDefaults>,
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
+  supplementProducts: string[],
 ): Promise<{
   availability: BookingAvailabilityType;
   offer?: TicketOffer;
 }> => {
   try {
-    const response = await fetchOffers(request, trip, travellers, products);
+    let supplementProductsInput: string[] = supplementProducts;
+
+    // This is a hack until the release of 1.79.1, where the app properly sends supplementProducts
+    if (supplementProductsInput.length === 0 && products.length === 0) {
+      const existingProducts = travellers
+        .map((t) => t.productIds)
+        .flat()
+        .filter(isDefined);
+      supplementProductsInput = await Promise.all(
+        existingProducts.map((productId) =>
+          lookupSupplementProducts(productId, request),
+        ),
+      ).then((allSupplementProducts) =>
+        allSupplementProducts.flat().map((sp) => sp.id),
+      );
+    }
+
+    const response = await fetchOffers(
+      request,
+      trip,
+      travellers,
+      products,
+      supplementProductsInput,
+    );
     const data = await response.json();
     if (!response.ok) {
       let errorResponse = ErrorResponse.safeParse(data).data;
@@ -33,7 +58,9 @@ export const getBookingInfo = async (
           availability: BookingAvailabilityType.Closed,
         };
       }
-      console.error(`Unexpected error fetching offers for trip: ${data}`);
+      console.error(
+        `Unexpected error fetching offers for trip: ${JSON.stringify(data)}`,
+      );
       return {
         availability: BookingAvailabilityType.Unknown,
       };
@@ -97,7 +124,7 @@ export const TicketOffer = z.object({
   offerId: z.string(),
   travellerId: z.string(),
   price: SearchOfferPrice,
-  fareProduct: z.string(),
+  fareProduct: z.string().nullish(),
   validFrom: z.string().nullish(),
   validTo: z.string().nullish(),
   flexDiscountLadder: z.any().nullish(),
@@ -108,6 +135,26 @@ export const TicketOffer = z.object({
 export type TicketOffer = z.infer<typeof TicketOffer>;
 
 export const TicketOffers = z.array(TicketOffer);
+
+export const LimitationsSubset = z.object({
+  supplementProductRefs: z.array(z.string()).nullish(),
+});
+
+export const PreassignedFareProductSubset = z.object({
+  id: z.string(),
+  limitations: LimitationsSubset,
+  isBookingEnabled: z.boolean().nullish(),
+  isSupplementProduct: z.boolean().nullish(),
+});
+type PreassignedFareProductSubsetType = z.infer<
+  typeof PreassignedFareProductSubset
+>;
+
+export const ReservationProductSubset = z.object({
+  id: z.string(),
+  kind: z.literal('reservation'),
+});
+type ReservationProductSubsetType = z.infer<typeof ReservationProductSubset>;
 
 function mapToAvailabilityStatus(
   offer: TicketOffer | undefined,
@@ -131,11 +178,13 @@ async function fetchOffers(
   trip: TripPatternFragment,
   travellers: BookingTraveller[],
   products: string[],
+  supplementProducts: string[],
 ) {
   const body = {
     travellers,
     travelDate: trip.expectedStartTime,
     products,
+    supplementProducts,
     legs: trip.legs.map((leg) => ({
       fromStopPlaceId: leg.fromPlace.quay?.stopPlace?.id,
       toStopPlaceId: leg.toPlace.quay?.stopPlace?.id,
@@ -158,6 +207,55 @@ async function fetchOffers(
       },
     },
     SALES_BASEURL,
+  );
+}
+
+async function fetchProducts(request: Request<ReqRefDefaults>) {
+  return get<PreassignedFareProductSubsetType[]>(
+    '/product/v1',
+    request,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Atb-App-Version': request.headers['atb-app-version'],
+        'Atb-Distribution-Channel': request.headers['atb-distribution-channel'],
+        'X-Endpoint-API-UserInfo': request.headers['x-endpoint-api-userinfo'],
+        Authorization: request.headers.authorization,
+      },
+    },
+    PRODUCT_BASEURL,
+  );
+}
+
+async function fetchSupplementProducts(request: Request<ReqRefDefaults>) {
+  return get<ReservationProductSubsetType[]>(
+    '/product/v1/supplement',
+    request,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Atb-App-Version': request.headers['atb-app-version'],
+        'Atb-Distribution-Channel': request.headers['atb-distribution-channel'],
+        'X-Endpoint-API-UserInfo': request.headers['x-endpoint-api-userinfo'],
+        Authorization: request.headers.authorization,
+      },
+    },
+    PRODUCT_BASEURL,
+  );
+}
+
+async function lookupSupplementProducts(
+  productId: string,
+  request: Request<ReqRefDefaults>,
+) {
+  const product = await fetchProducts(request).then((result) =>
+    result.find((p) => p.id === productId),
+  );
+  if (!product) return [];
+
+  const allSupplementProducts = await fetchSupplementProducts(request);
+  return allSupplementProducts.filter((sp) =>
+    product.limitations.supplementProductRefs?.includes(sp.id),
   );
 }
 

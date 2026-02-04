@@ -91,6 +91,11 @@ export const ENROLLMENT_BASEURL: string = getServiceUrl(
   getEnv() === 'prod',
 );
 export const SALES_BASEURL: string = getServiceUrl('http://', 'SALES', false);
+export const PRODUCT_BASEURL: string = getServiceUrl(
+  'http://',
+  'PRODUCT',
+  false,
+);
 export const REDIS_HOST: string = getServiceHost('REDIS');
 export const REDIS_PORT: string = getServicePort('REDIS');
 
