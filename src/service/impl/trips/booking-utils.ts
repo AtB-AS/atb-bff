@@ -140,7 +140,6 @@ export type TicketOffer = z.infer<typeof TicketOffer>;
 
 export const TicketOffers = z.array(TicketOffer);
 
-
 // TODO: Clean up and move types, utils and API calls into a reasonable file structure
 export const LimitationsSubset = z.object({
   supplementProductRefs: z.array(z.string()).nullish(),
