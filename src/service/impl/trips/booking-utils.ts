@@ -18,21 +18,25 @@ export const getBookingInfo = async (
   offer?: TicketOffer;
 }> => {
   try {
-    let supplementProductsInput: string[] = supplementProducts;
+    let supplementProductsIds: string[] = supplementProducts;
 
     // This is a hack until the release of 1.79.1, where the app properly sends supplementProducts
-    if (supplementProductsInput.length === 0 && products.length === 0) {
-      const existingProducts = travellers
+    if (supplementProductsIds.length === 0 && products.length === 0) {
+      const allProducts = await fetchProducts(request);
+      const allSupplementProducts = await fetchSupplementProducts(request);
+      const existingProductIds = travellers
         .map((t) => t.productIds)
         .flat()
         .filter(isDefined);
-      supplementProductsInput = await Promise.all(
-        existingProducts.map((productId) =>
-          lookupSupplementProducts(productId, request),
-        ),
-      ).then((allSupplementProducts) =>
-        allSupplementProducts.flat().map((sp) => sp.id),
-      );
+      supplementProductsIds = existingProductIds
+        .flatMap((productId) =>
+          lookupSupplementProducts(
+            productId,
+            allProducts,
+            allSupplementProducts,
+          ),
+        )
+        .map((sp) => sp.id);
     }
 
     const response = await fetchOffers(
@@ -40,7 +44,7 @@ export const getBookingInfo = async (
       trip,
       travellers,
       products,
-      supplementProductsInput,
+      supplementProductsIds,
     );
     const data = await response.json();
     if (!response.ok) {
@@ -136,6 +140,8 @@ export type TicketOffer = z.infer<typeof TicketOffer>;
 
 export const TicketOffers = z.array(TicketOffer);
 
+
+// TODO: Clean up and move types, utils and API calls into a reasonable file structure
 export const LimitationsSubset = z.object({
   supplementProductRefs: z.array(z.string()).nullish(),
 });
@@ -244,16 +250,14 @@ async function fetchSupplementProducts(request: Request<ReqRefDefaults>) {
   );
 }
 
-async function lookupSupplementProducts(
+function lookupSupplementProducts(
   productId: string,
-  request: Request<ReqRefDefaults>,
+  allProducts: PreassignedFareProductSubsetType[],
+  allSupplementProducts: ReservationProductSubsetType[],
 ) {
-  const product = await fetchProducts(request).then((result) =>
-    result.find((p) => p.id === productId),
-  );
+  const product = allProducts.find((p) => p.id === productId);
   if (!product) return [];
 
-  const allSupplementProducts = await fetchSupplementProducts(request);
   return allSupplementProducts.filter((sp) =>
     product.limitations.supplementProductRefs?.includes(sp.id),
   );
