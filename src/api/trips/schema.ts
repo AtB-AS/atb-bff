@@ -90,6 +90,7 @@ export const postBookingTripsRequest = {
       }),
     ),
     products: Joi.array().items(Joi.string()).required(),
+    supplementProducts: Joi.array().items(Joi.string()),
   }),
 };
 
