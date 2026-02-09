@@ -121,6 +121,18 @@ export type BikePark = PlaceInterface & {
   spacesAvailable?: Maybe<Scalars['Int']['output']>;
 };
 
+/** Bicycle routing preferences. */
+export type BikePreferencesInput = {
+  /** The set of characteristics that the user wants to optimize for during bicycle routing. */
+  optimisationMethod?: InputMaybe<VehicleOptimisationMethod>;
+  /** A measure of how bad biking is compared to being in transit for equal periods of time. Higher values make routing prefer other modes over biking. */
+  reluctance?: InputMaybe<Scalars['Float']['input']>;
+  /** The maximum bike speed along streets, in meters per second. */
+  speed?: InputMaybe<Scalars['Float']['input']>;
+  /** When using optimisationMethod 'triangle', these values tell the routing engine how important each factor is compared to the others. All values should add up to 1. */
+  triangleFactors?: InputMaybe<TriangleFactors>;
+};
+
 export type BikeRentalStation = PlaceInterface & {
   allowDropoff?: Maybe<Scalars['Boolean']['output']>;
   bikesAvailable?: Maybe<Scalars['Int']['output']>;
@@ -205,8 +217,15 @@ export type DatedServiceJourney = {
   operatingDay?: Maybe<Scalars['Date']['output']>;
   /** Quays visited by the dated service journey. */
   quays: Array<Quay>;
-  /** List of the dated service journeys this dated service journeys replaces */
+  /** Dated service journeys this dated service journey is replaced by */
+  replacedByRelation: Array<ReplacedByRelation>;
+  /**
+   * List of the dated service journeys this dated service journeys replaces
+   * @deprecated Use replacementForRelation
+   */
   replacementFor: Array<DatedServiceJourney>;
+  /** Dated service journeys this dated service journey replaces with full replacement information */
+  replacementForRelation: Array<ReplacementForRelation>;
   /** The service journey this Dated Service Journey is based on */
   serviceJourney: ServiceJourney;
   /** Alterations specified on the Trip in the planned data */
@@ -248,7 +267,11 @@ export type ElevationProfileStep = {
   elevation?: Maybe<Scalars['Float']['output']>;
 };
 
-/** Emission information for a trip-pattern or legs. */
+/**
+ * Emission information for a trip-pattern or legs.
+ *
+ * For more information, go to https://data.entur.no/dataset/energy_emissions
+ */
 export type Emission = {
   /** The average CO₂ emission per passenger in grams. */
   co2?: Maybe<Scalars['Float']['output']>;
@@ -316,15 +339,9 @@ export type EstimatedCall = {
 export enum FilterPlaceType {
   /** Bicycle rent stations */
   BicycleRent = 'bicycleRent',
-  /**
-   * Bike parks
-   * @deprecated Not supported
-   */
+  /** Bike parks */
   BikePark = 'bikePark',
-  /**
-   * Car parks
-   * @deprecated Not supported
-   */
+  /** Car parks */
   CarPark = 'carPark',
   /** Quay */
   Quay = 'quay',
@@ -621,6 +638,13 @@ export type Line = {
   /** Groups of lines that line is a part of. */
   groupOfLines: Array<Maybe<GroupOfLines>>;
   id: Scalars['ID']['output'];
+  /**
+   * Is this a replacement Line? In NeTEx/SIRI-sourced data this can be set by either
+   * a replacement submode, or a replacement link in a DatedServiceJourney. Only true
+   * for GTFS-sourced data if set by the extended GTFS type.
+   *
+   */
+  isReplacement: Scalars['Boolean']['output'];
   journeyPatterns?: Maybe<Array<Maybe<JourneyPattern>>>;
   name?: Maybe<Scalars['String']['output']>;
   notices: Array<Notice>;
@@ -629,6 +653,8 @@ export type Line = {
   /** Publicly announced code for line, differentiating it from other lines for the same operator. */
   publicCode?: Maybe<Scalars['String']['output']>;
   quays: Array<Maybe<Quay>>;
+  /** Are there replacement DatedServiceJourneys for this Line? */
+  replacementsExist: Scalars['Boolean']['output'];
   serviceJourneys: Array<Maybe<ServiceJourney>>;
   /** Get all situations active for the line. */
   situations: Array<PtSituationElement>;
@@ -658,6 +684,7 @@ export enum Mode {
   Bus = 'bus',
   Cableway = 'cableway',
   Car = 'car',
+  Carpool = 'carpool',
   Coach = 'coach',
   Foot = 'foot',
   Funicular = 'funicular',
@@ -666,6 +693,7 @@ export enum Mode {
   Monorail = 'monorail',
   Rail = 'rail',
   Scooter = 'scooter',
+  SnowAndIce = 'snowAndIce',
   Taxi = 'taxi',
   Tram = 'tram',
   Trolleybus = 'trolleybus',
@@ -864,6 +892,8 @@ export type Place = {
   rentalVehicle?: Maybe<RentalVehicle>;
   /** Type of vertex. (Normal, Bike sharing station, Bike P+R, Transit quay) Mostly used for better localization of bike sharing and P+R station names */
   vertexType?: Maybe<VertexType>;
+  /** This defines if the place is a requested via location, and what kind it is. If the value is `null`, this place is not a via location. */
+  viaLocationType?: Maybe<ViaLocationType>;
 };
 
 export type PlaceAtDistance = {
@@ -1259,8 +1289,7 @@ export type QueryTypeTripArgs = {
   alightSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
   arriveBy?: InputMaybe<Scalars['Boolean']['input']>;
   banned?: InputMaybe<InputBanned>;
-  bicycleOptimisationMethod?: InputMaybe<BicycleOptimisationMethod>;
-  bikeSpeed?: InputMaybe<Scalars['Float']['input']>;
+  bikePreferences?: InputMaybe<BikePreferencesInput>;
   boardSlackDefault?: InputMaybe<Scalars['Int']['input']>;
   boardSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
   bookingTime?: InputMaybe<Scalars['DateTime']['input']>;
@@ -1280,12 +1309,12 @@ export type QueryTypeTripArgs = {
   numTripPatterns?: InputMaybe<Scalars['Int']['input']>;
   pageCursor?: InputMaybe<Scalars['String']['input']>;
   relaxTransitGroupPriority?: InputMaybe<RelaxCostInput>;
+  scooterPreferences?: InputMaybe<ScooterPreferencesInput>;
   searchWindow?: InputMaybe<Scalars['Int']['input']>;
   timetableView?: InputMaybe<Scalars['Boolean']['input']>;
   to: Location;
   transferPenalty?: InputMaybe<Scalars['Int']['input']>;
   transferSlack?: InputMaybe<Scalars['Int']['input']>;
-  triangleFactors?: InputMaybe<TriangleFactors>;
   useBikeRentalAvailabilityInformation?: InputMaybe<Scalars['Boolean']['input']>;
   via?: InputMaybe<Array<TripViaLocationInput>>;
   waitReluctance?: InputMaybe<Scalars['Float']['input']>;
@@ -1375,6 +1404,24 @@ export type RentalVehicleType = {
   vehicleTypeId: Scalars['String']['output'];
 };
 
+/**
+ * Relation for indicating the DatedServiceJourney which is replacing an older one. Exists as a
+ * place to put additional information on the replacement when we get SIRI 2.1 support.
+ */
+export type ReplacedByRelation = {
+  /** The replacing DatedServiceJourney. */
+  datedServiceJourney?: Maybe<DatedServiceJourney>;
+};
+
+/**
+ * Relation for indicating the DatedServiceJourney which is replaced by a newer one. Exists as a
+ * place to put additional information on the replacement when we get SIRI 2.1 support.
+ */
+export type ReplacementForRelation = {
+  /** The replaced DatedServiceJourney. */
+  datedServiceJourney?: Maybe<DatedServiceJourney>;
+};
+
 export enum ReportType {
   /** Indicates a general info-message that should not affect trip. */
   General = 'general',
@@ -1461,12 +1508,17 @@ export type RoutingParameters = {
   disableRemainingWeightHeuristic?: Maybe<Scalars['Boolean']['output']>;
   /** What is the cost of boarding a elevator? */
   elevatorBoardCost?: Maybe<Scalars['Int']['output']>;
-  /** How long does it take to get on an elevator, on average. */
+  /** How long it takes to get on an elevator, on average. */
   elevatorBoardTime?: Maybe<Scalars['Int']['output']>;
-  /** What is the cost of travelling one floor on an elevator? */
+  /**
+   * What is the cost of travelling one floor on an elevator?
+   * @deprecated Use elevatorReluctance to set cost instead.
+   */
   elevatorHopCost?: Maybe<Scalars['Int']['output']>;
-  /** How long does it take to advance one floor on an elevator? */
+  /** How long it takes to advance one floor on an elevator, on average. */
   elevatorHopTime?: Maybe<Scalars['Int']['output']>;
+  /** A multiplier to specify how bad using an elevator is. */
+  elevatorReluctance?: Maybe<Scalars['Float']['output']>;
   /** Whether to apply the ellipsoid->geoid offset to all elevations in the response. */
   geoIdElevation?: Maybe<Scalars['Boolean']['output']>;
   /** When true, real-time updates are ignored during this search. */
@@ -1545,6 +1597,18 @@ export type SjEstimatedCallsPreviousArgs = {
   count?: InputMaybe<Scalars['Int']['input']>;
 };
 
+/** Scooter routing preferences. */
+export type ScooterPreferencesInput = {
+  /** The set of characteristics that the user wants to optimize for during scooter routing. */
+  optimisationMethod?: InputMaybe<VehicleOptimisationMethod>;
+  /** A measure of how bad scooter travel is compared to being in transit for equal periods of time. Higher values make routing prefer other modes over scooter. */
+  reluctance?: InputMaybe<Scalars['Float']['input']>;
+  /** The maximum scooter speed along streets, in meters per second. */
+  speed?: InputMaybe<Scalars['Float']['input']>;
+  /** When using optimisationMethod 'triangle', these values tell the routing engine how important each factor is compared to the others. All values should add up to 1. */
+  triangleFactors?: InputMaybe<TriangleFactors>;
+};
+
 /**
  * Information about the deployment. This is only useful to developers of OTP itself.
  * It is not recommended for regular API consumers to use this type as it has no
@@ -1596,10 +1660,26 @@ export type ServiceJourney = {
    */
   bookingArrangements?: Maybe<BookingArrangement>;
   directionType?: Maybe<DirectionType>;
-  /** Returns scheduled passingTimes for this ServiceJourney for a given date, updated with real-time-updates (if available). NB! This takes a date as argument (default=today) and returns estimatedCalls for that date and should only be used if the date is known when creating the request. For fetching estimatedCalls for a given trip.leg, use leg.serviceJourneyEstimatedCalls instead. */
+  /**
+   * Returns scheduled passingTimes for this ServiceJourney for a given date, updated with real-time-updates (if available).
+   * NB! This takes a date as argument (default=today) and returns estimatedCalls for that date and should only be used if the date is
+   * known when creating the request. For fetching estimatedCalls for a given trip.leg, use leg.serviceJourneyEstimatedCalls instead.
+   *
+   */
   estimatedCalls: Array<EstimatedCall>;
   id: Scalars['ID']['output'];
-  /** JourneyPattern for the service journey, according to scheduled data. If the ServiceJourney is not included in the scheduled data, null is returned. */
+  /**
+   * Is this a replacement ServiceJourney? In NeTEx/SIRI-sourced data this can be set by
+   * either a replacement submode, or a replacement link in a DatedServiceJourney. Only
+   * true for GTFS-sourced data if set by the extended GTFS type.
+   *
+   */
+  isReplacement: Scalars['Boolean']['output'];
+  /**
+   * JourneyPattern for the service journey, according to scheduled data. If the
+   * ServiceJourney is not included in the scheduled data, null is returned.
+   *
+   */
   journeyPattern?: Maybe<JourneyPattern>;
   line: Line;
   notices: Array<Notice>;
@@ -1612,8 +1692,14 @@ export type ServiceJourney = {
   privateCode?: Maybe<Scalars['String']['output']>;
   /** Publicly announced code for service journey, differentiating it from other service journeys for the same line. */
   publicCode?: Maybe<Scalars['String']['output']>;
-  /** Quays visited by service journey, according to scheduled data. If the ServiceJourney is not included in the scheduled data, an empty list is returned. */
+  /**
+   * Quays visited by service journey, according to scheduled data. If the
+   * ServiceJourney is not included in the scheduled data, an empty list is returned.
+   *
+   */
   quays: Array<Quay>;
+  /** Are there replacement DatedServiceJourneys for this ServiceJourney? */
+  replacementsExist: Scalars['Boolean']['output'];
   /** @deprecated The service journey alteration will be moved out of SJ and grouped together with the SJ and date. In Netex this new type is called DatedServiceJourney. We will create artificial DSJs for the old SJs. */
   serviceAlteration?: Maybe<ServiceAlteration>;
   /** Get all situations active for the service journey. */
@@ -1760,6 +1846,8 @@ export enum StreetMode {
   CarPickup = 'car_pickup',
   /** Walk to a car rental point along the road, drive to a drop-off point along the road, and walk the rest of the way. This can include car rentals at fixed locations or free-floating services. */
   CarRental = 'car_rental',
+  /** Share a car ride with a driver and other passengers going in the same direction. */
+  Carpool = 'carpool',
   /** Walk to an eligible pickup area for flexible transportation, ride to an eligible drop-off area and then walk the rest of the way. */
   Flexible = 'flexible',
   /** Walk only */
@@ -1800,6 +1888,7 @@ export type SystemNotice = {
   text?: Maybe<Scalars['String']['output']>;
 };
 
+/** A **zone** used to define a zonal fare structure in a zone-counting or zone-matrix system. This includes TariffZone, as well as the specialised FareZone elements. TariffZones are deprecated, please use FareZones. **TariffZone data will not be maintained from 1. MAY 2025 (Entur).** */
 export type TariffZone = {
   id: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
@@ -2287,6 +2376,18 @@ export type ValidityPeriod = {
   startTime?: Maybe<Scalars['DateTime']['output']>;
 };
 
+/** Optimization methods for vehicle routing (bicycle, scooter, etc.). */
+export enum VehicleOptimisationMethod {
+  /** Prefer flat terrain */
+  Flat = 'flat',
+  /** Prefer faster routes */
+  Quick = 'quick',
+  /** Prefer safer routes */
+  Safe = 'safe',
+  /** Custom optimization using triangle factors */
+  Triangle = 'triangle'
+}
+
 export enum VertexType {
   BikePark = 'bikePark',
   BikeShare = 'bikeShare',
@@ -2315,6 +2416,14 @@ export type ViaLocationInput = {
   /** The id of an element in the OTP model. Currently supports Quay, StopPlace, multimodal StopPlace, and GroupOfStopPlaces. */
   place?: InputMaybe<Scalars['String']['input']>;
 };
+
+/** Categorization for via locations. */
+export enum ViaLocationType {
+  /** The via stop location must be visited as part of a transit trip as at the boarding stop, the intermediate stop, or the alighting stop. */
+  PassThrough = 'passThrough',
+  /** The location is visited physically by boarding or alighting a transit trip at a given stop, or by traveling via requested coordinate location as part of a access, transfer, egress or direct segment. Intermediate stops visited on-board do not count. */
+  Visit = 'visit'
+}
 
 export type ViaSegmentInput = {
   /** A list of filters for which trips should be included. A trip will be included if it matches with at least one filter. An empty list of filters means that all trips should be included. */
