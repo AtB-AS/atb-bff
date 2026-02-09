@@ -17,6 +17,7 @@ fragment tripPattern on TripPattern {
     duration
     walkDistance
     legs {
+        id
         mode
         distance
         duration
