@@ -81,7 +81,7 @@ const service = (): IEnrollmentService => {
 
       return await request(
         'POST',
-        `${baseUrl}/enrollments/${enrollmentId}/customers`,
+        `${baseUrl}/internal/${enrollmentId}/customers`,
         {
           customer_account_id: customerAccountId,
           enrollment_id: enrollmentId,
