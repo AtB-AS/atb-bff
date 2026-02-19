@@ -2,6 +2,7 @@ fragment vehicleTypeAvailabilityBasic on VehicleTypeAvailability {
     count
     vehicleType {
         formFactor
+        propulsionType
     }
 }
 
