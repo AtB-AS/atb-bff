@@ -14,7 +14,12 @@ import {
   postNonTransitTripsRequest,
   postBookingTripsRequest,
 } from './schema';
-import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
+import {
+  TripsQuery,
+  TripsQueryVariables,
+} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
+
+const RETRY_LIMIT = 5;
 
 export default (server: Hapi.Server) => (service: ITrips_v2) => {
   server.route({
@@ -27,9 +32,27 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     },
     handler: async (request, h) => {
       const query = request.payload as unknown as TripsQueryVariables;
-      const result = await service.getTrips(query, h.request);
-      const unwrapped = result.unwrap();
-      return unwrapped;
+
+      // Retry trip search until there is at least one trip pattern
+      let retryCount = 0;
+      let cursor = query.cursor;
+      let result: TripsQuery | undefined = undefined;
+      while (retryCount < RETRY_LIMIT) {
+        result = (
+          await service.getTrips({...query, cursor}, h.request)
+        ).unwrap();
+
+        if (result.trip.tripPatterns.length > 0) {
+          break;
+        }
+        if (!result.trip.nextPageCursor) {
+          break;
+        }
+
+        retryCount++;
+        cursor = result.trip.nextPageCursor;
+      }
+      return result!;
     },
   });
 
