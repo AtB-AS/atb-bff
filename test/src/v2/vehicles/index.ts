@@ -1,1 +1,0 @@
-export {serviceJourneys} from './servicejourney';
