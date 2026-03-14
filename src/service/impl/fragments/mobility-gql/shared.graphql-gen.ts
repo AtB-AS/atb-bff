@@ -4,7 +4,7 @@ import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export type OperatorFragment = { id: string, name: TranslatedStringFragment };
 
-export type PricingPlanFragment = { price: number, perKmPricing?: Array<PricingSegmentFragment>, perMinPricing?: Array<PricingSegmentFragment> };
+export type PricingPlanFragment = { price: number, currency: string, perKmPricing?: Array<PricingSegmentFragment>, perMinPricing?: Array<PricingSegmentFragment> };
 
 export type PricingSegmentFragment = { rate: number, end?: number, interval: number, start: number };
 
@@ -43,6 +43,7 @@ export const PricingPlanFragmentDoc = gql`
     ...pricingSegment
   }
   price
+  currency
   perMinPricing {
     ...pricingSegment
   }
