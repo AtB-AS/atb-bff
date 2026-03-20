@@ -270,7 +270,7 @@ export type ElevationProfileStep = {
 /**
  * Emission information for a trip-pattern or legs.
  *
- * For more information, go to https://data.entur.no/dataset/energy_emissions
+ * For more information, go to https://data.entur.no/public/datasets/energy_emissions
  */
 export type Emission = {
   /** The average CO₂ emission per passenger in grams. */
@@ -312,6 +312,8 @@ export type EstimatedCall = {
   expectedArrivalTime: Scalars['DateTime']['output'];
   /** Expected time of departure from quay. Updated with real time information if available. */
   expectedDepartureTime: Scalars['DateTime']['output'];
+  /** Whether this call is an extra call introduced by real-time data */
+  extraCall: Scalars['Boolean']['output'];
   /** Whether vehicle may be alighted at quay. */
   forAlighting: Scalars['Boolean']['output'];
   /** Whether vehicle may be boarded at quay. */
