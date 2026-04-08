@@ -1,4 +1,4 @@
-query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int, $searchWindow: Int) {
+query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int, $searchWindow: Int, $includeCancellations: Boolean!) {
   trip(
     from: $from
     to: $to
@@ -13,6 +13,8 @@ query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTi
     modes: $modes
     numTripPatterns: $numTripPatterns
     searchWindow: $searchWindow
+    includeRealtimeCancellations: $includeCancellations
+    includePlannedCancellations: $includeCancellations
   ) {
   ...trip
   }
