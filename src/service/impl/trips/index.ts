@@ -40,6 +40,7 @@ export default (): ITrips_v2 => {
         arriveBy: false,
         when: query.searchTime,
         searchWindow: 1440, // 24 hours
+        includeCancellations: false,
         modes: {
           transportModes: [
             {
