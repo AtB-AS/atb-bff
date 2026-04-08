@@ -46,7 +46,7 @@ export const postTripsRequest = {
         }),
       ),
     }).optional(),
-    includeCancellations: Joi.bool().required(),
+    includeCancellations: Joi.bool().optional(),
   }),
 };
 
