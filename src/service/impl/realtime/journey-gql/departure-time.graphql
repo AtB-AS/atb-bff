@@ -4,7 +4,7 @@ query GetDepartureRealtime(
   $timeRange: Int!
   $limit: Int!
   $limitPerLine: Int
-  $lineIds: [ID]
+  $lineIds: [ID!]
 ) {
   quays(ids: $quayIds) {
     id
@@ -15,9 +15,7 @@ query GetDepartureRealtime(
       timeRange: $timeRange
       arrivalDeparture: departures
       includeCancelledTrips: false
-      whiteListed: {
-        lines: $lineIds
-      }
+      filters: [{select: [{lines: $lineIds}]}]
     ) {
       ...estimatedCall
     }
