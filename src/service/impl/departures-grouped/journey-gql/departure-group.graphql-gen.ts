@@ -16,7 +16,7 @@ export type GroupsByIdQueryVariables = Types.Exact<{
   timeRange: Types.Scalars['Int']['input'];
   limitPerLine: Types.Scalars['Int']['input'];
   totalLimit: Types.Scalars['Int']['input'];
-  filterByLineIds?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']['input']>> | Types.InputMaybe<Types.Scalars['ID']['input']>>;
+  filterByLineIds?: Types.InputMaybe<Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input']>;
   includeCancelledTrips?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
@@ -150,7 +150,7 @@ export const Group_StopPlaceFieldsFragmentDoc = gql`
 }
     `;
 export const GroupsByIdDocument = gql`
-    query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID], $includeCancelledTrips: Boolean) {
+    query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID!], $includeCancelledTrips: Boolean) {
   quays(ids: $ids) {
     ...group_quayFields
     stopPlace {
@@ -163,7 +163,7 @@ export const GroupsByIdDocument = gql`
       numberOfDepartures: $totalLimit
       arrivalDeparture: departures
       includeCancelledTrips: $includeCancelledTrips
-      whiteListed: {lines: $filterByLineIds}
+      filters: [{select: [{lines: $filterByLineIds}]}]
     ) {
       ...group_times_estimatedCallFields
     }
@@ -174,7 +174,7 @@ export const GroupsByIdDocument = gql`
       numberOfDeparturesPerLineAndDestinationDisplay: 1
       arrivalDeparture: departures
       includeCancelledTrips: $includeCancelledTrips
-      whiteListed: {lines: $filterByLineIds}
+      filters: [{select: [{lines: $filterByLineIds}]}]
     ) {
       ...group_estimatedCallFields
     }

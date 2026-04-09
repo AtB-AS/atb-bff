@@ -1,4 +1,4 @@
-query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID], $includeCancelledTrips: Boolean) {
+query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limitPerLine: Int!, $totalLimit: Int!, $filterByLineIds: [ID!], $includeCancelledTrips: Boolean) {
   quays(ids: $ids) {
     ...group_quayFields
     stopPlace {
@@ -11,7 +11,7 @@ query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limi
       numberOfDepartures: $totalLimit
       arrivalDeparture: departures
       includeCancelledTrips: $includeCancelledTrips
-      whiteListed: {lines: $filterByLineIds}
+      filters: [{select: [{lines: $filterByLineIds}]}]
     ) {
       ...group_times_estimatedCallFields
     }
@@ -22,7 +22,7 @@ query GroupsById($ids: [String]!, $startTime: DateTime!, $timeRange: Int!, $limi
       numberOfDeparturesPerLineAndDestinationDisplay: 1
       arrivalDeparture: departures
       includeCancelledTrips: $includeCancelledTrips
-      whiteListed: {lines: $filterByLineIds}
+      filters: [{select: [{lines: $filterByLineIds}]}]
     ) {
       ...group_estimatedCallFields
     }

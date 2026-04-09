@@ -338,6 +338,24 @@ export type EstimatedCall = {
   timingPoint: Scalars['Boolean']['output'];
 };
 
+/** A collection of selectors for what estimated calls should be included / excluded. At least one of `select` or `not` must be provided. The `select` is always applied first, then `not`. If only `not` is present, the exclude is applied to the existing set of estimated calls. */
+export type EstimatedCallFilterInput = {
+  /** A list of selectors for what estimated calls should be excluded during the search. If a call matches with at least one selector it will be excluded. */
+  not?: InputMaybe<Array<EstimatedCallSelectInput>>;
+  /** A list of selectors for what estimated calls should be included. A call is included if it matches at least one selector. Omit the field to include all calls. An empty list is not allowed. */
+  select?: InputMaybe<Array<EstimatedCallSelectInput>>;
+};
+
+/** A selector for filter allow-list / exclude-list. At least one field must be provided. An estimated call matches a selector if it matches all fields. Within each field, a call matches if it matches any of the listed values. */
+export type EstimatedCallSelectInput = {
+  /** Set of ids for authorities that should be included in/excluded from search. A call matches if its authority matches any of the given IDs. An empty list is not allowed. Omit the field to match all authorities. */
+  authorities?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Set of ids for lines that should be included in/excluded from search. A call matches if its line matches any of the given IDs. An empty list is not allowed. Omit the field to match all lines. */
+  lines?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** The allowed modes for the estimated call. A call matches if its mode matches any of the listed modes. An empty list is not allowed. Omit the field to match all modes. Omitting main mode (transportMode) is also not allowed. */
+  transportModes?: InputMaybe<Array<TransportModes>>;
+};
+
 export enum FilterPlaceType {
   /** Bicycle rent stations */
   BicycleRent = 'bicycleRent',
@@ -1021,13 +1039,12 @@ export type Quay = PlaceInterface & {
 /** A place such as platform, stance, or quayside where passengers have access to PT vehicles. */
 export type QuayEstimatedCallsArgs = {
   arrivalDeparture?: InputMaybe<ArrivalDeparture>;
+  filters?: InputMaybe<Array<EstimatedCallFilterInput>>;
   includeCancelledTrips?: InputMaybe<Scalars['Boolean']['input']>;
   numberOfDepartures?: InputMaybe<Scalars['Int']['input']>;
   numberOfDeparturesPerLineAndDestinationDisplay?: InputMaybe<Scalars['Int']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
   timeRange?: InputMaybe<Scalars['Int']['input']>;
-  whiteListed?: InputMaybe<InputWhiteListed>;
-  whiteListedModes?: InputMaybe<Array<InputMaybe<TransportMode>>>;
 };
 
 
@@ -1802,13 +1819,12 @@ export type StopPlace = PlaceInterface & {
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlaceEstimatedCallsArgs = {
   arrivalDeparture?: InputMaybe<ArrivalDeparture>;
+  filters?: InputMaybe<Array<EstimatedCallFilterInput>>;
   includeCancelledTrips?: InputMaybe<Scalars['Boolean']['input']>;
   numberOfDepartures?: InputMaybe<Scalars['Int']['input']>;
   numberOfDeparturesPerLineAndDestinationDisplay?: InputMaybe<Scalars['Int']['input']>;
   startTime?: InputMaybe<Scalars['DateTime']['input']>;
   timeRange?: InputMaybe<Scalars['Int']['input']>;
-  whiteListed?: InputMaybe<InputWhiteListed>;
-  whiteListedModes?: InputMaybe<Array<InputMaybe<TransportMode>>>;
 };
 
 
