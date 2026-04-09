@@ -36,7 +36,6 @@ export function generateSingleTripQueryString(
     walkReluctance,
     walkSpeed,
     modes,
-    includeCancellations,
   } = queryVariables;
   const arriveBy = false;
   const singleTripQuery: TripsQueryVariables = {
@@ -49,7 +48,6 @@ export function generateSingleTripQueryString(
     walkSpeed,
     arriveBy,
     modes,
-    includeCancellations,
   };
 
   // encode to string
