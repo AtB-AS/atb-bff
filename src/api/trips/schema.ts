@@ -6,7 +6,6 @@ import {
   BookingTripsQueryPayload,
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
-  TripsQueryWithJourneyIds,
 } from '../../types/trips';
 
 export const postTripsRequest = {
@@ -99,29 +98,4 @@ export const postEncodedSingleTripRequest = {
   payload: Joi.object<CompressedSingleTripQuery>({
     compressedQuery: Joi.string().required(),
   }).required(),
-};
-
-export const postSingleTripRequest = {
-  payload: Joi.object<TripsQueryWithJourneyIds>({
-    query: Joi.object({
-      from: Joi.object<Location>({
-        place: Joi.string().optional(),
-        name: Joi.string().default('UNKNOWN'),
-        coordinates: Joi.object({
-          latitude: Joi.number(),
-          longitude: Joi.number(),
-        }),
-      }).required(),
-      to: Joi.object<Location>({
-        place: Joi.string().optional(),
-        name: Joi.string().default('UNKNOWN'),
-        coordinates: Joi.object({
-          latitude: Joi.number(),
-          longitude: Joi.number(),
-        }),
-      }).required(),
-      when: Joi.date(),
-    }),
-    journeyIds: Joi.array().items(Joi.string()).default([]).single(),
-  }),
 };
