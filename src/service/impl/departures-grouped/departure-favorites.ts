@@ -21,13 +21,16 @@ export async function getDepartureFavorites(
 ): Promise<Result<DepartureFavoritesMetadata, APIError>> {
   const quayIds = favorites?.map((f) => f.quayId).filter(onlyUniques);
 
+  const lineIds = favorites.map((f) => f.lineId);
+  const filters = lineIds.length ? [{select: [{lines: lineIds}]}] : undefined;
+
   const variables: GroupsByIdQueryVariables = {
     ids: quayIds,
     timeRange: 86400 * 2, // Two days
     startTime: options.startTime,
     limitPerLine: options.limitPerLine,
     totalLimit: options.limitPerLine * 10,
-    filterByLineIds: favorites.map((f) => f.lineId),
+    filters,
     includeCancelledTrips: options.includeCancelledTrips,
   };
 

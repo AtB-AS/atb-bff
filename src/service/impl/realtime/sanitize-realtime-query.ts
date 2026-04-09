@@ -20,5 +20,10 @@ export const sanitizeRealtimeQuery = (
   const realtimeWindowEnd = addMinutes(now, REALTIME_MINUTES);
   const timeRange = differenceInSeconds(realtimeWindowEnd, startTime);
 
-  return timeRange > 0 ? {...query, startTime, timeRange} : undefined;
+  if (timeRange <= 0) return undefined;
+
+  const {lineIds, ...rest} = query;
+  const filters = lineIds?.length ? [{select: [{lines: lineIds}]}] : undefined;
+
+  return {...rest, startTime, timeRange, filters};
 };

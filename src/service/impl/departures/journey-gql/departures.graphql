@@ -3,7 +3,7 @@ query departures(
   $numberOfDepartures: Int,
   $startTime: DateTime,
   $timeRange: Int,
-  $filterByLineIds: [ID!],
+  $filters: [EstimatedCallFilterInput!],
   $limitPerLine: Int
 ) {
   quays(ids: $ids) {
@@ -16,7 +16,7 @@ query departures(
       startTime: $startTime
       timeRange: $timeRange
       includeCancelledTrips: true
-      filters: [{select: [{lines: $filterByLineIds}]}]
+      filters: $filters
       numberOfDeparturesPerLineAndDestinationDisplay: $limitPerLine
     ) {
       date
