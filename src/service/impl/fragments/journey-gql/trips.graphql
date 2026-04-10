@@ -45,12 +45,14 @@ fragment tripPattern on TripPattern {
                 ...notice
             }
             stopPositionInPattern
+            cancellation
         }
         toEstimatedCall {
             notices {
                 ...notice
             }
             stopPositionInPattern
+            cancellation
         }
         situations {
             ...situation
@@ -148,6 +150,7 @@ fragment tripPattern on TripPattern {
                 name
             }
             predictionInaccurate
+            cancellation
         }
         bookingArrangements {
             ...bookingArrangement
