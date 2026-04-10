@@ -55,6 +55,10 @@ export default (): IDeparturesService => {
               numberOfDepartures,
             };
 
+        const filters = lineIds?.length
+          ? [{select: [{lines: lineIds}]}]
+          : undefined;
+
         const result = await journeyPlannerClient(request).query<
           DeparturesQuery,
           DeparturesQueryVariables
@@ -64,7 +68,7 @@ export default (): IDeparturesService => {
             ids: quayIds,
             startTime,
             timeRange,
-            filterByLineIds: lineIds,
+            filters,
             ...limit,
           },
         });
