@@ -2,19 +2,14 @@ import {IVehiclesService} from '../../interface';
 import {Result} from '@badrap/result';
 import {GetServiceJourneyVehicles} from '../../types';
 import {APIError} from '../../../utils/api-error';
-import {
-  vehiclesClient,
-  vehiclesSubscriptionClient,
-} from '../../../graphql/graphql-client';
+import {vehiclesClient} from '../../../graphql/graphql-client';
 import {
   GetServiceJourneyVehicleDocument,
   GetServiceJourneyVehicleQuery,
   GetServiceJourneyVehicleQueryVariables,
 } from './vehicles-gql/vehicles.graphql-gen';
-import {
-  ServiceJourneyDocument,
-  ServiceJourneySubscription,
-} from './vehicles-gql/service-journey-subscription.graphql-gen';
+import {vehicleSubscriptionPool} from './subscription-pool';
+import {Subscription} from 'zen-observable-ts';
 
 export default (): IVehiclesService => ({
   async getServiceJourneyVehicles(query, request) {
@@ -48,21 +43,14 @@ export default (): IVehiclesService => ({
     }
   },
   createServiceJourneySubscription(query, ws) {
-    return vehiclesSubscriptionClient
-      .subscribe({
-        query: ServiceJourneyDocument,
-        fetchPolicy: 'no-cache',
-        variables: query,
-      })
-      .subscribe({
-        next: (value) => {
-          const data = value.data as ServiceJourneySubscription;
-          const vehicle = data.vehicles?.find(
-            (v) => v.serviceJourney?.id === query.serviceJourneyId,
-          );
-          if (!vehicle) return;
-          ws.send(JSON.stringify(vehicle));
-        },
-      });
+    vehicleSubscriptionPool.subscribe(query.serviceJourneyId, ws);
+    return {
+      unsubscribe: () => {
+        vehicleSubscriptionPool.unsubscribe(query.serviceJourneyId, ws);
+      },
+      get closed() {
+        return false;
+      },
+    } as Subscription;
   },
 });
