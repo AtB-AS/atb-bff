@@ -9,6 +9,7 @@ import * as Types from '../graphql/vehicles/vehicles-types_v2';
 import {CursoredQuery} from './cursored';
 import {GetServiceJourneyVehicleQuery} from './impl/vehicles/vehicles-gql/vehicles.graphql-gen';
 import {DeparturesQuery} from './impl/departures/journey-gql/departures.graphql-gen';
+import {z} from 'zod';
 
 export interface Coordinates {
   latitude: number;
@@ -252,3 +253,64 @@ export enum Org {
   nfk = 'nfk',
   troms = 'troms',
 }
+
+export enum BookingAvailabilityType {
+  /** The product supports booking and has available seats */
+  Available = 'available',
+  /** The product does not support booking */
+  BookingNotSupported = 'booking_not_supported',
+  /** No more seats are available for booking */
+  SoldOut = 'sold_out',
+  /** The product supports booking, but ticket sale isn't currently open */
+  Closed = 'closed',
+  /** Fallback state for unhandled errors */
+  Unknown = 'unknown',
+}
+
+export const SearchOfferPrice = z.object({
+  originalAmount: z.string(),
+  originalAmountFloat: z.number().nullish(),
+  amount: z.string(),
+  amountFloat: z.number().nullish(),
+  currency: z.string(),
+  vatGroup: z.string().nullish(),
+});
+export type SearchOfferPrice = z.infer<typeof SearchOfferPrice>;
+
+export const TicketOffer = z.object({
+  offerId: z.string(),
+  travellerId: z.string(),
+  price: SearchOfferPrice,
+  fareProduct: z.string().nullish(),
+  validFrom: z.string().nullish(),
+  validTo: z.string().nullish(),
+  flexDiscountLadder: z.any().nullish(),
+  route: z.any(),
+  shouldStartNow: z.boolean(),
+  available: z.number().nullish(),
+});
+export type TicketOffer = z.infer<typeof TicketOffer>;
+
+export const TicketOffers = z.array(TicketOffer);
+
+export const LimitationsSubset = z.object({
+  supplementProductRefs: z.array(z.string()).nullish(),
+});
+
+export const PreassignedFareProductSubset = z.object({
+  id: z.string(),
+  limitations: LimitationsSubset,
+  isBookingEnabled: z.boolean().nullish(),
+  isSupplementProduct: z.boolean().nullish(),
+});
+export type PreassignedFareProductSubsetType = z.infer<
+  typeof PreassignedFareProductSubset
+>;
+
+export const ReservationProductSubset = z.object({
+  id: z.string(),
+  kind: z.literal('reservation'),
+});
+export type ReservationProductSubsetType = z.infer<
+  typeof ReservationProductSubset
+>;

@@ -7,10 +7,7 @@ import {
   TripFragment,
   TripPatternFragment,
 } from '../service/impl/fragments/journey-gql/trips.graphql-gen';
-import {
-  BookingAvailabilityType,
-  TicketOffer,
-} from '../service/impl/trips/booking-utils';
+import {BookingInfo} from '../service/impl/trips/booking-utils';
 
 export type TripPattern = Required<TripsQuery>['trip']['tripPatterns'][0] & {
   id?: any;
@@ -60,8 +57,5 @@ export type BookingTripsQuery = {
   };
 };
 export type TripPatternWithBooking = TripPatternFragment & {
-  booking: {
-    availability: BookingAvailabilityType;
-    offer?: TicketOffer;
-  };
+  booking: BookingInfo;
 };

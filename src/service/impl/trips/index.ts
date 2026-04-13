@@ -55,13 +55,15 @@ export default (): ITrips_v2 => {
       const tripPatternsWithBookingInfo: TripPatternWithBooking[] =
         await Promise.all(
           result.trip?.tripPatterns.map(async (tripPattern) => {
-            const booking = await getBookingInfo(
-              request,
-              tripPattern,
-              payload.travellers,
-              payload.products,
-              payload.supplementProducts ?? [],
-            );
+            const booking = (
+              await getBookingInfo(
+                request,
+                tripPattern,
+                payload.travellers,
+                payload.products,
+                payload.supplementProducts ?? [],
+              )
+            ).unwrap();
             return {
               ...tripPattern,
               booking,
