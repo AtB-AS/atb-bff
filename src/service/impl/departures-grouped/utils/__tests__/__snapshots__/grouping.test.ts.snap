@@ -30,6 +30,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
           {
             "departures": [
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -43,6 +44,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -56,6 +58,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -69,6 +72,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -82,6 +86,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -172,6 +177,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
           {
             "departures": [
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -185,6 +191,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -198,6 +205,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -211,6 +219,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
@@ -224,6 +233,7 @@ exports[`service stops -> departure group utils snapshot - should group data fro
                 "time": undefined,
               },
               {
+                "actualTime": undefined,
                 "aimedTime": undefined,
                 "bookingArrangements": undefined,
                 "cancellation": undefined,
