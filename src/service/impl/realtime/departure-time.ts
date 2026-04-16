@@ -36,6 +36,7 @@ function mapDeparture(input: EstimatedCallFragment[]) {
         realtime: departure.realtime ?? false,
         expectedDepartureTime: departure.expectedDepartureTime,
         aimedDepartureTime: departure.aimedDepartureTime,
+        actualDepartureTime: departure.actualDepartureTime,
       },
     };
   }

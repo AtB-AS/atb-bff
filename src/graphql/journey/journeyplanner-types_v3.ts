@@ -1461,6 +1461,8 @@ export type RoutingError = {
 export enum RoutingErrorCode {
   /** The specified location is not close to any streets or transit stops */
   LocationNotFound = 'locationNotFound',
+  /** No usable itineraries were found for the requested direct mode and no transit was included in the search */
+  NoDirectModeConnection = 'noDirectModeConnection',
   /** No stops are reachable from the location specified. You can try searching using a different access or egress mode */
   NoStopsInRange = 'noStopsInRange',
   /** No transit connection was found between the origin and destination withing the operating day or the next day */
