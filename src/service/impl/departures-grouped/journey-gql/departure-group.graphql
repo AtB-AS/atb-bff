@@ -59,6 +59,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   }
   date
   expectedDepartureTime
+  actualDepartureTime
   aimedDepartureTime
   predictionInaccurate
   realtime

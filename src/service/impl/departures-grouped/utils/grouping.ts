@@ -51,6 +51,7 @@ type DepartureLineInfo = {
 type DepartureTime = {
   time: string;
   aimedTime: string;
+  actualTime?: string;
   realtime?: boolean;
   predictionInaccurate?: boolean;
   situations: Situation[];
@@ -162,6 +163,7 @@ export default function mapQueryToGroups(
             return {
               time: time.expectedDepartureTime,
               aimedTime: time.aimedDepartureTime,
+              actualTime: time.actualDepartureTime,
               predictionInaccurate: time.predictionInaccurate,
               realtime: time.realtime,
               situations: time.situations,
