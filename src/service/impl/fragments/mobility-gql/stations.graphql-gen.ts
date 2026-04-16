@@ -4,7 +4,7 @@ import { TranslatedStringFragment, PricingPlanFragment, SystemFragment, RentalUr
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
-export type VehicleTypeAvailabilityBasicFragment = { count: number, vehicleType: { formFactor: Types.FormFactor, propulsionType: Types.PropulsionType } };
+export type VehicleTypeAvailabilityBasicFragment = { count: number, vehicleType: { id: string, formFactor: Types.FormFactor, propulsionType: Types.PropulsionType } };
 
 export type StationBasicFragment = { id: string, lat: number, lon: number, capacity?: number, vehicleTypesAvailable?: Array<VehicleTypeAvailabilityBasicFragment> };
 
@@ -26,6 +26,7 @@ export const VehicleTypeAvailabilityBasicFragmentDoc = gql`
     fragment vehicleTypeAvailabilityBasic on VehicleTypeAvailability {
   count
   vehicleType {
+    id
     formFactor
     propulsionType
   }
