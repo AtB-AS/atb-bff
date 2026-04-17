@@ -1,10 +1,10 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { TranslatedStringFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
+import { PricingPlanFragment, TranslatedStringFragment, SystemFragment, RentalUrisFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { TranslatedStringFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
-export type VehicleTypeAvailabilityBasicFragment = { count: number, vehicleType: { id: string, formFactor: Types.FormFactor, propulsionType: Types.PropulsionType } };
+import { PricingPlanFragmentDoc, TranslatedStringFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc } from './shared.graphql-gen';
+export type VehicleTypeAvailabilityBasicFragment = { count: number, vehicleType: { id: string, formFactor: Types.FormFactor, propulsionType: Types.PropulsionType, pricingPlans?: Array<PricingPlanFragment> } };
 
 export type StationBasicFragment = { id: string, lat: number, lon: number, capacity?: number, vehicleTypesAvailable?: Array<VehicleTypeAvailabilityBasicFragment> };
 
@@ -29,9 +29,12 @@ export const VehicleTypeAvailabilityBasicFragmentDoc = gql`
     id
     formFactor
     propulsionType
+    pricingPlans {
+      ...pricingPlan
+    }
   }
 }
-    `;
+    ${PricingPlanFragmentDoc}`;
 export const StationBasicFragmentDoc = gql`
     fragment stationBasic on Station {
   id

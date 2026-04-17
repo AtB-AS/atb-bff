@@ -4,6 +4,9 @@ fragment vehicleTypeAvailabilityBasic on VehicleTypeAvailability {
         id
         formFactor
         propulsionType
+        pricingPlans {
+            ...pricingPlan
+        }
     }
 }
 
