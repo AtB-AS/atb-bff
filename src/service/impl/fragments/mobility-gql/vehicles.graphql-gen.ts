@@ -1,9 +1,9 @@
 import * as Types from '../../../../graphql/mobility/mobility-types_v2';
 
-import { VehicleTypeBasicFragment, PricingPlanFragment, SystemFragment, RentalUrisFragment, VehicleTypeFragment } from './shared.graphql-gen';
+import { VehicleTypeBasicFragment, PricingPlanFragment, TranslatedStringFragment, SystemFragment, RentalUrisFragment, VehicleTypeFragment } from './shared.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-import { VehicleTypeBasicFragmentDoc, PricingPlanFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc, VehicleTypeFragmentDoc } from './shared.graphql-gen';
+import { VehicleTypeBasicFragmentDoc, PricingPlanFragmentDoc, TranslatedStringFragmentDoc, SystemFragmentDoc, RentalUrisFragmentDoc, VehicleTypeFragmentDoc } from './shared.graphql-gen';
 export type VehicleBasicFragment = { id: string, lat: number, lon: number, currentFuelPercent?: number, currentRangeMeters: number, vehicleType: VehicleTypeBasicFragment };
 
 export type VehicleExtendedFragment = (
