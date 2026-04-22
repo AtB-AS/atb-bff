@@ -44,12 +44,18 @@ fragment tripPattern on TripPattern {
             notices {
                 ...notice
             }
+            situations {
+                ...situation
+            }
             stopPositionInPattern
             cancellation
         }
         toEstimatedCall {
             notices {
                 ...notice
+            }
+            situations {
+                ...situation
             }
             stopPositionInPattern
             cancellation
