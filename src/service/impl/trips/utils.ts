@@ -2,6 +2,9 @@ import {TripsQueryVariables} from './journey-gql/trip.graphql-gen';
 import {
   TripPattern as TripPattern_v3,
   TripsQueryWithJourneyIds,
+  Leg,
+  RefreshedLeg,
+  TripPatternStatus,
 } from '../../../types/trips';
 import {
   compressToEncodedURIComponent,
@@ -96,4 +99,94 @@ export function extractServiceJourneyIds(trip: TripPattern_v3) {
     .filter((jId) => {
       return !!jId;
     });
+}
+
+// --- v3 singleTrip utilities ---
+
+export function isNotStaleLeg(leg: RefreshedLeg): leg is Leg {
+  return 'mode' in leg;
+}
+
+export function isTransitLeg(leg: RefreshedLeg): leg is Leg {
+  return isNotStaleLeg(leg) && 'fromPlace' in leg && leg.fromPlace.quay != null;
+}
+
+/**
+ * Checks if any leg N+1's expectedStartTime is before leg N's expectedEndTime,
+ * indicating a missed connection (impossible trip).
+ */
+export function hasTemporalOverlap(legs: Leg[]): boolean {
+  for (let i = 1; i < legs.length; i++) {
+    const prev = legs[i - 1];
+    const curr = legs[i];
+    if (parseISO(curr.expectedStartTime) < parseISO(prev.expectedEndTime)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Computes correct aimedStartTime and aimedEndTime for a trip pattern.
+ * Handles the Entur quirk where foot legs (and other non-quay legs) have
+ * aimed times equal to expected times. For those legs, we derive the aimed
+ * time from adjacent transit legs with quays.
+ */
+export function computeAimedTimes(legs: Leg[]): {
+  aimedStartTime: string;
+  aimedEndTime: string;
+} {
+  if (legs.length === 0) {
+    return {aimedStartTime: '', aimedEndTime: ''};
+  }
+
+  const firstLeg = legs[0];
+  const lastLeg = legs[legs.length - 1];
+
+  let aimedStartTime = firstLeg.aimedStartTime;
+  let aimedEndTime = lastLeg.aimedEndTime;
+
+  if (legs.some((leg) => leg.mode === 'foot')) {
+    if (!isTransitLeg(firstLeg)) {
+      const firstTransitIndex = legs.findIndex(isTransitLeg);
+      if (firstTransitIndex !== -1) {
+        const firstTransit = legs[firstTransitIndex];
+        const durationBefore = legs
+          .slice(0, firstTransitIndex)
+          .reduce((acc, leg) => acc + leg.duration, 0);
+        aimedStartTime = addSeconds(
+          parseISO(firstTransit.aimedStartTime),
+          -durationBefore,
+        ).toISOString();
+      }
+    }
+
+    if (!isTransitLeg(lastLeg)) {
+      const reversedLegs = [...legs].reverse();
+      const lastTransitIndex = reversedLegs.findIndex(isTransitLeg);
+      if (lastTransitIndex !== -1) {
+        const lastTransit = reversedLegs[lastTransitIndex];
+        const durationAfter = reversedLegs
+          .slice(0, lastTransitIndex)
+          .reduce((acc, leg) => acc + leg.duration, 0);
+        aimedEndTime = addSeconds(
+          parseISO(lastTransit.aimedEndTime),
+          durationAfter,
+        ).toISOString();
+      }
+    }
+  }
+
+  return {aimedStartTime, aimedEndTime};
+}
+
+/**
+ * Determines the overall trip pattern status.
+ * Priority: stale > impossible > valid
+ */
+export function determineTripStatus(legs: Leg[]): TripPatternStatus {
+  if (hasTemporalOverlap(legs)) {
+    return 'impossible';
+  }
+  return 'valid';
 }

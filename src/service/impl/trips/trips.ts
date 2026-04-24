@@ -6,13 +6,23 @@ import {
   TripsQuery,
   TripsQueryVariables,
 } from './journey-gql/trip.graphql-gen';
+import {
+  RefreshLegDocument,
+  RefreshLegQuery,
+  RefreshLegQueryVariables,
+} from './journey-gql/leg.graphql-gen';
 import {Result} from '@badrap/result';
 import {APIError} from '../../../utils/api-error';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {ReqRefDefaults, Request} from '@hapi/hapi';
 
 import * as Boom from '@hapi/boom';
-import {extractServiceJourneyIds, generateSingleTripQueryString} from './utils';
+import {
+  extractServiceJourneyIds,
+  generateSingleTripQueryString,
+  computeAimedTimes,
+  determineTripStatus,
+} from './utils';
 import * as Trips from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {Mode} from '../../../graphql/journey/journeyplanner-types_v3';
@@ -160,4 +170,69 @@ function bikeRentalContainsOnlyFootLegs(data: TripsNonTransitQuery) {
       t.legs.every((l) => l.mode === Mode.Foot),
     )
   );
+}
+
+export async function refreshSingleTrip(
+  tripPattern: Trips.TripPattern,
+  request: Request<ReqRefDefaults>,
+): Promise<Trips.TripPattern> {
+  const client = journeyPlannerClient(request);
+
+  // Refetch all transit legs in parallel, keep non-transit legs as-is
+  const refreshedLegs: Trips.RefreshedLeg[] = await Promise.all(
+    tripPattern.legs.map(async (leg): Promise<Trips.RefreshedLeg> => {
+      if (!leg.id) {
+        // Non-transit leg (foot, bicycle, etc.) — return as-is
+        return leg;
+      }
+
+      try {
+        const result = await client.query<
+          RefreshLegQuery,
+          RefreshLegQueryVariables
+        >({
+          query: RefreshLegDocument,
+          variables: {id: leg.id},
+        });
+
+        if (result.data.leg) {
+          return result.data.leg as Trips.Leg;
+        }
+      } catch {
+        // Query failed — treat as stale
+      }
+
+      return {id: leg.id, status: 'stale' as const};
+    }),
+  );
+
+  const mergedLegs: Trips.Leg[] = refreshedLegs.map((leg, index) => {
+    if ('status' in leg && leg.status === 'stale') {
+      return tripPattern.legs[index];
+    }
+    return leg as Trips.Leg;
+  });
+
+  const status = determineTripStatus(mergedLegs);
+  const {aimedStartTime, aimedEndTime} = computeAimedTimes(mergedLegs);
+
+  const expectedStartTime = mergedLegs[0].expectedStartTime;
+  const expectedEndTime = mergedLegs[mergedLegs.length - 1].expectedEndTime;
+
+  const duration = mergedLegs.reduce((acc, leg) => acc + leg.duration, 0);
+  const walkDistance = mergedLegs
+    .filter((leg) => leg.mode === Mode.Foot)
+    .reduce((acc, leg) => acc + leg.distance, 0);
+
+  return {
+    ...tripPattern,
+    status,
+    aimedStartTime,
+    aimedEndTime,
+    expectedStartTime,
+    expectedEndTime,
+    duration,
+    walkDistance,
+    legs: mergedLegs,
+  };
 }
