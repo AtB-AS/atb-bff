@@ -206,9 +206,11 @@ export async function refreshSingleTrip(
     }),
   );
 
+  // Merge stale legs with originals for best-effort time computation.
+  // Mark stale legs so determineTripStatus can detect them.
   const mergedLegs: Trips.Leg[] = refreshedLegs.map((leg, index) => {
     if ('status' in leg && leg.status === 'stale') {
-      return tripPattern.legs[index];
+      return {...tripPattern.legs[index], isStale: true};
     }
     return leg as Trips.Leg;
   });

@@ -189,4 +189,27 @@ describe('determineTripStatus', () => {
     ];
     expect(determineTripStatus(legs)).toBe('impossible');
   });
+
+  it('returns stale when any leg is marked as stale', () => {
+    const legs: Leg[] = [
+      makeTransitLeg(),
+      makeTransitLeg({isStale: true} as Partial<Leg>),
+    ];
+    expect(determineTripStatus(legs)).toBe('stale');
+  });
+
+  it('returns stale over impossible when both conditions apply', () => {
+    const legs: Leg[] = [
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:00:00.000Z',
+        expectedEndTime: '2024-01-01T10:20:00.000Z',
+      }),
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:15:00.000Z',
+        expectedEndTime: '2024-01-01T10:25:00.000Z',
+        isStale: true,
+      } as Partial<Leg>),
+    ];
+    expect(determineTripStatus(legs)).toBe('stale');
+  });
 });

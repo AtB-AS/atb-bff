@@ -3,7 +3,6 @@ import {
   TripPattern as TripPattern_v3,
   TripsQueryWithJourneyIds,
   Leg,
-  RefreshedLeg,
   TripPatternStatus,
 } from '../../../types/trips';
 import {
@@ -103,12 +102,8 @@ export function extractServiceJourneyIds(trip: TripPattern_v3) {
 
 // --- v3 singleTrip utilities ---
 
-export function isNotStaleLeg(leg: RefreshedLeg): leg is Leg {
-  return 'mode' in leg;
-}
-
-export function isTransitLeg(leg: RefreshedLeg): leg is Leg {
-  return isNotStaleLeg(leg) && 'fromPlace' in leg && leg.fromPlace.quay != null;
+export function isTransitLeg(leg: Leg): boolean {
+  return leg.fromPlace.quay != null;
 }
 
 /**
@@ -185,6 +180,9 @@ export function computeAimedTimes(legs: Leg[]): {
  * Priority: stale > impossible > valid
  */
 export function determineTripStatus(legs: Leg[]): TripPatternStatus {
+  if (legs.some((leg) => leg.isStale)) {
+    return 'stale';
+  }
   if (hasTemporalOverlap(legs)) {
     return 'impossible';
   }

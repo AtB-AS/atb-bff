@@ -71,7 +71,9 @@ export type TripPatternWithBooking = TripPatternFragment & {
   };
 };
 
-export type Leg = TripPattern['legs'][0];
+export type Leg = TripPattern['legs'][0] & {
+  isStale?: boolean;
+};
 
 export type Place = Leg['fromPlace'];
 
