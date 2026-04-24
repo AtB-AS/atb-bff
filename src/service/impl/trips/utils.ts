@@ -141,7 +141,7 @@ export function computeAimedTimes(legs: Leg[]): {
   let aimedStartTime = firstLeg.aimedStartTime;
   let aimedEndTime = lastLeg.aimedEndTime;
 
-  if (legs.some((leg) => leg.mode === 'foot')) {
+  if (legs.some((leg) => !isTransitLeg(leg))) {
     if (!isTransitLeg(firstLeg)) {
       const firstTransitIndex = legs.findIndex(isTransitLeg);
       if (firstTransitIndex !== -1) {
