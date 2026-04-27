@@ -103,7 +103,7 @@ export function extractServiceJourneyIds(trip: TripPattern_v3) {
 // --- v3 singleTrip utilities ---
 
 export function isTransitLeg(leg: Leg): boolean {
-  return leg.fromPlace.quay != null;
+  return leg.serviceJourney != null;
 }
 
 /**

@@ -17,6 +17,7 @@ function makeTransitLeg(overrides: Partial<Leg> = {}): Leg {
     expectedEndTime: '2024-01-01T10:10:00.000Z',
     realtime: true,
     situations: [],
+    serviceJourney: {id: 'ATB:ServiceJourney:test'},
     fromPlace: {
       name: 'A',
       longitude: 10,
