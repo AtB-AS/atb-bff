@@ -72,17 +72,7 @@ export type TripPatternWithBooking = TripPatternFragment & {
 };
 
 export type Leg = TripPattern['legs'][0] & {
-  isStale?: boolean;
+  refreshedAt?: string;
 };
 
 export type Place = Leg['fromPlace'];
-
-// --- v3 singleTrip types ---
-
-/** A leg that could not be refetched from JourneyPlanner */
-export type StaleLeg = {
-  id: string;
-  status: 'stale';
-};
-
-export type RefreshedLeg = Leg | StaleLeg;

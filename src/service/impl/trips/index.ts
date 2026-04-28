@@ -3,7 +3,6 @@ import {
   TripPatternWithBooking,
   TripPattern,
   TripsQueryWithJourneyIds,
-  RefreshedLeg,
   Leg,
 } from '../../../types/trips';
 import {
@@ -195,12 +194,14 @@ export default (): ITrips_v2 => {
     ) {
       const client = journeyPlannerClient(request);
 
-      // Refetch all transit legs in parallel, keep non-transit legs as-is
-      const refreshedLegs: RefreshedLeg[] = await Promise.all(
-        tripPattern.legs.map(async (leg): Promise<RefreshedLeg> => {
+      const now = new Date().toISOString();
+
+      // Refetch all transit legs in parallel, keep non-transit legs as-is.
+      // Failed fetches fall back to the original leg with its old refreshedAt.
+      const legs: Leg[] = await Promise.all(
+        tripPattern.legs.map(async (leg): Promise<Leg> => {
           if (!leg.id) {
-            // Non-transit leg (foot, bicycle, etc.) — return as-is
-            return leg;
+            return {...leg, refreshedAt: now};
           }
 
           try {
@@ -213,33 +214,24 @@ export default (): ITrips_v2 => {
             });
 
             if (result.data.leg) {
-              return result.data.leg as Leg;
+              return {...(result.data.leg as Leg), refreshedAt: now};
             }
           } catch {
-            // Query failed — treat as stale
+            // Query failed — leg keeps its old refreshedAt
           }
 
-          return {id: leg.id, status: 'stale' as const};
+          return leg;
         }),
       );
 
-      // Merge stale legs with originals for best-effort time computation.
-      // Mark stale legs so determineTripStatus can detect them.
-      const mergedLegs: Leg[] = refreshedLegs.map((leg, index) => {
-        if ('status' in leg && leg.status === 'stale') {
-          return {...tripPattern.legs[index], isStale: true};
-        }
-        return leg as Leg;
-      });
+      const status = determineTripStatus(legs);
+      const {aimedStartTime, aimedEndTime} = computeAimedTimes(legs);
 
-      const status = determineTripStatus(mergedLegs);
-      const {aimedStartTime, aimedEndTime} = computeAimedTimes(mergedLegs);
+      const expectedStartTime = legs[0].expectedStartTime;
+      const expectedEndTime = legs[legs.length - 1].expectedEndTime;
 
-      const expectedStartTime = mergedLegs[0].expectedStartTime;
-      const expectedEndTime = mergedLegs[mergedLegs.length - 1].expectedEndTime;
-
-      const duration = mergedLegs.reduce((acc, leg) => acc + leg.duration, 0);
-      const walkDistance = mergedLegs
+      const duration = legs.reduce((acc, leg) => acc + leg.duration, 0);
+      const walkDistance = legs
         .filter((leg) => leg.mode === Mode.Foot)
         .reduce((acc, leg) => acc + leg.distance, 0);
 
@@ -252,7 +244,7 @@ export default (): ITrips_v2 => {
         expectedEndTime,
         duration,
         walkDistance,
-        legs: mergedLegs,
+        legs,
       };
     },
   };
@@ -264,6 +256,7 @@ function mapTripsData(
   results: TripsQuery,
   queryVariables: TripsQueryVariables,
 ): TripsQuery {
+  const now = new Date().toISOString();
   return {
     ...results,
     trip: {
@@ -271,6 +264,7 @@ function mapTripsData(
       tripPatterns: results.trip.tripPatterns.map((pattern) => ({
         ...pattern,
         compressedQuery: generateSingleTripQueryString(pattern, queryVariables),
+        legs: pattern.legs.map((leg) => ({...leg, refreshedAt: now})),
       })),
     },
   };

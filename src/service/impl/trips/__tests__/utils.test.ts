@@ -164,51 +164,79 @@ describe('computeAimedTimes', () => {
 
 describe('determineTripStatus', () => {
   it('returns valid when legs are sequential', () => {
+    const now = new Date().toISOString();
     const legs: Leg[] = [
       makeTransitLeg({
         expectedStartTime: '2024-01-01T10:00:00.000Z',
         expectedEndTime: '2024-01-01T10:10:00.000Z',
-      }),
+        refreshedAt: now,
+      } as Partial<Leg>),
       makeTransitLeg({
         expectedStartTime: '2024-01-01T10:15:00.000Z',
         expectedEndTime: '2024-01-01T10:25:00.000Z',
-      }),
+        refreshedAt: now,
+      } as Partial<Leg>),
     ];
     expect(determineTripStatus(legs)).toBe('valid');
   });
 
   it('returns impossible when legs have temporal overlap', () => {
+    const now = new Date().toISOString();
     const legs: Leg[] = [
       makeTransitLeg({
         expectedStartTime: '2024-01-01T10:00:00.000Z',
         expectedEndTime: '2024-01-01T10:20:00.000Z',
-      }),
+        refreshedAt: now,
+      } as Partial<Leg>),
       makeTransitLeg({
         expectedStartTime: '2024-01-01T10:15:00.000Z',
         expectedEndTime: '2024-01-01T10:25:00.000Z',
-      }),
+        refreshedAt: now,
+      } as Partial<Leg>),
     ];
     expect(determineTripStatus(legs)).toBe('impossible');
   });
 
-  it('returns stale when any leg is marked as stale', () => {
+  it('returns stale when a leg has an old refreshedAt', () => {
+    const now = new Date().toISOString();
+    const old = new Date(Date.now() - 60_000).toISOString();
     const legs: Leg[] = [
-      makeTransitLeg(),
-      makeTransitLeg({isStale: true} as Partial<Leg>),
+      makeTransitLeg({refreshedAt: now} as Partial<Leg>),
+      makeTransitLeg({refreshedAt: old} as Partial<Leg>),
     ];
     expect(determineTripStatus(legs)).toBe('stale');
   });
 
+  it('returns valid when all legs have similar refreshedAt', () => {
+    const now = new Date();
+    const legs: Leg[] = [
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:00:00.000Z',
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        refreshedAt: new Date(now.getTime() - 2000).toISOString(),
+      } as Partial<Leg>),
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:15:00.000Z',
+        expectedEndTime: '2024-01-01T10:25:00.000Z',
+        refreshedAt: now.toISOString(),
+      } as Partial<Leg>),
+    ];
+    expect(determineTripStatus(legs)).toBe('valid');
+  });
+
   it('returns stale over impossible when both conditions apply', () => {
+    const now = new Date().toISOString();
+    const old = new Date(Date.now() - 60_000).toISOString();
     const legs: Leg[] = [
       makeTransitLeg({
         expectedStartTime: '2024-01-01T10:00:00.000Z',
         expectedEndTime: '2024-01-01T10:20:00.000Z',
-      }),
+        refreshedAt: now,
+      } as Partial<Leg>),
       makeTransitLeg({
         expectedStartTime: '2024-01-01T10:15:00.000Z',
         expectedEndTime: '2024-01-01T10:25:00.000Z',
-        isStale: true,
+        refreshedAt: old,
       } as Partial<Leg>),
     ];
     expect(determineTripStatus(legs)).toBe('stale');

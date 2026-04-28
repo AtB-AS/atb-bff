@@ -175,16 +175,45 @@ export function computeAimedTimes(legs: Leg[]): {
   return {aimedStartTime, aimedEndTime};
 }
 
+const STALE_THRESHOLD_SECONDS = 10;
+
 /**
  * Determines the overall trip pattern status.
  * Priority: stale > impossible > valid
+ *
+ * Staleness is derived from the `refreshedAt` timestamps on each leg.
+ * A stale leg typically occurs when the RefreshLeg(id) call fails,
+ * causing the leg to keep its old `refreshedAt` while other legs get
+ * a fresh timestamp. A leg is considered stale if its `refreshedAt` is
+ * more than STALE_THRESHOLD_SECONDS older than the most recently refreshed leg.
+ *
+ * We compare against the newest leg rather than the current time to avoid
+ * false positives: if the batch of parallel leg refreshes takes a few
+ * seconds, early-refreshed legs would otherwise appear stale relative
+ * to `Date.now()`.
  */
 export function determineTripStatus(legs: Leg[]): TripPatternStatus {
-  if (legs.some((leg) => leg.isStale)) {
+  if (hasStaleLegs(legs)) {
     return 'stale';
   }
   if (hasTemporalOverlap(legs)) {
     return 'impossible';
   }
   return 'valid';
+}
+
+function hasStaleLegs(legs: Leg[]): boolean {
+  const timestamps = legs
+    .map((leg) => leg.refreshedAt)
+    .filter((t): t is string => t != null)
+    .map((t) => new Date(t).getTime());
+
+  if (timestamps.length === 0) {
+    return false;
+  }
+
+  const newest = Math.max(...timestamps);
+  return timestamps.some(
+    (t) => newest - t > STALE_THRESHOLD_SECONDS * 1000,
+  );
 }
