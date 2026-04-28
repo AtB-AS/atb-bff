@@ -18,33 +18,12 @@ export const getBookingInfo = async (
   offer?: TicketOffer;
 }> => {
   try {
-    let supplementProductsIds: string[] = supplementProducts;
-
-    // This is a hack until the release of 1.79.1, where the app properly sends supplementProducts
-    if (supplementProductsIds.length === 0 && products.length === 0) {
-      const allProducts = await fetchProducts(request);
-      const allSupplementProducts = await fetchSupplementProducts(request);
-      const existingProductIds = travellers
-        .map((t) => t.productIds)
-        .flat()
-        .filter(isDefined);
-      supplementProductsIds = existingProductIds
-        .flatMap((productId) =>
-          lookupSupplementProducts(
-            productId,
-            allProducts,
-            allSupplementProducts,
-          ),
-        )
-        .map((sp) => sp.id);
-    }
-
     const response = await fetchOffers(
       request,
       trip,
       travellers,
       products,
-      supplementProductsIds,
+      supplementProducts,
     );
     const data = await response.json();
     if (!response.ok) {
@@ -52,7 +31,7 @@ export const getBookingInfo = async (
       if (errorResponse?.kind === 'NO_AVAILABLE_OFFERS_DUE_TO_BEING_SOLD_OUT') {
         return {
           availability: BookingAvailabilityType.SoldOut,
-        };
+        }
       }
       if (
         errorResponse?.kind ===
