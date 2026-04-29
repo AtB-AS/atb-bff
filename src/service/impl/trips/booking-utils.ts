@@ -1,11 +1,10 @@
 import {ReqRefDefaults, Request} from '@hapi/hapi';
-import {PRODUCT_BASEURL, SALES_BASEURL} from '../../../config/env';
+import {SALES_BASEURL} from '../../../config/env';
 import {BookingTraveller} from '../../../types/trips';
 import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {z} from 'zod';
 import {ErrorResponse} from '@atb-as/utils';
-import {post, get} from '../../../utils/fetch-client';
-import {isDefined} from '../stop-places/utils';
+import {post} from '../../../utils/fetch-client';
 
 export const getBookingInfo = async (
   request: Request<ReqRefDefaults>,
@@ -18,33 +17,12 @@ export const getBookingInfo = async (
   offer?: TicketOffer;
 }> => {
   try {
-    let supplementProductsIds: string[] = supplementProducts;
-
-    // This is a hack until the release of 1.79.1, where the app properly sends supplementProducts
-    if (supplementProductsIds.length === 0 && products.length === 0) {
-      const allProducts = await fetchProducts(request);
-      const allSupplementProducts = await fetchSupplementProducts(request);
-      const existingProductIds = travellers
-        .map((t) => t.productIds)
-        .flat()
-        .filter(isDefined);
-      supplementProductsIds = existingProductIds
-        .flatMap((productId) =>
-          lookupSupplementProducts(
-            productId,
-            allProducts,
-            allSupplementProducts,
-          ),
-        )
-        .map((sp) => sp.id);
-    }
-
     const response = await fetchOffers(
       request,
       trip,
       travellers,
       products,
-      supplementProductsIds,
+      supplementProducts,
     );
     const data = await response.json();
     if (!response.ok) {
@@ -151,15 +129,11 @@ export const PreassignedFareProductSubset = z.object({
   isBookingEnabled: z.boolean().nullish(),
   isSupplementProduct: z.boolean().nullish(),
 });
-type PreassignedFareProductSubsetType = z.infer<
-  typeof PreassignedFareProductSubset
->;
 
 export const ReservationProductSubset = z.object({
   id: z.string(),
   kind: z.literal('reservation'),
 });
-type ReservationProductSubsetType = z.infer<typeof ReservationProductSubset>;
 
 function mapToAvailabilityStatus(
   offer: TicketOffer | undefined,
@@ -212,53 +186,6 @@ async function fetchOffers(
       },
     },
     SALES_BASEURL,
-  );
-}
-
-async function fetchProducts(request: Request<ReqRefDefaults>) {
-  return get<PreassignedFareProductSubsetType[]>(
-    '/product/v1',
-    request,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Atb-App-Version': request.headers['atb-app-version'],
-        'Atb-Distribution-Channel': request.headers['atb-distribution-channel'],
-        'X-Endpoint-API-UserInfo': request.headers['x-endpoint-api-userinfo'],
-        Authorization: request.headers.authorization,
-      },
-    },
-    PRODUCT_BASEURL,
-  );
-}
-
-async function fetchSupplementProducts(request: Request<ReqRefDefaults>) {
-  return get<ReservationProductSubsetType[]>(
-    '/product/v1/supplement',
-    request,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Atb-App-Version': request.headers['atb-app-version'],
-        'Atb-Distribution-Channel': request.headers['atb-distribution-channel'],
-        'X-Endpoint-API-UserInfo': request.headers['x-endpoint-api-userinfo'],
-        Authorization: request.headers.authorization,
-      },
-    },
-    PRODUCT_BASEURL,
-  );
-}
-
-function lookupSupplementProducts(
-  productId: string,
-  allProducts: PreassignedFareProductSubsetType[],
-  allSupplementProducts: ReservationProductSubsetType[],
-) {
-  const product = allProducts.find((p) => p.id === productId);
-  if (!product) return [];
-
-  return allSupplementProducts.filter((sp) =>
-    product.limitations.supplementProductRefs?.includes(sp.id),
   );
 }
 

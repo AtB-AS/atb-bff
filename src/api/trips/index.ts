@@ -5,11 +5,13 @@ import {
   BookingTripsQueryPayload,
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
+  TripPattern,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
 import {parseTripQueryString} from '../../service/impl/trips/utils';
 import {
   postEncodedSingleTripRequest,
+  postSingleTripV3Request,
   postTripsRequest,
   postNonTransitTripsRequest,
   postBookingTripsRequest,
@@ -102,6 +104,20 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       );
       const result = await service.getSingleTrip(query, h.request);
       return result.unwrap();
+    },
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/bff/v3/singleTrip',
+    options: {
+      tags: ['api', 'singleTrip'],
+      description: 'Refresh a single trip pattern',
+      validate: postSingleTripV3Request,
+    },
+    handler: async (request, h) => {
+      const tripPattern = request.payload as TripPattern;
+      return service.refreshSingleTrip(tripPattern, h.request);
     },
   });
 };

@@ -12,8 +12,13 @@ import {
   TicketOffer,
 } from '../service/impl/trips/booking-utils';
 
+export type TripPatternStatus = 'valid' | 'impossible' | 'stale';
+
 export type TripPattern = Required<TripsQuery>['trip']['tripPatterns'][0] & {
   id?: any;
+  status?: TripPatternStatus;
+  aimedStartTime?: string;
+  aimedEndTime?: string;
 };
 
 export type TripsQueryWithJourneyIds = {
@@ -65,3 +70,9 @@ export type TripPatternWithBooking = TripPatternFragment & {
     offer?: TicketOffer;
   };
 };
+
+export type Leg = TripPattern['legs'][0] & {
+  refreshedAt?: string;
+};
+
+export type Place = Leg['fromPlace'];

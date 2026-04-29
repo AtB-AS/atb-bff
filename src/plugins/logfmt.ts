@@ -16,15 +16,22 @@ const discardLogger = new stream.Writable({
   },
 });
 
+const MAX_FLATTEN_DEPTH = 3;
+
 const flatten = (
   obj: object,
   prefix: string = '',
   res: Record<string, any> = {},
+  depth: number = 0,
 ) =>
   Object.entries(obj).reduce((r, [key, val]) => {
     const k = `${prefix}${key}`;
-    if (typeof val === 'object') {
-      flatten(val, `${k}_`, r);
+    if (typeof val === 'object' && val !== null) {
+      if (depth < MAX_FLATTEN_DEPTH) {
+        flatten(val, `${k}_`, r, depth + 1);
+      } else {
+        res[k] = `[TRUNCATED depth=${MAX_FLATTEN_DEPTH}]`;
+      }
     } else {
       res[k] = val;
     }

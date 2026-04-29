@@ -1,0 +1,5 @@
+query RefreshLeg($id: ID!) {
+    leg(id: $id) {
+        ...leg
+    }
+}
