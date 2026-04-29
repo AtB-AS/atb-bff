@@ -102,7 +102,7 @@ export const postEncodedSingleTripRequest = {
 
 // Only validates the fields the BFF reads; everything else passes through.
 const legStubSchema = Joi.object({
-  id: Joi.string().optional(),
+  id: Joi.string().optional().allow(null),
   mode: Joi.string().required(),
   distance: Joi.number().required(),
   duration: Joi.number().required(),
