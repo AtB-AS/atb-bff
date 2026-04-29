@@ -122,12 +122,14 @@ export function hasTemporalOverlap(legs: Leg[]): boolean {
 }
 
 /**
- * Computes correct aimedStartTime and aimedEndTime for a trip pattern.
- * Handles the Entur quirk where foot legs (and other non-quay legs) have
- * aimed times equal to expected times. For those legs, we derive the aimed
- * time from adjacent transit legs with quays.
+ * Computes the trip-level aimedStartTime and aimedEndTime.
+ *
+ * Entur quirk: non-transit legs (foot, bicycle, etc.) have no real scheduled
+ * times — their aimed times are always equal to their expected times. To get
+ * correct trip-level aimed boundaries, we derive them from the nearest transit
+ * legs and subtract/add the non-transit leg durations.
  */
-export function computeAimedTimes(legs: Leg[]): {
+export function computeTripAimedStartEnd(legs: Leg[]): {
   aimedStartTime: string;
   aimedEndTime: string;
 } {
@@ -213,7 +215,91 @@ function hasStaleLegs(legs: Leg[]): boolean {
   }
 
   const newest = Math.max(...timestamps);
-  return timestamps.some(
-    (t) => newest - t > STALE_THRESHOLD_SECONDS * 1000,
-  );
+  return timestamps.some((t) => newest - t > STALE_THRESHOLD_SECONDS * 1000);
+}
+
+/**
+ * Adjusts expectedStartTime and expectedEndTime on non-transit legs based on
+ * updated expected times from adjacent transit legs.
+ *
+ * After refreshing transit legs, non-transit leg expected times become stale —
+ * they still reflect the original schedule even though adjacent transit legs
+ * may have shifted due to delays. This function recalculates them:
+ *
+ * - Leading non-transit leg: derived from first transit leg's expectedStartTime
+ * - Trailing non-transit leg: derived from last transit leg's expectedEndTime
+ * - Intermediate non-transit legs: chain forward from previous transit leg's
+ *   expectedEndTime, each leg's end becoming the next leg's start. Any remaining
+ *   gap before the next transit leg is wait time.
+ *
+ * Assumes at most one leading and one trailing non-transit leg — which matches
+ * how Entur structures trip patterns (a single walk to/from the first/last stop).
+ *
+ * Transit legs are returned unchanged. If there are no transit legs, all legs
+ * are returned unchanged (no anchor to derive from).
+ */
+export function adjustNonTransitExpectedTimes(legs: Leg[]): Leg[] {
+  const firstTransitIndex = legs.findIndex(isTransitLeg);
+  if (firstTransitIndex === -1) {
+    return legs;
+  }
+
+  const lastTransitIndex = findLastIndex(legs, isTransitLeg);
+
+  return legs.map((leg, i) => {
+    if (isTransitLeg(leg)) return leg;
+
+    // Leading non-transit leg: the single leg immediately before first transit
+    if (i === firstTransitIndex - 1) {
+      const transitStart = parseISO(legs[firstTransitIndex].expectedStartTime);
+      return {
+        ...leg,
+        expectedStartTime: addSeconds(
+          transitStart,
+          -leg.duration,
+        ).toISOString(),
+        expectedEndTime: transitStart.toISOString(),
+      };
+    }
+
+    // Trailing non-transit leg: the single leg immediately after last transit
+    if (i === lastTransitIndex + 1) {
+      const transitEnd = parseISO(legs[lastTransitIndex].expectedEndTime);
+      return {
+        ...leg,
+        expectedStartTime: transitEnd.toISOString(),
+        expectedEndTime: addSeconds(transitEnd, leg.duration).toISOString(),
+      };
+    }
+
+    // Intermediate: the legs between two transit legs are non-scheduled walks/
+    // transfers whose times are derived from the previous transit leg's end time.
+    // When there are multiple consecutive non-transit legs, we need to account
+    // for the duration of the ones before this one. durationBefore is the sum of
+    // durations of non-transit legs between the previous transit leg and this leg.
+    // In the common case of a single walk leg, durationBefore is 0 and the leg
+    // starts directly at the previous transit leg's end time.
+    // This assumes all non-transit legs between two transit legs are sequential
+    // with no gaps — any wait time comes after the last non-transit leg.
+    const prevTransitIdx = findLastIndex(legs.slice(0, i), isTransitLeg);
+    const durationBefore = legs
+      .slice(prevTransitIdx + 1, i)
+      .reduce((acc, l) => acc + l.duration, 0);
+    const anchor = parseISO(legs[prevTransitIdx].expectedEndTime);
+    const start = addSeconds(anchor, durationBefore);
+    return {
+      ...leg,
+      expectedStartTime: start.toISOString(),
+      expectedEndTime: addSeconds(start, leg.duration).toISOString(),
+    };
+  });
+}
+
+// Array.prototype.findLastIndex requires ES2023 target, which this project
+// does not use. This is a simple polyfill.
+function findLastIndex<T>(arr: T[], predicate: (item: T) => boolean): number {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (predicate(arr[i])) return i;
+  }
+  return -1;
 }

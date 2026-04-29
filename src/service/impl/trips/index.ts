@@ -30,11 +30,11 @@ import * as Boom from '@hapi/boom';
 import {APIError} from '../../../utils/api-error';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {getBookingInfo} from './booking-utils';
-import {TripPatternFragment} from '../fragments/journey-gql/trips.graphql-gen';
 import {
   extractServiceJourneyIds,
   generateSingleTripQueryString,
-  computeAimedTimes,
+  computeTripAimedStartEnd,
+  adjustNonTransitExpectedTimes,
   determineTripStatus,
 } from './utils';
 
@@ -157,17 +157,14 @@ export default (): ITrips_v2 => {
       });
 
       if (results.errors) {
-        return Result.err(
-          Boom.internal('Error fetching data', results.errors),
-        );
+        return Result.err(Boom.internal('Error fetching data', results.errors));
       }
 
       const singleTripPattern = results.data.trip?.tripPatterns.find((trip) => {
         const journeyIds = extractServiceJourneyIds(trip);
         if (journeyIds.length != queryWithIds.journeyIds.length) return false;
         return (
-          JSON.stringify(journeyIds) ===
-          JSON.stringify(queryWithIds.journeyIds)
+          JSON.stringify(journeyIds) === JSON.stringify(queryWithIds.journeyIds)
         );
       });
 
@@ -224,14 +221,18 @@ export default (): ITrips_v2 => {
         }),
       );
 
-      const status = determineTripStatus(legs);
-      const {aimedStartTime, aimedEndTime} = computeAimedTimes(legs);
+      const adjustedLegs = adjustNonTransitExpectedTimes(legs);
 
-      const expectedStartTime = legs[0].expectedStartTime;
-      const expectedEndTime = legs[legs.length - 1].expectedEndTime;
+      const status = determineTripStatus(adjustedLegs);
+      const {aimedStartTime, aimedEndTime} =
+        computeTripAimedStartEnd(adjustedLegs);
 
-      const duration = legs.reduce((acc, leg) => acc + leg.duration, 0);
-      const walkDistance = legs
+      const expectedStartTime = adjustedLegs[0].expectedStartTime;
+      const expectedEndTime =
+        adjustedLegs[adjustedLegs.length - 1].expectedEndTime;
+
+      const duration = adjustedLegs.reduce((acc, leg) => acc + leg.duration, 0);
+      const walkDistance = adjustedLegs
         .filter((leg) => leg.mode === Mode.Foot)
         .reduce((acc, leg) => acc + leg.distance, 0);
 
@@ -244,7 +245,7 @@ export default (): ITrips_v2 => {
         expectedEndTime,
         duration,
         walkDistance,
-        legs,
+        legs: adjustedLegs,
       };
     },
   };
