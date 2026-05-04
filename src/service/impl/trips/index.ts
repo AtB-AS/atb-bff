@@ -236,7 +236,7 @@ export default (): ITrips_v2 => {
         .filter((leg) => leg.mode === Mode.Foot)
         .reduce((acc, leg) => acc + leg.distance, 0);
 
-      return {
+      return Result.ok({
         ...tripPattern,
         status,
         aimedStartTime,
@@ -246,7 +246,7 @@ export default (): ITrips_v2 => {
         duration,
         walkDistance,
         legs: adjustedLegs,
-      };
+      });
     },
   };
 

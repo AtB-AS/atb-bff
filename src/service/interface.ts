@@ -140,7 +140,7 @@ export interface ITrips_v2 {
   refreshSingleTrip(
     tripPattern: Trips.TripPattern,
     request: Request<ReqRefDefaults>,
-  ): Promise<Trips.TripPattern>;
+  ): Promise<Result<Trips.TripPattern, Boom>>;
 }
 
 export interface IDeparturesGroupedService {

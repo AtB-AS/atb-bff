@@ -117,7 +117,8 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     },
     handler: async (request, h) => {
       const tripPattern = request.payload as TripPattern;
-      return service.refreshSingleTrip(tripPattern, h.request);
+      const result = await service.refreshSingleTrip(tripPattern, h.request);
+      return result.unwrap();
     },
   });
 };
