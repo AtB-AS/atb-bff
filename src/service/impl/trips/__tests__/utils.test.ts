@@ -339,4 +339,38 @@ describe('determineTripStatus', () => {
     ];
     expect(determineTripStatus(legs)).toBe('stale');
   });
+
+  it('should not crash or mask staleness when refreshedAt contains invalid dates', () => {
+    const now = new Date().toISOString();
+    const old = new Date(Date.now() - 30000).toISOString();
+    const legs = [
+      makeTransitLeg({
+        refreshedAt: now,
+      } as Partial<Leg>),
+      makeTransitLeg({
+        refreshedAt: 'not-a-valid-date',
+      } as Partial<Leg>),
+      makeTransitLeg({
+        refreshedAt: old,
+      } as Partial<Leg>),
+    ];
+    // The invalid date is filtered out; staleness is still detected between now and old
+    expect(determineTripStatus(legs)).toBe('stale');
+  });
+
+  it('should return valid when all refreshedAt values are invalid', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:00:00.000Z',
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        refreshedAt: 'invalid',
+      } as Partial<Leg>),
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:15:00.000Z',
+        expectedEndTime: '2024-01-01T10:25:00.000Z',
+        refreshedAt: 'also-invalid',
+      } as Partial<Leg>),
+    ];
+    expect(determineTripStatus(legs)).toBe('valid');
+  });
 });

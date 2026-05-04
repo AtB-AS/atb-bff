@@ -208,7 +208,8 @@ function hasStaleLegs(legs: Leg[]): boolean {
   const timestamps = legs
     .map((leg) => leg.refreshedAt)
     .filter((t): t is string => t != null)
-    .map((t) => new Date(t).getTime());
+    .map((t) => new Date(t).getTime())
+    .filter((t) => !isNaN(t));
 
   if (timestamps.length === 0) {
     return false;
