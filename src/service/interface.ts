@@ -136,6 +136,11 @@ export interface ITrips_v2 {
     query: Trips.TripsQueryWithJourneyIds,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<Trips.TripPattern, Boom>>;
+
+  refreshSingleTrip(
+    tripPattern: Trips.TripPattern,
+    request: Request<ReqRefDefaults>,
+  ): Promise<Result<Trips.TripPattern, Boom>>;
 }
 
 export interface IDeparturesGroupedService {

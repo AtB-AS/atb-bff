@@ -99,3 +99,25 @@ export const postEncodedSingleTripRequest = {
     compressedQuery: Joi.string().required(),
   }).required(),
 };
+
+// Only validates the fields the BFF reads; everything else passes through.
+const legStubSchema = Joi.object({
+  id: Joi.string().optional().allow(null),
+  mode: Joi.string().required(),
+  distance: Joi.number().required(),
+  duration: Joi.number().required(),
+  aimedStartTime: Joi.string().required(),
+  aimedEndTime: Joi.string().required(),
+  expectedStartTime: Joi.string().required(),
+  expectedEndTime: Joi.string().required(),
+  fromPlace: Joi.object().required(),
+  toPlace: Joi.object().required(),
+}).options({allowUnknown: true});
+
+export const postSingleTripV3Request = {
+  payload: Joi.object({
+    legs: Joi.array().items(legStubSchema).min(1).required(),
+  })
+    .options({allowUnknown: true})
+    .required(),
+};
