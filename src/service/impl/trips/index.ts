@@ -168,6 +168,11 @@ export default (): ITrips_v2 => {
         );
       });
 
+      request.logfmt.with({
+        singleTrip_version: 'v2',
+        singleTrip_found: singleTripPattern ? 'true' : 'false',
+      });
+
       if (singleTripPattern) {
         return Result.ok({
           ...singleTripPattern,
@@ -193,6 +198,10 @@ export default (): ITrips_v2 => {
 
       const now = new Date().toISOString();
 
+      let transitLegs = 0;
+      let refreshed = 0;
+      let refreshFailed = 0;
+
       // Refetch all transit legs in parallel, keep non-transit legs as-is.
       // Failed fetches fall back to the original leg with its old refreshedAt.
       const legs: Leg[] = await Promise.all(
@@ -200,6 +209,8 @@ export default (): ITrips_v2 => {
           if (!leg.id) {
             return {...leg, refreshedAt: now};
           }
+
+          transitLegs++;
 
           try {
             const result = await client.query<
@@ -211,12 +222,14 @@ export default (): ITrips_v2 => {
             });
 
             if (result.data.leg) {
+              refreshed++;
               return {...(result.data.leg as Leg), refreshedAt: now};
             }
           } catch {
             // Query failed — leg keeps its old refreshedAt
           }
 
+          refreshFailed++;
           return leg;
         }),
       );
@@ -226,6 +239,15 @@ export default (): ITrips_v2 => {
       const status = determineTripStatus(adjustedLegs);
       const {aimedStartTime, aimedEndTime} =
         computeTripAimedStartEnd(adjustedLegs);
+
+      request.logfmt.with({
+        singleTrip_version: 'v3',
+        singleTrip_status: status,
+        singleTrip_totalLegs: tripPattern.legs.length.toString(),
+        singleTrip_transitLegs: transitLegs.toString(),
+        singleTrip_refreshed: refreshed.toString(),
+        singleTrip_refreshFailed: refreshFailed.toString(),
+      });
 
       const expectedStartTime = adjustedLegs[0].expectedStartTime;
       const expectedEndTime =
