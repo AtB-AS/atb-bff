@@ -284,11 +284,20 @@ function mapTripsData(
     ...results,
     trip: {
       ...results.trip,
-      tripPatterns: results.trip.tripPatterns.map((pattern) => ({
-        ...pattern,
-        compressedQuery: generateSingleTripQueryString(pattern, queryVariables),
-        legs: pattern.legs.map((leg) => ({...leg, refreshedAt: now})),
-      })),
+      tripPatterns: results.trip.tripPatterns.map((pattern) => {
+        const legs = pattern.legs.map((leg) => ({...leg, refreshedAt: now}));
+        const {aimedStartTime, aimedEndTime} = computeTripAimedStartEnd(legs);
+        return {
+          ...pattern,
+          aimedStartTime,
+          aimedEndTime,
+          compressedQuery: generateSingleTripQueryString(
+            pattern,
+            queryVariables,
+          ),
+          legs,
+        };
+      }),
     },
   };
 }
