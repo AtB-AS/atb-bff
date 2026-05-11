@@ -9,9 +9,6 @@
 # GH actions
 /.github/workflows/ @rosvik @reidzeibel
 
-# Tests
-/test/ @rosvik @marius-at-atb @tormoseng
-
 # No code owners for generated files
 src/graphql/journey/journeyplanner-types_v3.ts
 src/graphql/mobility/mobility-types_v2.ts
