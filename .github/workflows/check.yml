@@ -12,10 +12,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-      - uses: actions/cache@v5
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          cache: "npm"
       - name: npm ci
         run: npm ci
       - name: Check
