@@ -10,12 +10,12 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: install node v18
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - name: install node
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
-      - uses: actions/cache@v3
+          node-version: 22
+      - uses: actions/cache@v5
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
