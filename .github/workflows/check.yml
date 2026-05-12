@@ -1,0 +1,19 @@
+name: TypeScript Check
+on:
+  push:
+
+jobs:
+  tsc:
+    name: tsc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: "npm"
+      - name: npm ci
+        run: npm ci
+      - name: Check
+        run: npm run check-all

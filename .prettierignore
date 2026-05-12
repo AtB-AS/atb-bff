@@ -1,5 +1,6 @@
 dist/
 test/
+*.json
 
 # Ignore generated/imported GraphQL files
 *.graphql

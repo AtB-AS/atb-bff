@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0 <23"
   },
   "scripts": {
     "build": "tsc",
@@ -13,7 +13,9 @@
     "start:watch": "nodemon",
     "test": "jest",
     "gql-gen": "graphql-codegen --config codegen.yml",
-    "lint": "eslint . --ext .js,.ts"
+    "prettier": "prettier -c src",
+    "lint": "eslint . --ext .js,.ts",
+    "check-all": "npm run build && npm run lint && npm run test && npm run prettier"
   },
   "keywords": [],
   "author": "",
