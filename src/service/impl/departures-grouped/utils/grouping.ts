@@ -166,7 +166,7 @@ export default function mapQueryToGroups(
               actualTime: time.actualDepartureTime,
               predictionInaccurate: time.predictionInaccurate,
               realtime: time.realtime,
-              situations: time.situations,
+              situations: time.situations ?? [],
               serviceJourneyId: time.serviceJourney?.id,
               serviceDate: time.date,
               cancellation: time.cancellation,
