@@ -20,6 +20,9 @@ query DatedServiceJourney($id: String!) {
                 publicCode
                 name
             }
+            situations {
+                ...situation
+            }
         }
     }
 }

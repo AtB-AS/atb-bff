@@ -288,7 +288,6 @@ function mapTripsData(
         const legs = pattern.legs.map((leg) => ({
           ...leg,
           refreshedAt: now,
-          situations: leg.situations ?? [],
         }));
         const {aimedStartTime, aimedEndTime} = computeTripAimedStartEnd(legs);
         return {
