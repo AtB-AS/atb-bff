@@ -1,3 +1,5 @@
+process.env.TZ = 'Europe/Oslo';
+
 module.exports = {
   roots: ['<rootDir>/src'],
   testMatch: [
