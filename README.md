@@ -23,10 +23,6 @@ docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
 
 ### Starting locally
 
-#### Requirements
-
-- Node.js >=18
-
 Install node packages
 
 `npm install`
