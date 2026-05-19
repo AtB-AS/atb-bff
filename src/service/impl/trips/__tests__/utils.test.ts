@@ -135,25 +135,25 @@ describe('computeTripAimedStartEnd', () => {
   it('derives aimed start from first transit leg when first leg is foot', () => {
     const footLeg = makeFootLeg({duration: 300});
     const transitLeg = makeTransitLeg({
-      aimedStartTime: '2024-01-01T10:00:00.000Z',
-      aimedEndTime: '2024-01-01T10:10:00.000Z',
+      aimedStartTime: '2024-01-01T11:00:00+01:00',
+      aimedEndTime: '2024-01-01T11:10:00+01:00',
     });
     const result = computeTripAimedStartEnd([footLeg, transitLeg]);
-    // 10:00 - 300 seconds = 09:55
-    expect(result.aimedStartTime).toBe('2024-01-01T09:55:00.000Z');
-    expect(result.aimedEndTime).toBe('2024-01-01T10:10:00.000Z');
+    // 11:00+01:00 - 300 seconds = 10:55+01:00
+    expect(result.aimedStartTime).toBe('2024-01-01T10:55:00+01:00');
+    expect(result.aimedEndTime).toBe('2024-01-01T11:10:00+01:00');
   });
 
   it('derives aimed end from last transit leg when last leg is foot', () => {
     const transitLeg = makeTransitLeg({
-      aimedStartTime: '2024-01-01T10:00:00.000Z',
-      aimedEndTime: '2024-01-01T10:10:00.000Z',
+      aimedStartTime: '2024-01-01T11:00:00+01:00',
+      aimedEndTime: '2024-01-01T11:10:00+01:00',
     });
     const footLeg = makeFootLeg({duration: 300});
     const result = computeTripAimedStartEnd([transitLeg, footLeg]);
-    expect(result.aimedStartTime).toBe('2024-01-01T10:00:00.000Z');
-    // 10:10 + 300 seconds = 10:15
-    expect(result.aimedEndTime).toBe('2024-01-01T10:15:00.000Z');
+    expect(result.aimedStartTime).toBe('2024-01-01T11:00:00+01:00');
+    // 11:10+01:00 + 300 seconds = 11:15+01:00
+    expect(result.aimedEndTime).toBe('2024-01-01T11:15:00+01:00');
   });
 
   it('returns empty strings when legs array is empty', () => {
