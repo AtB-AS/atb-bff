@@ -1,13 +1,15 @@
 import * as Types from '../../../../graphql/journey/journeyplanner-types_v3';
 
+import { SituationFragment } from '../../fragments/journey-gql/situations.graphql-gen';
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
+import { SituationFragmentDoc } from '../../fragments/journey-gql/situations.graphql-gen';
 export type DatedServiceJourneyQueryVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
 }>;
 
 
-export type DatedServiceJourneyQuery = { datedServiceJourney?: { id: string, estimatedCalls: Array<{ expectedDepartureTime: any, expectedArrivalTime: any, quay: { stopPlace?: { id: string, name: string } } }>, serviceJourney: { transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, line: { publicCode?: string, name?: string } } } };
+export type DatedServiceJourneyQuery = { datedServiceJourney?: { id: string, estimatedCalls: Array<{ expectedDepartureTime: any, expectedArrivalTime: any, quay: { stopPlace?: { id: string, name: string } } }>, serviceJourney: { transportMode?: Types.TransportMode, transportSubmode?: Types.TransportSubmode, line: { publicCode?: string, name?: string }, situations: Array<SituationFragment> } } };
 
 
 export const DatedServiceJourneyDocument = gql`
@@ -31,10 +33,13 @@ export const DatedServiceJourneyDocument = gql`
         publicCode
         name
       }
+      situations {
+        ...situation
+      }
     }
   }
 }
-    `;
+    ${SituationFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
