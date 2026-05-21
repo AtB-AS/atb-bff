@@ -124,6 +124,12 @@ fragment leg on Leg {
         quay {
             name
             id
+            stopPlace {
+                id
+                longitude
+                latitude
+                name
+            }
         }
         date
         stopPositionInPattern
