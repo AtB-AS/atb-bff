@@ -126,6 +126,7 @@ fragment leg on Leg {
             id
         }
         date
+        stopPositionInPattern
     }
     authority {
         ...authority
@@ -142,6 +143,7 @@ fragment leg on Leg {
         }
         predictionInaccurate
         cancellation
+        stopPositionInPattern
     }
     bookingArrangements {
         ...bookingArrangement
@@ -155,6 +157,7 @@ fragment leg on Leg {
                 name
             }
             predictionInaccurate
+            stopPositionInPattern
         }
     }
     rentedBike
