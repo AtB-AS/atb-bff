@@ -9,7 +9,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from 'lz-string';
-import {addSeconds, parseISO} from 'date-fns';
+import {addSeconds, formatISO, parseISO} from 'date-fns';
 
 const START_TIME_PADDING = 60; // time in seconds
 
@@ -151,10 +151,9 @@ export function computeTripAimedStartEnd(legs: Leg[]): {
         const durationBefore = legs
           .slice(0, firstTransitIndex)
           .reduce((acc, leg) => acc + leg.duration, 0);
-        aimedStartTime = addSeconds(
-          parseISO(firstTransit.aimedStartTime),
-          -durationBefore,
-        ).toISOString();
+        aimedStartTime = formatISO(
+          addSeconds(parseISO(firstTransit.aimedStartTime), -durationBefore),
+        );
       }
     }
 
@@ -166,10 +165,9 @@ export function computeTripAimedStartEnd(legs: Leg[]): {
         const durationAfter = reversedLegs
           .slice(0, lastTransitIndex)
           .reduce((acc, leg) => acc + leg.duration, 0);
-        aimedEndTime = addSeconds(
-          parseISO(lastTransit.aimedEndTime),
-          durationAfter,
-        ).toISOString();
+        aimedEndTime = formatISO(
+          addSeconds(parseISO(lastTransit.aimedEndTime), durationAfter),
+        );
       }
     }
   }
