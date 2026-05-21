@@ -126,6 +126,10 @@ fragment leg on Leg {
             id
         }
         date
+        stopPositionInPattern
+        aimedDepartureTime
+        expectedDepartureTime
+        realtime
     }
     authority {
         ...authority
