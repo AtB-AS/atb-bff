@@ -59,10 +59,7 @@ fragment leg on Leg {
             latitude
             description
             stopPlace {
-                id
-                longitude
-                latitude
-                name
+                ...stopPlace
             }
             situations {
                 ...situation
@@ -84,10 +81,7 @@ fragment leg on Leg {
             latitude
             description
             stopPlace {
-                id
-                longitude
-                latitude
-                name
+                ...stopPlace
             }
             situations {
                 ...situation
@@ -125,10 +119,7 @@ fragment leg on Leg {
             name
             id
             stopPlace {
-                id
-                longitude
-                latitude
-                name
+                ...stopPlace
             }
         }
         date
