@@ -137,6 +137,7 @@ fragment leg on Leg {
         aimedDepartureTime
         expectedDepartureTime
         quay {
+            id
             name
         }
         predictionInaccurate
@@ -150,6 +151,7 @@ fragment leg on Leg {
         estimatedCalls {
             actualDepartureTime
             quay {
+                id
                 name
             }
             predictionInaccurate
