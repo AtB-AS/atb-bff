@@ -79,6 +79,62 @@ export type ReverseFeaturesQuery = {
   layers?: Array<'address' | 'venue'>;
 };
 
+export type GeocoderV3Layer =
+  | 'stopPlace'
+  | 'address'
+  | 'street'
+  | 'groupOfStopPlaces'
+  | 'poi'
+  | 'place';
+
+export type FeaturesV3Query = {
+  query: string;
+  lat?: number;
+  lon?: number;
+  lang?: string;
+  layers?: GeocoderV3Layer[];
+  fareZoneAuthorities?: string[];
+  limit?: number;
+  multimodal?: 'parent' | 'child' | 'all';
+};
+
+export type ReverseFeaturesV3Query = {
+  lat: number;
+  lon: number;
+  radius?: number;
+  limit?: number;
+  lang?: string;
+  layers?: GeocoderV3Layer[];
+};
+
+export interface LocationV3 {
+  id: string;
+  name: {
+    default: string;
+    display: string;
+  };
+  layer: GeocoderV3Layer;
+  address?: {
+    street?: string;
+    housenumber?: string;
+    postalCode?: string;
+    locality?: string;
+    localityId?: string;
+    county?: string;
+    countyId?: string;
+    countryCode?: string;
+  };
+  transportModes?: Array<{
+    mode: string;
+    subMode?: string;
+  }>;
+  stopPlaceTypes?: string[];
+  categories?: string[];
+  fareZones?: string[];
+  source?: string;
+  distance?: number;
+}
+
 export type DepartureFavoritesPayload = {
   favorites: FavoriteDeparture[];
 };
