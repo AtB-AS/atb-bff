@@ -59,10 +59,7 @@ fragment leg on Leg {
             latitude
             description
             stopPlace {
-                id
-                longitude
-                latitude
-                name
+                ...stopPlace
             }
             situations {
                 ...situation
@@ -84,10 +81,7 @@ fragment leg on Leg {
             latitude
             description
             stopPlace {
-                id
-                longitude
-                latitude
-                name
+                ...stopPlace
             }
             situations {
                 ...situation
@@ -124,6 +118,9 @@ fragment leg on Leg {
         quay {
             name
             id
+            stopPlace {
+                ...stopPlace
+            }
         }
         date
         stopPositionInPattern
