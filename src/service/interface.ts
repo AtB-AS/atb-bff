@@ -43,6 +43,9 @@ import {
   DeparturesRealtimeData,
   DeparturesWithLineName,
   FeaturesQuery,
+  FeaturesV3Query,
+  LocationV3,
+  ReverseFeaturesV3Query,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
   ServiceJourneyMapInfoData,
@@ -88,6 +91,18 @@ export interface IGeocoderService {
     query: ReverseFeaturesQuery,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<Feature<Point, Location>[], APIError>>;
+}
+
+export interface IGeocoderService_v3 {
+  getFeatures(
+    query: FeaturesV3Query,
+    request: Request<ReqRefDefaults>,
+  ): Promise<Result<Feature<Point, LocationV3>[], APIError>>;
+
+  getFeaturesReverse(
+    query: ReverseFeaturesV3Query,
+    request: Request<ReqRefDefaults>,
+  ): Promise<Result<Feature<Point, LocationV3>[], APIError>>;
 }
 
 export interface IServiceJourneyService_v2 {

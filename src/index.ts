@@ -3,6 +3,7 @@ import {Boom} from '@hapi/boom';
 import {createServer, initializePlugins} from './server';
 
 import geocoderService from './service/impl/geocoder';
+import geocoderV3Service from './service/impl/geocoder_v3';
 import departuresGroupedService from './service/impl/departures-grouped';
 import departuresService from './service/impl/departures';
 import realtimeService from './service/impl/realtime';
@@ -14,6 +15,7 @@ import vehiclesService from './service/impl/vehicles';
 import stopPlacesService from './service/impl/stop-places';
 
 import geocoderRoutes from './api/geocoder';
+import geocoderV3Routes from './api/geocoder_v3';
 import departuresGroupedRoutes from './api/departures-grouped';
 import realtimeRoutes from './api/realtime';
 import healthRoutes from './api/health';
@@ -52,6 +54,7 @@ process.on('unhandledRejection', (err) => {
     healthRoutes(server);
     departuresGroupedRoutes(server)(departuresGroupedService());
     geocoderRoutes(server)(geocoderService());
+    geocoderV3Routes(server)(geocoderV3Service());
     enrollmentRoutes(server)(enrollmentService());
     quayRoutes(server)(quayService());
     mobilityRoutes(server)(mobilityService());
