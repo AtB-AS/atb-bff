@@ -79,13 +79,16 @@ export type ReverseFeaturesQuery = {
   layers?: Array<'address' | 'venue'>;
 };
 
-export type GeocoderV3Layer =
-  | 'stopPlace'
-  | 'address'
-  | 'street'
-  | 'groupOfStopPlaces'
-  | 'poi'
-  | 'place';
+export const geocoderV3Layers = [
+  'stopPlace',
+  'address',
+  'street',
+  'groupOfStopPlaces',
+  'poi',
+  'place',
+] as const;
+
+export type GeocoderV3Layer = (typeof geocoderV3Layers)[number];
 
 export type FeaturesV3Query = {
   query: string;

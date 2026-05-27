@@ -1,14 +1,9 @@
 import Joi from 'joi';
-import {FeaturesV3Query, ReverseFeaturesV3Query} from '../../service/types';
-
-const v3Layers = [
-  'stopPlace',
-  'address',
-  'street',
-  'groupOfStopPlaces',
-  'poi',
-  'place',
-] as const;
+import {
+  FeaturesV3Query,
+  geocoderV3Layers,
+  ReverseFeaturesV3Query,
+} from '../../service/types';
 
 export const getFeaturesV3Request = Joi.object<FeaturesV3Query>({
   query: Joi.string().required(),
@@ -16,7 +11,7 @@ export const getFeaturesV3Request = Joi.object<FeaturesV3Query>({
   lat: Joi.number(),
   lang: Joi.string(),
   layers: Joi.array()
-    .items(Joi.string().valid(...v3Layers))
+    .items(Joi.string().valid(...geocoderV3Layers))
     .single(),
   multimodal: Joi.string().valid('parent', 'child', 'all').default('child'),
   fareZoneAuthorities: Joi.array().items(Joi.string()).single(),
@@ -29,7 +24,7 @@ export const getFeaturesReverseV3Request = Joi.object<ReverseFeaturesV3Query>({
   radius: Joi.number(),
   lang: Joi.string(),
   layers: Joi.array()
-    .items(Joi.string().valid(...v3Layers))
+    .items(Joi.string().valid(...geocoderV3Layers))
     .single(),
   limit: Joi.number(),
 });
