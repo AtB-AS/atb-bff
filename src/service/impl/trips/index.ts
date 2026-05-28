@@ -260,7 +260,10 @@ export default (): ITrips_v2 => {
       const expectedEndTime =
         adjustedLegs[adjustedLegs.length - 1].expectedEndTime;
 
-      const duration = adjustedLegs.reduce((acc, leg) => acc + leg.duration, 0);
+      const duration =
+        (new Date(expectedEndTime).getTime() -
+          new Date(expectedStartTime).getTime()) /
+        1000;
       const walkDistance = adjustedLegs
         .filter((leg) => leg.mode === Mode.Foot)
         .reduce((acc, leg) => acc + leg.distance, 0);
