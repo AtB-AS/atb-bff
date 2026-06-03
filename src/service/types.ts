@@ -118,8 +118,8 @@ export interface LocationV3 {
   };
   layer: GeocoderV3Layer;
   address?: {
-    street?: string;
-    housenumber?: string;
+    streetName?: string;
+    houseNumber?: string;
     postalCode?: string;
     locality?: string;
     localityId?: string;
