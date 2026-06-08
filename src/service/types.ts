@@ -112,7 +112,7 @@ export type ReverseFeaturesV3Query = {
 
 export interface LocationV3 {
   id: string;
-  name: {
+  names: {
     default: string;
     display: string;
   };
