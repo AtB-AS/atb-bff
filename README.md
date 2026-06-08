@@ -23,17 +23,22 @@ docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
 
 ### Starting locally
 
+This project uses [pnpm](https://pnpm.io) (v11). Enable it via Corepack
+(bundled with Node.js):
+
+`corepack enable`
+
 Install node packages
 
-`npm install`
+`pnpm install`
 
 Start the development server
 
-`npm run start:dev`
+`pnpm start:dev`
 
 Or, to enable live reloading
 
-`npm run start:watch`
+`pnpm start:watch`
 
 ## Architecture
 
@@ -64,7 +69,7 @@ If the queries, scheme, operations or fragments change, generate the code using
 the script:
 
 ```
-npm run gql-gen
+pnpm gql-gen
 ```
 
 This will make a TypeScript representation of the `.graphql` file in the same
