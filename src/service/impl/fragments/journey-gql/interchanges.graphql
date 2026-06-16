@@ -1,0 +1,19 @@
+fragment interchange on Interchange {
+    fromServiceJourney {
+        id
+        publicCode
+        line {
+            publicCode
+        }
+    }
+    toServiceJourney {
+        id
+        publicCode
+        line {
+            publicCode
+        }
+    }
+    guaranteed
+    maximumWaitTime
+    staySeated
+}

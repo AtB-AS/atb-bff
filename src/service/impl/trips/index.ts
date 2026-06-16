@@ -223,12 +223,13 @@ export default (): ITrips_v2 => {
 
             if (result.data.leg) {
               refreshed++;
-              // Preserve interchangeTo from the original leg: it's a trip-level
-              // relationship that journey-planner does not populate when a leg
-              // is queried in isolation by id.
+              // Preserve interchangeTo/interchangeFrom from the original leg:
+              // they're trip-level relationships that journey-planner does not
+              // populate when a leg is queried in isolation by id.
               return {
                 ...(result.data.leg as Leg),
                 interchangeTo: leg.interchangeTo,
+                interchangeFrom: leg.interchangeFrom,
                 refreshedAt: now,
               };
             }

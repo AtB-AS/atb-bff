@@ -103,12 +103,10 @@ fragment leg on Leg {
         }
     }
     interchangeTo {
-        toServiceJourney {
-            id
-        }
-        guaranteed
-        maximumWaitTime
-        staySeated
+        ...interchange
+    }
+    interchangeFrom {
+        ...interchange
     }
     pointsOnLink {
         points
