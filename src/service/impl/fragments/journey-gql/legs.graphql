@@ -125,6 +125,9 @@ fragment leg on Leg {
         aimedDepartureTime
         expectedDepartureTime
         realtime
+        notices {
+            ...notice
+        }
     }
     authority {
         ...authority
