@@ -17,4 +17,31 @@ fragment situation on PtSituationElement {
   validityPeriod {
     ...validityPeriod
   }
+  affects {
+    __typename
+    ... on AffectedStopPlace {
+      stopPlace {
+        name
+      }
+      quay {
+        name
+      }
+    }
+    ... on AffectedStopPlaceOnServiceJourney {
+      stopPlace {
+        name
+      }
+      quay {
+        name
+      }
+    }
+    ... on AffectedStopPlaceOnLine {
+      stopPlace {
+        name
+      }
+      quay {
+        name
+      }
+    }
+  }
 }
