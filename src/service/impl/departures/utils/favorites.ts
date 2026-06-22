@@ -1,10 +1,10 @@
-import {
-  DestinationDisplay,
-  EstimatedCall,
-} from '../../../../graphql/journey/journeyplanner-types_v3';
+import {DestinationDisplay} from '../../../../graphql/journey/journeyplanner-types_v3';
 import {FavoriteDeparture} from '../../../types';
 import {DeparturesQuery} from '../journey-gql/departures.graphql-gen';
 import {ensureViaFormat, mapToLegacyLineName} from './converters';
+
+type DeparturesEstimatedCall =
+  DeparturesQuery['quays'][number]['estimatedCalls'][number];
 
 export function filterFavoriteDepartures(
   result?: DeparturesQuery,
@@ -18,7 +18,7 @@ export function filterFavoriteDepartures(
    * provided, returns true. Ignores the StopPlace ID in favorites, and requires
    * a Quay ID.
    */
-  const isFavorite = (ec: EstimatedCall) =>
+  const isFavorite = (ec: DeparturesEstimatedCall) =>
     !favorites ||
     favorites.some(
       (f) =>
@@ -31,9 +31,7 @@ export function filterFavoriteDepartures(
     quays: quays.map((quay) => {
       return {
         ...quay,
-        estimatedCalls: quay.estimatedCalls.filter((estimatedCall) =>
-          isFavorite(estimatedCall as EstimatedCall),
-        ),
+        estimatedCalls: quay.estimatedCalls.filter(isFavorite),
       };
     }),
   };
@@ -41,7 +39,7 @@ export function filterFavoriteDepartures(
 
 function favoriteDepartureMatchesEstimatedCall(
   favoriteDeparture: FavoriteDeparture,
-  estimatedCall: EstimatedCall,
+  estimatedCall: DeparturesEstimatedCall,
 ) {
   return (
     estimatedCall.serviceJourney?.line.id === favoriteDeparture.lineId &&
