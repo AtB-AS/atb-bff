@@ -1,4 +1,4 @@
-FROM node:22-slim AS base
+FROM node:22.22-slim AS base
 WORKDIR /app
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME/bin:$PATH"
@@ -10,7 +10,7 @@ RUN pnpm fetch --prod
 COPY . .
 RUN pnpm build
 
-FROM node:22-slim AS prod
+FROM node:22.22-slim AS prod
 WORKDIR /app
 COPY package.json .
 COPY --from=build /app/node_modules ./node_modules
