@@ -4,8 +4,51 @@ import { MultilingualStringFragment, InfoLinkFragment, ValidityPeriodFragment } 
 import { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 import { MultilingualStringFragmentDoc, InfoLinkFragmentDoc, ValidityPeriodFragmentDoc } from './shared.graphql-gen';
-export type SituationFragment = { id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<MultilingualStringFragment>, description: Array<MultilingualStringFragment>, advice: Array<MultilingualStringFragment>, infoLinks?: Array<InfoLinkFragment>, validityPeriod?: ValidityPeriodFragment, affects: Array<{ __typename: 'AffectedLine' } | { __typename: 'AffectedServiceJourney' } | { __typename: 'AffectedStopPlace', stopPlace?: { name: string }, quay?: { name: string } } | { __typename: 'AffectedStopPlaceOnLine', stopPlace?: { name: string }, quay?: { name: string } } | { __typename: 'AffectedStopPlaceOnServiceJourney', stopPlace?: { name: string }, quay?: { name: string } } | { __typename: 'AffectedUnknown' }> };
+export type SituationFragment = { id: string, situationNumber?: string, reportType?: Types.ReportType, summary: Array<MultilingualStringFragment>, description: Array<MultilingualStringFragment>, advice: Array<MultilingualStringFragment>, infoLinks?: Array<InfoLinkFragment>, validityPeriod?: ValidityPeriodFragment, affects: Array<Affects_AffectedLine_Fragment | Affects_AffectedServiceJourney_Fragment | Affects_AffectedStopPlace_Fragment | Affects_AffectedStopPlaceOnLine_Fragment | Affects_AffectedStopPlaceOnServiceJourney_Fragment | Affects_AffectedUnknown_Fragment> };
 
+export type Affects_AffectedLine_Fragment = { __typename: 'AffectedLine' };
+
+export type Affects_AffectedServiceJourney_Fragment = { __typename: 'AffectedServiceJourney' };
+
+export type Affects_AffectedStopPlace_Fragment = { __typename: 'AffectedStopPlace', stopPlace?: { name: string }, quay?: { name: string } };
+
+export type Affects_AffectedStopPlaceOnLine_Fragment = { __typename: 'AffectedStopPlaceOnLine', stopPlace?: { name: string }, quay?: { name: string } };
+
+export type Affects_AffectedStopPlaceOnServiceJourney_Fragment = { __typename: 'AffectedStopPlaceOnServiceJourney', stopPlace?: { name: string }, quay?: { name: string } };
+
+export type Affects_AffectedUnknown_Fragment = { __typename: 'AffectedUnknown' };
+
+export type AffectsFragment = Affects_AffectedLine_Fragment | Affects_AffectedServiceJourney_Fragment | Affects_AffectedStopPlace_Fragment | Affects_AffectedStopPlaceOnLine_Fragment | Affects_AffectedStopPlaceOnServiceJourney_Fragment | Affects_AffectedUnknown_Fragment;
+
+export const AffectsFragmentDoc = gql`
+    fragment affects on Affects {
+  __typename
+  ... on AffectedStopPlace {
+    stopPlace {
+      name
+    }
+    quay {
+      name
+    }
+  }
+  ... on AffectedStopPlaceOnServiceJourney {
+    stopPlace {
+      name
+    }
+    quay {
+      name
+    }
+  }
+  ... on AffectedStopPlaceOnLine {
+    stopPlace {
+      name
+    }
+    quay {
+      name
+    }
+  }
+}
+    `;
 export const SituationFragmentDoc = gql`
     fragment situation on PtSituationElement {
   id
@@ -27,36 +70,13 @@ export const SituationFragmentDoc = gql`
     ...validityPeriod
   }
   affects {
-    __typename
-    ... on AffectedStopPlace {
-      stopPlace {
-        name
-      }
-      quay {
-        name
-      }
-    }
-    ... on AffectedStopPlaceOnServiceJourney {
-      stopPlace {
-        name
-      }
-      quay {
-        name
-      }
-    }
-    ... on AffectedStopPlaceOnLine {
-      stopPlace {
-        name
-      }
-      quay {
-        name
-      }
-    }
+    ...affects
   }
 }
     ${MultilingualStringFragmentDoc}
 ${InfoLinkFragmentDoc}
-${ValidityPeriodFragmentDoc}`;
+${ValidityPeriodFragmentDoc}
+${AffectsFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
