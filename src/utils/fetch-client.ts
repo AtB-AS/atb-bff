@@ -16,16 +16,20 @@ const httpAgent = new HttpAgent({
   keepAlive: true,
 });
 
+const selectAgent = (parsedURL: URL) =>
+  parsedURL.protocol === 'http:' ? httpAgent : httpsAgent;
+
 export function fetchWithTimeout(
   input: URL | RequestInfo,
   init: RequestInit | undefined,
 ): Promise<Response> {
+  const initWithAgent: RequestInit = {agent: selectAgent, ...init};
   return new Promise((resolve, reject) => {
     const timer = setTimeout(
       () => reject(new Error('TIMEOUT')),
       REQUEST_TIMEOUT,
     );
-    fetch(input, init)
+    fetch(input, initWithAgent)
       .then(
         (response) => resolve(response),
         (error) => reject(error),
