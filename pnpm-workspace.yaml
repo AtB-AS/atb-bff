@@ -1,2 +1,2 @@
 minimumReleaseAgeExclude:
-- '@atb-as/*'
+  - '@atb-as/*'

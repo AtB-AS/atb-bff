@@ -23,8 +23,7 @@ docker run --rm -it -e PORT=8080 -p 8080:8080 -v $PWD:/app atb-bff:dev
 
 ### Starting locally
 
-This project uses [pnpm](https://pnpm.io) (v11). Enable it via Corepack
-(bundled with Node.js):
+Enable pnpm with Corepack
 
 `corepack enable`
 
