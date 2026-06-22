@@ -1,20 +1,19 @@
-name: Check
+name: TypeScript Check
 on:
   push:
 
 jobs:
-  check:
-    name: Check
+  tsc:
+    name: tsc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
-      - name: Install node
+      - name: install node
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          node-version: 22
+          cache: "npm"
+      - name: npm ci
+        run: npm ci
       - name: Check
-        run: pnpm check-all
+        run: npm run check-all

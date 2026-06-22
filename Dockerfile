@@ -1,19 +1,23 @@
-FROM node:22-slim AS base
+FROM node:22-slim AS proddeps
 WORKDIR /app
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME/bin:$PATH"
-RUN corepack enable
+COPY package*.json ./
+RUN npm ci --omit dev
 
-FROM base AS build
-COPY pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm fetch --prod
+FROM node:22-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
 COPY . .
-RUN pnpm build
+RUN npm run build
 
-FROM node:22-slim AS prod
+FROM node:22-slim as dev
+WORKDIR /app
+CMD ["npm", "run", "start:watch"]
+
+FROM node:22-slim as prod
 WORKDIR /app
 COPY package.json .
-COPY --from=build /app/node_modules ./node_modules
+COPY --from=proddeps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
 ENV NODE_ENV=production
