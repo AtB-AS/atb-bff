@@ -125,6 +125,8 @@ fragment leg on Leg {
         aimedDepartureTime
         expectedDepartureTime
         realtime
+        forAlighting
+        forBoarding
         notices {
             ...notice
         }
