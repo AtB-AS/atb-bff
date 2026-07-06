@@ -28,8 +28,6 @@ interface ReverseV3Params {
   layers?: GeocoderV3Layer[];
 }
 
-const GEOCODER_V3_BASEURL = 'https://api.dev.entur.io';
-
 const FOCUS_WEIGHT = parseFloat(process.env.GEOCODER_V3_FOCUS_WEIGHT || '0.7');
 const RADIUS = parseInt(process.env.GEOCODER_V3_RADIUS || '60');
 
@@ -63,8 +61,6 @@ export default (): IGeocoderService_v3 => {
         const result = await get<FeatureCollection<Point, LocationV3>>(
           `/geocoder/v3/autocomplete?${queryString}`,
           request,
-          {},
-          GEOCODER_V3_BASEURL,
         );
         return Result.ok(result.features);
       } catch (error) {
@@ -89,8 +85,6 @@ export default (): IGeocoderService_v3 => {
         const result = await get<FeatureCollection<Point, LocationV3>>(
           `/geocoder/v3/reverse?${queryString}`,
           request,
-          {},
-          GEOCODER_V3_BASEURL,
         );
         return Result.ok(result.features);
       } catch (error) {
