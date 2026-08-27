@@ -26,6 +26,7 @@ query departures(
       realtime
       predictionInaccurate
       cancellation
+      requestStop
       quay {
         id
       }
