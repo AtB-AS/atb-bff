@@ -35,7 +35,7 @@ export type QuayIdInStopsQuery = { stopPlaces: Array<{ id: string, quays?: Array
 
 export type Group_EstimatedCallFieldsFragment = { stopPositionInPattern: number, destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, serviceJourney: Group_ServiceJourneyFieldsFragment };
 
-export type Group_Times_EstimatedCallFieldsFragment = { date: any, expectedDepartureTime: any, actualDepartureTime?: any, aimedDepartureTime: any, predictionInaccurate: boolean, realtime: boolean, cancellation: boolean, stopPositionInPattern: number, destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, situations: Array<SituationFragment>, serviceJourney: { id: string, line: { id: string } }, bookingArrangements?: BookingArrangementFragment };
+export type Group_Times_EstimatedCallFieldsFragment = { date: any, expectedDepartureTime: any, actualDepartureTime?: any, aimedDepartureTime: any, predictionInaccurate: boolean, realtime: boolean, cancellation: boolean, requestStop: boolean, stopPositionInPattern: number, destinationDisplay?: { frontText?: string, via?: Array<string> }, notices: Array<NoticeFragment>, situations: Array<SituationFragment>, serviceJourney: { id: string, line: { id: string } }, bookingArrangements?: BookingArrangementFragment };
 
 export type Group_NoticeFieldsFragment = { text?: string };
 
@@ -103,6 +103,7 @@ export const Group_Times_EstimatedCallFieldsFragmentDoc = gql`
   predictionInaccurate
   realtime
   cancellation
+  requestStop
   notices {
     ...notice
   }
