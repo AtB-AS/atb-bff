@@ -115,6 +115,131 @@ describe('hasTemporalOverlap', () => {
   });
 });
 
+describe('hasTemporalOverlap with interchanges', () => {
+  it('ignores an overlap at a guaranteed interchange', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true},
+      }),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:09:00.000Z'}),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(false);
+  });
+
+  it('returns true when the interchange is explicitly not guaranteed', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: false},
+      }),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:09:00.000Z'}),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(true);
+  });
+
+  it('returns true when there is no interchange at all', () => {
+    const legs = [
+      makeTransitLeg({expectedEndTime: '2024-01-01T10:10:00.000Z'}),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:09:00.000Z'}),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(true);
+  });
+
+  it('ignores a guaranteed interchange reached through a walk', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true},
+      }),
+      makeFootLeg({
+        expectedStartTime: '2024-01-01T10:10:00.000Z',
+        expectedEndTime: '2024-01-01T10:15:00.000Z',
+      }),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:13:00.000Z'}),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(false);
+  });
+
+  it('ignores an overlap within the interchange maximum wait time', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true, maximumWaitTime: 300},
+      }),
+      makeTransitLeg({
+        aimedStartTime: '2024-01-01T10:08:00.000Z',
+        expectedStartTime: '2024-01-01T10:08:00.000Z',
+      }),
+    ];
+    // Held until 10:08 + 5 min = 10:13, and we arrive at 10:10.
+    expect(hasTemporalOverlap(legs)).toBe(false);
+  });
+
+  it('treats arrival exactly at the maximum wait deadline as caught', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:13:00.000Z',
+        interchangeTo: {guaranteed: true, maximumWaitTime: 300},
+      }),
+      makeTransitLeg({
+        aimedStartTime: '2024-01-01T10:08:00.000Z',
+        expectedStartTime: '2024-01-01T10:08:00.000Z',
+      }),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(false);
+  });
+
+  it('returns true once arrival is past the maximum wait time', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:20:00.000Z',
+        interchangeTo: {guaranteed: true, maximumWaitTime: 300},
+      }),
+      makeTransitLeg({
+        aimedStartTime: '2024-01-01T10:08:00.000Z',
+        expectedStartTime: '2024-01-01T10:08:00.000Z',
+      }),
+    ];
+    // Held until 10:13, but we do not arrive until 10:20.
+    expect(hasTemporalOverlap(legs)).toBe(true);
+  });
+
+  it('counts an intervening walk against the maximum wait time', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true, maximumWaitTime: 120},
+      }),
+      makeFootLeg({
+        expectedStartTime: '2024-01-01T10:10:00.000Z',
+        expectedEndTime: '2024-01-01T10:15:00.000Z',
+      }),
+      makeTransitLeg({
+        aimedStartTime: '2024-01-01T10:11:00.000Z',
+        expectedStartTime: '2024-01-01T10:11:00.000Z',
+      }),
+    ];
+    // Held until 10:13, but the walk does not end until 10:15.
+    expect(hasTemporalOverlap(legs)).toBe(true);
+  });
+
+  it('still catches a later overlap at an unguaranteed interchange', () => {
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true},
+      }),
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:09:00.000Z',
+        expectedEndTime: '2024-01-01T10:20:00.000Z',
+      }),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:19:00.000Z'}),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(true);
+  });
+});
+
 describe('computeTripAimedStartEnd', () => {
   it('returns aimed times from first and last leg when all are transit', () => {
     const legs: Leg[] = [
@@ -261,6 +386,22 @@ describe('adjustNonTransitExpectedTimes', () => {
 });
 
 describe('determineTripStatus', () => {
+  it('returns valid when the only overlap is at a guaranteed interchange', () => {
+    const now = new Date().toISOString();
+    const legs = [
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true},
+        refreshedAt: now,
+      }),
+      makeTransitLeg({
+        expectedStartTime: '2024-01-01T10:09:00.000Z',
+        refreshedAt: now,
+      }),
+    ];
+    expect(determineTripStatus(legs)).toBe('valid');
+  });
+
   it('returns valid when legs are sequential', () => {
     const now = new Date().toISOString();
     const legs: Leg[] = [

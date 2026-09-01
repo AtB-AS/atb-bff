@@ -109,16 +109,61 @@ export function isTransitLeg(leg: Leg): boolean {
 /**
  * Checks if any leg N+1's expectedStartTime is before leg N's expectedEndTime,
  * indicating a missed connection (impossible trip).
+ *
+ * Overlaps at a guaranteed interchange are ignored: the connecting service has
+ * committed to waiting for the delayed one, so a negative gap there is not a
+ * missed connection.
  */
 export function hasTemporalOverlap(legs: Leg[]): boolean {
   for (let i = 1; i < legs.length; i++) {
     const prev = legs[i - 1];
     const curr = legs[i];
     if (parseISO(curr.expectedStartTime) < parseISO(prev.expectedEndTime)) {
+      if (interchangeHolds(legs, i)) continue;
       return true;
     }
   }
   return false;
+}
+
+/**
+ * Whether the interchange into the leg at `index` still guarantees the
+ * connection, given when you actually arrive.
+ *
+ * A guarantee is bounded by `maximumWaitTime`: the connecting service holds
+ * for that many seconds past its own scheduled departure, and arriving later
+ * means missing it despite the guarantee. An absent `maximumWaitTime` means it
+ * waits however long it takes. Arrival is the end of the leg immediately
+ * before, so an intervening walk counts against the deadline.
+ */
+function interchangeHolds(legs: Leg[], index: number): boolean {
+  const interchange = previousTransitLeg(legs, index)?.interchangeTo;
+  if (interchange?.guaranteed !== true) return false;
+  if (interchange.maximumWaitTime == null) return true;
+
+  const deadline = addSeconds(
+    parseISO(legs[index].aimedStartTime),
+    interchange.maximumWaitTime,
+  );
+  const arrival = parseISO(legs[index - 1].expectedEndTime);
+  // Unparseable times keep the guarantee, so bad data suppresses a warning
+  // rather than inventing one.
+  if (isNaN(deadline.getTime()) || isNaN(arrival.getTime())) return true;
+
+  return arrival <= deadline;
+}
+
+/**
+ * The transit leg you alight from, which is the one carrying the interchange
+ * relationship. Walks back past non-transit legs: a bus -> walk -> bus
+ * transfer overlaps on the (walk, bus) pair, but it is the first bus that
+ * holds `interchangeTo`.
+ */
+function previousTransitLeg(legs: Leg[], index: number): Leg | undefined {
+  for (let i = index - 1; i >= 0; i--) {
+    if (isTransitLeg(legs[i])) return legs[i];
+  }
+  return undefined;
 }
 
 /**
