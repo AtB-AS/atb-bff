@@ -16,6 +16,16 @@ export type Scalars = {
   Duration: { input: any; output: any; }
 };
 
+export type Affects = {
+  datedServiceJourneys?: Maybe<Array<Maybe<DatedServiceJourney>>>;
+  lines?: Maybe<Array<Maybe<Line>>>;
+  operators?: Maybe<Array<Maybe<Operator>>>;
+  serviceJourneys?: Maybe<Array<Maybe<ServiceJourney>>>;
+  stopPlaces?: Maybe<Array<Maybe<Stop>>>;
+  stopPoints?: Maybe<Array<Maybe<Stop>>>;
+  vehicleModes?: Maybe<Array<Maybe<VehicleModeEnumeration>>>;
+};
+
 export type BoundingBox = {
   maxLat: Scalars['Float']['input'];
   maxLon: Scalars['Float']['input'];
@@ -43,6 +53,12 @@ export type Call = {
   forBoarding?: Maybe<Scalars['Boolean']['output']>;
   occupancyStatus?: Maybe<OccupancyStatus>;
   order?: Maybe<Scalars['Int']['output']>;
+  /**
+   *  Situations affecting this stop while the vehicle is here. A situation on a quay that
+   *  ends before the vehicle arrives is not included. A situation affecting several of the
+   *  journey's stops is reported against every one of them.
+   */
+  situations?: Maybe<Array<Maybe<Situation>>>;
   stopPoint?: Maybe<Stop>;
 };
 
@@ -81,9 +97,21 @@ export type EstimatedTimetableUpdate = {
   originName?: Maybe<Scalars['String']['output']>;
   originRef?: Maybe<Scalars['String']['output']>;
   serviceJourney?: Maybe<ServiceJourney>;
+  /**
+   *  Situations affecting this journey as a whole: those naming the journey, its dated
+   *  journey or its line and overlapping the journey. A situation reported against one of
+   *  the journey's calls is not repeated here, so select calls { situations } as well to
+   *  see every disruption affecting this journey. Closed situations are never included.
+   */
+  situations?: Maybe<Array<Maybe<Situation>>>;
   vehicleId?: Maybe<Scalars['String']['output']>;
   /**  Reported status of the vehicle */
   vehicleStatus?: Maybe<VehicleStatusEnumeration>;
+};
+
+export type InfoLink = {
+  labels?: Maybe<Array<Maybe<TranslatedString>>>;
+  uri?: Maybe<Scalars['String']['output']>;
 };
 
 export type Line = {
@@ -184,6 +212,7 @@ export type Query = {
   operators?: Maybe<Array<Maybe<Operator>>>;
   serviceJourney?: Maybe<ServiceJourney>;
   serviceJourneys?: Maybe<Array<Maybe<ServiceJourney>>>;
+  situations?: Maybe<Array<Maybe<Situation>>>;
   /** @deprecated Experimental. */
   timetables?: Maybe<Array<Maybe<EstimatedTimetableUpdate>>>;
   vehicles?: Maybe<Array<Maybe<VehicleUpdate>>>;
@@ -211,6 +240,24 @@ export type QueryServiceJourneysArgs = {
 };
 
 
+export type QuerySituationsArgs = {
+  codespaceId?: InputMaybe<Scalars['String']['input']>;
+  datedServiceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  includeClosed?: InputMaybe<Scalars['Boolean']['input']>;
+  lineRef?: InputMaybe<Scalars['String']['input']>;
+  minAge?: InputMaybe<Scalars['Duration']['input']>;
+  mode?: InputMaybe<VehicleModeEnumeration>;
+  openEnded?: InputMaybe<Scalars['Boolean']['input']>;
+  operatorRef?: InputMaybe<Scalars['String']['input']>;
+  reportType?: InputMaybe<Scalars['String']['input']>;
+  serviceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  severity?: InputMaybe<SeverityEnumeration>;
+  situationNumbers?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  stopRef?: InputMaybe<Scalars['String']['input']>;
+  validNow?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type QueryTimetablesArgs = {
   cancellation?: InputMaybe<Scalars['Boolean']['input']>;
   codespaceId?: InputMaybe<Scalars['String']['input']>;
@@ -228,6 +275,7 @@ export type QueryVehiclesArgs = {
   date?: InputMaybe<Scalars['String']['input']>;
   datedServiceJourneyId?: InputMaybe<Scalars['String']['input']>;
   datedServiceJourneyIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  includeInvalidLocations?: InputMaybe<Scalars['Boolean']['input']>;
   lineName?: InputMaybe<Scalars['String']['input']>;
   lineRef?: InputMaybe<Scalars['String']['input']>;
   maxDataAge?: InputMaybe<Scalars['Duration']['input']>;
@@ -258,6 +306,54 @@ export type ServiceJourneyIdAndDate = {
   id: Scalars['String']['input'];
 };
 
+export enum SeverityEnumeration {
+  NoImpact = 'noImpact',
+  Normal = 'normal',
+  Severe = 'severe',
+  Slight = 'slight',
+  Undefined = 'undefined',
+  Unknown = 'unknown',
+  VerySevere = 'verySevere',
+  VerySlight = 'verySlight'
+}
+
+export type Situation = {
+  advice?: Maybe<Array<Maybe<TranslatedString>>>;
+  affects?: Maybe<Affects>;
+  /**  Time elapsed since creationTime. Null when creationTime is absent. */
+  age?: Maybe<Scalars['Duration']['output']>;
+  codespace?: Maybe<Codespace>;
+  creationTime?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Array<Maybe<TranslatedString>>>;
+  detail?: Maybe<Array<Maybe<TranslatedString>>>;
+  /**  Null when the situation never expires. */
+  expiration?: Maybe<Scalars['DateTime']['output']>;
+  expirationEpochSecond?: Maybe<Scalars['Float']['output']>;
+  infoLinks?: Maybe<Array<Maybe<InfoLink>>>;
+  keywords?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  lastUpdated?: Maybe<Scalars['DateTime']['output']>;
+  lastUpdatedEpochSecond?: Maybe<Scalars['Float']['output']>;
+  /**  True when no validity period carries an end time. */
+  openEnded?: Maybe<Scalars['Boolean']['output']>;
+  participantRef?: Maybe<Scalars['String']['output']>;
+  planned?: Maybe<Scalars['Boolean']['output']>;
+  priority?: Maybe<Scalars['Int']['output']>;
+  progress?: Maybe<WorkflowStatusEnumeration>;
+  reportType?: Maybe<Scalars['String']['output']>;
+  severity?: Maybe<SeverityEnumeration>;
+  situationNumber: Scalars['String']['output'];
+  sourceType?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<Array<Maybe<TranslatedString>>>;
+  validityPeriods?: Maybe<Array<Maybe<ValidityPeriod>>>;
+  /**
+   *  The subscription stream is only eventually consistent: two concurrent updates
+   *  to the same situation can be published in reverse version order. Clients should
+   *  keep the highest version seen per situationNumber and discard a regression.
+   */
+  version?: Maybe<Scalars['Int']['output']>;
+  versionedAtTime?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type Stop = {
   id: Scalars['String']['output'];
   location?: Maybe<Location>;
@@ -266,8 +362,30 @@ export type Stop = {
 
 export type Subscription = {
   /** @deprecated Experimental. */
+  situations?: Maybe<Array<Maybe<Situation>>>;
+  /** @deprecated Experimental. */
   timetables?: Maybe<Array<Maybe<EstimatedTimetableUpdate>>>;
   vehicles?: Maybe<Array<Maybe<VehicleUpdate>>>;
+};
+
+
+export type SubscriptionSituationsArgs = {
+  bufferSize?: InputMaybe<Scalars['Int']['input']>;
+  bufferTime?: InputMaybe<Scalars['Int']['input']>;
+  codespaceId?: InputMaybe<Scalars['String']['input']>;
+  datedServiceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  includeClosed?: InputMaybe<Scalars['Boolean']['input']>;
+  lineRef?: InputMaybe<Scalars['String']['input']>;
+  minAge?: InputMaybe<Scalars['Duration']['input']>;
+  mode?: InputMaybe<VehicleModeEnumeration>;
+  openEnded?: InputMaybe<Scalars['Boolean']['input']>;
+  operatorRef?: InputMaybe<Scalars['String']['input']>;
+  reportType?: InputMaybe<Scalars['String']['input']>;
+  serviceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  severity?: InputMaybe<SeverityEnumeration>;
+  situationNumbers?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  stopRef?: InputMaybe<Scalars['String']['input']>;
+  validNow?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -292,6 +410,7 @@ export type SubscriptionVehiclesArgs = {
   date?: InputMaybe<Scalars['String']['input']>;
   datedServiceJourneyId?: InputMaybe<Scalars['String']['input']>;
   datedServiceJourneyIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  includeInvalidLocations?: InputMaybe<Scalars['Boolean']['input']>;
   lineName?: InputMaybe<Scalars['String']['input']>;
   lineRef?: InputMaybe<Scalars['String']['input']>;
   maxDataAge?: InputMaybe<Scalars['Duration']['input']>;
@@ -302,6 +421,16 @@ export type SubscriptionVehiclesArgs = {
   serviceJourneyIdAndDates?: InputMaybe<Array<InputMaybe<ServiceJourneyIdAndDate>>>;
   vehicleId?: InputMaybe<Scalars['String']['input']>;
   vehicleIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type TranslatedString = {
+  language?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export type ValidityPeriod = {
+  endTime?: Maybe<Scalars['DateTime']['output']>;
+  startTime?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export enum VehicleModeEnumeration {
@@ -361,3 +490,13 @@ export type VehicleUpdate = {
   /**  Reported status of the vehicle */
   vehicleStatus?: Maybe<VehicleStatusEnumeration>;
 };
+
+export enum WorkflowStatusEnumeration {
+  ApprovedDraft = 'approvedDraft',
+  Closed = 'closed',
+  Closing = 'closing',
+  Draft = 'draft',
+  Open = 'open',
+  PendingApproval = 'pendingApproval',
+  Published = 'published'
+}

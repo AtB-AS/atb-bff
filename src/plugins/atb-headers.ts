@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import {v4 as uuid} from 'uuid';
+import {randomUUID} from 'crypto';
 
 interface Options {}
 
@@ -15,7 +15,7 @@ const plugin: Hapi.Plugin<Options> = {
     const webshopVersion = (request: Hapi.Request) =>
       request.headers['atb-webshop-version'];
     const correlationId = (request: Hapi.Request) =>
-      request.headers['atb-correlation-id'] || uuid();
+      request.headers['atb-correlation-id'] || randomUUID();
     const customerAccountId = (request: Hapi.Request) =>
       request.headers['entur-customer-account-id'];
     const tlsVersion = (request: Hapi.Request) =>
