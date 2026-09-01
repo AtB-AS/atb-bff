@@ -210,6 +210,8 @@ export type Contact = {
 export type DatedServiceJourney = {
   /** Returns scheduled passingTimes for this dated service journey, updated with real-time-updates (if available).  */
   estimatedCalls: Array<EstimatedCall>;
+  /** Whether this is an extra journey, either from planned data or added in realtime */
+  extraJourney: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   /** JourneyPattern for the dated service journey. */
   journeyPattern?: Maybe<JourneyPattern>;
@@ -228,7 +230,7 @@ export type DatedServiceJourney = {
   replacementForRelation: Array<ReplacementForRelation>;
   /** The service journey this Dated Service Journey is based on */
   serviceJourney: ServiceJourney;
-  /** Alterations specified on the Trip in the planned data */
+  /** Alterations specified on the Trip in the planned data. Note: realtime alterations are not included */
   tripAlteration?: Maybe<ServiceAlteration>;
 };
 
@@ -237,6 +239,14 @@ export type DatedServiceJourney = {
 export type DatedServiceJourneyQuaysArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** Identifies a specific service journey on a specific service date. Exactly one of the fields must be set. */
+export type DatedServiceJourneyReference = {
+  /** Identifies the service journey by a dated service journey ID (e.g. from NeTEx data where a service journey on a date has a unique ID). */
+  datedServiceJourneyId?: InputMaybe<Scalars['String']['input']>;
+  /** Identifies the service journey by service journey ID and service date. */
+  serviceJourneyOnServiceDate?: InputMaybe<ServiceJourneyOnServiceDate>;
 };
 
 /** An advertised destination of a specific journey pattern, usually displayed on a head sign or at other on-board locations. */
@@ -688,7 +698,7 @@ export enum Locale {
   Us = 'us'
 }
 
-/** Input format for specifying a location through either a place reference (id), coordinates or both. If both place and coordinates are provided the place ref will be used if found, coordinates will only be used if place is not known. */
+/** Input format for specifying a location through either a place reference (id), coordinates or both. If both place and coordinates are provided the place ref will be used if found, coordinates will only be used if place is not known. Alternatively, a serviceJourneyLocation can be used to start the search on-board a vehicle,or pinpoint a boarding on a specific dated service journey to start routing. */
 export type Location = {
   /** Coordinates for the location. This can be used alone or as fallback if the place id is not found. */
   coordinates?: InputMaybe<InputCoordinates>;
@@ -696,6 +706,8 @@ export type Location = {
   name?: InputMaybe<Scalars['String']['input']>;
   /** The id of an element in the OTP model. Currently supports Quay, StopPlace, multimodal StopPlace, and GroupOfStopPlaces. */
   place?: InputMaybe<Scalars['String']['input']>;
+  /** Identifies a location on a specific transit trip. When set, the search starts from the specified vehicle,considered either to be starting on-board or boarding at the provided stop. In this case, the dateTime parameter of the request is ignored, as the time is resolved based on timetable data instead. */
+  serviceJourneyLocation?: InputMaybe<ServiceJourneyLocationInput>;
 };
 
 export enum Mode {
@@ -930,6 +942,14 @@ export type PlaceInterface = {
   longitude?: Maybe<Scalars['Float']['output']>;
 };
 
+/** Identifies a point in a journey pattern by stop location ID, optionally with an aimed departure time for disambiguation. */
+export type PointInJourneyPatternReference = {
+  /** The exact aimed departure time at this stop, corresponding to the aimedDepartureTime on EstimatedCall. Must match exactly. Used for disambiguation when the stop location is visited more than once in the journey pattern (e.g. ring lines). If provided, it is always validated against the timetable. */
+  aimedDepartureTime?: InputMaybe<Scalars['DateTime']['input']>;
+  /** The stop location ID (quay or stop place). Must not be the last stop in the journey pattern, as boarding there would not allow further travel. */
+  stopLocationId: Scalars['String']['input'];
+};
+
 /** A list of coordinates encoded as a polyline string (see http://code.google.com/apis/maps/documentation/polylinealgorithm.html) */
 export type PointsOnLink = {
   /** The distance in meters. */
@@ -1103,6 +1123,11 @@ export type QueryType = {
   quaysByBbox: Array<Maybe<Quay>>;
   /** Get all quays within the specified walking radius from a location. There are no maximum limits for the input parameters, but the query will timeout and return if the parameters are too high. */
   quaysByRadius?: Maybe<QuayAtDistanceConnection>;
+  /**
+   * Get an updated version of a trip pattern with realtime changes applied.
+   * @deprecated This query is experimental and might change in the future.
+   */
+  refetchTripPattern: RefetchTripPatternResult;
   /** Get default routing parameters. */
   routingParameters?: Maybe<RoutingParameters>;
   /** Get OTP deployment information. This is only useful for developers of OTP itself not regular API users. */
@@ -1257,6 +1282,22 @@ export type QueryTypeQuaysByRadiusArgs = {
 };
 
 
+export type QueryTypeRefetchTripPatternArgs = {
+  alightSlackDefault?: InputMaybe<Scalars['Int']['input']>;
+  alightSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
+  boardSlackDefault?: InputMaybe<Scalars['Int']['input']>;
+  boardSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
+  from?: InputMaybe<Location>;
+  legs: Array<Scalars['ID']['input']>;
+  maxAccessEgressDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
+  modes?: InputMaybe<Modes>;
+  to?: InputMaybe<Location>;
+  walkReluctance?: InputMaybe<Scalars['Float']['input']>;
+  walkSpeed?: InputMaybe<Scalars['Float']['input']>;
+  wheelchairAccessible?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type QueryTypeServiceJourneyArgs = {
   id: Scalars['String']['input'];
 };
@@ -1370,6 +1411,12 @@ export enum RealtimeState {
   Updated = 'updated'
 }
 
+/** Refetched data for a trip pattern */
+export type RefetchTripPatternResult = {
+  /** The refetched trip pattern */
+  tripPattern?: Maybe<TripPattern>;
+};
+
 export enum RelativeDirection {
   CircleClockwise = 'circleClockwise',
   CircleCounterclockwise = 'circleCounterclockwise',
@@ -1473,6 +1520,8 @@ export enum RoutingErrorCode {
   OutsideBounds = 'outsideBounds',
   /** The date specified is outside the range of data currently loaded into the system */
   OutsideServicePeriod = 'outsideServicePeriod',
+  /** The service journey location is ambiguous because the stop is visited more than once by the service journey. An aimedDepartureTime is necessary to disambiguate. */
+  ServiceJourneyLocationMissingAimedDepartureTime = 'serviceJourneyLocationMissingAimedDepartureTime',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
   WalkingBetterThanTransit = 'walkingBetterThanTransit'
 }
@@ -1742,6 +1791,22 @@ export type ServiceJourneyEstimatedCallsArgs = {
 export type ServiceJourneyQuaysArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** Identifies a specific dated service journey and a specific point within it. */
+export type ServiceJourneyLocationInput = {
+  /** Identifies the service journey and service date, either by service journey ID and service date, or by a dated service journey ID. */
+  datedServiceJourneyReference: DatedServiceJourneyReference;
+  /** Identifies a specific point in the journey pattern. Note that cancelled stops are not allowed unless includePlannedCancellations/includeRealtimeCancellations are set accordingly. */
+  pointInJourneyPatternReference: PointInJourneyPatternReference;
+};
+
+/** Identifies a service journey by service journey ID and service date. */
+export type ServiceJourneyOnServiceDate = {
+  /** The service date of the trip, in ISO 8601 format (YYYY-MM-DD). */
+  serviceDate: Scalars['Date']['input'];
+  /** The service journey ID. */
+  serviceJourneyId: Scalars['String']['input'];
 };
 
 export enum Severity {
@@ -2215,8 +2280,6 @@ export type TripFilterSelectInput = {
   groupOfLines?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Set of ids for lines that should be included in/excluded from search */
   lines?: InputMaybe<Array<Scalars['ID']['input']>>;
-  /** Set of ids for service journeys that should be included in/excluded from search */
-  serviceJourneys?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** The allowed modes for the transit part of the trip. Use an empty list to disallow transit for this search. If the element is not present or null, it will default to all transport modes. */
   transportModes?: InputMaybe<Array<TransportModes>>;
 };

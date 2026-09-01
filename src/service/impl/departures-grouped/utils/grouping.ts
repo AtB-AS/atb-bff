@@ -1,5 +1,3 @@
-import groupBy from 'lodash.groupby';
-import sortBy from 'lodash.sortby';
 import {
   DestinationDisplay,
   ReportType,
@@ -127,10 +125,10 @@ export default function mapQueryToGroups(
     const quayGroups =
       quays?.map(function (quay) {
         const {times, estimatedCalls, ...quayInfo} = quay;
-        const groups = groupBy(times, (item) =>
+        const groups = Object.groupBy(times, (item) =>
           toKey(item.serviceJourney?.line.id, item.destinationDisplay),
         );
-        const lineInfoGroups = groupBy(estimatedCalls, (item) =>
+        const lineInfoGroups = Object.groupBy(estimatedCalls, (item) =>
           toKey(item.serviceJourney?.line.id, item.destinationDisplay),
         );
 
@@ -138,7 +136,7 @@ export default function mapQueryToGroups(
 
         for (let [lineGroup, times] of Object.entries(groups)) {
           const lineInfoEntry = lineInfoGroups[lineGroup]?.[0];
-          if (!lineInfoEntry) {
+          if (!lineInfoEntry || !times) {
             continue;
           }
 
@@ -190,10 +188,13 @@ export default function mapQueryToGroups(
 
     return {
       stopPlace,
-      quays: sortBy(quayGroups, [
-        (group) => sortByNumberIfPossible(group.quay.publicCode),
-        (group) => group.quay.id,
-      ]),
+      quays: quayGroups.toSorted(
+        (a, b) =>
+          compareAscending(
+            sortByNumberIfPossible(a.quay.publicCode),
+            sortByNumberIfPossible(b.quay.publicCode),
+          ) || compareAscending(a.quay.id, b.quay.id),
+      ),
     };
   });
 }
@@ -217,6 +218,24 @@ const groupByStopPlace = (quays: GroupsByIdQuery['quays']) =>
     }
     return grouped;
   }, []);
+
+/**
+ * Ascending order matching the semantics we relied on from lodash.sortBy:
+ * undefined sorts last, and values that are not mutually comparable (a number
+ * against a non-numeric string) compare equal, leaving their relative order to
+ * the stable sort.
+ */
+export function compareAscending(
+  a?: string | number,
+  b?: string | number,
+): number {
+  if (a === b) return 0;
+  if (a === undefined) return 1;
+  if (b === undefined) return -1;
+  if (a > b) return 1;
+  if (a < b) return -1;
+  return 0;
+}
 
 function sortByNumberIfPossible(val?: string) {
   if (!val) return val;
