@@ -64,6 +64,7 @@ fragment group_times_estimatedCallFields on EstimatedCall {
   predictionInaccurate
   realtime
   cancellation
+  requestStop
   notices {
     ...notice
   }

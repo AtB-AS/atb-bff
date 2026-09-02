@@ -56,6 +56,7 @@ type DepartureTime = {
   serviceJourneyId?: string;
   serviceDate: string;
   cancellation: boolean;
+  requestStop: boolean;
   bookingArrangements?: BookingArrangementFragment;
   notices?: NoticeFragment[];
   stopPositionInPattern: number;
@@ -168,6 +169,7 @@ export default function mapQueryToGroups(
               serviceJourneyId: time.serviceJourney?.id,
               serviceDate: time.date,
               cancellation: time.cancellation,
+              requestStop: time.requestStop,
               notices: time.notices,
               bookingArrangements: time.bookingArrangements,
               stopPositionInPattern: time.stopPositionInPattern,
