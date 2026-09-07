@@ -12,8 +12,8 @@ importers:
         specifier: ^3.9.3
         version: 3.9.3(graphql-ws@5.16.2(graphql@16.8.1))(graphql@16.8.1)
       '@atb-as/utils':
-        specifier: ^7.0.0
-        version: 7.0.0(zod@4.5.4)
+        specifier: ^8.0.1
+        version: 8.0.1(zod@4.5.4)
       '@badrap/result':
         specifier: ^0.2.13
         version: 0.2.13
@@ -237,8 +237,8 @@ packages:
     resolution: {integrity: sha512-xhlTqH0m31mnsG0tIP4ETgfSB6gXDaYYsUWTrlUV93fFQPI9dd8hE0Ot6MHLCtqgB32hwJAC3YZMWlXZw7AleA==}
     engines: {node: '>=14'}
 
-  '@atb-as/utils@7.0.0':
-    resolution: {integrity: sha512-1Unj1qtN7DgY0LZOPlIPHFfhjX04TC4mYSeiudSFbW7jqdPzl9z2z9MDwOOhcmiaZ+mymd/YJWQdfj56kBjhSw==}
+  '@atb-as/utils@8.0.1':
+    resolution: {integrity: sha512-3SsBVVpwSOHFFfFGMC7a2ufWzGd8IDx+Uz2SnPoKHr1FGncwGU/ul2P32V37/31pdqQWa33AAP7IIHApqYt/yg==}
     peerDependencies:
       zod: ^4.1.11
 
@@ -4092,7 +4092,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@atb-as/utils@7.0.0(zod@4.5.4)':
+  '@atb-as/utils@8.0.1(zod@4.5.4)':
     dependencies:
       lodash: 4.17.21
       zod: 4.5.4

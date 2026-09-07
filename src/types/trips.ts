@@ -11,12 +11,18 @@ import {
   BookingAvailabilityType,
   TicketOffer,
 } from '../service/impl/trips/booking-utils';
+import type {TransferRisk} from '@atb-as/utils';
 
+/**
+ * `'impossible'` is kept only while shipped apps still read it. Narrows to
+ * `'valid' | 'stale'` once the minimum supported version reads `transferRisk`.
+ */
 export type TripPatternStatus = 'valid' | 'impossible' | 'stale';
 
 export type TripPattern = Required<TripsQuery>['trip']['tripPatterns'][0] & {
   id?: any;
   status?: TripPatternStatus;
+  transferRisk?: TransferRisk;
   aimedStartTime?: string;
   aimedEndTime?: string;
 };
@@ -73,6 +79,7 @@ export type TripPatternWithBooking = TripPatternFragment & {
 
 export type Leg = TripPattern['legs'][0] & {
   refreshedAt?: string;
+  transferRisk?: TransferRisk;
 };
 
 export type Place = Leg['fromPlace'];
