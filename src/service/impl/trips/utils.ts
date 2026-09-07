@@ -10,6 +10,7 @@ import {
   decompressFromEncodedURIComponent,
 } from 'lz-string';
 import {addSeconds, formatISO, parseISO} from 'date-fns';
+import {isTransitLeg} from '@atb-as/utils';
 
 const START_TIME_PADDING = 60; // time in seconds
 
@@ -102,10 +103,6 @@ export function extractServiceJourneyIds(trip: TripPattern_v3) {
 
 // --- v3 singleTrip utilities ---
 
-export function isTransitLeg(leg: Leg): boolean {
-  return leg.serviceJourney != null;
-}
-
 /**
  * Checks if any leg N+1's expectedStartTime is before leg N's expectedEndTime,
  * indicating a missed connection (impossible trip).
@@ -113,6 +110,11 @@ export function isTransitLeg(leg: Leg): boolean {
  * Overlaps at a guaranteed interchange are ignored: the connecting service has
  * committed to waiting for the delayed one, so a negative gap there is not a
  * missed connection.
+ *
+ * Duplicates `getLegTransferRisk` from `@atb-as/utils` on purpose, until clients
+ * stop reading `status === 'impossible'`. Both now treat a gap of exactly zero
+ * as fine; this one still differs in looking at every adjacent pair rather than
+ * only the transit leg being boarded. Delete with the impossible branch.
  */
 export function hasTemporalOverlap(legs: Leg[]): boolean {
   for (let i = 1; i < legs.length; i++) {
@@ -128,13 +130,9 @@ export function hasTemporalOverlap(legs: Leg[]): boolean {
 
 /**
  * Whether the interchange into the leg at `index` still guarantees the
- * connection, given when you actually arrive.
- *
- * A guarantee is bounded by `maximumWaitTime`: the connecting service holds
- * for that many seconds past its own scheduled departure, and arriving later
- * means missing it despite the guarantee. An absent `maximumWaitTime` means it
- * waits however long it takes. Arrival is the end of the leg immediately
- * before, so an intervening walk counts against the deadline.
+ * connection. A guarantee lasts `maximumWaitTime` seconds past the connecting
+ * service's scheduled departure; absent, it waits indefinitely. Arrival is the
+ * end of the leg immediately before, so an intervening walk counts.
  */
 function interchangeHolds(legs: Leg[], index: number): boolean {
   const interchange = previousTransitLeg(legs, index)?.interchangeTo;
@@ -146,18 +144,16 @@ function interchangeHolds(legs: Leg[], index: number): boolean {
     interchange.maximumWaitTime,
   );
   const arrival = parseISO(legs[index - 1].expectedEndTime);
-  // Unparseable times keep the guarantee, so bad data suppresses a warning
-  // rather than inventing one.
+  // Bad data suppresses a warning rather than inventing one.
   if (isNaN(deadline.getTime()) || isNaN(arrival.getTime())) return true;
 
   return arrival <= deadline;
 }
 
 /**
- * The transit leg you alight from, which is the one carrying the interchange
- * relationship. Walks back past non-transit legs: a bus -> walk -> bus
- * transfer overlaps on the (walk, bus) pair, but it is the first bus that
- * holds `interchangeTo`.
+ * The transit leg you alight from, which carries the interchange. Walks back
+ * past non-transit legs: bus -> walk -> bus overlaps on the (walk, bus) pair,
+ * but the first bus holds `interchangeTo`.
  */
 function previousTransitLeg(legs: Leg[], index: number): Leg | undefined {
   for (let i = index - 1; i >= 0; i--) {

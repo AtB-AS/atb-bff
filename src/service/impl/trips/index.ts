@@ -25,6 +25,7 @@ import {
   TransportSubmode,
   Mode,
 } from '../../../graphql/journey/journeyplanner-types_v3';
+import {withTransferRisk, getTripTransferRisk} from '@atb-as/utils';
 import {Result} from '@badrap/result';
 import * as Boom from '@hapi/boom';
 import {APIError} from '../../../utils/api-error';
@@ -242,15 +243,19 @@ export default (): ITrips_v2 => {
         }),
       );
 
-      const adjustedLegs = adjustNonTransitExpectedTimes(legs);
+      const adjustedLegs = withTransferRisk(
+        adjustNonTransitExpectedTimes(legs),
+      );
 
       const status = determineTripStatus(adjustedLegs);
+      const transferRisk = getTripTransferRisk(adjustedLegs);
       const {aimedStartTime, aimedEndTime} =
         computeTripAimedStartEnd(adjustedLegs);
 
       request.logfmt.with({
         singleTrip_version: 'v3',
         singleTrip_status: status,
+        singleTrip_transferRisk: transferRisk ?? 'none',
         singleTrip_totalLegs: tripPattern.legs.length.toString(),
         singleTrip_transitLegs: transitLegs.toString(),
         singleTrip_refreshed: refreshed.toString(),
@@ -270,8 +275,11 @@ export default (): ITrips_v2 => {
         .reduce((acc, leg) => acc + leg.distance, 0);
 
       return Result.ok({
+        // After the spread: clients POST the whole pattern back, so a value
+        // echoed from an earlier response must be overwritten, not kept.
         ...tripPattern,
         status,
+        transferRisk,
         aimedStartTime,
         aimedEndTime,
         expectedStartTime,

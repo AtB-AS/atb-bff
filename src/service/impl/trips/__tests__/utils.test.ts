@@ -1,6 +1,11 @@
 import {Mode} from '../../../../graphql/journey/journeyplanner-types_v3';
 import {Leg} from '../../../../types/trips';
 import {
+  TransferRisk,
+  withTransferRisk,
+  getTripTransferRisk,
+} from '@atb-as/utils';
+import {
   hasTemporalOverlap,
   computeTripAimedStartEnd,
   adjustNonTransitExpectedTimes,
@@ -382,6 +387,43 @@ describe('adjustNonTransitExpectedTimes', () => {
     // Second walk: 10:12 → 10:13
     expect(result[2].expectedStartTime).toBe('2024-01-01T10:12:00.000Z');
     expect(result[2].expectedEndTime).toBe('2024-01-01T10:13:00.000Z');
+  });
+});
+
+// The rule itself is covered in @atb-as/utils. These check that this repo's
+// Leg type feeds it correctly and that the trip-level value reaches the caller.
+describe('transfer risk over BFF legs', () => {
+  it('stamps the leg you might miss and reports it at trip level', () => {
+    const legs = withTransferRisk([
+      makeTransitLeg({expectedEndTime: '2024-01-01T10:10:00.000Z'}),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:09:00.000Z'}),
+    ]);
+    expect(legs[0].transferRisk).toBeUndefined();
+    expect(legs[1].transferRisk).toBe(TransferRisk.Uncertain);
+    expect(getTripTransferRisk(legs)).toBe(TransferRisk.Uncertain);
+  });
+
+  it('agrees with `hasTemporalOverlap` at a zero gap', () => {
+    // The two rules run side by side until clients stop reading
+    // `status === 'impossible'`, and phase 3 replaces one with the other.
+    const legs = [
+      makeTransitLeg({expectedEndTime: '2024-01-01T10:10:00.000Z'}),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:10:00.000Z'}),
+    ];
+    expect(hasTemporalOverlap(legs)).toBe(false);
+    expect(getTripTransferRisk(legs)).toBeUndefined();
+  });
+
+  it('reads interchangeTo off a BFF leg, so the guarantee gate fires', () => {
+    const legs = withTransferRisk([
+      makeTransitLeg({
+        expectedEndTime: '2024-01-01T10:10:00.000Z',
+        interchangeTo: {guaranteed: true},
+      }),
+      makeTransitLeg({expectedStartTime: '2024-01-01T10:00:00.000Z'}),
+    ]);
+    expect(legs[1].transferRisk).toBeUndefined();
+    expect(getTripTransferRisk(legs)).toBeUndefined();
   });
 });
 
