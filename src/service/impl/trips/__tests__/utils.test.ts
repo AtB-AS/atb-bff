@@ -1,10 +1,12 @@
 import {Mode} from '../../../../graphql/journey/journeyplanner-types_v3';
 import {Leg} from '../../../../types/trips';
-import {TransferRisk} from '@atb-as/utils';
 import {
-  hasTemporalOverlap,
+  TransferRisk,
   withTransferRisk,
   getTripTransferRisk,
+} from '@atb-as/utils';
+import {
+  hasTemporalOverlap,
   computeTripAimedStartEnd,
   adjustNonTransitExpectedTimes,
   determineTripStatus,

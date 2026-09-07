@@ -103,15 +103,6 @@ export function extractServiceJourneyIds(trip: TripPattern_v3) {
 
 // --- v3 singleTrip utilities ---
 
-// The transfer-risk rule and its trip-level aggregation live in @atb-as/utils,
-// shared with planner-web and the app. Re-exported here so call sites in this
-// module's siblings keep one import.
-export {
-  isTransitLeg,
-  withTransferRisk,
-  getTripTransferRisk,
-} from '@atb-as/utils';
-
 /**
  * Checks if any leg N+1's expectedStartTime is before leg N's expectedEndTime,
  * indicating a missed connection (impossible trip).

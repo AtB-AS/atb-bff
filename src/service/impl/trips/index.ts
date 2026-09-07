@@ -25,6 +25,7 @@ import {
   TransportSubmode,
   Mode,
 } from '../../../graphql/journey/journeyplanner-types_v3';
+import {withTransferRisk, getTripTransferRisk} from '@atb-as/utils';
 import {Result} from '@badrap/result';
 import * as Boom from '@hapi/boom';
 import {APIError} from '../../../utils/api-error';
@@ -36,8 +37,6 @@ import {
   computeTripAimedStartEnd,
   adjustNonTransitExpectedTimes,
   determineTripStatus,
-  withTransferRisk,
-  getTripTransferRisk,
 } from './utils';
 
 export default (): ITrips_v2 => {
