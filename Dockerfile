@@ -5,10 +5,12 @@ ENV PATH="$PNPM_HOME/bin:$PATH"
 RUN corepack enable
 
 FROM base AS build
-COPY pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm fetch --prod
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm fetch
 COPY . .
+RUN pnpm install --frozen-lockfile --prefer-offline
 RUN pnpm build
+RUN pnpm prune --prod
 
 FROM node:22.22-slim AS prod
 WORKDIR /app
