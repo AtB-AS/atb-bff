@@ -10,7 +10,11 @@ import {
   computeTripAimedStartEnd,
   adjustNonTransitExpectedTimes,
   determineTripStatus,
+  generateSingleTripQueryString,
+  parseTripQueryString,
 } from '../utils';
+import {TripPattern} from '../../../../types/trips';
+import {TripsQueryVariables} from '../journey-gql/trip.graphql-gen';
 
 function makeTransitLeg(overrides: Partial<Leg> = {}): Leg {
   return {
@@ -555,5 +559,52 @@ describe('determineTripStatus', () => {
       } as Partial<Leg>),
     ];
     expect(determineTripStatus(legs)).toBe('valid');
+  });
+});
+
+describe('generateSingleTripQueryString', () => {
+  const queryVariables = {
+    from: {name: 'A', coordinates: {latitude: 63.4, longitude: 10.4}},
+    to: {name: 'B', coordinates: {latitude: 63.5, longitude: 10.5}},
+    when: '2024-01-01T09:00:00.000Z',
+    arriveBy: false,
+    transferSlack: 0,
+    transferPenalty: 10,
+    waitReluctance: 1,
+    walkReluctance: 4,
+    walkSpeed: 0.8,
+    includeCancellations: true,
+  } as TripsQueryVariables;
+
+  const trip = {
+    legs: [makeTransitLeg(), makeTransitLeg()],
+  } as TripPattern;
+
+  function roundTrip(overrides: Partial<TripsQueryVariables> = {}) {
+    return parseTripQueryString(
+      generateSingleTripQueryString(trip, {...queryVariables, ...overrides}),
+    ).query;
+  }
+
+  it('preserves every parameter that affects which itinerary is picked', () => {
+    expect(roundTrip()).toMatchObject({
+      transferSlack: 0,
+      transferPenalty: 10,
+      waitReluctance: 1,
+      walkReluctance: 4,
+      walkSpeed: 0.8,
+    });
+  });
+
+  it('preserves a zero transferSlack rather than losing it as falsy', () => {
+    expect(roundTrip({transferSlack: 0})).toHaveProperty('transferSlack', 0);
+  });
+
+  it('re-times the search to just before the trip starts', () => {
+    expect(roundTrip().when).toBe('2024-01-01T09:59:00.000Z');
+  });
+
+  it('always resolves forward in time, even for an arriveBy search', () => {
+    expect(roundTrip({arriveBy: true}).arriveBy).toBe(false);
   });
 });
