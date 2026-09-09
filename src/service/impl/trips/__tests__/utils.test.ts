@@ -586,7 +586,7 @@ describe('generateSingleTripQueryString', () => {
     ).query;
   }
 
-  it('preserves every parameter that affects which itinerary is picked', () => {
+  it('preserves transfer/walk tuning parameters used to reproduce the selected itinerary', () => {
     expect(roundTrip()).toMatchObject({
       transferSlack: 0,
       transferPenalty: 10,
