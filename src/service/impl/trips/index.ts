@@ -154,7 +154,10 @@ export default (): ITrips_v2 => {
         TripsQueryVariables
       >({
         query: TripsDocument,
-        variables: queryWithIds.query,
+        variables: {
+          ...queryWithIds.query,
+          transferSlack: 0,
+        },
       });
 
       if (results.errors) {
