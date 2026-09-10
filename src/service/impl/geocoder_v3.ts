@@ -28,6 +28,11 @@ interface ReverseV3Params {
   layers?: GeocoderV3Layer[];
 }
 
+interface PlaceV3Params {
+  ids: string[];
+  lang?: string;
+}
+
 const FOCUS_WEIGHT = parseFloat(process.env.GEOCODER_V3_FOCUS_WEIGHT || '0.7');
 const RADIUS = parseInt(process.env.GEOCODER_V3_RADIUS || '60');
 
@@ -84,6 +89,23 @@ export default (): IGeocoderService_v3 => {
         });
         const result = await get<FeatureCollection<Point, LocationV3>>(
           `/geocoder/v3/reverse?${queryString}`,
+          request,
+        );
+        return Result.ok(result.features);
+      } catch (error) {
+        return Result.err(new APIError(error));
+      }
+    },
+    async getPlaces({ids, lang}, request) {
+      try {
+        const placeParams: PlaceV3Params = {ids, lang};
+        const queryString = qs.stringify(placeParams, {
+          allowDots: true,
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        const result = await get<FeatureCollection<Point, LocationV3>>(
+          `/geocoder/v3/place?${queryString}`,
           request,
         );
         return Result.ok(result.features);

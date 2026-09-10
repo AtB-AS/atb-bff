@@ -45,6 +45,7 @@ import {
   FeaturesQuery,
   FeaturesV3Query,
   LocationV3,
+  PlaceV3Query,
   ReverseFeaturesV3Query,
   QuaysCoordinatesPayload,
   ReverseFeaturesQuery,
@@ -101,6 +102,11 @@ export interface IGeocoderService_v3 {
 
   getFeaturesReverse(
     query: ReverseFeaturesV3Query,
+    request: Request<ReqRefDefaults>,
+  ): Promise<Result<Feature<Point, LocationV3>[], APIError>>;
+
+  getPlaces(
+    query: PlaceV3Query,
     request: Request<ReqRefDefaults>,
   ): Promise<Result<Feature<Point, LocationV3>[], APIError>>;
 }
