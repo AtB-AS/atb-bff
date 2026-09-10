@@ -157,7 +157,6 @@ export default (): ITrips_v2 => {
         variables: {
           ...queryWithIds.query,
           transferSlack: 0,
-          numTripPatterns: 20,
         },
       });
 
