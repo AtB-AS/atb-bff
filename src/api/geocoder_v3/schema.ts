@@ -2,6 +2,7 @@ import Joi from 'joi';
 import {
   FeaturesV3Query,
   geocoderV3Layers,
+  PlaceV3Query,
   ReverseFeaturesV3Query,
 } from '../../service/types';
 
@@ -27,4 +28,9 @@ export const getFeaturesReverseV3Request = Joi.object<ReverseFeaturesV3Query>({
     .items(Joi.string().valid(...geocoderV3Layers))
     .single(),
   limit: Joi.number(),
+});
+
+export const getPlacesV3Request = Joi.object<PlaceV3Query>({
+  ids: Joi.array().items(Joi.string()).single().max(100).required(),
+  lang: Joi.string(),
 });

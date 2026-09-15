@@ -110,6 +110,11 @@ export type ReverseFeaturesV3Query = {
   layers?: GeocoderV3Layer[];
 };
 
+export type PlaceV3Query = {
+  ids: string[];
+  lang?: string;
+};
+
 export interface LocationV3 {
   id: string;
   names: {
