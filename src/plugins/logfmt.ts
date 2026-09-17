@@ -61,7 +61,12 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
     server.ext('onPreHandler', (request, h) => {
       request.logfmt.with(flatten(request.query));
 
-      if (request.payload && typeof request.payload !== 'string') {
+      // Routes opt out of body logging with `plugins: {logfmt: {payload: false}}`.
+      if (
+        request.route.settings.plugins?.logfmt?.payload !== false &&
+        request.payload &&
+        typeof request.payload !== 'string'
+      ) {
         request.logfmt.with(flatten(request.payload));
       }
       return h.continue;

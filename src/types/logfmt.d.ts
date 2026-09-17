@@ -6,8 +6,16 @@ export interface Logger {
   log: () => void;
 }
 
+export interface LogFmtRouteOptions {
+  payload?: boolean;
+}
+
 declare module '@hapi/hapi' {
   export interface Request {
     logfmt: Logger;
+  }
+
+  export interface PluginSpecificConfiguration {
+    logfmt?: LogFmtRouteOptions;
   }
 }

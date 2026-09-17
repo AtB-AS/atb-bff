@@ -202,9 +202,7 @@ export default (): ITrips_v2 => {
 
       const now = new Date().toISOString();
 
-      let transitLegs = 0;
-      let refreshed = 0;
-      let refreshFailed = 0;
+      const failedLegIds: string[] = [];
 
       // Refetch all transit legs in parallel, keep non-transit legs as-is.
       // Failed fetches fall back to the original leg with its old refreshedAt.
@@ -213,8 +211,6 @@ export default (): ITrips_v2 => {
           if (!leg.id) {
             return {...leg, refreshedAt: now};
           }
-
-          transitLegs++;
 
           try {
             const result = await client.query<
@@ -226,7 +222,6 @@ export default (): ITrips_v2 => {
             });
 
             if (result.data.leg) {
-              refreshed++;
               // Preserve interchangeTo/interchangeFrom from the original leg:
               // they're trip-level relationships that journey-planner does not
               // populate when a leg is queried in isolation by id.
@@ -241,7 +236,7 @@ export default (): ITrips_v2 => {
             // Query failed — leg keeps its old refreshedAt
           }
 
-          refreshFailed++;
+          failedLegIds.push(leg.id);
           return leg;
         }),
       );
@@ -255,14 +250,32 @@ export default (): ITrips_v2 => {
       const {aimedStartTime, aimedEndTime} =
         computeTripAimedStartEnd(adjustedLegs);
 
+      // The pattern the client posts back carries the compressedQuery we set on
+      // the original /bff/v2/trips response, which encodes the search that
+      // produced this trip. It is the only link back to that search: requestId
+      // is per-request, so it cannot join the two log lines.
+      const compressedQuery = (tripPattern as {compressedQuery?: string})
+        .compressedQuery;
+
+      // Until 'impossible' status is removed, we use status === 'stale',
+      // because 'impossible' means the data is not stale.
+      // Otherwise we should use status !== 'valid' in the future.
+      const degraded = failedLegIds.length > 0 || status === 'stale';
+
+      // A failed refetch still returns 200 with the stale leg, so these two
+      // fields are the only signal that journey-planner is degrading.
       request.logfmt.with({
-        singleTrip_version: 'v3',
         singleTrip_status: status,
-        singleTrip_transferRisk: transferRisk ?? 'none',
-        singleTrip_totalLegs: tripPattern.legs.length.toString(),
-        singleTrip_transitLegs: transitLegs.toString(),
-        singleTrip_refreshed: refreshed.toString(),
-        singleTrip_refreshFailed: refreshFailed.toString(),
+        singleTrip_refreshFailed: failedLegIds.length.toString(),
+        ...(failedLegIds.length > 0 && {
+          singleTrip_failedLegIds: failedLegIds.join(','),
+        }),
+        // Replay key for the original search. Only on degraded responses: it
+        // embeds the user's from/to, so it is kept off the happy path.
+        ...(degraded &&
+          compressedQuery && {
+            singleTrip_compressedQuery: compressedQuery,
+          }),
       });
 
       const expectedStartTime = adjustedLegs[0].expectedStartTime;
