@@ -267,11 +267,6 @@ export default (): ITrips_v2 => {
       // Otherwise we should use status !== 'valid' in the future.
       const degraded = failedLegIds.length > 0 || status === 'stale';
 
-      // Skip successful logs
-      if (!degraded) {
-        request.logfmt.suppress();
-      }
-
       request.logfmt.with({
         singleTrip_version: 'v3',
         singleTrip_status: status,
@@ -286,11 +281,12 @@ export default (): ITrips_v2 => {
         ...(failedLegIds.length > 0 && {
           singleTrip_failedLegIds: failedLegIds.join(','),
         }),
-        // Replay key for the original search. Every line written here is a
-        // degraded or errored refresh, so this never reaches the happy path.
-        ...(compressedQuery && {
-          singleTrip_compressedQuery: compressedQuery,
-        }),
+        // Replay key for the original search. Only on degraded responses: it
+        // embeds the user's from/to, so it is kept off the happy path.
+        ...(degraded &&
+          compressedQuery && {
+            singleTrip_compressedQuery: compressedQuery,
+          }),
       });
 
       const expectedStartTime = adjustedLegs[0].expectedStartTime;

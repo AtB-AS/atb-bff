@@ -49,18 +49,12 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
         l = l.namespace(options.defaultFields(request));
       }
 
-      let suppressed = false;
-
       return {
-        log: (force = false) => {
-          if (suppressed && !force) return;
+        log: () => {
           if (options.json) l.stringify = JSON.stringify;
           l.log({}, options.stream);
         },
         with: (obj) => (l = l.namespace(obj)),
-        suppress: () => {
-          suppressed = true;
-        },
       };
     };
     server.decorate('request', 'logfmt', logger, {apply: true});
@@ -84,15 +78,16 @@ const plugin: Hapi.Plugin<LogFmtOptions> = {
       return h.continue;
     });
     server.events.on('response', (request) => {
-      let isError = false;
       if (request.raw.res && request.raw.res.statusCode) {
         const statusCode = request.raw.res.statusCode;
-        isError = statusCode >= 400;
         request.logfmt.with({code: statusCode.toString()});
-        request.logfmt.with({severity: isError ? 'ERROR' : 'INFO'});
+        if (statusCode >= 400) {
+          request.logfmt.with({severity: 'ERROR'});
+        } else {
+          request.logfmt.with({severity: 'INFO'});
+        }
       }
-      // An error is always logged, even if the handler suppressed the line.
-      request.logfmt.log(isError);
+      request.logfmt.log();
     });
   },
   name: 'logfmt',

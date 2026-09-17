@@ -33,22 +33,6 @@ describe('logfmt', () => {
       options: {plugins: {logfmt: {payload: false}}},
       handler: (_, h) => h.response().code(200),
     });
-    server.route({
-      method: 'POST',
-      path: '/suppressed',
-      handler: (request, h) => {
-        request.logfmt.suppress();
-        return h.response().code(200);
-      },
-    });
-    server.route({
-      method: 'POST',
-      path: '/suppressed-error',
-      handler: (request) => {
-        request.logfmt.suppress();
-        throw new Error('boom');
-      },
-    });
   });
 
   const post = async (url: string) => {
@@ -71,14 +55,5 @@ describe('logfmt', () => {
     expect(optedOut).toHaveLength(1);
     expect(optedOut[0]).not.toContain('legs_0_id');
     expect(optedOut[0]).toContain('"code":"200"');
-  });
-
-  it('drops a suppressed line, unless the response is an error', async () => {
-    expect(await post('/suppressed')).toHaveLength(0);
-
-    // Errors override suppression, so a failure can never be logged away.
-    expect(await post('/suppressed-error')).toEqual([
-      expect.stringContaining('"severity":"ERROR"'),
-    ]);
   });
 });
