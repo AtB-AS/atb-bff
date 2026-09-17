@@ -202,8 +202,6 @@ export default (): ITrips_v2 => {
 
       const now = new Date().toISOString();
 
-      let transitLegs = 0;
-      let refreshed = 0;
       const failedLegIds: string[] = [];
 
       // Refetch all transit legs in parallel, keep non-transit legs as-is.
@@ -213,8 +211,6 @@ export default (): ITrips_v2 => {
           if (!leg.id) {
             return {...leg, refreshedAt: now};
           }
-
-          transitLegs++;
 
           try {
             const result = await client.query<
@@ -226,7 +222,6 @@ export default (): ITrips_v2 => {
             });
 
             if (result.data.leg) {
-              refreshed++;
               // Preserve interchangeTo/interchangeFrom from the original leg:
               // they're trip-level relationships that journey-planner does not
               // populate when a leg is queried in isolation by id.
@@ -267,16 +262,10 @@ export default (): ITrips_v2 => {
       // Otherwise we should use status !== 'valid' in the future.
       const degraded = failedLegIds.length > 0 || status === 'stale';
 
+      // A failed refetch still returns 200 with the stale leg, so these two
+      // fields are the only signal that journey-planner is degrading.
       request.logfmt.with({
-        singleTrip_version: 'v3',
         singleTrip_status: status,
-        singleTrip_transferRisk: transferRisk ?? 'none',
-        singleTrip_modes: adjustedLegs.map((leg) => leg.mode).join(','),
-        singleTrip_serviceJourneyIds:
-          extractServiceJourneyIds(tripPattern).join(',') || 'none',
-        singleTrip_totalLegs: tripPattern.legs.length.toString(),
-        singleTrip_transitLegs: transitLegs.toString(),
-        singleTrip_refreshed: refreshed.toString(),
         singleTrip_refreshFailed: failedLegIds.length.toString(),
         ...(failedLegIds.length > 0 && {
           singleTrip_failedLegIds: failedLegIds.join(','),
