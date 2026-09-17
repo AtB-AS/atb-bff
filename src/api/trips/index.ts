@@ -113,6 +113,8 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
     options: {
       tags: ['api', 'singleTrip'],
       description: 'Refresh a single trip pattern',
+      // only log the singleTrip-specific logging
+      plugins: {logfmt: {payload: false}},
       validate: postSingleTripV3Request,
     },
     handler: async (request, h) => {
