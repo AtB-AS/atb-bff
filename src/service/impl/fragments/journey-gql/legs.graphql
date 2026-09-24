@@ -121,6 +121,9 @@ fragment leg on Leg {
             stopPlace {
                 ...stopPlace
             }
+            tariffZones {
+                id
+            }
         }
         date
         stopPositionInPattern
