@@ -83,13 +83,14 @@ You can see the status of each deploy [here](https://github.com/AtB-AS/atb-bff/a
 
 ## Deploy to prod
 
-1. Go to [Releases](https://github.com/AtB-AS/atb-bff/releases)
-2. Click "Draft a new release"
-3. Create a new tag (formatted something like "v1.9.0"). When selecting version number, follow these guidelines:
-    - **Major**: Breaking change. This version breaks functionality for older clients.
-    - **Minor**: This version extends functionality.
-    - **Patch**: This version affects no APIs at all, just changes to existing code.
-4. Click "Generate release notes"
-5. Click "Publish release"
+To release to production, merge the open Release PR (created automatically by
+release-please), which publishes a GitHub Release and triggers the production
+deployment.
+
+The version is bumped automatically from the Conventional Commit PR titles:
+
+- **Major**: Breaking change (`feat!:`). This version breaks functionality for older clients.
+- **Minor**: `feat:`. This version extends functionality.
+- **Patch**: `fix:`. This version affects no APIs at all, just changes to existing code.
 
 You can see the status of the deploy [here](https://github.com/AtB-AS/atb-bff/actions/workflows/docker_gcp-infra.yaml).
