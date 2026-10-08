@@ -47,12 +47,15 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
         if (result.trip.tripPatterns.length > 0) {
           break;
         }
-        if (!result.trip.nextPageCursor) {
+        const retryCursor = query.arriveBy
+          ? result.trip.previousPageCursor
+          : result.trip.nextPageCursor;
+        if (!retryCursor) {
           break;
         }
 
         retryCount++;
-        cursor = result.trip.nextPageCursor;
+        cursor = retryCursor;
       }
       return result!;
     },
