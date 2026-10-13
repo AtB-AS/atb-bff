@@ -14,6 +14,8 @@ const plugin: Hapi.Plugin<Options> = {
       request.headers['atb-app-version'];
     const webshopVersion = (request: Hapi.Request) =>
       request.headers['atb-webshop-version'];
+    const plannerWebVersion = (request: Hapi.Request) =>
+      request.headers['atb-planner-web-version'];
     const correlationId = (request: Hapi.Request) =>
       request.headers['atb-correlation-id'] || randomUUID();
     const customerAccountId = (request: Hapi.Request) =>
@@ -24,6 +26,9 @@ const plugin: Hapi.Plugin<Options> = {
     server.decorate('request', 'requestId', requestId, {apply: true});
     server.decorate('request', 'appVersion', appVersion, {apply: true});
     server.decorate('request', 'webshopVersion', webshopVersion, {apply: true});
+    server.decorate('request', 'plannerWebVersion', plannerWebVersion, {
+      apply: true,
+    });
     server.decorate('request', 'correlationId', correlationId, {apply: true});
     server.decorate('request', 'customerAccountId', customerAccountId, {
       apply: true,

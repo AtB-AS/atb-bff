@@ -62,6 +62,7 @@ export const logResponse = ({
     requestId: request['requestId'],
     installId: request['installId'],
     webshopVersion: request['webshopVersion'],
+    plannerWebVersion: request['plannerWebVersion'],
     appVersion: request['appVersion'],
     customerAccountId: customerAccountId,
     rateLimitUsed: rateLimitUsed,
