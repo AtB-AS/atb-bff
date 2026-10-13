@@ -7,6 +7,7 @@ declare module '@hapi/hapi' {
     requestId?: string;
     appVersion?: string;
     webshopVersion?: string;
+    plannerWebVersion?: string;
     correlationId?: string;
     customerAccountId?: string;
     tlsVersion?: string;
