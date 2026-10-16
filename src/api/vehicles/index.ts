@@ -37,6 +37,8 @@ export default (server: Hapi.Server) => (service: IVehiclesService) => {
       plugins: {
         websocket: {
           only: true,
+          // Send a WebSocket Ping every 30s and terminate peers that don't Pong within an interval.
+          autoping: 30_000,
           connect: ({ctx, ws, req}) => {
             if (!req.url) {
               if (ws.readyState == WebSocket.OPEN) {
