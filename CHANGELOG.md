@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.21.1](https://github.com/AtB-AS/atb-bff/compare/v3.21.0...v3.21.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* Add autoping on websocket connection to clean up ghost clients ([#488](https://github.com/AtB-AS/atb-bff/issues/488)) ([513a7be](https://github.com/AtB-AS/atb-bff/commit/513a7be649303bf624fa9866137a4e04aacbc74c))
+
 ## [3.21.0](https://github.com/AtB-AS/atb-bff/compare/v3.20.0...v3.21.0) (2026-10-13)
 
 
