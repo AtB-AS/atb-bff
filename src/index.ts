@@ -19,6 +19,7 @@ import geocoderV3Routes from './api/geocoder_v3';
 import departuresGroupedRoutes from './api/departures-grouped';
 import realtimeRoutes from './api/realtime';
 import healthRoutes from './api/health';
+import warmupRoutes, {startWarmup} from './api/warmup';
 import enrollmentRoutes from './api/enrollment';
 import tripsRoutes from './api/trips';
 import departureRoutes from './api/departures';
@@ -52,6 +53,7 @@ process.on('unhandledRejection', (err) => {
     });
 
     healthRoutes(server);
+    warmupRoutes(server);
     departuresGroupedRoutes(server)(departuresGroupedService());
     geocoderRoutes(server)(geocoderService());
     geocoderV3Routes(server)(geocoderV3Service());
@@ -71,6 +73,8 @@ process.on('unhandledRejection', (err) => {
     await server.start();
 
     console.info('✅ Server started at http://localhost:' + port);
+
+    void startWarmup(server);
   } catch (error: any) {
     console.error(
       `failed to initialize server: ${error?.message}, terminating process.`,
