@@ -4,9 +4,7 @@ export const onlyUniques = <T>(value: T, index: number, self: T[]) =>
   self.indexOf(value) === index;
 
 /**
- * Removes duplicate stop places, keeping the first occurrence per `id` in
- * order. Linear: the previous `findIndex` dedupe was O(n²) and cost ~400ms
- * CPU per Troms `stop-places/mode` request (14k quays).
+ * Removes duplicate stop places, keeping the first occurrence per id in order.
  */
 export const uniqueStopPlacesById = <T extends {id: string}>(
   stopPlaces: T[],
