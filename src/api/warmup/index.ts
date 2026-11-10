@@ -1,5 +1,5 @@
-/* eslint no-console: 0 */
 import Hapi from '@hapi/hapi';
+import {logInfo} from '../../utils/log';
 
 /**
  * A fresh pod pays a one-time CPU cost while V8 compiles and optimizes the request pipeline
@@ -42,7 +42,7 @@ async function warmup(server: Hapi.Server) {
     runWarmup(server).then(() => 'done' as const),
     timeout,
   ]).catch(() => 'failed' as const);
-  console.info(`🔥 Warmup ${outcome} in ${Date.now() - started}ms`);
+  logInfo('Warmup finished', {outcome, duration: Date.now() - started});
 }
 
 async function runWarmup(server: Hapi.Server) {

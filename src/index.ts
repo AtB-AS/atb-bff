@@ -1,6 +1,7 @@
 /* eslint no-console: 0 */
 import {Boom} from '@hapi/boom';
 import {createServer, initializePlugins} from './server';
+import {logInfo} from './utils/log';
 
 import geocoderService from './service/impl/geocoder';
 import geocoderV3Service from './service/impl/geocoder_v3';
@@ -38,7 +39,7 @@ process.on('unhandledRejection', (err) => {
 
 (async () => {
   try {
-    console.info('⏳ Starting server...');
+    logInfo('Starting server');
 
     const port = process.env['PORT'] || '8080';
     const server = createServer({
@@ -72,7 +73,7 @@ process.on('unhandledRejection', (err) => {
     await server.initialize();
     await server.start();
 
-    console.info('✅ Server started at http://localhost:' + port);
+    logInfo('Server started', {port: Number(port)});
 
     void startWarmup(server);
   } catch (error: any) {
