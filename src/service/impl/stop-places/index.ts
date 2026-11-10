@@ -1,3 +1,4 @@
+import {ReqRefDefaults, Request} from '@hapi/hapi';
 import {IStopPlacesService} from '../../interface';
 import {journeyPlannerClient} from '../../../graphql/graphql-client';
 import {Result} from '@badrap/result';
@@ -24,49 +25,26 @@ import {
   GetStopPlaceParentQuery,
   GetStopPlaceParentQueryVariables,
 } from './journey-gql/stop-place-parent.graphql-gen';
-import {StopPlaces} from '../../types';
+import {StopPlaces, StopPlacesByModeQuery} from '../../types';
 import {getDistancesResult} from '../../../api/stop-places/schema';
 import {DistancesResult} from '../../../api/stop-places/types';
 import Joi from 'joi';
 import {get} from '../../../utils/fetch-client';
 import {getOrg} from '../../../utils/get-org';
+import {CACHE_TTL_MS_SERVER_STOP_PLACES_MODE} from '../../../config/env';
+import {createStopPlacesByModeCache} from './stop-places-by-mode-cache';
 
 export default (): IStopPlacesService => {
+  const stopPlacesByModeCache = createStopPlacesByModeCache({
+    ttlMs: CACHE_TTL_MS_SERVER_STOP_PLACES_MODE,
+    maxEntries: 100,
+  });
+
   return {
-    async getStopPlacesByMode(query, request) {
-      const result = await journeyPlannerClient(request).query<
-        GetStopPlacesByModeQuery,
-        GetStopPlacesByModeQueryVariables
-      >({
-        query: GetStopPlacesByModeDocument,
-        variables: {
-          authorities: query.authorities,
-          transportModes: query.transportModes,
-        },
-      });
-
-      if (result.errors) {
-        return Result.err(new APIError(result.errors));
-      }
-
-      try {
-        const uniqueStopPlaces = uniqueStopPlacesById(
-          result.data.lines
-            .filter((line) =>
-              filterTransportModes(
-                {submodes: query.transportSubmodes},
-                undefined,
-                line.transportSubmode,
-              ),
-            )
-            .flatMap((line) => line.quays)
-            .map((quay) => quay.stopPlace)
-            .filter(isDefined),
-        );
-        return Result.ok(uniqueStopPlaces);
-      } catch (error) {
-        return Result.err(new APIError(error));
-      }
+    getStopPlacesByMode(query, request) {
+      return stopPlacesByModeCache.getOrLoad(query, () =>
+        fetchStopPlacesByMode(query, request),
+      );
     },
     async getStopPlaceConnections(query, request) {
       const result = await journeyPlannerClient(request).query<
@@ -218,4 +196,43 @@ function getReachableQuays(quays: QuayFragment[], fromStopPlaceId: string) {
     (quay) => quay.stopPlace?.id !== fromStopPlaceId,
   );
   return reachableQuaysOnLineWithoutFromStopPlace;
+}
+
+async function fetchStopPlacesByMode(
+  query: StopPlacesByModeQuery,
+  request: Request<ReqRefDefaults>,
+): Promise<Result<StopPlaces, APIError>> {
+  const result = await journeyPlannerClient(request).query<
+    GetStopPlacesByModeQuery,
+    GetStopPlacesByModeQueryVariables
+  >({
+    query: GetStopPlacesByModeDocument,
+    variables: {
+      authorities: query.authorities,
+      transportModes: query.transportModes,
+    },
+  });
+
+  if (result.errors) {
+    return Result.err(new APIError(result.errors));
+  }
+
+  try {
+    const uniqueStopPlaces = uniqueStopPlacesById(
+      result.data.lines
+        .filter((line) =>
+          filterTransportModes(
+            {submodes: query.transportSubmodes},
+            undefined,
+            line.transportSubmode,
+          ),
+        )
+        .flatMap((line) => line.quays)
+        .map((quay) => quay.stopPlace)
+        .filter(isDefined),
+    );
+    return Result.ok(uniqueStopPlaces);
+  } catch (error) {
+    return Result.err(new APIError(error));
+  }
 }
