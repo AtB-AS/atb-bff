@@ -6,7 +6,7 @@ import {
   GetStopPlaceConnectionsQuery,
   GetStopPlaceConnectionsQueryVariables,
 } from './journey-gql/stop-place-connections.graphql-gen';
-import {isDefined, onlyUniquesBasedOnField, orgToEnturOrgNoMap} from './utils';
+import {isDefined, uniqueStopPlacesById, orgToEnturOrgNoMap} from './utils';
 import {APIError} from '../../../utils/api-error';
 import {
   GetStopPlacesByModeDocument,
@@ -50,18 +50,19 @@ export default (): IStopPlacesService => {
       }
 
       try {
-        const uniqueStopPlaces = result.data.lines
-          .filter((line) =>
-            filterTransportModes(
-              {submodes: query.transportSubmodes},
-              undefined,
-              line.transportSubmode,
-            ),
-          )
-          .flatMap((line) => line.quays)
-          .map((quay) => quay.stopPlace)
-          .filter(isDefined)
-          .filter(onlyUniquesBasedOnField('id'));
+        const uniqueStopPlaces = uniqueStopPlacesById(
+          result.data.lines
+            .filter((line) =>
+              filterTransportModes(
+                {submodes: query.transportSubmodes},
+                undefined,
+                line.transportSubmode,
+              ),
+            )
+            .flatMap((line) => line.quays)
+            .map((quay) => quay.stopPlace)
+            .filter(isDefined),
+        );
         return Result.ok(uniqueStopPlaces);
       } catch (error) {
         return Result.err(new APIError(error));
@@ -100,9 +101,9 @@ export default (): IStopPlacesService => {
 
       const reachableStopPlaces = reachableQuays.map((quay) => quay.stopPlace);
 
-      const uniqueStopPlaces = reachableStopPlaces
-        .filter(isDefined)
-        .filter(onlyUniquesBasedOnField('id'));
+      const uniqueStopPlaces = uniqueStopPlacesById(
+        reachableStopPlaces.filter(isDefined),
+      );
 
       try {
         return Result.ok(uniqueStopPlaces ?? []);
