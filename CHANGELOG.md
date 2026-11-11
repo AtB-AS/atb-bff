@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.21.2](https://github.com/AtB-AS/atb-bff/compare/v3.21.1...v3.21.2) (2026-11-10)
+
+
+### Bug Fixes
+
+* Add in-memory cache of stop places by mode ([#492](https://github.com/AtB-AS/atb-bff/issues/492)) ([27d89c3](https://github.com/AtB-AS/atb-bff/commit/27d89c3ce34e2817b1e98d717fb9e1f20b513e2d))
+
 ## [3.21.1](https://github.com/AtB-AS/atb-bff/compare/v3.21.0...v3.21.1) (2026-11-10)
 
 
