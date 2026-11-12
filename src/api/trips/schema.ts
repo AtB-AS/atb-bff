@@ -29,6 +29,7 @@ export const postTripsRequest = {
     arriveBy: Joi.bool().required(),
     when: Joi.date(),
     cursor: Joi.string(),
+    numTripPatterns: Joi.number().integer().min(1),
     transferSlack: Joi.number(),
     transferPenalty: Joi.number(),
     waitReluctance: Joi.number(),
