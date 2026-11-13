@@ -133,19 +133,26 @@ export function hasTemporalOverlap(legs: Leg[]): boolean {
 /**
  * Whether the interchange into the leg at `index` still guarantees the
  * connection. A guarantee lasts `maximumWaitTime` seconds past the connecting
- * service's scheduled departure; absent, it waits indefinitely. Arrival is the
- * end of the leg immediately before, so an intervening walk counts.
+ * service's scheduled departure; absent, it waits indefinitely. Entur sends
+ * `-1` rather than null when no limit is set, so a negative value counts as
+ * absent.
+ *
+ * Arrival is when the service you alight from arrives, not the end of a walk
+ * after it: Entur counts walk time and slack as covered by the guarantee.
  */
 function interchangeHolds(legs: Leg[], index: number): boolean {
-  const interchange = previousTransitLeg(legs, index)?.interchangeTo;
-  if (interchange?.guaranteed !== true) return false;
-  if (interchange.maximumWaitTime == null) return true;
+  const alightedFrom = previousTransitLeg(legs, index);
+  const interchange = alightedFrom?.interchangeTo;
+  if (!alightedFrom || interchange?.guaranteed !== true) return false;
+  if (interchange.maximumWaitTime == null || interchange.maximumWaitTime < 0) {
+    return true;
+  }
 
   const deadline = addSeconds(
     parseISO(legs[index].aimedStartTime),
     interchange.maximumWaitTime,
   );
-  const arrival = parseISO(legs[index - 1].expectedEndTime);
+  const arrival = parseISO(alightedFrom.expectedEndTime);
   // Bad data suppresses a warning rather than inventing one.
   if (isNaN(deadline.getTime()) || isNaN(arrival.getTime())) return true;
 
