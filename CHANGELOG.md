@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.22.0](https://github.com/AtB-AS/atb-bff/compare/v3.21.2...v3.22.0) (2026-11-13)
+
+
+### Features
+
+* support numTripPatterns in trips query ([#494](https://github.com/AtB-AS/atb-bff/issues/494)) ([e0798d7](https://github.com/AtB-AS/atb-bff/commit/e0798d7404a5c1dc681a15d10d1010d695a2432c))
+
+
+### Bug Fixes
+
+* handle unset maximumWaitTime and walk time on guaranteed interchanges ([#496](https://github.com/AtB-AS/atb-bff/issues/496)) ([7614ec0](https://github.com/AtB-AS/atb-bff/commit/7614ec08f83a9bbad9acd74ca559a15bcdb1c6e1))
+
 ## [3.21.2](https://github.com/AtB-AS/atb-bff/compare/v3.21.1...v3.21.2) (2026-11-10)
 
 
