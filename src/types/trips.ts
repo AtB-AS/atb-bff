@@ -27,6 +27,11 @@ export type TripPattern = Required<TripsQuery>['trip']['tripPatterns'][0] & {
   aimedEndTime?: string;
 };
 
+export type TripsQueryPayload = Omit<TripsQueryVariables, 'via'> & {
+  /** ID of a stop the trip must board or alight at. */
+  via?: string;
+};
+
 export type TripsQueryWithJourneyIds = {
   query: TripsQueryVariables;
   journeyIds: string[];

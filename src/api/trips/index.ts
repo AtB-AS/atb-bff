@@ -6,6 +6,7 @@ import {
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
   TripPattern,
+  TripsQueryPayload,
   TripsQueryWithJourneyIds,
 } from '../../types/trips';
 import {parseTripQueryString} from '../../service/impl/trips/utils';
@@ -33,7 +34,11 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       validate: postTripsRequest,
     },
     handler: async (request, h) => {
-      const query = request.payload as unknown as TripsQueryVariables;
+      const {via, ...payload} = request.payload as TripsQueryPayload;
+      const query: TripsQueryVariables = {
+        ...payload,
+        via: via ? [{visit: {stopLocationIds: [via]}}] : undefined,
+      };
 
       // Retry trip search until there is at least one trip pattern
       let retryCount = 0;
