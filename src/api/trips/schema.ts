@@ -48,7 +48,13 @@ export const postTripsRequest = {
     }).optional(),
     includeCancellations: Joi.bool().optional(),
     lineFilter: Joi.array().items(Joi.string()),
-    via: Joi.string(),
+    via: Joi.object<Location>({
+      place: Joi.string(),
+      coordinates: Joi.object({
+        latitude: Joi.number(),
+        longitude: Joi.number(),
+      }),
+    }).xor('place', 'coordinates'),
   }),
 };
 

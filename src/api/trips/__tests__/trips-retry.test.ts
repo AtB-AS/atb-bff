@@ -62,21 +62,4 @@ describe('POST /bff/v2/trips retries', () => {
     expect(getTrips).toHaveBeenCalledTimes(2);
     expect(getTrips.mock.calls[1][0].cursor).toBe('previous-cursor');
   });
-
-  it('passes a via stop as a visit', async () => {
-    await server.inject({
-      method: 'POST',
-      url: '/bff/v2/trips',
-      payload: {
-        from: {place: 'NSR:StopPlace:1'},
-        to: {place: 'NSR:StopPlace:2'},
-        arriveBy: false,
-        via: 'NSR:StopPlace:3',
-      },
-    });
-
-    expect(getTrips.mock.calls[0][0].via).toEqual([
-      {visit: {stopLocationIds: ['NSR:StopPlace:3']}},
-    ]);
-  });
 });

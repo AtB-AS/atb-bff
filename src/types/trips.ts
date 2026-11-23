@@ -2,7 +2,7 @@ import {
   TripsQuery,
   TripsQueryVariables,
 } from '../service/impl/trips/journey-gql/trip.graphql-gen';
-import {StreetMode} from '../graphql/journey/journeyplanner-types_v3';
+import {Location, StreetMode} from '../graphql/journey/journeyplanner-types_v3';
 import {
   TripFragment,
   TripPatternFragment,
@@ -28,8 +28,7 @@ export type TripPattern = Required<TripsQuery>['trip']['tripPatterns'][0] & {
 };
 
 export type TripsQueryPayload = Omit<TripsQueryVariables, 'via'> & {
-  /** ID of a stop the trip must board or alight at. */
-  via?: string;
+  via?: Pick<Location, 'place' | 'coordinates'>;
 };
 
 export type TripsQueryWithJourneyIds = {

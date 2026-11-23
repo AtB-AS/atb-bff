@@ -37,7 +37,13 @@ export default (server: Hapi.Server) => (service: ITrips_v2) => {
       const {via, ...payload} = request.payload as TripsQueryPayload;
       const query: TripsQueryVariables = {
         ...payload,
-        via: via ? [{visit: {stopLocationIds: [via]}}] : undefined,
+        via: via && [
+          {
+            visit: via.place
+              ? {stopLocationIds: [via.place]}
+              : {coordinate: via.coordinates},
+          },
+        ],
       };
 
       // Retry trip search until there is at least one trip pattern
