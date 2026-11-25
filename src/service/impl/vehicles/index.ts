@@ -63,7 +63,7 @@ export default (): IVehiclesService => ({
           // than the newest one already seen.
           const vehicle = pickNewestVehicleUpdate(
             data.vehicles?.filter(
-              (v) => v.serviceJourney?.id === query.serviceJourneyId,
+              (v) => v?.serviceJourney?.id === query.serviceJourneyId,
             ) ?? [],
           );
           if (!vehicle) return;
