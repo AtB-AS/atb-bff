@@ -1,42 +1,44 @@
 import {VehicleFragment} from '../fragments/vehicles-gql/vehicle.graphql-gen';
 
-const toTimestamp = (vehicle: VehicleFragment): number | undefined => {
-  if (!vehicle.lastUpdated) return undefined;
-  const timestamp = new Date(vehicle.lastUpdated).getTime();
-  return Number.isNaN(timestamp) ? undefined : timestamp;
+/**
+ * Returns `lastUpdated` as epoch milliseconds. A missing or invalid
+ * `lastUpdated` gives 0, so that it counts as older than any real time.
+ */
+const getLastUpdatedTime = (vehicle: VehicleFragment): number => {
+  const time = new Date(vehicle.lastUpdated).getTime();
+  return Number.isNaN(time) ? 0 : time;
+};
+
+const findNewest = (
+  vehicles: VehicleFragment[],
+): VehicleFragment | undefined => {
+  if (vehicles.length === 0) return undefined;
+
+  let newest = vehicles[0];
+  for (const vehicle of vehicles) {
+    if (getLastUpdatedTime(vehicle) > getLastUpdatedTime(newest)) {
+      newest = vehicle;
+    }
+  }
+  return newest;
 };
 
 /**
- * Creates a stateful filter for a single vehicle update stream. Upstream
- * updates can arrive out of order, so the filter remembers the newest
- * `lastUpdated` it has seen and rejects updates that are older than it.
- *
- * Given the vehicle updates in a message, it returns the newest one, or
- * `undefined` if all of them are older than an update already accepted.
- * Updates without a valid `lastUpdated` can't be ordered, and are only
- * returned if the message has no update with a valid `lastUpdated`.
+ * Upstream vehicle updates can arrive out of order. The returned function
+ * takes the vehicle updates of one message and returns the newest of them,
+ * or `undefined` if it is older than an update returned earlier.
  */
 export const createStaleVehicleUpdateFilter = () => {
-  let newestTimestamp: number | undefined;
+  let newestTimeSeen = 0;
 
   return (vehicles: VehicleFragment[]): VehicleFragment | undefined => {
-    let newest: VehicleFragment | undefined;
-    let newestInMessage: number | undefined;
-    for (const vehicle of vehicles) {
-      const timestamp = toTimestamp(vehicle);
-      if (timestamp === undefined) {
-        newest ??= vehicle;
-      } else if (newestInMessage === undefined || timestamp > newestInMessage) {
-        newest = vehicle;
-        newestInMessage = timestamp;
-      }
-    }
+    const newest = findNewest(vehicles);
+    if (!newest) return undefined;
 
-    if (newestInMessage === undefined) return newest;
-    if (newestTimestamp !== undefined && newestInMessage < newestTimestamp) {
-      return undefined;
-    }
-    newestTimestamp = newestInMessage;
+    const time = getLastUpdatedTime(newest);
+    if (time < newestTimeSeen) return undefined;
+
+    newestTimeSeen = time;
     return newest;
   };
 };

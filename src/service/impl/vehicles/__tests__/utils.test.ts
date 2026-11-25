@@ -69,13 +69,21 @@ describe('Function createStaleVehicleUpdateFilter', () => {
     expect(filter([])).toBeUndefined();
   });
 
-  it('accepts updates without a valid lastUpdated', () => {
+  it('accepts updates without a valid lastUpdated until a valid one is seen', () => {
     const filter = createStaleVehicleUpdateFilter();
-    filter([update('2026-11-25T12:00:05Z')]);
     const missing = update(undefined);
     const invalid = update('not a date');
     expect(filter([missing])).toBe(missing);
     expect(filter([invalid])).toBe(invalid);
+    const valid = update('2026-11-25T12:00:05Z');
+    expect(filter([valid])).toBe(valid);
+  });
+
+  it('discards updates without a valid lastUpdated after a valid one is seen', () => {
+    const filter = createStaleVehicleUpdateFilter();
+    filter([update('2026-11-25T12:00:05Z')]);
+    expect(filter([update(undefined)])).toBeUndefined();
+    expect(filter([update('not a date')])).toBeUndefined();
     // Does not reset the newest timestamp seen
     expect(filter([update('2026-11-25T12:00:04Z')])).toBeUndefined();
   });
