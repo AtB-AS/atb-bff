@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.23.0](https://github.com/AtB-AS/atb-bff/compare/v3.22.0...v3.23.0) (2026-11-25)
+
+
+### Features
+
+* add support for planner-web params in trip search ([#497](https://github.com/AtB-AS/atb-bff/issues/497)) ([6f264e1](https://github.com/AtB-AS/atb-bff/commit/6f264e19586db20515ef39b2afb28d6198c05454))
+
+
+### Bug Fixes
+
+* discard stale vehicle updates if we already have a newer one ([#498](https://github.com/AtB-AS/atb-bff/issues/498)) ([49f075e](https://github.com/AtB-AS/atb-bff/commit/49f075e4a8cb2ec84fddf5fcd5d1790dab6321cc))
+
 ## [3.22.0](https://github.com/AtB-AS/atb-bff/compare/v3.21.2...v3.22.0) (2026-11-13)
 
 
