@@ -1,15 +1,15 @@
 import Joi from 'joi';
 import {Location, Modes} from '../../graphql/journey/journeyplanner-types_v3';
-import {TripsQueryVariables} from '../../service/impl/trips/journey-gql/trip.graphql-gen';
 import {
   BookingTripsQueryParameters,
   BookingTripsQueryPayload,
   CompressedSingleTripQuery,
   NonTransitTripsQueryVariables,
+  TripsQueryPayload,
 } from '../../types/trips';
 
 export const postTripsRequest = {
-  payload: Joi.object<TripsQueryVariables>({
+  payload: Joi.object<TripsQueryPayload>({
     from: Joi.object<Location>({
       place: Joi.string().optional(),
       name: Joi.string().default('UNKNOWN'),
@@ -47,6 +47,14 @@ export const postTripsRequest = {
       ),
     }).optional(),
     includeCancellations: Joi.bool().optional(),
+    lineFilter: Joi.array().items(Joi.string()),
+    via: Joi.object<Location>({
+      place: Joi.string(),
+      coordinates: Joi.object({
+        latitude: Joi.number(),
+        longitude: Joi.number(),
+      }),
+    }).xor('place', 'coordinates'),
   }),
 };
 

@@ -19,6 +19,8 @@ export type TripsQueryVariables = Types.Exact<{
   numTripPatterns?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   searchWindow?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   includeCancellations?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+  lineFilter?: Types.InputMaybe<Array<Types.InputMaybe<Types.Scalars['ID']['input']>> | Types.InputMaybe<Types.Scalars['ID']['input']>>;
+  via?: Types.InputMaybe<Array<Types.TripViaLocationInput> | Types.TripViaLocationInput>;
 }>;
 
 
@@ -40,7 +42,7 @@ export type TripsNonTransitQuery = { footTrip: TripFragment, bikeRentalTrip: Tri
 
 
 export const TripsDocument = gql`
-    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int, $searchWindow: Int, $includeCancellations: Boolean) {
+    query Trips($from: Location!, $to: Location!, $arriveBy: Boolean!, $when: DateTime, $cursor: String, $transferSlack: Int, $transferPenalty: Int, $waitReluctance: Float, $walkReluctance: Float, $walkSpeed: Float, $modes: Modes, $numTripPatterns: Int, $searchWindow: Int, $includeCancellations: Boolean, $lineFilter: [ID], $via: [TripViaLocationInput!]) {
   trip(
     from: $from
     to: $to
@@ -57,6 +59,8 @@ export const TripsDocument = gql`
     searchWindow: $searchWindow
     includeRealtimeCancellations: $includeCancellations
     includePlannedCancellations: $includeCancellations
+    whiteListed: {lines: $lineFilter}
+    via: $via
   ) {
     ...trip
   }
