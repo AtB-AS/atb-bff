@@ -15,6 +15,7 @@ import {
   ServiceJourneyDocument,
   ServiceJourneySubscription,
 } from './vehicles-gql/service-journey-subscription.graphql-gen';
+import {createStaleVehicleUpdateFilter} from './utils';
 
 export default (): IVehiclesService => ({
   async getServiceJourneyVehicles(query, request) {
@@ -48,6 +49,7 @@ export default (): IVehiclesService => ({
     }
   },
   createServiceJourneySubscription(query, ws) {
+    const pickNewestVehicleUpdate = createStaleVehicleUpdateFilter();
     return vehiclesSubscriptionClient
       .subscribe({
         query: ServiceJourneyDocument,
@@ -57,8 +59,12 @@ export default (): IVehiclesService => ({
       .subscribe({
         next: (value) => {
           const data = value.data as ServiceJourneySubscription;
-          const vehicle = data.vehicles?.find(
-            (v) => v.serviceJourney?.id === query.serviceJourneyId,
+          // Updates can arrive out of order, so discard those that are older
+          // than the newest one already seen.
+          const vehicle = pickNewestVehicleUpdate(
+            data.vehicles?.filter(
+              (v) => v?.serviceJourney?.id === query.serviceJourneyId,
+            ) ?? [],
           );
           if (!vehicle) return;
           ws.send(JSON.stringify(vehicle));
